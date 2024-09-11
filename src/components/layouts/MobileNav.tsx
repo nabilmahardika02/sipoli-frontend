@@ -1,0 +1,136 @@
+import { navbarMenus } from "@/content/menu";
+import clsxm from "@/lib/clsxm";
+import Link from "next/link";
+import { useState } from "react";
+import { IoClose } from "react-icons/io5";
+import { MdKeyboardArrowLeft } from "react-icons/md";
+import { RxHamburgerMenu } from "react-icons/rx";
+import Logo from "../elements/Logo";
+import Typography from "../elements/Typography";
+import SubNav from "./SubNav";
+
+const MobileNav = ({ className }: { className?: string }) => {
+  const [isOpen, setOpen] = useState(false);
+  const [isVisible, setVisible] = useState(false);
+  const [showSubnav, setShowSubNav] = useState<boolean[]>(
+    new Array(navbarMenus.length).fill(false)
+  );
+
+  const handleOpen = () => {
+    setOpen(true);
+    setVisible(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setTimeout(() => {
+      setVisible(false);
+      setShowSubNav(new Array(navbarMenus.length).fill(false));
+    }, 200);
+  };
+
+  const toggleMenuState = (index: number) => {
+    setShowSubNav((prevState) => {
+      const newState = [...prevState];
+      newState[index] = !newState[index];
+      return newState;
+    });
+  };
+
+  return (
+    <>
+      <nav
+        className={clsxm(
+          "h-[64px] bg-primary px-5 py-4 fixed top-0 left-0 w-full flex justify-between items-center shadow-md",
+          className
+        )}
+      >
+        <Logo size="sm" />
+        <button
+          className="text-white text-2xl active:rotate-90 active:transition-all active:duration-300"
+          onClick={isOpen ? handleClose : handleOpen}
+        >
+          {isOpen ? <IoClose /> : <RxHamburgerMenu />}
+        </button>
+      </nav>
+      {isVisible && (
+        <>
+          <div className="w-full h-[calc(100vh-64px)] bg-black md:hidden fixed bottom-0 left-0 bg-opacity-30">
+            <div
+              className={clsxm(
+                "w-[70%] bg-white right-0 h-[calc(100vh-64px)] fixed bottom-0",
+                isOpen ? "fade-in-right" : "fade-out-left"
+              )}
+            >
+              <ul className="flex flex-col w-full py-4 items-center">
+                {navbarMenus.map((menu, index) =>
+                  menu.children.length ? (
+                    <div
+                      key={menu.href}
+                      className="w-full border-b border-gray-300"
+                    >
+                      <button
+                        className={clsxm(
+                          "parent-nav py-4 w-full group flex px-4 items-center justify-between",
+                          showSubnav[index]
+                            ? "active-subnav"
+                            : "inactive-subnav"
+                        )}
+                        key={menu.href}
+                        onClick={() => toggleMenuState(index)}
+                      >
+                        <div className="flex items-center gap-2">
+                          <menu.icon className="menu-icon text-dark text-xl" />
+
+                          <Typography
+                            variant="p2"
+                            font="ubuntu"
+                            className="menu-title text-dark"
+                          >
+                            {menu.name}
+                          </Typography>
+                        </div>
+                        <MdKeyboardArrowLeft className="subnav-arrow text-dark text-xl" />
+                      </button>
+                      <SubNav
+                        childMenu={menu.children}
+                        className={
+                          showSubnav[index]
+                            ? "block fade-in-down-menu"
+                            : "hidden fade-out-up-menu"
+                        }
+                      />
+                    </div>
+                  ) : (
+                    <Link
+                      href={menu.href}
+                      className={clsxm(
+                        "py-4 w-full group flex px-4 items-center justify-start border-b border-gray-300"
+                      )}
+                      key={menu.href}
+                    >
+                      <div className="flex items-center gap-2">
+                        <menu.icon className="menu-icon text-dark text-xl group-active:text-primary" />
+                        {isVisible && (
+                          <Typography
+                            variant="p2"
+                            font="ubuntu"
+                            className="text-dark group-active:text-primary"
+                          >
+                            {menu.name}
+                          </Typography>
+                        )}
+                      </div>
+                    </Link>
+                  )
+                )}
+              </ul>
+            </div>
+          </div>
+        </>
+      )}
+    </>
+  );
+};
+
+export default MobileNav;

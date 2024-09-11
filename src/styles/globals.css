@@ -1,0 +1,169 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOutUp {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+}
+
+.fade-in-down {
+  animation: fadeInDown 0.3s forwards;
+}
+
+.fade-out-up {
+  animation: fadeOutUp 0.3s forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+@media (max-width: 768px) {
+  /* Tailwind's medium breakpoint is 768px */
+  .sm-fade-in-up {
+    animation: fadeInUp 0.3s forwards;
+  }
+
+  .sm-fade-out-down {
+    animation: fadeOutDown 0.3s forwards;
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeOutLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+.fade-in-right {
+  animation: fadeInRight 0.3s forwards;
+}
+.fade-out-left {
+  animation: fadeOutLeft 0.3s forwards;
+}
+
+/* -------------------------------------------------------------------------------- BODY */
+body {
+  @apply bg-neutral-100;
+}
+
+/* -------------------------------------------------------------------------------- NO SCROLLBAR */
+.no-scrollbar {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+/* -------------------------------------------------------------------------------- SUBNAV */
+
+.parent-nav.active-subnav {
+  .menu-icon {
+    @apply text-primary md:text-green-200;
+  }
+
+  .menu-title {
+    @apply text-primary md:text-green-200;
+  }
+
+  .subnav-arrow {
+    @apply -rotate-90 transition-transform duration-300 text-primary md:text-green-200;
+  }
+}
+
+.parent-nav.inactive-subnav {
+  .menu-icon {
+    @apply text-slate-700 md:text-white;
+  }
+
+  .menu-title {
+    @apply text-slate-700 md:text-white;
+  }
+
+  .subnav-arrow {
+    @apply rotate-0 transition-transform duration-300 text-slate-700 md:text-white;
+  }
+}
+
+@keyframes fadeInDownMenu {
+  from {
+    opacity: 0;
+    transform: translateY(-5%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOutUpMenu {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-5%);
+  }
+}
+
+.fade-in-down-menu {
+  animation: fadeInDownMenu 0.3s ease;
+}
+
+.fade-out-up-menu {
+  animation: fadeOutUpMenu 0.3s ease;
+}

@@ -1,0 +1,15 @@
+{
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "react/display-name": "off"
+  },
+  "overrides": [
+    {
+      "files": ["*.js", "*.jsx"],
+      "rules": {
+        "react/display-name": "off",
+        "react-hooks/rules-of-hooks": "off"
+      }
+    }
+  ]
+}
