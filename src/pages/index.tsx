@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <main className="w-full min-h-screen flex items-center justify-center">
       <Head>
-        <title>OSIS</title>
+        <title>SIPOLI</title>
       </Head>
       <div className="w-10 h-10 bg-white shadow-lg rounded-xl"></div>
     </main>

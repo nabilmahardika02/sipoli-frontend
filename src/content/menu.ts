@@ -1,6 +1,10 @@
 import { IconType } from "react-icons";
 import { BiSolidHome } from "react-icons/bi";
 import { FaBook } from "react-icons/fa";
+import { MdSwitchAccount } from "react-icons/md";
+import { FaCapsules } from "react-icons/fa";
+import { FaPeopleCarryBox } from "react-icons/fa6";
+import { VscGraphLine } from "react-icons/vsc";
 
 export type NavbarMenu = {
   name: string;
@@ -17,53 +21,48 @@ export const navbarMenus: NavbarMenu[] = [
     children: [],
   },
   {
-    name: "Menu 1",
-    icon: FaBook,
+    name: "Daftar Akun",
+    icon: MdSwitchAccount,
     href: "/menu-1",
-    children: [
-      {
-        name: "Sub Menu 1",
-        icon: FaBook,
-        href: "/menu-1/sub-1",
-        children: [],
-      },
-      {
-        name: "Sub Menu 2",
-        icon: FaBook,
-        href: "/menu-1/sub-2",
-        children: [],
-      },
-      {
-        name: "Sub Menu 3",
-        icon: FaBook,
-        href: "/menu-1/sub-3",
-        children: [],
-      },
-    ],
+    children: [],
   },
   {
-    name: "Menu 2",
-    icon: FaBook,
+    name: "Kunjungan",
+    icon: FaPeopleCarryBox,
     href: "/menu-2",
     children: [
       {
-        name: "Sub Menu 1",
+        name: "Daftar Kunjungan",
         icon: FaBook,
         href: "/menu-2/sub-1",
         children: [],
       },
       {
-        name: "Sub Menu 2",
-        icon: FaBook,
+        name: "Dashboard Kunjungan",
+        icon: VscGraphLine,
         href: "/menu-2/sub-2",
+        children: [],
+      }
+    ],
+  },
+  {
+    name: "Obat",
+    icon: FaCapsules,
+    href: "/menu-2",
+    children: [
+      {
+        name: "Daftar Obat",
+        icon: FaBook,
+        href: "/menu-2/sub-1",
         children: [],
       },
       {
-        name: "Sub Menu 3",
-        icon: FaBook,
-        href: "/menu-2/sub-3",
+        name: "Dashboard Obat",
+        icon: VscGraphLine,
+        href: "/menu-2/sub-2",
         children: [],
-      },
+      }
     ],
   },
+  
 ];
