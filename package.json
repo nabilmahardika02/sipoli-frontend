@@ -9,16 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.7",
     "auto-zustand-selectors-hook": "^2.0.0",
     "axios": "^1.2.1",
     "clsx": "^1.2.1",
     "eslint": "^8.30.0",
     "immer": "^10.0.3",
+    "next": "14.2.7",
     "primereact": "^10.6.3",
+    "propensi-fe-3": "file:",
+    "react": "^18",
     "react-data-table-component": "^7.6.2",
+    "react-dom": "^18",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.43.9",
     "react-hook-form-persist": "^3.0.0",
@@ -34,18 +35,18 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@tailwindcss/forms": "^0.5.3",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.7",
-    "@tailwindcss/forms": "^0.5.3",
     "@types/react-window": "^1.8.8",
     "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.7",
     "eslint-config-prettier": "^8.5.0",
-    "prettier": "^2.8.1"
+    "postcss": "^8",
+    "prettier": "^2.8.1",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
   }
 }

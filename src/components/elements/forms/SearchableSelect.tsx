@@ -102,6 +102,7 @@ export default function SearchableSelect({
             name={id}
             // @ts-ignore
             value={
+              // @ts-ignore
               options?.find((option) => option.value === watchedValue) || null
             }
             className={clsxm(
