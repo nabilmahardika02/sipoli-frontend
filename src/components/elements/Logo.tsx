@@ -13,12 +13,12 @@ const Logo = ({
   className?: string;
   size?: keyof typeof ButtonSize;
 }) => {
-  const logoSize = size === "base" ? 35 : 30;
+  const logoSize = size === "base" ? 50 : 45;
 
   return (
     <div className={clsxm("w-fit", className)}>
       <Image
-        src={"/images/logo.svg"}
+        src={"/images/logo.png"}
         alt="Logo"
         width={logoSize}
         height={logoSize}
