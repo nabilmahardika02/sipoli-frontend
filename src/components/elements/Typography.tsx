@@ -3,7 +3,7 @@ import clsxm from "@/lib/clsxm";
 import { Inter, Josefin_Sans, Ubuntu } from "next/font/google";
 
 export const inter = Inter({
-  weight: ["300", "400", "500", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
 });
 export const ubuntu = Ubuntu({
@@ -11,7 +11,7 @@ export const ubuntu = Ubuntu({
   subsets: ["latin"],
 });
 export const josefins = Josefin_Sans({
-  weight: ["300", "400", "500", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
 });
 
@@ -28,15 +28,6 @@ enum TypographyVariant {
   "p4",
 }
 
-export enum TypographyColor {
-  "primary",
-  "secondary",
-  "ternary",
-  "warning",
-  "danger",
-  "white",
-}
-
 export enum FontVariant {
   "ubuntu",
   "inter",
@@ -45,7 +36,7 @@ export enum FontVariant {
 
 enum FontWeight {
   "light",
-  "regular",
+  "normal",
   "medium",
   "semibold",
   "bold",
@@ -55,7 +46,6 @@ type TypographyProps<T extends React.ElementType> = {
   as?: T;
   className?: string;
   weight?: keyof typeof FontWeight;
-  color?: keyof typeof TypographyColor;
   font?: keyof typeof FontVariant;
   variant?: keyof typeof TypographyVariant;
   children: React.ReactNode;
@@ -65,10 +55,9 @@ export default function Typography<T extends React.ElementType>({
   as,
   children,
   className,
-  weight = "medium",
+  weight = "normal",
   variant = "p1",
   font = "inter",
-  color = "primary",
   ...props
 }: TypographyProps<T> &
   Omit<React.ComponentProps<T>, keyof TypographyProps<T>>) {
@@ -77,6 +66,7 @@ export default function Typography<T extends React.ElementType>({
   return (
     <Component
       className={clsxm(
+        "text-slate-800 w-fit",
         // *=============== Font Type ==================
         [
           [font === "inter" && [inter.className]],
@@ -86,7 +76,7 @@ export default function Typography<T extends React.ElementType>({
         // *=============== Font Weight ==================
         [
           [weight === "light" && ["font-light"]],
-          [weight === "regular" && ["font-regular"]],
+          [weight === "normal" && ["font-normal"]],
           [weight === "medium" && ["font-medium"]],
           [weight === "semibold" && ["font-semibold"]],
           [weight === "bold" && ["font-bold"]],
@@ -94,35 +84,28 @@ export default function Typography<T extends React.ElementType>({
         // *=============== Font Variants ==================
         [
           variant === "h1" && [
-            "text-[40px] font-bold leading-normal md:text-[96px] md:leading-tight",
+            "text-[42px] font-bold leading-normal md:text-[64px] md:leading-tight",
           ],
           variant === "h2" && [
-            "text-[30px] font-bold leading-normal md:text-[60px] md:leading-tight",
+            "text-[32px] font-bold leading-normal md:text-[48px] md:leading-tight",
           ],
           variant === "h3" && [
-            "text-[28px] font-bold leading-normal md:text-[48px] md:leading-tight",
+            "text-[28px] font-bold leading-normal md:text-[40px] md:leading-tight",
           ],
           variant === "h4" && [
-            "text-[24px] font-bold leading-normal md:text-[34px] md:leading-tight",
+            "text-[22px] font-bold leading-normal md:text-[32px] md:leading-tight",
           ],
           variant === "h5" && [
-            "text-[18px] font-bold leading-normal md:text-[24px] md:leading-tight",
+            "text-[18px] font-bold leading-normal md:text-[28px] md:leading-tight",
           ],
           variant === "h6" && [
-            "text-[14px] font-bold leading-normal md:text-[20px] md:leading-tight",
+            "text-[16px] font-bold leading-normal md:text-[24px] md:leading-tight",
           ],
           variant === "p1" && ["text-[16px] leading-normal md:leading-relaxed"],
           variant === "p2" && ["text-[14px] leading-normal md:leading-relaxed"],
           variant === "p3" && ["text-[12px] leading-normal md:leading-relaxed"],
-          variant === "p4" && ["text-[10px] md:leading-[12px]"],
+          variant === "p4" && ["text-[10px] leading-normal md:leading-relaxed"],
         ],
-        // *=============== Font Color ==================
-        [color === "primary" && ["text-slate-800"]],
-        [color === "secondary" && ["text-slate-600"]],
-        [color === "ternary" && ["text-gray-600"]],
-        [color === "warning" && ["text-yellow-500"]],
-        [color === "danger" && ["text-red-500"]],
-        [color === "white" && ["text-white"]],
         className
       )}
       {...props}

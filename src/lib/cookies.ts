@@ -3,17 +3,17 @@ import Cookies from "universal-cookie";
 const cookies = new Cookies();
 
 export const getToken = (): string => {
-  return cookies.get("@app/token");
+  return cookies.get("@sipoli/token");
 };
 
 export const setToken = (token: string) => {
-  cookies.set("@app/token", token, {
+  cookies.set("@sipoli/token", token, {
     path: "/",
   });
 };
 
 export const removeToken = () => {
-  cookies.remove("@app/token", {
+  cookies.remove("@sipoli/token", {
     path: "/",
   });
 };

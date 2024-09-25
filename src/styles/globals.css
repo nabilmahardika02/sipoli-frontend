@@ -95,7 +95,7 @@
 
 /* -------------------------------------------------------------------------------- BODY */
 body {
-  @apply bg-neutral-100;
+  @apply bg-white md:bg-neutral-100;
 }
 
 /* -------------------------------------------------------------------------------- NO SCROLLBAR */
@@ -112,29 +112,29 @@ body {
 
 .parent-nav.active-subnav {
   .menu-icon {
-    @apply text-primary md:text-green-200;
+    @apply text-primary-1 md:text-success-3;
   }
 
   .menu-title {
-    @apply text-primary md:text-green-200;
+    @apply text-primary-1 md:text-success-3;
   }
 
   .subnav-arrow {
-    @apply -rotate-90 transition-transform duration-300 text-primary md:text-green-200;
+    @apply -rotate-90 transition-transform duration-300 text-primary-1 md:text-success-3;
   }
 }
 
 .parent-nav.inactive-subnav {
   .menu-icon {
-    @apply text-slate-700 md:text-white;
+    @apply text-primary-1 md:text-white;
   }
 
   .menu-title {
-    @apply text-slate-700 md:text-white;
+    @apply text-primary-1 md:text-white;
   }
 
   .subnav-arrow {
-    @apply rotate-0 transition-transform duration-300 text-slate-700 md:text-white;
+    @apply rotate-0 transition-transform duration-300 text-primary-1 md:text-white;
   }
 }
 

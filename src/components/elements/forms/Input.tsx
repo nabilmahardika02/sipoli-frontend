@@ -66,7 +66,9 @@ export default function Input({
           >
             {label}
           </Typography>
-          {validation?.required && <Typography color="danger">*</Typography>}
+          {validation?.required && (
+            <Typography className="text-danger-core">*</Typography>
+          )}
         </label>
       )}
 
@@ -123,7 +125,7 @@ export default function Input({
               [LeftIcon && "pl-9", RightIcon && "pr-9"],
               "bg-transparent text-sm",
               "focus:ring-blue-500 focus:ring-1 focus:outline-none",
-              readOnly && "cursor-not-allowed bg-gray-100",
+              readOnly && "cursor-not-allowed bg-gray-200",
               prefix && "rounded-l-none rounded-r-md",
               suffix && "rounded-l-md rounded-r-none",
               prefix && suffix && "rounded-none",

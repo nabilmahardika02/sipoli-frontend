@@ -6,9 +6,11 @@ import Typography from "./Typography";
 
 enum ButtonVariant {
   "primary",
-  "dark",
+  "secondary",
   "outline",
-  "danger"
+  "danger",
+  "warning",
+  "success",
 }
 
 enum ButtonSize {
@@ -34,7 +36,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       className,
       disabled: buttonDisabled,
-      fullRounded = true,
+      fullRounded = false,
       size = "base",
       variant = "primary",
       leftIcon: LeftIcon,
@@ -55,7 +57,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled}
         className={clsxm(
           fullRounded ? "rounded-full" : "rounded-lg",
-          "button group flex items-center justify-center text-center",
+          "button group flex items-center justify-center text-center w-fit h-fit",
           //*=========== Size ===========
           [
             size === "lg" && ["px-3 py-2 md:px-6 md:py-[8px]"],
@@ -65,16 +67,22 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           //*=========== Variants ===========
           [
             variant === "primary" && [
-              "bg-secondary hover:bg-primary active:bg-slate-700 active:ring-1 active:ring-primary ",
+              "bg-primary-1 hover:bg-primary-2 active:bg-primary-3 active:ring-1 active:ring-primary-3 ",
             ],
-            variant === "dark" && [
-              "bg-eerie hover:bg-licorice active:bg-dark active:ring-1 active:ring-primary",
+            variant === "secondary" && [
+              "bg-secondary-1 hover:bg-secondary-2 active:bg-secondary-3 active:ring-1 active:ring-secondary-3 ",
             ],
             variant === "danger" && [
-              "bg-red-400 hover:bg-red-500 active:bg-red-600 active:ring-1 active:ring-red-200",
+              "bg-danger-2 hover:bg-red-500 active:bg-red-600 active:ring-1 active:ring-red-600",
+            ],
+            variant === "warning" && [
+              "bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-600 active:ring-1 active:ring-yellow-600",
+            ],
+            variant === "success" && [
+              "bg-success-core hover:bg-success-2 active:bg-success-1 active:ring-1 active:ring-success-1",
             ],
             variant === "outline" && [
-              "border-2 border-primary bg-transparent hover:bg-primary active:bg-slate-700",
+              "bg-transparent outline outline-primary-1 hover:bg-primary-1 active:bg-primary-2",
             ],
           ],
           //#endregion  //*======== Variants ===========
@@ -92,7 +100,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               size === "base" && "mr-[8px] text-xl",
               size === "lg" && "mr-[8px] text-xl",
               variant === "outline"
-                ? "text-primary group-hover:text-white"
+                ? "text-primary-1 group-hover:text-white"
                 : "text-white",
             ])}
           >
@@ -102,12 +110,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         <Typography
           className={clsxm(
             textClassName,
-            variant === "outline" && "text-primary group-hover:text-white"
+            variant === "outline"
+              ? "text-primary-1 group-hover:text-white"
+              : "text-white"
           )}
           variant={size === "sm" ? "p3" : "p2"}
           color="white"
           weight="medium"
-          font="ubuntu"
+          font="inter"
         >
           {children}
         </Typography>
@@ -118,7 +128,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               size === "base" && "ml-[8px]",
               size === "lg" && "ml-[8px]",
               variant === "outline"
-                ? "text-primary group-hover:text-white"
+                ? "text-primary-1 group-hover:text-white"
                 : "text-white",
             ])}
           >

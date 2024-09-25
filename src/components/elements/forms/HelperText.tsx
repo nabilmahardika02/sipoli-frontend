@@ -12,7 +12,7 @@ export default function HelperText({
     <div className="flex space-x-1">
       <Typography
         variant="p3"
-        className={clsxm("leading-tight text-secondary", helperTextClassName)}
+        className={clsxm("leading-tight text-gray-500", helperTextClassName)}
       >
         {children}
       </Typography>

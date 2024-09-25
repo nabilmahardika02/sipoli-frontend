@@ -1,6 +1,10 @@
 import { IconType } from "react-icons";
 import { BiSolidHome } from "react-icons/bi";
-import { FaBook } from "react-icons/fa";
+import { FaBook, FaCapsules } from "react-icons/fa";
+import { FaPeopleCarryBox } from "react-icons/fa6";
+import { MdSwitchAccount } from "react-icons/md";
+import { VscGraphLine } from "react-icons/vsc";
+import { MdOutlineSick } from "react-icons/md";
 
 export type NavbarMenu = {
   name: string;
@@ -9,61 +13,139 @@ export type NavbarMenu = {
   children: NavbarMenu[];
 };
 
-export const navbarMenus: NavbarMenu[] = [
+export const operatorMenu: NavbarMenu[] = [
   {
     name: "Home",
     icon: BiSolidHome,
-    href: "/",
+    href: "/home",
     children: [],
   },
   {
-    name: "Menu 1",
-    icon: FaBook,
-    href: "/menu-1",
+    name: "Daftar Akun",
+    icon: MdSwitchAccount,
+    href: "/akun",
+    children: [],
+  },
+  {
+    name: "Kunjungan",
+    icon: FaPeopleCarryBox,
+    href: "/kunjungan",
     children: [
       {
-        name: "Sub Menu 1",
+        name: "Daftar Kunjungan",
         icon: FaBook,
-        href: "/menu-1/sub-1",
+        href: "/kunjungan/all",
         children: [],
       },
       {
-        name: "Sub Menu 2",
-        icon: FaBook,
-        href: "/menu-1/sub-2",
-        children: [],
-      },
-      {
-        name: "Sub Menu 3",
-        icon: FaBook,
-        href: "/menu-1/sub-3",
+        name: "Dashboard Kunjungan",
+        icon: VscGraphLine,
+        href: "/kunjungan/dashboard",
         children: [],
       },
     ],
   },
   {
-    name: "Menu 2",
-    icon: FaBook,
-    href: "/menu-2",
+    name: "Obat",
+    icon: FaCapsules,
+    href: "/obat",
     children: [
       {
-        name: "Sub Menu 1",
-        icon: FaBook,
-        href: "/menu-2/sub-1",
+        name: "Daftar Obat",
+        icon: FaCapsules,
+        href: "/obat/all",
         children: [],
       },
       {
-        name: "Sub Menu 2",
-        icon: FaBook,
-        href: "/menu-2/sub-2",
-        children: [],
-      },
-      {
-        name: "Sub Menu 3",
-        icon: FaBook,
-        href: "/menu-2/sub-3",
+        name: "Dashboard Obat",
+        icon: VscGraphLine,
+        href: "/obat/dashboard",
         children: [],
       },
     ],
+  },
+];
+
+export const pasienMenu: NavbarMenu[] = [
+  {
+    name: "Home",
+    icon: BiSolidHome,
+    href: "/home",
+    children: [],
+  },
+  {
+    name: "Rekam Medis",
+    icon: FaBook,
+    href: "/rekam-medis",
+    children: [],
+  },
+];
+
+export const dokterMenu: NavbarMenu[] = [
+  {
+    name: "Home",
+    icon: BiSolidHome,
+    href: "/home",
+    children: [],
+  },
+  {
+    name: "Daftar Kunjungan",
+    icon: FaBook,
+    href: "/kunjungan",
+    children: [],
+  },
+  {
+    name: "Daftar Obat",
+    icon: FaCapsules,
+    href: "/obat",
+    children: [],
+  },
+  {
+    name: "Dashboard",
+    icon: VscGraphLine,
+    href: "/dashboard",
+    children: [],
+  },
+];
+
+export const perawatMenu: NavbarMenu[] = [
+  {
+    name: "Home",
+    icon: BiSolidHome,
+    href: "/home",
+    children: [],
+  },
+  {
+    name: "Daftar Kunjungan",
+    icon: FaBook,
+    href: "/kunjungan",
+    children: [],
+  },
+  {
+    name: "Daftar Obat",
+    icon: FaCapsules,
+    href: "/obat",
+    children: [],
+  },
+  {
+    name: "Daftar Pasien",
+    icon: MdOutlineSick,
+    href: "/pasien",
+    children: [],
+  },
+  {
+    name: "Dashboard",
+    icon: VscGraphLine,
+    href: "/dashboard",
+    children: [],
+  },
+];
+
+export const defaultMenu: NavbarMenu[] = [
+  {
+    name: "Home",
+    icon: BiSolidHome,
+    href: "/home",
+    children: [],
   },
 ];
