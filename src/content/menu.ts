@@ -61,9 +61,10 @@ export const operatorMenu: NavbarMenu[] = [
         icon: VscGraphLine,
         href: "/obat/dashboard",
         children: [],
-      },
+      }
     ],
   },
+  
 ];
 
 export const pasienMenu: NavbarMenu[] = [
