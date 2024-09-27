@@ -55,7 +55,7 @@ export default function Checkbox({
             "rounded-sm border-2 focus:ring-0",
             "checked:accent-blue-500 group-hover:cursor-pointer",
             readOnly &&
-              "checked:accent-primary cursor-not-allowed group-hover:cursor-not-allowed",
+              "checked:accent-blue-600 cursor-not-allowed group-hover:cursor-not-allowed",
             size === "vs" && "w-1 h-1",
             size === "sm" && "w-2 h-3",
             size === "base" && "h-4 w-4"

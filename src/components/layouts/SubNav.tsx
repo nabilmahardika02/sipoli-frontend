@@ -15,18 +15,16 @@ const SubNav = ({
       {childMenu.map((menu, index) => (
         <Link
           href={menu.href}
-          className={clsxm(
-            "py-2 w-full group flex px-4 items-center",
-          )}
+          className={clsxm("py-2 w-full group flex px-4 items-center")}
           key={menu.href}
         >
           <div className="flex items-center gap-2">
-            <menu.icon className="text-slate-700 md:text-white group-hover:text-green-300 text-xl" />
+            <menu.icon className="text-primary-1 md:text-white group-hover:text-success-3 text-xl" />
 
             <Typography
               variant="p2"
               font="ubuntu"
-              className="text-slate-700 md:text-white group-hover:text-green-300"
+              className="text-primary-1 md:text-white group-hover:text-success-3"
             >
               {menu.name}
             </Typography>

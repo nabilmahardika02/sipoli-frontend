@@ -29,7 +29,7 @@ export default function Toast() {
                 {message}
                 {t.type !== "loading" && (
                   <button
-                    className="rounded-full p-1 ring-blue-400 transition hover:bg-[#444] focus:outline-none focus-visible:ring"
+                    className="rounded-full p-1 ring-blue-400 transition hover:bg-[#444] hover:bg-opacity-20 focus:outline-none focus-visible:ring"
                     onClick={() => toast.dismiss(t.id)}
                   >
                     <HiX />
@@ -51,7 +51,7 @@ export const DEFAULT_TOAST: ToastOptions = {
   },
   icon: <RiErrorWarningLine />,
   className: "w-[375px] [&>div]:justify-start",
-  position: "bottom-right",
+  position: "top-center",
   duration: 4000,
 };
 
@@ -83,7 +83,7 @@ export const LOADING_TOAST = createCustomToast({
   },
   icon: <AiOutlineLoading3Quarters className="animate-spin" />,
   className: "w-[375px] [&>div]:justify-start",
-  position: "bottom-right",
+  position: "top-center",
   duration: Infinity,
 });
 
@@ -94,7 +94,7 @@ export const SUCCESS_TOAST = createCustomToast({
   },
   icon: <BiSolidBadgeCheck size={20} />,
   className: "w-[375px] [&>div]:justify-start",
-  position: "bottom-right",
+  position: "top-center",
   duration: 4000,
 });
 
@@ -105,7 +105,7 @@ export const DANGER_TOAST = createCustomToast({
   },
   icon: <MdErrorOutline size={20} />,
   className: "w-[375px] [&>div]:justify-start",
-  position: "bottom-right",
+  position: "top-center",
   duration: 4000,
 });
 
@@ -116,6 +116,6 @@ export const WARNING_TOAST = createCustomToast({
   },
   icon: <BiSolidError size={20} />,
   className: "w-[375px] [&>div]:justify-start",
-  position: "bottom-right",
+  position: "top-center",
   duration: 4000,
 });

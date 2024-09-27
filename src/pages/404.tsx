@@ -9,10 +9,12 @@ const Error404 = () => {
       <Head>
         <title>404</title>
       </Head>
-      <Typography variant="h1" font="ubuntu" color="primary">
+      <Typography variant="h1" font="ubuntu" className="text-primary-1">
         404
       </Typography>
-      <Typography variant="h5">Page not found</Typography>
+      <Typography variant="h5" className="text-primary-2">
+        Page not found
+      </Typography>
       <div>
         <Link href={"/"}>
           <Button className="mt-5" fullRounded>

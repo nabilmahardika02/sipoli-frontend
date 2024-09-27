@@ -1,52 +1,40 @@
-import { useState } from "react";
+import * as React from "react";
 import { get, RegisterOptions, useFormContext } from "react-hook-form";
-import { IconType } from "react-icons";
-import { HiEye, HiEyeOff } from "react-icons/hi";
 import Typography from "../Typography";
 import ErrorMessage from "./ErrorMessage";
 import HelperText from "./HelperText";
 
 import clsxm from "@/lib/clsxm";
 
-export type InputProps = {
+export type SelectInputProps = {
   id: string;
-  value?: string;
   label?: string;
   labelClassName?: string;
+  labelDirection?: string;
   helperText?: string;
   helperTextClassName?: string;
   hideError?: boolean;
   validation?: RegisterOptions;
-  prefix?: string;
-  suffix?: string;
-  leftIcon?: IconType;
-  rightIcon?: IconType;
-  leftIconClassName?: string;
-  rightIconClassName?: string;
-} & React.ComponentPropsWithoutRef<"input">;
+  readOnly?: boolean;
+  placeholder?: string;
+} & React.ComponentPropsWithoutRef<"select">;
 
-export default function Input({
+export default function SelectInput({
   id,
-  value,
   label,
-  labelClassName,
+  labelDirection,
   helperText,
+  helperTextClassName,
   hideError = false,
   validation,
   className,
-  type = "text",
   readOnly = false,
-  prefix,
-  suffix,
-  leftIcon: LeftIcon,
-  rightIcon: RightIcon,
-  leftIconClassName,
-  rightIconClassName,
-  helperTextClassName,
+  defaultValue = "",
+  placeholder = "",
+  labelClassName,
+  children,
   ...rest
-}: InputProps) {
-  const [showPassword, setShowPassword] = useState(false);
-
+}: SelectInputProps) {
   const {
     register,
     formState: { errors },
@@ -56,121 +44,50 @@ export default function Input({
 
   return (
     <div className="w-full space-y-1.5 rounded-md">
-      {label && (
-        <label htmlFor={id} className="flex items-center space-x-1">
-          <Typography
-            font="inter"
-            variant="p2"
-            weight="medium"
-            className={labelClassName}
-          >
-            {label}
-          </Typography>
-          {validation?.required && <Typography color="danger">*</Typography>}
-        </label>
-      )}
-
       <div
-        className={clsxm("group relative flex w-full rounded-md", className)}
+        className={clsxm(
+          labelDirection === "horizontal" && "md:flex md:items-center gap-2"
+        )}
       >
-        <div
+        {label && (
+          <label htmlFor={id} className="flex space-x-1 items-center">
+            <Typography
+              font="inter"
+              variant="p2"
+              weight="medium"
+              color="slate"
+              className={labelClassName}
+            >
+              {label}
+            </Typography>
+            {validation?.required && <Typography color="danger">*</Typography>}
+          </label>
+        )}
+
+        <select
+          {...register(id, validation)}
+          id={id}
+          name={id}
+          defaultValue={defaultValue}
+          disabled={readOnly}
           className={clsxm(
-            "pointer-events-none absolute h-full w-full rounded-md ring-1 ring-inset ring-gray-300 group-focus:ring-blue-500",
+            "w-full pl-3 pr-8 py-2.5 truncate rounded-md border-none mt-1 bg-transparent",
+            "focus:ring-inset focus:ring-theme-primary-main ring-1 ring-inset ring-gray-300 focus:outline-blue-500 focus:outline-1",
+            readOnly && "cursor-not-allowed",
             className
           )}
-        />
-
-        {prefix && (
-          <Typography
-            variant="p3"
-            weight="medium"
-            className="flex items-center rounded-l-md bg-gray-100 px-3"
-          >
-            {prefix}
-          </Typography>
-        )}
-
-        <div
-          className={clsxm(
-            "relative w-full rounded-md focus:ring-blue-500 active:ring-blue-500"
-          )}
+          aria-describedby={id}
+          {...rest}
         >
-          {LeftIcon && (
-            <div
-              className={clsxm(
-                "absolute left-0 top-0 h-full",
-                "flex items-center justify-center pl-2.5",
-                "text-lg text-gray-400 md:text-xl",
-                leftIconClassName
-              )}
-            >
-              <LeftIcon />
-            </div>
+          {placeholder && (
+            <option value="" disabled hidden>
+              {placeholder}
+            </option>
           )}
-
-          <input
-            {...register(id, validation)}
-            type={
-              type === "password" ? (showPassword ? "text" : "password") : type
-            }
-            id={id}
-            name={id}
-            readOnly={readOnly}
-            disabled={readOnly}
-            value={value}
-            className={clsxm(
-              "h-full w-full rounded-md px-3 py-3",
-              [LeftIcon && "pl-9", RightIcon && "pr-9"],
-              "bg-transparent text-sm",
-              "focus:ring-blue-500 focus:ring-1 focus:outline-none",
-              readOnly && "cursor-not-allowed bg-gray-100",
-              prefix && "rounded-l-none rounded-r-md",
-              suffix && "rounded-l-md rounded-r-none",
-              prefix && suffix && "rounded-none",
-              className
-            )}
-            aria-describedby={id}
-            {...rest}
-          />
-
-          {RightIcon && type !== "password" && (
-            <div
-              className={clsxm(
-                "absolute bottom-0 right-0 h-full",
-                "flex items-center justify-center pr-2.5",
-                "text-lg text-gray-400 md:text-xl",
-                rightIconClassName
-              )}
-            >
-              <RightIcon />
-            </div>
-          )}
-
-          {type === "password" && (
-            <div
-              className={clsxm(
-                "absolute bottom-0 right-0 h-full",
-                "flex items-center justify-center pr-3",
-                "text-lg text-gray-400 md:text-xl",
-                rightIconClassName
-              )}
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? <HiEyeOff /> : <HiEye />}
-            </div>
-          )}
-        </div>
-
-        {suffix && (
-          <Typography
-            variant="p3"
-            weight="medium"
-            className="flex items-center rounded-r-md bg-gray-100 px-3"
-          >
-            {suffix}
-          </Typography>
-        )}
+          {children}
+        </select>
       </div>
+
       {!hideError && error && <ErrorMessage>{error.message}</ErrorMessage>}
       {!error && helperText && (
         <HelperText helperTextClassName={helperTextClassName}>

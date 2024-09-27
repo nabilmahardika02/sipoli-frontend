@@ -1,5 +1,6 @@
-import { navbarMenus } from "@/content/menu";
+import { defaultMenu, dokterMenu, operatorMenu, pasienMenu, perawatMenu } from "@/content/menu";
 import clsxm from "@/lib/clsxm";
+import useAuthStore from "@/store/useAuthStore";
 import Link from "next/link";
 import { useState } from "react";
 import { IoClose } from "react-icons/io5";
@@ -12,8 +13,24 @@ import SubNav from "./SubNav";
 const MobileNav = ({ className }: { className?: string }) => {
   const [isOpen, setOpen] = useState(false);
   const [isVisible, setVisible] = useState(false);
+  const user = useAuthStore.useUser();
+  const getMenu = (role: string) => {
+    switch (role) {
+      case "OPERATOR":
+        return operatorMenu;
+      case "DOKTER":
+        return dokterMenu;
+      case "PERAWAT":
+        return perawatMenu;
+      case "PASIEN":
+        return pasienMenu;
+      default:
+        return defaultMenu;
+    }
+  };
+
   const [showSubnav, setShowSubNav] = useState<boolean[]>(
-    new Array(navbarMenus.length).fill(false)
+    new Array(getMenu(user?.role || "DEFAULT").length).fill(false)
   );
 
   const handleOpen = () => {
@@ -25,7 +42,7 @@ const MobileNav = ({ className }: { className?: string }) => {
     setOpen(false);
     setTimeout(() => {
       setVisible(false);
-      setShowSubNav(new Array(navbarMenus.length).fill(false));
+      setShowSubNav(new Array(getMenu(user?.role || "DEFAULT").length).fill(false));
     }, 200);
   };
 
@@ -41,7 +58,7 @@ const MobileNav = ({ className }: { className?: string }) => {
     <>
       <nav
         className={clsxm(
-          "h-[64px] bg-primary px-5 py-4 fixed top-0 left-0 w-full flex justify-between items-center shadow-md",
+          "h-[64px] bg-primary-1 px-5 py-4 fixed top-0 left-0 w-full flex justify-between items-center shadow-md z-30",
           className
         )}
       >
@@ -55,7 +72,7 @@ const MobileNav = ({ className }: { className?: string }) => {
       </nav>
       {isVisible && (
         <>
-          <div className="w-full h-[calc(100vh-64px)] bg-black md:hidden fixed bottom-0 left-0 bg-opacity-30">
+          <div className="w-full h-[calc(100vh-64px)] bg-black md:hidden fixed bottom-0 left-0 bg-opacity-30 z-30">
             <div
               className={clsxm(
                 "w-[70%] bg-white right-0 h-[calc(100vh-64px)] fixed bottom-0",
@@ -63,11 +80,11 @@ const MobileNav = ({ className }: { className?: string }) => {
               )}
             >
               <ul className="flex flex-col w-full py-4 items-center">
-                {navbarMenus.map((menu, index) =>
+                {user && getMenu(user.role).map((menu, index) =>
                   menu.children.length ? (
                     <div
                       key={menu.href}
-                      className="w-full border-b border-gray-300"
+                      className="w-full"
                     >
                       <button
                         className={clsxm(
@@ -80,17 +97,17 @@ const MobileNav = ({ className }: { className?: string }) => {
                         onClick={() => toggleMenuState(index)}
                       >
                         <div className="flex items-center gap-2">
-                          <menu.icon className="menu-icon text-dark text-xl" />
+                          <menu.icon className="menu-icon text-primary-1 text-xl" />
 
                           <Typography
                             variant="p2"
                             font="ubuntu"
-                            className="menu-title text-dark"
+                            className="menu-title text-primary-1"
                           >
                             {menu.name}
                           </Typography>
                         </div>
-                        <MdKeyboardArrowLeft className="subnav-arrow text-dark text-xl" />
+                        <MdKeyboardArrowLeft className="subnav-arrow text-primary-1 text-xl" />
                       </button>
                       <SubNav
                         childMenu={menu.children}
@@ -105,17 +122,17 @@ const MobileNav = ({ className }: { className?: string }) => {
                     <Link
                       href={menu.href}
                       className={clsxm(
-                        "py-4 w-full group flex px-4 items-center justify-start border-b border-gray-300"
+                        "py-4 w-full group flex px-4 items-center justify-start"
                       )}
                       key={menu.href}
                     >
                       <div className="flex items-center gap-2">
-                        <menu.icon className="menu-icon text-dark text-xl group-active:text-primary" />
+                        <menu.icon className="menu-icon text-primary-1 text-xl group-active:text-primary" />
                         {isVisible && (
                           <Typography
                             variant="p2"
                             font="ubuntu"
-                            className="text-dark group-active:text-primary"
+                            className="text-primary-1 group-active:text-primary"
                           >
                             {menu.name}
                           </Typography>
