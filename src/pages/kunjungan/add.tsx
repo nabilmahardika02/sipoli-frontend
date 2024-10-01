@@ -70,7 +70,7 @@ const KunjunganAddPage = () => {
         const fetchProfiles = async () => {
             const [responseData, message, isSuccess] = await sendRequest(
                 "get",
-                "profile/all-profile",  // Endpoint API untuk mendapatkan seluruh data account
+                "profile/all-profile", 
                 
             );
 
