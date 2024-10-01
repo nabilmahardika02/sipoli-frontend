@@ -65,6 +65,25 @@ const KunjunganAddPage = () => {
         fetchAccounts();
     }, []);
 
+    useEffect(() =>{
+        // Fungsi untuk mengambil data profil dari API
+        const fetchProfiles = async () => {
+            const [responseData, message, isSuccess] = await sendRequest(
+                "get",
+                "profile/all-profile",  // Endpoint API untuk mendapatkan seluruh data account
+                
+            );
+
+            if (isSuccess) {
+                setProfiles(responseData as Profile[]); // Set data profil ke state
+            }
+
+            console.log("Data yang diterima:", responseData); 
+        };
+
+        fetchProfiles();
+    }, []);
+
     const methods = useForm<SandboxForm>({
         mode: "onTouched",
     });
