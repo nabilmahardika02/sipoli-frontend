@@ -15,11 +15,15 @@ import SelectInput from "@/components/elements/forms/SelectInput";
 import { Kunjungan } from "@/types/entities/kunjungan";
 import { SandboxForm } from "@/types/forms/SandboxForm";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import DataTable from "@/lib/datatable";
+import { getRowIdKunjungans, kunjunganTableColumns } from "@/types/table/kunjunganColumn";
 
 const HomePage = () => {
+  const user = useAuthStore.useUser();
   const { setTitle } = useDocumentTitle();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [kunjungans, setKunjungans] = useState<Kunjungan[]>([]);
+  const [selectedProfile, setProfile] = useState<Profile>();
 
   const methods = useForm<SandboxForm>({
     mode: "onTouched",
@@ -49,12 +53,49 @@ const HomePage = () => {
   }, []);
 
   const handleProfile = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    // const selectedProfileId = event.target.value;
+    const selectedProfileId = event.target.value;
 
-    // const selectedProfile = profiles.find(profile => profile.id === selectedProfileId);
+    // Temukan profile berdasarkan profileId yang dipilih
+    const selectedProfile = profiles.find(profile => profile.id === selectedProfileId);
+    setProfile(selectedProfile);
 
-    
+    const fetchKunjungan = async () => {
+      const [responseData, message, isSuccess] = await sendRequest(
+        "get",
+        "kunjungan/all?profileId="+selectedProfileId
+      );
+
+      if (isSuccess) {
+        setKunjungans(responseData as Kunjungan[]);
+      }
+
+      console.log("Data yang diterima:", responseData); 
+    };
+
+    if (user?.role === "PASIEN") {
+      fetchKunjungan();
+    }
   };
+
+  useEffect(() =>{
+    // Fungsi untuk mengambil data profil dari API
+    const fetchKunjungans = async () => {
+        const [responseData, message, isSuccess] = await sendRequest(
+            "get",
+            "kunjungan/all?isActive=true", 
+        );
+
+        if (isSuccess) {
+          setKunjungans(responseData as Kunjungan[]);
+        }
+  
+        console.log("Data yang diterima:", responseData); 
+      };
+  
+      if (user?.role !== "PASIEN") {
+        fetchKunjungans();
+      }
+  }, []);
 
   const logout = useAuthStore.useLogout();
   const router = useRouter();
@@ -70,9 +111,18 @@ const HomePage = () => {
       <Head>
         <title>SIPOLI</title>
       </Head>
+
+      {user?.role !== "PASIEN" && <Typography variant="h6">
+        Antrian Hari Ini
+      </Typography>}
+
+      <Link href={"/kunjungan/add"}>
+        <Button leftIcon={GoPlus}>Daftar Kunjungan</Button>
+      </Link>
+
       <div className="justify-between gap-5 my-5 md:grid-cols-2 gap-5">
         <FormProvider {...methods}>
-          <SelectInput
+          {user?.role === "PASIEN" && <SelectInput
             id="profileId"
             placeholder="Pilih profil"
             validation={{ required: "Profil wajib diisi" }}
@@ -87,31 +137,60 @@ const HomePage = () => {
             ) : (
               <option value="">Tidak ada profil yang tersedia</option>
             )}
-          </SelectInput>
+          </SelectInput>}
         </FormProvider>
       </div>
-        <div className="bg-white shadow-lg rounded-lg p-6 max-w-md w-full mb-5 border border-gray-200">
-          <Typography variant="h6" className="font-semibold mb-2">Antrian ke berapa</Typography>
-          <Typography variant="p1" className="mb-2">Tanggal kunjungan</Typography>
-          <Typography variant="p1" className="mb-4">Sesi ke berapa</Typography>
-          <div className="flex justify-between">
-            <Link href={"/home"}>
-              <Button variant="danger">Cancel</Button>
-            </Link>
-            <Link href={"/home"}>
-              <Button>Detail</Button>
-            </Link>
+
+      {user?.role === "PASIEN" && (
+        selectedProfile ? (
+          kunjungans.length > 0 ? (
+            kunjungans.map((kunjungan) => (
+              <div key={kunjungan.id} className="bg-white shadow-lg rounded-lg p-6 max-w-md w-full mb-5 border border-gray-200">
+                <Typography variant="h6" className="font-semibold mb-2">
+                  Antrian {kunjungan.antrian.noAntrian} - Sesi {kunjungan.antrian.sesi}
+                </Typography>
+                <Typography variant="p1" className="mb-2">
+                  {new Date(kunjungan.tanggal).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+                </Typography>
+                <div className="flex justify-between">
+                  <Link href={"/home"}>
+                    <Button variant="danger">Cancel</Button>
+                  </Link>
+                  <Link href={`/kunjungan/${kunjungan.id}`}>
+                    <Button>Detail</Button>
+                  </Link>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="text-center text-gray-500">
+              <Typography variant="p1" className="my-5">
+                Tidak ada kunjungan aktif
+              </Typography>
+            </div>
+          )
+        ) : (
+          <div className="text-center text-gray-500">
+            <Typography variant="p1" className="my-5">
+              Mohon pilih profil terlebih dahulu
+            </Typography>
           </div>
-        </div>
+        )
+      )}
 
-        <Link href={"/kunjungan/add"}>
-          <Button leftIcon={GoPlus}>Daftar Kunjungan</Button>
-        </Link>
+      <div className="w-full flex items-center justify-end gap-4">
+        {user?.role !== "PASIEN" && kunjungans && (
+          <DataTable
+            columns={kunjunganTableColumns}
+            getRowId={getRowIdKunjungans}
+            rows={kunjungans}
+          />
+        )}
+      </div>
 
-        <Button className="mt-5" onClick={handleLogout}>
-          Logout
-        </Button>
-      
+      <Button className="mt-5" onClick={handleLogout}>
+        Logout
+      </Button>
     </main>
   );
 };

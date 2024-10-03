@@ -7,7 +7,6 @@ import Typography from "@/components/elements/Typography";
 import withAuth from "@/components/hoc/withAuth";
 import { useDocumentTitle } from "@/context/Title";
 import sendRequest from "@/lib/getApi";
-import { SandboxForm } from "@/types/forms/SandboxForm";
 import router from "next/router";
 import { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
@@ -15,6 +14,7 @@ import { Profile } from "@/types/entities/profile";
 import { Account } from "@/types/entities/account";
 import useAuthStore from "@/store/useAuthStore";
 import Link from "next/link";
+import { KunjunganForm } from "@/types/forms/kunjunganForm";
 
 const sesi = [
     {
@@ -41,6 +41,7 @@ const KunjunganAddPage = () => {
     const [profiles, setProfiles] = useState<Profile[]>([]);
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [profile, setProfile] = useState<Profile>();
+    const [account, setAccount] = useState<Account>();
 
     useEffect(() => {
         setTitle("Pendaftaran Kunjungan");
@@ -71,7 +72,6 @@ const KunjunganAddPage = () => {
             const [responseData, message, isSuccess] = await sendRequest(
                 "get",
                 "profile/all-profile", 
-                
             );
 
             if (isSuccess) {
@@ -81,28 +81,29 @@ const KunjunganAddPage = () => {
             console.log("Data yang diterima:", responseData); 
         };
 
-        fetchProfiles();
+        if (user?.role === "PASIEN") {
+            fetchProfiles();
+        };
+        
     }, []);
 
-    const methods = useForm<SandboxForm>({
+    const methods = useForm<KunjunganForm>({
         mode: "onTouched",
     });
 
     const { handleSubmit } = methods;
 
-    const onSubmit: SubmitHandler<SandboxForm> = (data) => {
+    const onSubmit: SubmitHandler<KunjunganForm> = (data) => {
         const postData = async () => {
-        const [responseData, message, isSuccess] = await sendRequest(
-            "post",
-            "kunjungan/add",
-            data,
-            true
-        );
+            const [responseData, message, isSuccess] = await sendRequest(
+                "post",
+                "kunjungan/add",
+                data,
+                true
+            );
 
             if (isSuccess) {
                 router.push("/home");
-            }  else {
-                console.error("Data yang diterima bukan array!");
             }
         };
 
@@ -120,6 +121,8 @@ const KunjunganAddPage = () => {
             const listProfile = selectedAccount.listProfile;
     
             setProfiles(listProfile);
+            setProfile(listProfile[0]);
+            setAccount(selectedAccount);
         }
     };
 
@@ -131,6 +134,9 @@ const KunjunganAddPage = () => {
         if (selectedProfile) {
             setProfile(selectedProfile);
         }
+
+        console.log(selectedProfileId);
+        console.log(selectedProfile);
     };
 
     const formatDate = (dateString: string) => {
