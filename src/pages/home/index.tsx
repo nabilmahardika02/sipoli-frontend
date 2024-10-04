@@ -16,7 +16,7 @@ import { Kunjungan } from "@/types/entities/kunjungan";
 import { SandboxForm } from "@/types/forms/SandboxForm";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import DataTable from "@/lib/datatable";
-import { getRowIdKunjungans, kunjunganTableColumns } from "@/types/table/kunjunganColumn";
+import { getRowIdKunjungans, kunjunganTableColumns } from "@/types/table/antrianColumn";
 
 const HomePage = () => {
   const user = useAuthStore.useUser();

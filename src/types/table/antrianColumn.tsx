@@ -13,26 +13,25 @@ type CustomGridValueGetterParams = {
   row: Kunjungan;
 };
 
-export const kunjunganTables: GridColDef[] = [
+export const kunjunganTableColumns: GridColDef[] = [
   {
-    field: "tanggal",
-    headerName: "Tanggal Kunjungan",
+    field: "sesi",
+    headerName: "Sesi",
     headerAlign: "center",  // Menengahkan teks header
     align: "center", 
     width: 200,
     valueGetter: (value, row, column, apiRef) => {
-      const tanggal = row.tanggal;
-      if (tanggal) {
-        const date = new Date(tanggal);
-        const options: Intl.DateTimeFormatOptions = { 
-          weekday: 'long', 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        };
-        return date.toLocaleDateString('id-ID', options); // Menggunakan locale Indonesia
-      }
-      return "-";
+      return row.antrian?.sesi ?? "-"
+    }
+  },
+  {
+    field: "noAntrian",
+    headerName: "No. Antrian",
+    headerAlign: "center",
+    width: 200,
+    align: "center",
+    valueGetter: (value, row, column, apiRef) => {
+      return row.antrian?.noAntrian ?? "-"
     }
   },
   {
@@ -62,15 +61,7 @@ export const kunjunganTables: GridColDef[] = [
           break;
         case 1:
           statusText = "Sedang Dilayani";
-          color = "blue";
-          break;
-        case 2:
-          statusText = "Selesai";
           color = "green";
-          break;
-        case 3:
-          statusText = "Dibatalkan";
-          color = "gray";
           break;
       }
       return (
@@ -91,8 +82,12 @@ export const kunjunganTables: GridColDef[] = [
       return (
         <div className="w-full flex items-center gap-2 justify-center h-full">
           <Link href={`/home`}>
-            <Button variant="primary" size="sm" fullRounded className="mx-auto">
-              Detail 
+            <Button variant="outline" size="sm" fullRounded className="mx-auto">
+              Detail Pasien
+            </Button>
+          </Link>
+          <Link href={`/home`}>
+            <Button variant="primary" size="sm" fullRounded className="mx-auto" leftIcon={LuPencil}>
             </Button>
           </Link>
           <Link href={`/home`}>
@@ -106,4 +101,4 @@ export const kunjunganTables: GridColDef[] = [
 ];
 
 // Fungsi untuk mendapatkan Row ID
-export const getRowIdKunjungan: GridRowIdGetter<Kunjungan> = (row: Kunjungan) => row.id;
+export const getRowIdKunjungans: GridRowIdGetter<Kunjungan> = (row: Kunjungan) => row.id;
