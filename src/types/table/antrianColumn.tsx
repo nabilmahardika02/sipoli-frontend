@@ -22,7 +22,8 @@ export const kunjunganTableColumns: GridColDef[] = [
     width: 200,
     valueGetter: (value, row, column, apiRef) => {
       return row.antrian?.sesi ?? "-"
-    }
+    },
+    flex: 1,
   },
   {
     field: "noAntrian",
@@ -32,7 +33,8 @@ export const kunjunganTableColumns: GridColDef[] = [
     align: "center",
     valueGetter: (value, row, column, apiRef) => {
       return row.antrian?.noAntrian ?? "-"
-    }
+    },
+    flex: 1,
   },
   {
     field: "name",
@@ -42,7 +44,8 @@ export const kunjunganTableColumns: GridColDef[] = [
     align: "center",
     valueGetter: (value, row, column, apiRef) => {
       return row.profile?.name ?? "-"
-    }
+    },
+    flex: 1,
   },
   {
     field: "status",
@@ -69,7 +72,8 @@ export const kunjunganTableColumns: GridColDef[] = [
           {statusText}
         </span>
       );
-    }
+    },
+    flex: 1,
   },
   {
     field: "action",
@@ -97,6 +101,7 @@ export const kunjunganTableColumns: GridColDef[] = [
         </div>
       );
     },
+    flex: 1,
   },
 ];
 

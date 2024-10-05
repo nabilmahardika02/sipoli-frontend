@@ -33,7 +33,8 @@ export const kunjunganTables: GridColDef[] = [
         return date.toLocaleDateString('id-ID', options); // Menggunakan locale Indonesia
       }
       return "-";
-    }
+    },
+    flex: 1,
   },
   {
     field: "name",
@@ -43,7 +44,8 @@ export const kunjunganTables: GridColDef[] = [
     align: "center",
     valueGetter: (value, row, column, apiRef) => {
       return row.profile?.name ?? "-"
-    }
+    },
+    flex: 1,
   },
   {
     field: "status",
@@ -78,7 +80,8 @@ export const kunjunganTables: GridColDef[] = [
           {statusText}
         </span>
       );
-    }
+    },
+    flex: 1,
   },
   {
     field: "action",
@@ -102,6 +105,7 @@ export const kunjunganTables: GridColDef[] = [
         </div>
       );
     },
+    flex: 1,
   },
 ];
 

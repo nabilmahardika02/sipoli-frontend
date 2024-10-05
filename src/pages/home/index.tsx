@@ -62,7 +62,7 @@ const HomePage = () => {
     const fetchKunjungan = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "get",
-        "kunjungan/all?profileId="+selectedProfileId
+        "kunjungan/all?profileId="+selectedProfileId+"&isActive=true",
       );
 
       if (isSuccess) {
