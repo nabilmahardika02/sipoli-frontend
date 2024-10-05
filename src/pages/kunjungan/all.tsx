@@ -16,19 +16,22 @@ import { FilterKunjunganForm } from "@/types/forms/filterKunjunganForm";
 import axios from "axios";
 import Typography from "@/components/elements/Typography";
 import Divider from "@/components/elements/Divider";
+import { FaSearch } from "react-icons/fa";
+import { useRouter } from "next/router";
 
 const KunjunganAllPage = () => {
   const { setTitle } = useDocumentTitle();
   const [kunjungans, setKunjungans] = useState<Kunjungan[]>();
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
+  const router = useRouter();
 
   const methods = useForm<FilterKunjunganForm>({
     mode: "onTouched",
   });
   
   if (!checkRole(["OPERATOR", "PERAWAT", "DOKTER"])) {
-    return <Forbidden/>;
+    router.push("/403");
   }
 
   useEffect(() => {
@@ -82,13 +85,13 @@ const KunjunganAllPage = () => {
               label="Tanggal Awal"
               type="date"
             />
-            <Typography variant="p1">sampai</Typography>
+            <Typography variant="p1" className="mt-6">sampai</Typography>
             <Input
               id="endDate"
               label="Tanggal Akhir"
               type="date"
             />
-            <Button type="submit" className="h-full py-[calc(0.375rem+1px)] px-4">Cari</Button>
+            <Button type="submit" className="h-full" size="lg" textClassName="my-5 h-full"><FaSearch/></Button>
             </div>
           </form>
           
