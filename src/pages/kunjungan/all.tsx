@@ -15,6 +15,7 @@ import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { FilterKunjunganForm } from "@/types/forms/filterKunjunganForm";
 import axios from "axios";
 import Typography from "@/components/elements/Typography";
+import Divider from "@/components/elements/Divider";
 
 const KunjunganAllPage = () => {
   const { setTitle } = useDocumentTitle();
@@ -81,7 +82,7 @@ const KunjunganAllPage = () => {
               label="Tanggal Awal"
               type="date"
             />
-            <Typography variant="p4">sampai</Typography>
+            <Typography variant="p1">sampai</Typography>
             <Input
               id="endDate"
               label="Tanggal Akhir"
@@ -92,6 +93,7 @@ const KunjunganAllPage = () => {
           </form>
           
         </FormProvider>
+        <Divider/>
         <div className="w-full flex items-center justify-end gap-4 my-5">
         <Link href={"/kunjungan/add"}>
           <Button leftIcon={GoPlus}>Tambah</Button>

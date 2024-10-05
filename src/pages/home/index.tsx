@@ -116,9 +116,13 @@ const HomePage = () => {
         Antrian Hari Ini
       </Typography>}
 
-      <Link href={"/kunjungan/add"}>
+      {user?.role === "PASIEN" && <Link href={"/kunjungan/add"}>
         <Button leftIcon={GoPlus}>Daftar Kunjungan</Button>
-      </Link>
+      </Link>}
+
+      {user?.role !== "PASIEN" && <Link href={"/kunjungan/add"}>
+        <Button leftIcon={GoPlus}>Tambah Kunjungan</Button>
+      </Link>}
 
       <div className="justify-between gap-5 my-5 md:grid-cols-2 gap-5">
         <FormProvider {...methods}>
