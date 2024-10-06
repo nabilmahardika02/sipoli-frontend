@@ -113,7 +113,7 @@ const KunjunganAllPage = () => {
           <Button leftIcon={GoPlus}>Tambah</Button>
         </Link>
       </div>
-        <div className="w-full flex items-center justify-end gap-4">
+        <div style={{ width: '100%', overflowX: 'auto' }}>
           {kunjungans && kunjungans.length > 0 ? (
             <DataTable
               columns={kunjunganTables}

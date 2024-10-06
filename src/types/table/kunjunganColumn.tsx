@@ -34,7 +34,6 @@ export const kunjunganTables: GridColDef[] = [
       }
       return "-";
     },
-    flex: 1,
   },
   {
     field: "name",
@@ -45,13 +44,12 @@ export const kunjunganTables: GridColDef[] = [
     valueGetter: (value, row, column, apiRef) => {
       return row.profile?.name ?? "-"
     },
-    flex: 1,
   },
   {
     field: "status",
     headerName: "Status",
     headerAlign: "center",
-    width: 200,
+    width: 150,
     align: "center",
     renderCell: (params) => {
       const status = params.row.status;
@@ -81,13 +79,12 @@ export const kunjunganTables: GridColDef[] = [
         </span>
       );
     },
-    flex: 1,
   },
   {
     field: "action",
     headerName: "Action",
     headerAlign: "center",
-    width: 400,
+    width: 200,
     align: "center",
     sortable: false,
     renderCell: (params: CustomGridValueGetterParams) => {
@@ -106,7 +103,6 @@ export const kunjunganTables: GridColDef[] = [
         </div>
       );
     },
-    flex: 1,
   },
 ];
 

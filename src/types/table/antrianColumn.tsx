@@ -19,22 +19,20 @@ export const kunjunganTableColumns: GridColDef[] = [
     headerName: "Sesi",
     headerAlign: "center",  // Menengahkan teks header
     align: "center", 
-    width: 200,
+    width: 100,
     valueGetter: (value, row, column, apiRef) => {
       return row.antrian?.sesi ?? "-"
     },
-    flex: 1,
   },
   {
     field: "noAntrian",
     headerName: "No. Antrian",
     headerAlign: "center",
-    width: 200,
+    width: 100,
     align: "center",
     valueGetter: (value, row, column, apiRef) => {
       return row.antrian?.noAntrian ?? "-"
     },
-    flex: 1,
   },
   {
     field: "name",
@@ -45,13 +43,12 @@ export const kunjunganTableColumns: GridColDef[] = [
     valueGetter: (value, row, column, apiRef) => {
       return row.profile?.name ?? "-"
     },
-    flex: 1,
   },
   {
     field: "status",
     headerName: "Status",
     headerAlign: "center",
-    width: 200,
+    width: 150,
     align: "center",
     sortable: true,
     valueGetter: (value, row, column, apiRef) => {row.status},
@@ -75,7 +72,6 @@ export const kunjunganTableColumns: GridColDef[] = [
         </span>
       );
     },
-    flex: 1,
   },
   {
     field: "action",
@@ -105,7 +101,6 @@ export const kunjunganTableColumns: GridColDef[] = [
         </div>
       );
     },
-    flex: 1,
   },
 ];
 

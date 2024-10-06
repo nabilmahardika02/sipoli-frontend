@@ -206,7 +206,7 @@ const HomePage = () => {
         )
       )}
 
-      <div className="w-full flex items-center justify-end gap-4">
+      <div style={{ width: '100%', overflowX: 'auto' }}>
         {user?.role !== "PASIEN" && kunjungans && kunjungans.length > 0 ? (
           <DataTable
             columns={kunjunganTableColumns}
@@ -223,10 +223,12 @@ const HomePage = () => {
                 ],
               },
             }}
+            autoHeight
+            disableSelectionOnClick
           />
         ) : user?.role !== "PASIEN" ? (
           <Typography variant="h6" className="text-gray-500">Belum ada antrian</Typography>
-        ): ""};
+        ): ""}
       </div>
 
       <Button className="mt-5" onClick={handleLogout}>
