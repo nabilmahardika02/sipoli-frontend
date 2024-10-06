@@ -13,6 +13,7 @@ export const userTableColumns: GridColDef[] = [
     headerName: "Username",
     headerAlign: "center",
     width: 200,
+    align: "center",
   },
   {
     field: "nip",

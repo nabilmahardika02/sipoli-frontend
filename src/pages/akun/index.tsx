@@ -1,4 +1,5 @@
 import Button from "@/components/elements/Button";
+import { LoadingDiv } from "@/components/elements/Loading";
 import withAuth from "@/components/hoc/withAuth";
 import { useDocumentTitle } from "@/context/Title";
 import DataTable from "@/lib/datatable";
@@ -41,12 +42,14 @@ const AkunPage = () => {
         </Link>
       </div>
       <section className="mt-5">
-        {users && (
+        {users ? (
           <DataTable
             columns={userTableColumns}
             getRowId={getRowIdUsers}
             rows={users}
           />
+        ) : (
+          <LoadingDiv />
         )}
       </section>
     </main>

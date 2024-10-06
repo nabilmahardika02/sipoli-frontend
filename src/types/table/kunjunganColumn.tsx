@@ -1,6 +1,4 @@
 import Button from "@/components/elements/Button";
-import { LuPencil } from "react-icons/lu";
-import { FaRegTrashAlt } from "react-icons/fa";
 import { Kunjungan } from "@/types/entities/kunjungan";
 import {
   GridColDef,
@@ -8,6 +6,7 @@ import {
   GridValidRowModel,
 } from "@mui/x-data-grid";
 import Link from "next/link";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 type CustomGridValueGetterParams = {
   row: Kunjungan;
@@ -17,20 +16,20 @@ export const kunjunganTables: GridColDef[] = [
   {
     field: "tanggal",
     headerName: "Tanggal Kunjungan",
-    headerAlign: "center",  // Menengahkan teks header
-    align: "center", 
+    headerAlign: "center", // Menengahkan teks header
+    align: "center",
     width: 200,
     valueGetter: (value, row, column, apiRef) => {
       const tanggal = row.tanggal;
       if (tanggal) {
         const date = new Date(tanggal);
-        const options: Intl.DateTimeFormatOptions = { 
-          weekday: 'long', 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
+        const options: Intl.DateTimeFormatOptions = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
         };
-        return date.toLocaleDateString('id-ID', options); // Menggunakan locale Indonesia
+        return date.toLocaleDateString("id-ID", options); // Menggunakan locale Indonesia
       }
       return "-";
     },
@@ -42,7 +41,7 @@ export const kunjunganTables: GridColDef[] = [
     width: 200,
     align: "center",
     valueGetter: (value, row, column, apiRef) => {
-      return row.profile?.name ?? "-"
+      return row.profile?.name ?? "-";
     },
   },
   {
@@ -73,11 +72,7 @@ export const kunjunganTables: GridColDef[] = [
           color = "gray";
           break;
       }
-      return (
-        <span style={{ color: color }}>
-          {statusText}
-        </span>
-      );
+      return <span style={{ color: color }}>{statusText}</span>;
     },
   },
   {
@@ -92,12 +87,12 @@ export const kunjunganTables: GridColDef[] = [
         <div className="w-full flex items-center gap-2 justify-center h-full">
           <Link href={`/home`}>
             <Button variant="primary" size="sm" fullRounded className="mx-auto">
-              Detail 
+              Detail
             </Button>
           </Link>
           <Link href={`/home`}>
             <Button variant="danger" size="lg" fullRounded className="mx-auto">
-              <FaRegTrashAlt/>
+              <FaRegTrashAlt />
             </Button>
           </Link>
         </div>
@@ -107,4 +102,5 @@ export const kunjunganTables: GridColDef[] = [
 ];
 
 // Fungsi untuk mendapatkan Row ID
-export const getRowIdKunjungan: GridRowIdGetter<Kunjungan> = (row: Kunjungan) => row.id;
+export const getRowIdKunjungan: GridRowIdGetter<GridValidRowModel> = (row) =>
+  row.id;
