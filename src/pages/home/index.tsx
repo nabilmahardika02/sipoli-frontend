@@ -69,17 +69,19 @@ const HomePage = () => {
       if (isSuccess) {
         // Sort data berdasarkan status dengan prioritas "Sedang Dilayani" paling atas
         const sortedData = (responseData as Kunjungan[]).sort((a, b) => {
-          const statusPriority = (status: number) => {
+          const statusPriority = (status: number | undefined) => {
             // Tentukan prioritas untuk setiap status
             switch (status) {
               case 1: // Sedang Dilayani
                 return 0;
               case 0: // Belum Dilayani
                 return 1;
+              default: // Jika status tidak valid (undefined)
+                return 3;
             }
           };
   
-          return statusPriority(a.status) - statusPriority(b.status);
+          return statusPriority(a.status ?? '') - statusPriority(b.status ?? '');
         });
   
         setKunjungans(sortedData); // Set data kunjungan yang sudah di-sort
