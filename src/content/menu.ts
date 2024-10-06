@@ -53,7 +53,7 @@ export const operatorMenu: NavbarMenu[] = [
       {
         name: "Daftar Obat",
         icon: FaCapsules,
-        href: "/obat/all",
+        href: "/obat",
         children: [],
       },
       {
