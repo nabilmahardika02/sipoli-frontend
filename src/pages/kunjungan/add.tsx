@@ -44,13 +44,13 @@ const KunjunganAddPage = () => {
     const [profile, setProfile] = useState<Profile>();
     const [account, setAccount] = useState<Account>();
 
-    {user?.role === "PASIEN" && useEffect(() => {
-        setTitle("Pendaftaran Kunjungan");
-    }, [setTitle]);}
-
-    {user?.role !== "PASIEN" && useEffect(() => {
-        setTitle("Tambah Kunjungan");
-    }, [setTitle]);}
+    useEffect(() => {
+        if (user?.role === "PASIEN") {
+            setTitle("Pendaftaran Kunjungan");
+        } else {
+            setTitle("Tambah Kunjungan")
+        }
+    }, [setTitle]);
 
     useEffect(() =>{
         // Fungsi untuk mengambil data profil dari API
