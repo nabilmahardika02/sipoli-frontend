@@ -1,3 +1,5 @@
+import { Profile } from "./profile";
+
 export interface Account {
   id: string;
   username: string;
@@ -10,4 +12,5 @@ export interface Account {
   jabatan: string;
   unitKerja: string;
   eselon: number;
+  listProfile: Profile[];
 }
