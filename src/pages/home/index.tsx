@@ -77,7 +77,7 @@ const HomePage = () => {
               case 0: // Belum Dilayani
                 return 1;
               default: // Jika status tidak valid (undefined)
-                return -1;
+                return 2;
             }
           };
   
