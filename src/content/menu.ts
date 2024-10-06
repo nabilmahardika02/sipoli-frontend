@@ -92,7 +92,7 @@ export const dokterMenu: NavbarMenu[] = [
   {
     name: "Daftar Kunjungan",
     icon: FaBook,
-    href: "/kunjungan",
+    href: "/kunjungan/all",
     children: [],
   },
   {
@@ -119,7 +119,7 @@ export const perawatMenu: NavbarMenu[] = [
   {
     name: "Daftar Kunjungan",
     icon: FaBook,
-    href: "/kunjungan",
+    href: "/kunjungan/all",
     children: [],
   },
   {
