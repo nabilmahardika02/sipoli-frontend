@@ -44,9 +44,13 @@ const KunjunganAddPage = () => {
     const [profile, setProfile] = useState<Profile>();
     const [account, setAccount] = useState<Account>();
 
-    useEffect(() => {
+    {user?.role === "PASIEN" && useEffect(() => {
         setTitle("Pendaftaran Kunjungan");
-    }, [setTitle]);
+    }, [setTitle]);}
+
+    {user?.role !== "PASIEN" && useEffect(() => {
+        setTitle("Tambah Kunjungan");
+    }, [setTitle]);}
 
     useEffect(() =>{
         // Fungsi untuk mengambil data profil dari API
@@ -122,7 +126,6 @@ const KunjunganAddPage = () => {
             const listProfile = selectedAccount.listProfile;
     
             setProfiles(listProfile);
-            setProfile(listProfile[0]);
             setAccount(selectedAccount);
         }
     };
@@ -156,10 +159,15 @@ const KunjunganAddPage = () => {
     return (
         <main>
             <section>
+                <div className="flex justify-center md:hidden">
+                    {user?.role === "PASIEN" && <Typography variant="h4" className="text-primary-1">Pendaftaran Kunjungan</Typography>}
+                    {user?.role !== "PASIEN" && <Typography variant="h4" className="text-primary-1">Tambah Kunjungan</Typography>}
+                </div>
+                <Divider className="md:hidden"/>
                 {user &&
                     <FormProvider {...methods}>
                     <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
-                        <div className="justify-between gap-5 my-5 md:grid-cols-2 gap-5">
+                        <div className="justify-between gap-5 my-5 md:grid-cols-2">
                             <RadioButtonGroup
                                 name="sesi"
                                 options={sesi}

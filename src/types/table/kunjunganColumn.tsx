@@ -99,7 +99,8 @@ export const kunjunganTables: GridColDef[] = [
             </Button>
           </Link>
           <Link href={`/home`}>
-            <Button variant="danger" size="sm" fullRounded className="mx-auto" leftIcon={FaRegTrashAlt}>
+            <Button variant="danger" size="lg" fullRounded className="mx-auto">
+              <FaRegTrashAlt/>
             </Button>
           </Link>
         </div>

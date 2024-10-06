@@ -53,6 +53,8 @@ export const kunjunganTableColumns: GridColDef[] = [
     headerAlign: "center",
     width: 200,
     align: "center",
+    sortable: true,
+    valueGetter: (value, row, column, apiRef) => {row.status},
     renderCell: (params) => {
       const status = params.row.status;
       let statusText = "";

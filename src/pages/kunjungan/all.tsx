@@ -48,7 +48,14 @@ const KunjunganAllPage = () => {
       );
 
       if (isSuccess) {
-        setKunjungans(responseData as Kunjungan[]); // Set data profil ke state
+        // Sort data di frontend berdasarkan tanggal (descending)
+        const sortedData = (responseData as Kunjungan[]).sort((a, b) => {
+          const dateA = new Date(a.tanggal).getTime();
+          const dateB = new Date(b.tanggal).getTime();
+          return dateB - dateA;  // Urutan descending
+        });
+  
+        setKunjungans(sortedData); // Set data kunjungan yang sudah di-sort
       }
 
       console.log("Data yang diterima:", responseData); 
@@ -77,6 +84,10 @@ const KunjunganAllPage = () => {
   return (
     <main>
       <section className="mt-5">
+        <div className="flex justify-center md:hidden">
+          <Typography variant="h4" className="text-primary-1">Daftar Kunjungan</Typography>
+        </div>
+        <Divider className="md:hidden"/>
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className="my-5">
           <div className="flex justify-center items-center gap-2">
@@ -103,12 +114,25 @@ const KunjunganAllPage = () => {
         </Link>
       </div>
         <div className="w-full flex items-center justify-end gap-4">
-          {kunjungans && (
+          {kunjungans && kunjungans.length > 0 ? (
             <DataTable
               columns={kunjunganTables}
               getRowId={getRowIdKunjungan}
               rows={kunjungans}
+              sortingOrder={['asc', 'desc']}  // Mengatur urutan sort (ascending, descending)
+              initialState={{
+                sorting: {
+                  sortModel: [
+                    {
+                      field: 'tanggal',  // Kolom yang akan di-sort
+                      sort: 'desc',  // Urutan descending (tanggal terbaru)
+                    },
+                  ],
+                },
+              }}
             />
+          ) : (
+            <Typography variant="h6" className="text-gray-500">Belum ada kunjungan</Typography>
           )}
         </div>
       </section>
