@@ -105,4 +105,5 @@ export const kunjunganTableColumns: GridColDef[] = [
 ];
 
 // Fungsi untuk mendapatkan Row ID
-export const getRowIdKunjungans: GridRowIdGetter<Kunjungan> = (row: Kunjungan) => row.id;
+export const getRowIdKunjungans: GridRowIdGetter<GridValidRowModel> = (row) =>
+  row.id;
