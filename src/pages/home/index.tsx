@@ -77,11 +77,11 @@ const HomePage = () => {
               case 0: // Belum Dilayani
                 return 1;
               default: // Jika status tidak valid (undefined)
-                return 3;
+                return -1;
             }
           };
   
-          return statusPriority(a.status ?? '') - statusPriority(b.status ?? '');
+          return statusPriority(a.status) - statusPriority(b.status);
         });
   
         setKunjungans(sortedData); // Set data kunjungan yang sudah di-sort
