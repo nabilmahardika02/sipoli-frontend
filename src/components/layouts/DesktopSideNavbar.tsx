@@ -68,7 +68,7 @@ const DesktopSideNavbar = ({ className }: { className?: string }) => {
       onMouseEnter={handleHover}
       onMouseLeave={handleMouseLeave}
       className={clsxm(
-        "fixed top-0 left-0 w-[7%] hover:w-[20%] transition-all duration-400 h-screen bg-primary-1 shadow-lg py-5 z-10",
+        "fixed top-0 left-0 w-[7%] hover:w-[20%] transition-all duration-400 h-screen bg-primary-1 shadow-lg py-5 z-30",
         className
       )}
     >

@@ -118,8 +118,17 @@ const LoginPage = () => {
             <Typography variant="p3" className="mt-5">
               Lupa password?
             </Typography>
-            <Link href={"https://wa.me/62888888888?text=Halo%20Admin,%20Saya%20lupa%20password"} target="_blank">
-              <Typography variant="p3" className="mt-5 hover:text-blue-500" weight="medium">
+            <Link
+              href={
+                "https://wa.me/62888888888?text=Halo%20Admin,%20Saya%20lupa%20password"
+              }
+              target="_blank"
+            >
+              <Typography
+                variant="p3"
+                className="mt-5 hover:text-blue-500"
+                weight="medium"
+              >
                 Hubungi Admin
               </Typography>
             </Link>

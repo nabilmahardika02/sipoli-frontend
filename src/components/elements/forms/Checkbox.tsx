@@ -18,7 +18,7 @@ export type CheckboxProps = {
   helperText?: string;
   readOnly?: boolean;
   labelClassName?: string;
-  isChecked?: boolean
+  isChecked?: boolean;
   labelVariant?: string;
   size?: keyof typeof CheckboxSize;
 } & Omit<React.ComponentPropsWithoutRef<"input">, "size">;
