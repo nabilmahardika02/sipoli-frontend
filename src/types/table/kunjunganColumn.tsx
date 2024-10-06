@@ -33,7 +33,7 @@ export const kunjunganTables: GridColDef[] = [
         return date.toLocaleDateString('id-ID', options); // Menggunakan locale Indonesia
       }
       return "-";
-    }
+    },
   },
   {
     field: "name",
@@ -43,13 +43,13 @@ export const kunjunganTables: GridColDef[] = [
     align: "center",
     valueGetter: (value, row, column, apiRef) => {
       return row.profile?.name ?? "-"
-    }
+    },
   },
   {
     field: "status",
     headerName: "Status",
     headerAlign: "center",
-    width: 200,
+    width: 150,
     align: "center",
     renderCell: (params) => {
       const status = params.row.status;
@@ -78,13 +78,13 @@ export const kunjunganTables: GridColDef[] = [
           {statusText}
         </span>
       );
-    }
+    },
   },
   {
     field: "action",
     headerName: "Action",
     headerAlign: "center",
-    width: 400,
+    width: 200,
     align: "center",
     sortable: false,
     renderCell: (params: CustomGridValueGetterParams) => {
@@ -96,7 +96,8 @@ export const kunjunganTables: GridColDef[] = [
             </Button>
           </Link>
           <Link href={`/home`}>
-            <Button variant="danger" size="sm" fullRounded className="mx-auto" leftIcon={FaRegTrashAlt}>
+            <Button variant="danger" size="lg" fullRounded className="mx-auto">
+              <FaRegTrashAlt/>
             </Button>
           </Link>
         </div>

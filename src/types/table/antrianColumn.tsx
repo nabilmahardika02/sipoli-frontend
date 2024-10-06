@@ -19,20 +19,20 @@ export const kunjunganTableColumns: GridColDef[] = [
     headerName: "Sesi",
     headerAlign: "center",  // Menengahkan teks header
     align: "center", 
-    width: 200,
+    width: 100,
     valueGetter: (value, row, column, apiRef) => {
       return row.antrian?.sesi ?? "-"
-    }
+    },
   },
   {
     field: "noAntrian",
     headerName: "No. Antrian",
     headerAlign: "center",
-    width: 200,
+    width: 100,
     align: "center",
     valueGetter: (value, row, column, apiRef) => {
       return row.antrian?.noAntrian ?? "-"
-    }
+    },
   },
   {
     field: "name",
@@ -42,14 +42,16 @@ export const kunjunganTableColumns: GridColDef[] = [
     align: "center",
     valueGetter: (value, row, column, apiRef) => {
       return row.profile?.name ?? "-"
-    }
+    },
   },
   {
     field: "status",
     headerName: "Status",
     headerAlign: "center",
-    width: 200,
+    width: 150,
     align: "center",
+    sortable: true,
+    valueGetter: (value, row, column, apiRef) => {row.status},
     renderCell: (params) => {
       const status = params.row.status;
       let statusText = "";
@@ -69,7 +71,7 @@ export const kunjunganTableColumns: GridColDef[] = [
           {statusText}
         </span>
       );
-    }
+    },
   },
   {
     field: "action",
@@ -81,17 +83,19 @@ export const kunjunganTableColumns: GridColDef[] = [
     renderCell: (params: CustomGridValueGetterParams) => {
       return (
         <div className="w-full flex items-center gap-2 justify-center h-full">
-          <Link href={`/home`}>
+          <Link href={`/pasien/${params.row.profile.id}`}>
             <Button variant="outline" size="sm" fullRounded className="mx-auto">
               Detail Pasien
             </Button>
           </Link>
           <Link href={`/home`}>
-            <Button variant="primary" size="sm" fullRounded className="mx-auto" leftIcon={LuPencil}>
+            <Button variant="primary" size="lg" fullRounded className="mx-auto">
+              <LuPencil/>
             </Button>
           </Link>
           <Link href={`/home`}>
-            <Button variant="danger" size="sm" fullRounded className="mx-auto" leftIcon={FaRegTrashAlt}>
+            <Button variant="danger" size="lg" fullRounded className="mx-auto">
+              <FaRegTrashAlt/>
             </Button>
           </Link>
         </div>

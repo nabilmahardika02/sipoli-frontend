@@ -17,6 +17,7 @@ import { SandboxForm } from "@/types/forms/SandboxForm";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import DataTable from "@/lib/datatable";
 import { getRowIdKunjungans, kunjunganTableColumns } from "@/types/table/antrianColumn";
+import Divider from "@/components/elements/Divider";
 
 const HomePage = () => {
   const user = useAuthStore.useUser();
@@ -62,11 +63,26 @@ const HomePage = () => {
     const fetchKunjungan = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "get",
-        "kunjungan/all?profileId="+selectedProfileId
+        "kunjungan/all?profileId="+selectedProfileId+"&isActive=true",
       );
 
       if (isSuccess) {
-        setKunjungans(responseData as Kunjungan[]);
+        // Sort data berdasarkan status dengan prioritas "Sedang Dilayani" paling atas
+        const sortedData = (responseData as Kunjungan[]).sort((a, b) => {
+          const statusPriority = (status: number) => {
+            // Tentukan prioritas untuk setiap status
+            switch (status) {
+              case 1: // Sedang Dilayani
+                return 0;
+              case 0: // Belum Dilayani
+                return 1;
+            }
+          };
+  
+          return statusPriority(a.status) - statusPriority(b.status);
+        });
+  
+        setKunjungans(sortedData); // Set data kunjungan yang sudah di-sort
       }
 
       console.log("Data yang diterima:", responseData); 
@@ -116,9 +132,19 @@ const HomePage = () => {
         Antrian Hari Ini
       </Typography>}
 
-      <Link href={"/kunjungan/add"}>
+      {user?.role === "PASIEN" && <Typography variant="h4" className=" text-primary-1 md:hidden">
+        Kunjungan Aktif
+      </Typography>}
+
+      <Divider className="md:hidden"/>
+
+      {user?.role === "PASIEN" && <Link href={"/kunjungan/add"}>
         <Button leftIcon={GoPlus}>Daftar Kunjungan</Button>
-      </Link>
+      </Link>}
+
+      {user?.role !== "PASIEN" && <Link href={"/kunjungan/add"}>
+        <Button leftIcon={GoPlus}>Tambah Kunjungan</Button>
+      </Link>}
 
       <div className="justify-between gap-5 my-5 md:grid-cols-2 gap-5">
         <FormProvider {...methods}>
@@ -144,24 +170,26 @@ const HomePage = () => {
       {user?.role === "PASIEN" && (
         selectedProfile ? (
           kunjungans.length > 0 ? (
-            kunjungans.map((kunjungan) => (
-              <div key={kunjungan.id} className="bg-white shadow-lg rounded-lg p-6 max-w-md w-full mb-5 border border-gray-200">
-                <Typography variant="h6" className="font-semibold mb-2">
-                  Antrian {kunjungan.antrian.noAntrian} - Sesi {kunjungan.antrian.sesi}
-                </Typography>
-                <Typography variant="p1" className="mb-2">
-                  {new Date(kunjungan.tanggal).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
-                </Typography>
-                <div className="flex justify-between">
-                  <Link href={"/home"}>
-                    <Button variant="danger">Cancel</Button>
-                  </Link>
-                  <Link href={`/kunjungan/${kunjungan.id}`}>
-                    <Button>Detail</Button>
-                  </Link>
+            <div className="lg:grid grid-cols-3 gap-4 w-full items-center md:grid grid-cols-2">
+              {kunjungans.map((kunjungan) => (
+                <div key={kunjungan.id} className="bg-white shadow-lg rounded-lg p-6 mb-5 border border-gray-200">
+                  <Typography variant="h6" className="font-semibold mb-2">
+                    Antrian {kunjungan.antrian.noAntrian} - Sesi {kunjungan.antrian.sesi}
+                  </Typography>
+                  <Typography variant="p1" className="mb-2">
+                    {new Date(kunjungan.tanggal).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+                  </Typography>
+                  <div className="flex justify-between">
+                    <Link href={"/home"}>
+                      <Button variant="danger">Cancel</Button>
+                    </Link>
+                    <Link href={`/kunjungan/${kunjungan.id}`}>
+                      <Button>Detail</Button>
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            ))
+              ))}
+            </div>
           ) : (
             <div className="text-center text-gray-500">
               <Typography variant="p1" className="my-5">
@@ -178,14 +206,29 @@ const HomePage = () => {
         )
       )}
 
-      <div className="w-full flex items-center justify-end gap-4">
-        {user?.role !== "PASIEN" && kunjungans && (
+      <div style={{ width: '100%', overflowX: 'auto' }}>
+        {user?.role !== "PASIEN" && kunjungans && kunjungans.length > 0 ? (
           <DataTable
             columns={kunjunganTableColumns}
             getRowId={getRowIdKunjungans}
             rows={kunjungans}
+            sortingOrder={['asc', 'desc']}  // Mengatur urutan sort (ascending, descending)
+            initialState={{
+              sorting: {
+                sortModel: [
+                  {
+                    field: 'status',  // Pastikan ini sesuai dengan field di columns
+                    sort: 'desc',  // Untuk memprioritaskan "Sedang Dilayani" di atas
+                  },
+                ],
+              },
+            }}
+            autoHeight
+            disableSelectionOnClick
           />
-        )}
+        ) : user?.role !== "PASIEN" ? (
+          <Typography variant="h6" className="text-gray-500">Belum ada antrian</Typography>
+        ): ""}
       </div>
 
       <Button className="mt-5" onClick={handleLogout}>

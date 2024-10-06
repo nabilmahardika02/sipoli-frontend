@@ -15,6 +15,7 @@ import { Account } from "@/types/entities/account";
 import useAuthStore from "@/store/useAuthStore";
 import Link from "next/link";
 import { KunjunganForm } from "@/types/forms/kunjunganForm";
+import Divider from "@/components/elements/Divider";
 
 const sesi = [
     {
@@ -43,9 +44,13 @@ const KunjunganAddPage = () => {
     const [profile, setProfile] = useState<Profile>();
     const [account, setAccount] = useState<Account>();
 
-    useEffect(() => {
+    {user?.role === "PASIEN" && useEffect(() => {
         setTitle("Pendaftaran Kunjungan");
-    }, [setTitle]);
+    }, [setTitle]);}
+
+    {user?.role !== "PASIEN" && useEffect(() => {
+        setTitle("Tambah Kunjungan");
+    }, [setTitle]);}
 
     useEffect(() =>{
         // Fungsi untuk mengambil data profil dari API
@@ -121,7 +126,6 @@ const KunjunganAddPage = () => {
             const listProfile = selectedAccount.listProfile;
     
             setProfiles(listProfile);
-            setProfile(listProfile[0]);
             setAccount(selectedAccount);
         }
     };
@@ -155,10 +159,15 @@ const KunjunganAddPage = () => {
     return (
         <main>
             <section>
+                <div className="flex justify-center md:hidden">
+                    {user?.role === "PASIEN" && <Typography variant="h4" className="text-primary-1">Pendaftaran Kunjungan</Typography>}
+                    {user?.role !== "PASIEN" && <Typography variant="h4" className="text-primary-1">Tambah Kunjungan</Typography>}
+                </div>
+                <Divider className="md:hidden"/>
                 {user &&
                     <FormProvider {...methods}>
                     <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
-                        <div className="justify-between gap-5 my-5 md:grid-cols-2 gap-5">
+                        <div className="justify-between gap-5 my-5 md:grid-cols-2">
                             <RadioButtonGroup
                                 name="sesi"
                                 options={sesi}
@@ -166,6 +175,7 @@ const KunjunganAddPage = () => {
                                 direction="horizontal"
                                 validation={{ required: "Mohon pilih sesi" }}
                             />
+                            <Divider/>
                             <Typography variant="p1" weight="bold" className="text-primary-1 my-5">Data Pribadi</Typography>
                             <div className="justify-between gap-5 my-5">
                                 {user.role !== "PASIEN" && <SelectInput
@@ -206,11 +216,12 @@ const KunjunganAddPage = () => {
                                         <option value="">Tidak ada profil yang tersedia</option>
                                     )}
                                 </SelectInput>
-                                <Typography variant="p1">Nama: {profile?.name}</Typography>
+                                <Typography variant="p1" className="mt-2">Nama: {profile?.name}</Typography>
                                 <Typography variant="p1">No. HP: {profile?.noHp}</Typography>
                                 <Typography variant="p1">Tanggal Lahir: {profile?.tanggalLahir ? formatDate(profile.tanggalLahir) : '-'}</Typography>
                                 <Typography variant="p1">Jenis Kelamin: {profile?.jenisKelamin !== undefined ? formatGender(profile.jenisKelamin) : '-'}</Typography>
                             </div>
+                            <Divider/>
                             {user.role !== "PASIEN" && <Input
                                 id="tanggalKunjungan"
                                 label="Tanggal Kunjungan"
@@ -237,7 +248,7 @@ const KunjunganAddPage = () => {
                                 validation={{ required: "Mohon beri tahu keluhan Anda" }}
                             />
                         </div>
-                        <div className="mt-5 flex items-center gap-4">
+                        <div className="mt-5 flex items-center justify-center gap-4">
                             <Button type="submit">Submit</Button>
                             <Link href={"/home"}>
                                 <Button variant="danger">Cancel</Button>

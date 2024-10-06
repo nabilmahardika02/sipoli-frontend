@@ -12,22 +12,26 @@ import { checkRole } from "@/lib/checkRole";
 import Forbidden from "@/components/fragments/Forbidden";
 import Input from "@/components/elements/forms/Input";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import { SandboxForm } from "@/types/forms/SandboxForm";
+import { FilterKunjunganForm } from "@/types/forms/filterKunjunganForm";
 import axios from "axios";
 import Typography from "@/components/elements/Typography";
+import Divider from "@/components/elements/Divider";
+import { FaSearch } from "react-icons/fa";
+import { useRouter } from "next/router";
 
 const KunjunganAllPage = () => {
   const { setTitle } = useDocumentTitle();
   const [kunjungans, setKunjungans] = useState<Kunjungan[]>();
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
+  const router = useRouter();
 
-  const methods = useForm<SandboxForm>({
+  const methods = useForm<FilterKunjunganForm>({
     mode: "onTouched",
   });
   
   if (!checkRole(["OPERATOR", "PERAWAT", "DOKTER"])) {
-    return <Forbidden/>;
+    router.push("/403");
   }
 
   useEffect(() => {
@@ -44,7 +48,14 @@ const KunjunganAllPage = () => {
       );
 
       if (isSuccess) {
-        setKunjungans(responseData as Kunjungan[]); // Set data profil ke state
+        // Sort data di frontend berdasarkan tanggal (descending)
+        const sortedData = (responseData as Kunjungan[]).sort((a, b) => {
+          const dateA = new Date(a.tanggal).getTime();
+          const dateB = new Date(b.tanggal).getTime();
+          return dateB - dateA;  // Urutan descending
+        });
+  
+        setKunjungans(sortedData); // Set data kunjungan yang sudah di-sort
       }
 
       console.log("Data yang diterima:", responseData); 
@@ -53,61 +64,75 @@ const KunjunganAllPage = () => {
     fetchKunjungans();
   }, []);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault(); // Mencegah reload halaman
-    await onSubmit();
-  };
+  const { handleSubmit } = methods;
 
-  const onSubmit = async () => {
-    try {
-      const response = await axios.get(`/kunjungan/all`, {
-        params: {
-          startDate: startDate,
-          endDate: endDate,
-        },
-      });
-      setKunjungans(response.data.result); // Mengupdate state dengan data yang diterima
-    } catch (error) {
-      console.error("Error fetching kunjungan:", error);
-    }
-  };
+  const onSubmit: SubmitHandler<FilterKunjunganForm> = (data) => {
+    const postData = async () => {
+      const [responseData, message, isSuccess] = await sendRequest(
+        "get",
+        "kunjungan/all?startDate="+data.startDate+"&endDate="+data.endDate
+      );
+
+      if (isSuccess) {
+        setKunjungans(responseData as Kunjungan[]);
+      }
+    };
+
+    postData();
+    };
 
   return (
     <main>
       <section className="mt-5">
+        <div className="flex justify-center md:hidden">
+          <Typography variant="h4" className="text-primary-1">Daftar Kunjungan</Typography>
+        </div>
+        <Divider className="md:hidden"/>
         <FormProvider {...methods}>
-          <form onSubmit={handleSubmit} className="my-5">
+          <form onSubmit={handleSubmit(onSubmit)} className="my-5">
           <div className="flex justify-center items-center gap-2">
             <Input
               id="startDate"
               label="Tanggal Awal"
               type="date"
-              onChange={(e) => setStartDate(e.target.value)}
             />
-            <Typography variant="p4">sampai</Typography>
+            <Typography variant="p1" className="mt-6">sampai</Typography>
             <Input
               id="endDate"
               label="Tanggal Akhir"
               type="date"
-              onChange={(e) => setEndDate(e.target.value)}
             />
-            <Button type="submit" className="h-full py-[calc(0.375rem+1px)] px-4">Cari</Button>
+            <Button type="submit" className="h-full" size="lg" textClassName="my-5 h-full"><FaSearch/></Button>
             </div>
           </form>
           
         </FormProvider>
+        <Divider/>
         <div className="w-full flex items-center justify-end gap-4 my-5">
         <Link href={"/kunjungan/add"}>
           <Button leftIcon={GoPlus}>Tambah</Button>
         </Link>
       </div>
-        <div className="w-full flex items-center justify-end gap-4">
-          {kunjungans && (
+        <div style={{ width: '100%', overflowX: 'auto' }}>
+          {kunjungans && kunjungans.length > 0 ? (
             <DataTable
               columns={kunjunganTables}
               getRowId={getRowIdKunjungan}
               rows={kunjungans}
+              sortingOrder={['asc', 'desc']}  // Mengatur urutan sort (ascending, descending)
+              initialState={{
+                sorting: {
+                  sortModel: [
+                    {
+                      field: 'tanggal',  // Kolom yang akan di-sort
+                      sort: 'desc',  // Urutan descending (tanggal terbaru)
+                    },
+                  ],
+                },
+              }}
             />
+          ) : (
+            <Typography variant="h6" className="text-gray-500">Belum ada kunjungan</Typography>
           )}
         </div>
       </section>
