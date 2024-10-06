@@ -1,13 +1,13 @@
 export function formatDateOnly(dateString: string): string {
   const date = new Date(dateString);
 
-  const options: Intl.DateTimeFormatOptions = { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   };
 
-  return date.toLocaleDateString('en-US', options);
+  return date.toLocaleDateString("en-US", options);
 }
 
 export function formatDate(isoDate: string): string {
@@ -42,4 +42,3 @@ export function getSatuanObat(value: number): string {
     return "";
   }
 }
-

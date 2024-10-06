@@ -1,5 +1,5 @@
 export interface Antrian {
-    id: string,
-    sesi: number,
-    noAntrian: number,
+  id: string;
+  sesi: number;
+  noAntrian: number;
 }

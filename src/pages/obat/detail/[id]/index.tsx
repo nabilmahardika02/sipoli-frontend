@@ -3,7 +3,7 @@ import Divider from "@/components/elements/Divider";
 import Input from "@/components/elements/forms/Input";
 import IconButton from "@/components/elements/IconButton";
 import { LoadingDiv } from "@/components/elements/Loading";
-import { DANGER_TOAST, showToast, SUCCESS_TOAST } from "@/components/elements/Toast";
+import { DANGER_TOAST, showToast } from "@/components/elements/Toast";
 import Typography from "@/components/elements/Typography";
 import withAuth from "@/components/hoc/withAuth";
 import ModalLayout from "@/components/layouts/ModalLayout";

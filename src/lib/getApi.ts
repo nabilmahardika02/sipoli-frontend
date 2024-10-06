@@ -37,7 +37,7 @@ const sendRequest = async <T>(
 
     dismissLoadingToast();
     if (toast) {
-      showToast(apiResponse.data.message, SUCCESS_TOAST)
+      showToast(apiResponse.data.message, SUCCESS_TOAST);
     }
     return [apiResponse.data.result, apiResponse.data.message, true];
   } catch (error) {

@@ -128,10 +128,7 @@ export default function RadioButtonGroup({
       {error && !hideError && (
         <Typography
           variant="p3"
-          className={clsxm(
-            "!leading-tight text-danger-core",
-            errorClassName
-          )}
+          className={clsxm("!leading-tight text-danger-core", errorClassName)}
         >
           {error?.message?.toString()}
         </Typography>

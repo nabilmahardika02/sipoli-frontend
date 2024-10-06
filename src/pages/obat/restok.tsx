@@ -46,8 +46,6 @@ const RestockPage = () => {
       ...restockListValue,
       tanggalPembelian: event.target.value,
     });
-
-    console.log(restockListValue);
   };
 
   const methods = useForm<RestockListForm>({

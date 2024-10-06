@@ -2,7 +2,6 @@ import Button from "@/components/elements/Button";
 import Input from "@/components/elements/forms/Input";
 import RadioButtonGroup from "@/components/elements/forms/RadioButtonGroup";
 import SelectInput from "@/components/elements/forms/SelectInput";
-import Typography from "@/components/elements/Typography";
 import withAuth from "@/components/hoc/withAuth";
 import { useDocumentTitle } from "@/context/Title";
 import sendRequest from "@/lib/getApi";

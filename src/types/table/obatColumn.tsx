@@ -21,7 +21,6 @@ export const obatTableColumn: GridColDef[] = [
     headerAlign: "center",
     width: 200,
     align: "center",
-    flex: 1,
   },
   {
     field: "totalStok",
@@ -68,7 +67,6 @@ export const restockColumn: GridColDef[] = [
     headerAlign: "center",
     width: 200,
     align: "center",
-    flex: 1,
     valueGetter: (value, row, column, apiRef) => `${formatDateOnly(value)}`,
   },
   {
@@ -77,7 +75,6 @@ export const restockColumn: GridColDef[] = [
     headerAlign: "center",
     width: 200,
     align: "center",
-    flex: 1,
   },
 ];
 

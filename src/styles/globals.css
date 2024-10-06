@@ -167,3 +167,9 @@ body {
 .fade-out-up-menu {
   animation: fadeOutUpMenu 0.3s ease;
 }
+
+/* -------------------------------------------------------------------------------- DATATABLE */
+
+.MuiDataGrid-columnHeaderTitle {
+  font-weight: 700 !important;
+}

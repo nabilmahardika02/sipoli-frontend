@@ -138,7 +138,7 @@ export default function withAuth<T>(
 
     if (isLoading) {
       return (
-        <div className="w-full flex justify-center items-center min-h-[70vh]">
+        <div className="w-full flex justify-center items-center h-screen">
           <Loading size="lg" />
         </div>
       );
@@ -147,7 +147,7 @@ export default function withAuth<T>(
     // unauthenticated user trying to access the system
     if ((isLoading || !isAuthenticated) && routeRole !== "public") {
       return (
-        <div className="w-full flex justify-center items-center min-h-[70vh]">
+        <div className="w-full flex justify-center items-center h-screen">
           <Loading size="lg" />
         </div>
       );
