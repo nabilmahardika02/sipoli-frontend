@@ -48,7 +48,7 @@ export const userTableColumns: GridColDef[] = [
     renderCell: (value) => {
       return (
         <div className="w-full flex items-center justify-center h-full">
-          <Link href={`/akun/${value.row.id}`}>
+          <Link href={`/akun/detail/${value.row.id}`}>
             <Button variant="outline" size="sm" fullRounded className="mx-auto">
               Detail
             </Button>
