@@ -1,6 +1,4 @@
 import Button from "@/components/elements/Button";
-import { LuPencil } from "react-icons/lu";
-import { FaRegTrashAlt } from "react-icons/fa";
 import { Kunjungan } from "@/types/entities/kunjungan";
 import {
   GridColDef,
@@ -8,6 +6,8 @@ import {
   GridValidRowModel,
 } from "@mui/x-data-grid";
 import Link from "next/link";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { LuPencil } from "react-icons/lu";
 
 type CustomGridValueGetterParams = {
   row: Kunjungan;
@@ -17,11 +17,11 @@ export const kunjunganTableColumns: GridColDef[] = [
   {
     field: "sesi",
     headerName: "Sesi",
-    headerAlign: "center",  // Menengahkan teks header
-    align: "center", 
+    headerAlign: "center", 
+    align: "center",
     width: 100,
     valueGetter: (value, row, column, apiRef) => {
-      return row.antrian?.sesi ?? "-"
+      return row.antrian?.sesi ?? "-";
     },
   },
   {
@@ -31,7 +31,7 @@ export const kunjunganTableColumns: GridColDef[] = [
     width: 100,
     align: "center",
     valueGetter: (value, row, column, apiRef) => {
-      return row.antrian?.noAntrian ?? "-"
+      return row.antrian?.noAntrian ?? "-";
     },
   },
   {
@@ -41,7 +41,7 @@ export const kunjunganTableColumns: GridColDef[] = [
     width: 200,
     align: "center",
     valueGetter: (value, row, column, apiRef) => {
-      return row.profile?.name ?? "-"
+      return row.profile?.name ?? "-";
     },
   },
   {
@@ -51,7 +51,9 @@ export const kunjunganTableColumns: GridColDef[] = [
     width: 150,
     align: "center",
     sortable: true,
-    valueGetter: (value, row, column, apiRef) => {row.status},
+    valueGetter: (value, row, column, apiRef) => {
+      row.status;
+    },
     renderCell: (params) => {
       const status = params.row.status;
       let statusText = "";
@@ -66,11 +68,7 @@ export const kunjunganTableColumns: GridColDef[] = [
           color = "green";
           break;
       }
-      return (
-        <span style={{ color: color }}>
-          {statusText}
-        </span>
-      );
+      return <span style={{ color: color }}>{statusText}</span>;
     },
   },
   {
@@ -90,12 +88,12 @@ export const kunjunganTableColumns: GridColDef[] = [
           </Link>
           <Link href={`/kunjungan/update/${params.row.id}`}>
             <Button variant="primary" size="lg" fullRounded className="mx-auto">
-              <LuPencil/>
+              <LuPencil />
             </Button>
           </Link>
           <Link href={`/home`}>
             <Button variant="danger" size="lg" fullRounded className="mx-auto">
-              <FaRegTrashAlt/>
+              <FaRegTrashAlt />
             </Button>
           </Link>
         </div>
@@ -105,4 +103,5 @@ export const kunjunganTableColumns: GridColDef[] = [
 ];
 
 // Fungsi untuk mendapatkan Row ID
-export const getRowIdKunjungans: GridRowIdGetter<Kunjungan> = (row: Kunjungan) => row.id;
+export const getRowIdKunjungans: GridRowIdGetter<GridValidRowModel> = (row) =>
+  row.id;

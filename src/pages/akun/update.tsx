@@ -2,6 +2,7 @@ import Button from "@/components/elements/Button";
 import Input from "@/components/elements/forms/Input";
 import RadioButtonGroup from "@/components/elements/forms/RadioButtonGroup";
 import SelectInput from "@/components/elements/forms/SelectInput";
+import Typography from "@/components/elements/Typography";
 import withAuth from "@/components/hoc/withAuth";
 import { useDocumentTitle } from "@/context/Title";
 import sendRequest from "@/lib/getApi";
@@ -10,6 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { Account } from "@/types/entities/account";
 
 const jenisKelamin = [
   {
@@ -22,11 +24,12 @@ const jenisKelamin = [
   },
 ];
 
-const RegisterPage = () => {
+const UpdatePage = () => {
   const { setTitle } = useDocumentTitle();
+  const [selectedAccount, setAccount] = useState<Account>();
 
   useEffect(() => {
-    setTitle("Registrasi Akun");
+    setTitle("Update Akun");
   }, [setTitle]);
 
   const router = useRouter();
@@ -37,11 +40,26 @@ const RegisterPage = () => {
 
   const { handleSubmit } = methods;
 
+  useEffect(() => {
+    const fetchAccount = async () => {
+        const [responseData, message, isSuccess] = await sendRequest(
+            "get",
+            "/get-user-by-id?"
+        );
+
+        if (isSuccess) {
+            setAccount(responseData as Account);
+        }
+        console.log("Data yang diterima:", responseData);
+        fetchAccount();
+    }
+})
+  
   const onSubmit: SubmitHandler<RegisterForm> = (data) => {
     const postData = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
-        "post",
-        "auth/register-account",
+        "put",
+        "auth/update-pasien-account",
         data,
         true
       );
@@ -50,7 +68,6 @@ const RegisterPage = () => {
         router.push("/akun");
       }
     };
-
     postData();
   };
 
@@ -153,4 +170,4 @@ const RegisterPage = () => {
   );
 };
 
-export default withAuth(RegisterPage, "OPERATOR");
+export default withAuth(UpdatePage, "OPERATOR");

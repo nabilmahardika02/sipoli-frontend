@@ -43,8 +43,6 @@ const PasienPage = () => {
 
       if (isSuccess) {
         setPasien(responseData as Profile);
-      } else {
-        console.log(message);
       }
     };
 
@@ -52,12 +50,15 @@ const PasienPage = () => {
   }, [router.query.id]);
 
   // Fungsi untuk menghitung usia
-  const calculateAge = (birthDate) => {
+  const calculateAge = (birthDate: Date) => {
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDifference = today.getMonth() - birthDate.getMonth();
 
-    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+    if (
+      monthDifference < 0 ||
+      (monthDifference === 0 && today.getDate() < birthDate.getDate())
+    ) {
       age--; // Kurangi 1 dari usia
     }
 
@@ -76,37 +77,57 @@ const PasienPage = () => {
 
   // Determine gender text only if pasien is defined
   const kelaminText = pasien
-    ? jenisKelamin.find(jk => jk.value === String(pasien.jenisKelamin))?.text
-    : '';
+    ? jenisKelamin.find((jk) => jk.value === String(pasien.jenisKelamin))?.text
+    : "";
 
   return (
     <main>
       <section>
         <div className="flex justify-center md:hidden">
-          <Typography variant="h4" className="text-primary-1">Detail Pasien</Typography>
+          <Typography variant="h4" className="text-primary-1">
+            Detail Pasien
+          </Typography>
         </div>
-        <Divider className="md:hidden"/>
+        <Divider className="md:hidden" />
         <div className="grid grid-cols-2 gap-5 my-5">
           <div className="w-full">
-            <Typography variant="p1" className="text-gray-600">Nama</Typography>
-            <Typography variant="h6" className="text-primary-1">{pasien?.name}</Typography>
+            <Typography variant="p1" className="text-gray-600">
+              Nama
+            </Typography>
+            <Typography variant="h6" className="text-primary-1">
+              {pasien?.name}
+            </Typography>
           </div>
           <div className="w-full">
-            <Typography variant="p1" className="text-gray-600">Nomor HP</Typography>
-            <Typography variant="h6" className="text-primary-1">{pasien?.noHp}</Typography>
+            <Typography variant="p1" className="text-gray-600">
+              Nomor HP
+            </Typography>
+            <Typography variant="h6" className="text-primary-1">
+              {pasien?.noHp}
+            </Typography>
           </div>
           <div className="w-full">
-            <Typography variant="p1" className="text-gray-600">Usia</Typography>
-            <Typography variant="h6" className="text-primary-1">{usia} tahun</Typography>
+            <Typography variant="p1" className="text-gray-600">
+              Usia
+            </Typography>
+            <Typography variant="h6" className="text-primary-1">
+              {usia} tahun
+            </Typography>
           </div>
           <div className="w-full">
-            <Typography variant="p1" className="text-gray-600">Jenis Kelamin</Typography>
-            <Typography variant="h6" className="text-primary-1">{kelaminText}</Typography>
+            <Typography variant="p1" className="text-gray-600">
+              Jenis Kelamin
+            </Typography>
+            <Typography variant="h6" className="text-primary-1">
+              {kelaminText}
+            </Typography>
           </div>
         </div>
-        <Divider/>
+        <Divider />
         <div className="flex justify-center my-5">
-          <Typography variant="h6" className="text-gray-500">Belum ada rekam medis</Typography>
+          <Typography variant="h6" className="text-gray-500">
+            Belum ada rekam medis
+          </Typography>
         </div>
       </section>
     </main>

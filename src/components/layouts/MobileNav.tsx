@@ -1,4 +1,10 @@
-import { defaultMenu, dokterMenu, operatorMenu, pasienMenu, perawatMenu } from "@/content/menu";
+import {
+  defaultMenu,
+  dokterMenu,
+  operatorMenu,
+  pasienMenu,
+  perawatMenu,
+} from "@/content/menu";
 import clsxm from "@/lib/clsxm";
 import useAuthStore from "@/store/useAuthStore";
 import Link from "next/link";
@@ -42,7 +48,9 @@ const MobileNav = ({ className }: { className?: string }) => {
     setOpen(false);
     setTimeout(() => {
       setVisible(false);
-      setShowSubNav(new Array(getMenu(user?.role || "DEFAULT").length).fill(false));
+      setShowSubNav(
+        new Array(getMenu(user?.role || "DEFAULT").length).fill(false)
+      );
     }, 200);
   };
 
@@ -80,67 +88,65 @@ const MobileNav = ({ className }: { className?: string }) => {
               )}
             >
               <ul className="flex flex-col w-full py-4 items-center">
-                {user && getMenu(user.role).map((menu, index) =>
-                  menu.children.length ? (
-                    <div
-                      key={menu.href}
-                      className="w-full"
-                    >
-                      <button
+                {user &&
+                  getMenu(user.role).map((menu, index) =>
+                    menu.children.length ? (
+                      <div key={menu.href} className="w-full">
+                        <button
+                          className={clsxm(
+                            "parent-nav py-4 w-full group flex px-4 items-center justify-between",
+                            showSubnav[index]
+                              ? "active-subnav"
+                              : "inactive-subnav"
+                          )}
+                          key={menu.href}
+                          onClick={() => toggleMenuState(index)}
+                        >
+                          <div className="flex items-center gap-2">
+                            <menu.icon className="menu-icon text-primary-1 text-xl" />
+
+                            <Typography
+                              variant="p2"
+                              font="ubuntu"
+                              className="menu-title text-primary-1"
+                            >
+                              {menu.name}
+                            </Typography>
+                          </div>
+                          <MdKeyboardArrowLeft className="subnav-arrow text-primary-1 text-xl" />
+                        </button>
+                        <SubNav
+                          childMenu={menu.children}
+                          className={
+                            showSubnav[index]
+                              ? "block fade-in-down-menu"
+                              : "hidden fade-out-up-menu"
+                          }
+                        />
+                      </div>
+                    ) : (
+                      <Link
+                        href={menu.href}
                         className={clsxm(
-                          "parent-nav py-4 w-full group flex px-4 items-center justify-between",
-                          showSubnav[index]
-                            ? "active-subnav"
-                            : "inactive-subnav"
+                          "py-4 w-full group flex px-4 items-center justify-start"
                         )}
                         key={menu.href}
-                        onClick={() => toggleMenuState(index)}
                       >
                         <div className="flex items-center gap-2">
-                          <menu.icon className="menu-icon text-primary-1 text-xl" />
-
-                          <Typography
-                            variant="p2"
-                            font="ubuntu"
-                            className="menu-title text-primary-1"
-                          >
-                            {menu.name}
-                          </Typography>
+                          <menu.icon className="menu-icon text-primary-1 text-xl group-active:text-primary" />
+                          {isVisible && (
+                            <Typography
+                              variant="p2"
+                              font="ubuntu"
+                              className="text-primary-1 group-active:text-primary"
+                            >
+                              {menu.name}
+                            </Typography>
+                          )}
                         </div>
-                        <MdKeyboardArrowLeft className="subnav-arrow text-primary-1 text-xl" />
-                      </button>
-                      <SubNav
-                        childMenu={menu.children}
-                        className={
-                          showSubnav[index]
-                            ? "block fade-in-down-menu"
-                            : "hidden fade-out-up-menu"
-                        }
-                      />
-                    </div>
-                  ) : (
-                    <Link
-                      href={menu.href}
-                      className={clsxm(
-                        "py-4 w-full group flex px-4 items-center justify-start"
-                      )}
-                      key={menu.href}
-                    >
-                      <div className="flex items-center gap-2">
-                        <menu.icon className="menu-icon text-primary-1 text-xl group-active:text-primary" />
-                        {isVisible && (
-                          <Typography
-                            variant="p2"
-                            font="ubuntu"
-                            className="text-primary-1 group-active:text-primary"
-                          >
-                            {menu.name}
-                          </Typography>
-                        )}
-                      </div>
-                    </Link>
-                  )
-                )}
+                      </Link>
+                    )
+                  )}
               </ul>
             </div>
           </div>

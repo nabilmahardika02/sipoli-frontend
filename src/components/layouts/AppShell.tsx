@@ -40,7 +40,12 @@ const AppShell = (props: AppShellProps) => {
         >
           {!disable && <DesktopTopNav title={title} />}
           <div className={clsxm("min-h-[80vh]", !disable && "p-8")}>
-            <div className={clsxm("bg-white md:rounded-xl md:shadow-xl", !disable && "md:py-5 md:px-10")}>
+            <div
+              className={clsxm(
+                "bg-white md:rounded-xl md:shadow-xl",
+                !disable && "md:py-5 md:px-10"
+              )}
+            >
               {props.children}
             </div>
           </div>
