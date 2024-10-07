@@ -9,7 +9,7 @@ import { checkRole } from "@/lib/checkRole";
 import DataTable from "@/lib/datatable";
 import sendRequest from "@/lib/getApi";
 import { Kunjungan } from "@/types/entities/kunjungan";
-import { FilterKunjunganForm } from "@/types/forms/filterKunjunganForm";
+import { FilterKunjunganForm } from "@/types/forms/kunjunganForm";
 import {
   getRowIdKunjungan,
   kunjunganTables,
@@ -119,17 +119,6 @@ const KunjunganAllPage = () => {
               getRowId={getRowIdKunjungan}
               rows={kunjungans}
               flexColumnIndexes={[1, 3]}
-              // sortingOrder={["asc", "desc"]} // Mengatur urutan sort (ascending, descending)
-              // initialState={{
-              //   sorting: {
-              //     sortModel: [
-              //       {
-              //         field: "tanggal", // Kolom yang akan di-sort
-              //         sort: "desc", // Urutan descending (tanggal terbaru)
-              //       },
-              //     ],
-              //   },
-              // }}
             />
           ) : (
             <div className="w-full py-10 px-5 rounded-lg border border-gray-300 flex items-center justify-center">

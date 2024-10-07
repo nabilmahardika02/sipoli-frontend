@@ -94,7 +94,7 @@ const PasienPage = () => {
             <Typography variant="p1" className="text-gray-600">
               Nama
             </Typography>
-            <Typography variant="h6" className="text-primary-1">
+            <Typography variant="h6" weight="light" className="text-primary-1">
               {pasien?.name}
             </Typography>
           </div>
@@ -102,7 +102,7 @@ const PasienPage = () => {
             <Typography variant="p1" className="text-gray-600">
               Nomor HP
             </Typography>
-            <Typography variant="h6" className="text-primary-1">
+            <Typography variant="h6" weight="light" className="text-primary-1">
               {pasien?.noHp}
             </Typography>
           </div>
@@ -110,7 +110,7 @@ const PasienPage = () => {
             <Typography variant="p1" className="text-gray-600">
               Usia
             </Typography>
-            <Typography variant="h6" className="text-primary-1">
+            <Typography variant="h6" weight="light" className="text-primary-1">
               {usia} tahun
             </Typography>
           </div>
@@ -118,7 +118,7 @@ const PasienPage = () => {
             <Typography variant="p1" className="text-gray-600">
               Jenis Kelamin
             </Typography>
-            <Typography variant="h6" className="text-primary-1">
+            <Typography variant="h6" weight="light" className="text-primary-1">
               {kelaminText}
             </Typography>
           </div>
