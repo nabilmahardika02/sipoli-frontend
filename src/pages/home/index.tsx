@@ -22,7 +22,10 @@ import { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { GoPlus } from "react-icons/go";
 import { SUCCESS_TOAST, showToast } from "@/components/elements/Toast";
-import { CancelKunjunganForm, KunjunganForm } from "@/types/forms/kunjunganForm";
+import {
+  CancelKunjunganForm,
+  KunjunganForm,
+} from "@/types/forms/kunjunganForm";
 
 const HomePage = () => {
   const user = useAuthStore.useUser();
@@ -120,7 +123,7 @@ const HomePage = () => {
   const cancelKunjungan = async () => {
     const [responseData, message, isSuccess] = await sendRequest(
       "put",
-      "kunjungan/cancel?kunjunganId="+cancelId,
+      "kunjungan/cancel?kunjunganId=" + cancelId,
       true
     );
 
@@ -144,26 +147,28 @@ const HomePage = () => {
       <Head>
         <title>SIPOLI</title>
       </Head>
-      
-        {user?.role !== "PASIEN" ? (
-          <Typography variant="h6" className="my-5">Antrian Hari Ini</Typography>
-        ) : (
-          <Typography variant="h4" className=" text-primary-1 md:hidden">
-            Kunjungan Aktif
-          </Typography>
-        )}
 
-        {user?.role === "PASIEN" ? (
-          <div className="flex justify-end">
-            <Link href={"/kunjungan/add"}>
-              <Button leftIcon={GoPlus}>Daftar Kunjungan</Button>
-            </Link>
-          </div>
-        ) : (
+      {user?.role !== "PASIEN" ? (
+        <Typography variant="h6" className="my-5">
+          Antrian Hari Ini
+        </Typography>
+      ) : (
+        <Typography variant="h4" className=" text-primary-1 md:hidden">
+          Kunjungan Aktif
+        </Typography>
+      )}
+
+      {user?.role === "PASIEN" ? (
+        <div className="flex justify-end">
           <Link href={"/kunjungan/add"}>
-            <Button leftIcon={GoPlus}>Tambah Kunjungan</Button>
-          </Link>  
-        )}
+            <Button leftIcon={GoPlus}>Daftar Kunjungan</Button>
+          </Link>
+        </div>
+      ) : (
+        <Link href={"/kunjungan/add"}>
+          <Button leftIcon={GoPlus}>Tambah Kunjungan</Button>
+        </Link>
+      )}
 
       <div className="justify-between gap-5 md:grid-cols-2 my-4">
         <FormProvider {...methods}>
@@ -191,11 +196,11 @@ const HomePage = () => {
       {user?.role === "PASIEN" &&
         (selectedProfile ? (
           kunjungans.length > 0 ? (
-            <div className="lg:grid gap-4 w-full items-center md:grid grid-cols-2">
+            <div className="w-full flex gap-5 justify-center flex-shrink-0 flex-wrap">
               {kunjungans.map((kunjungan) => (
                 <div
                   key={kunjungan.id}
-                  className="bg-white shadow-lg rounded-lg p-6 mb-5 border border-gray-200"
+                  className="bg-white shadow-lg rounded-lg p-6 mb-5 border border-gray-200 w-full md:w-[40%] shrink-0"
                 >
                   <Typography variant="h6" className="font-semibold mb-2">
                     Antrian {kunjungan.antrian.noAntrian} - Sesi{" "}
@@ -211,13 +216,14 @@ const HomePage = () => {
                   </Typography>
                   <div className="flex justify-between">
                     <Link href={"/home"}>
-                      <Button 
-                        variant="danger" 
+                      <Button
+                        variant="danger"
                         onClick={() => {
-                          setShowCancelModal(true)
-                          setCancelId(kunjungan.id)
-                        }}>
-                            Cancel
+                          setShowCancelModal(true);
+                          setCancelId(kunjungan.id);
+                        }}
+                      >
+                        Cancel
                       </Button>
                     </Link>
                     <Link href={`/kunjungan/${kunjungan.id}`}>
@@ -287,9 +293,12 @@ const HomePage = () => {
             </Typography>
             <Typography variant="p2" className="text-primary-1 mt-2">
               <ul className="list-disc pl-4">
-                <li>Kunjungan yang sudah dibatalkan tidak dapat dibuka kembali.</li>
                 <li>
-                  Anda tidak dapat melihat informasi kunjungan yang telah dibatalkan.
+                  Kunjungan yang sudah dibatalkan tidak dapat dibuka kembali.
+                </li>
+                <li>
+                  Anda tidak dapat melihat informasi kunjungan yang telah
+                  dibatalkan.
                 </li>
               </ul>
             </Typography>
@@ -297,9 +306,7 @@ const HomePage = () => {
               <Button
                 variant="danger"
                 size="sm"
-                onClick={() =>
-                  cancelKunjungan()
-                }
+                onClick={() => cancelKunjungan()}
               >
                 Cancel
               </Button>
