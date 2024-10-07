@@ -88,7 +88,7 @@ export const kunjunganTableColumns: GridColDef[] = [
               Detail Pasien
             </Button>
           </Link>
-          <Link href={`/home`}>
+          <Link href={`/kunjungan/update/${params.row.id}`}>
             <Button variant="primary" size="lg" fullRounded className="mx-auto">
               <LuPencil/>
             </Button>

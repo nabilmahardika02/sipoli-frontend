@@ -172,6 +172,7 @@ const KunjunganAddPage = () => {
                                 name="sesi"
                                 options={sesi}
                                 label="Sesi"
+                                label="Sesi"
                                 direction="horizontal"
                                 validation={{ required: "Mohon pilih sesi" }}
                             />
