@@ -49,7 +49,7 @@ const KunjunganUpdatePage = () => {
       const [status, setStatus] = useState<string>();
 
     useEffect(() => {
-        setTitle("Update Kunjungan");
+        setTitle("Perbarui Kunjungan");
     }, [setTitle]);
 
     useEffect(() => {
@@ -130,7 +130,7 @@ const KunjunganUpdatePage = () => {
           if (isSuccess) {
               router.push("/home");
           } else {
-              console.error("Failed to update Kunjungan:", message);
+              console.error("Gagal untuk memperbarui kunjungan:", message);
           }
       };
 
@@ -188,7 +188,7 @@ const KunjunganUpdatePage = () => {
         <main>
             <section>
                 <div className="flex justify-center md:hidden">
-                    <Typography variant="h4" className="text-primary-1">Update Kunjungan</Typography>
+                    <Typography variant="h4" className="text-primary-1">Memperbarui Kunjungan</Typography>
                 </div>
                 <Divider className="md:hidden"/>
                 {kunjungan &&
@@ -286,9 +286,9 @@ const KunjunganUpdatePage = () => {
                             />
                         </div>
                         <div className="mt-5 flex items-center justify-center gap-4">
-                            <Button type="submit">Update</Button>
+                            <Button type="submit">Perbarui</Button>
                             <Link href={"/home"}>
-                                <Button variant="danger">Cancel</Button>
+                                <Button variant="danger">Batalkan</Button>
                             </Link>
                         </div>
                     </form>
