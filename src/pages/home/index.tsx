@@ -20,6 +20,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { GoPlus } from "react-icons/go";
+import { LuPencil } from "react-icons/lu";
+
 
 const HomePage = () => {
   const user = useAuthStore.useUser();

@@ -48,7 +48,7 @@ const KunjunganUpdatePage = () => {
     const [account, setAccount] = useState<Account>();
 
     useEffect(() => {
-        setTitle("Update Kunjungan");
+        setTitle("Mengubah Kunjungan");
     }, [setTitle]);
 
     useEffect(() => {
@@ -186,48 +186,56 @@ const KunjunganUpdatePage = () => {
                                 defaultValue={kunjungan?.antrian.sesi.toString()} // Preselect the sesi value
                             />
                             <Divider/>
-                            <Typography variant="p1" weight="bold" className="text-primary-1 my-5">Data Pribadi</Typography>
-                            <div className="justify-between gap-5 my-5">
-                                <SelectInput
-                                    id="accountId"
-                                    label="Account"
-                                    placeholder="Pilih akun"
-                                    onChange={handleAccount}
-                                    defaultValue={account?.id}
+                            <Typography
+                                variant="p1"
+                                weight="bold"
+                                className="text-primary-1 my-5"
                                 >
-                                    {accounts.length > 0 ? (
-                                        accounts.map((account) => (
-                                            <option key={account.id} value={account.id}>
-                                                {account.nip} - {account.listProfile.find(profile => profile.relative === 0)?.name ?? account.username}
-                                            </option>
-                                        ))
-                                    ) : (
-                                        <option value="">Tidak ada akun yang tersedia</option>
-                                    )}
-                                </SelectInput>
-                                <SelectInput
-                                    id="profileId"
-                                    label="Profil"
-                                    placeholder="Pilih profil"
-                                    onChange={handleProfile}
-                                    defaultValue={profile?.id}
-                                >
-                                    {profiles.length > 0 ? (
-                                        profiles.map((profile) => (
-                                            <option key={profile.id} value={profile.id}>
-                                                {profile.name}
-                                            </option>
-                                        ))
-                                    ) : (
-                                        <option value="">Tidak ada profil yang tersedia</option>
-                                    )}
-                                </SelectInput>
-                                <Typography variant="p1" className="mt-2">Nama: {profile?.name}</Typography>
-                                <Typography variant="p1">No. HP: {profile?.noHp}</Typography>
-                                <Typography variant="p1">Tanggal Lahir: {profile?.tanggalLahir ? formatDate(profile.tanggalLahir) : '-'}</Typography>
-                                <Typography variant="p1">Jenis Kelamin: {profile?.jenisKelamin !== undefined ? formatGender(profile.jenisKelamin) : '-'}</Typography>
-                            </div>
+                                Data Pribadi
+                            </Typography>
                             <Divider/>
+                            <div className="justify-between gap-5 my-5">
+
+                                    <SelectInput
+                                        id="accountId"
+                                        label="Account"
+                                        placeholder="Pilih akun"
+                                        onChange={handleAccount}
+                                        defaultValue={account?.id}
+                                    >
+                                        {accounts.length > 0 ? (
+                                            accounts.map((account) => (
+                                                <option key={account.id} value={account.id}>
+                                                    {account.nip} - {account.listProfile.find(profile => profile.relative === 0)?.name ?? account.username}
+                                                </option>
+                                            ))
+                                        ) : (
+                                            <option value="">Tidak ada akun yang tersedia</option>
+                                        )}
+                                    </SelectInput>
+                                    <SelectInput
+                                        id="profileId"
+                                        label="Profil"
+                                        placeholder="Pilih profil"
+                                        onChange={handleProfile}
+                                        defaultValue={profile?.id}
+                                    >
+                                        {profiles.length > 0 ? (
+                                            profiles.map((profile) => (
+                                                <option key={profile.id} value={profile.id}>
+                                                    {profile.name}
+                                                </option>
+                                            ))
+                                        ) : (
+                                            <option value="">Tidak ada profil yang tersedia</option>
+                                        )}
+                                    </SelectInput>
+                                    <Typography variant="p1" className="mt-2">Nama: {profile?.name}</Typography>
+                                    <Typography variant="p1">No. HP: {profile?.noHp}</Typography>
+                                    <Typography variant="p1">Tanggal Lahir: {profile?.tanggalLahir ? formatDate(profile.tanggalLahir) : '-'}</Typography>
+                                    <Typography variant="p1">Jenis Kelamin: {profile?.jenisKelamin !== undefined ? formatGender(profile.jenisKelamin) : '-'}</Typography>
+                            </div>
+
                             <Input
                                 id="tanggalKunjungan"
                                 label="Tanggal Kunjungan"
