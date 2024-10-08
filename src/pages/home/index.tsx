@@ -41,7 +41,7 @@ const HomePage = () => {
   });
 
   useEffect(() => {
-    setTitle("Home");
+    setTitle("Beranda");
   }, [setTitle]);
 
   useEffect(() => {

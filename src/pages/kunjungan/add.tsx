@@ -198,7 +198,7 @@ const KunjunganAddPage = () => {
                   {user.role !== "PASIEN" && (
                     <SelectInput
                       id="accountId"
-                      label="Account"
+                      label="Akun"
                       placeholder="Pilih akun"
                       validation={{ required: "Akun wajib diisi" }}
                       onChange={handleAccount}
