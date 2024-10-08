@@ -26,7 +26,7 @@ const PasienPage = () => {
   const [usia, setUsia] = useState<number>();
   const [tanggalLahir, setTanggalLahir] = useState<Date>();
 
-  if (!checkRole(["OPERATOR", "PERAWAT"])) {
+  if (!checkRole(["OPERATOR", "PERAWAT", "DOKTER"])) {
     router.push("/403");
   }
 
@@ -44,6 +44,8 @@ const PasienPage = () => {
       if (isSuccess) {
         setPasien(responseData as Profile);
       }
+
+      console.log(router.query.id)
     };
 
     fetchProfile();

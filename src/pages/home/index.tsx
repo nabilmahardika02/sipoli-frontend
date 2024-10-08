@@ -150,7 +150,7 @@ const HomePage = () => {
 
       {user?.role !== "PASIEN" ? (
         <Typography variant="h6" className="my-5">
-          Antrian Hari Ini
+          Daftar Antrian
         </Typography>
       ) : (
         <Typography variant="h4" className=" text-primary-1 md:hidden">
@@ -308,7 +308,7 @@ const HomePage = () => {
                 size="sm"
                 onClick={() => cancelKunjungan()}
               >
-                Cancel
+                Batalkan Kunjungan
               </Button>
               <Button
                 variant="success"

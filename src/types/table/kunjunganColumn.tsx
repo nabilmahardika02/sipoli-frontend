@@ -90,11 +90,6 @@ export const kunjunganTables: GridColDef[] = [
               Detail
             </Button>
           </Link>
-          <Link href={`/home`}>
-            <Button variant="danger" size="lg" fullRounded className="mx-auto">
-              <FaRegTrashAlt />
-            </Button>
-          </Link>
         </div>
       );
     },
