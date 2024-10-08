@@ -23,7 +23,7 @@ const AkunPage = () => {
     const fetchData = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "get",
-        "auth/users"
+        "auth/users-active"
       );
 
       if (isSuccess) {

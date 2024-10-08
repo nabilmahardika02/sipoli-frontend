@@ -8,6 +8,18 @@ import {
     GridValidRowModel,
 } from "@mui/x-data-grid";
 import Link from "next/link";
+import { getRelative, getJenisKelamin } from "@/lib/formater";
+
+const jenisKelamin = [
+    {
+      value: false,
+      text: "Laki-laki",
+    },
+    {
+      value: true,
+      text: "Perempuan",
+    },
+];
 
 type CustomGridValueGetterParams = {
     row: Profile;
@@ -20,35 +32,35 @@ export const profileTableColumns: GridColDef[] = [
         headerAlign: "center",
         width: 200,
         valueGetter: (value, row, column, apiRef) => {
-            return row.profile?.name ?? "-"
+            return row.name || "-"
         },
     },
     {
-        field: "jenis_kelamin",
+        field: "jenisKelamin",
         headerName: "Jenis Kelamin",
         headerAlign: "center",
         width: 200,
         valueGetter: (value, row, column, apiRef) => {
-            return row.profile?.jenis_kelamin ?? "-"
+            return getJenisKelamin(row.jenisKelamin)
         },
     },
     {
-        field: "tanggal_lahir",
+        field: "tanggalLahir",
         headerName: "Tanggal Lahir",
         headerAlign: "center",
         width: 200,
         valueGetter: (value, row, column, apiRef) => {
-            return row.profile?.tanggal_lahir ?? "-"
+            return row.tanggalLahir || "-"
           },
       
     },
     {
-        field: "no_hp",
+        field: "noHp",
         headerName: "Nomor Telepon",
         headerAlign: "center",
         width: 200,
         valueGetter: (value, row, column, apiRef) => {
-            return row.profile?.no_hp ?? "-"
+            return row.noHp || "-"
         },
       
     },
@@ -58,31 +70,7 @@ export const profileTableColumns: GridColDef[] = [
         headerAlign: "center",
         width: 200,
         valueGetter: (value, row, column, apiRef) => {
-            return row.profile?.relative ?? "-"
-        },
-    },
-    {
-        field: "action",
-        headerName: "Action",
-        headerAlign: "center",
-        width: 200,
-        align: "center",
-        sortable: false,
-        renderCell: (params: CustomGridValueGetterParams) => {
-            return (
-            <div className="w-full flex items-center gap-2 justify-center h-full">
-                <Link href={``}>
-                <Button variant="primary" size="sm" fullRounded className="mx-auto">
-                    <BiSolidPencil />
-                </Button>
-                </Link>
-                <Link href={``}>
-                <Button variant="danger" size="lg" fullRounded className="mx-auto">
-                    <FaRegTrashAlt/>
-                </Button>
-                </Link>
-            </div>
-            );
+            return getRelative(row.relative)
         },
     },
 ]
