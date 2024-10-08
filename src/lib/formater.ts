@@ -1,3 +1,15 @@
+export function formatDateOnly(dateString: string): string {
+  const date = new Date(dateString);
+
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+
+  return date.toLocaleDateString("en-US", options);
+}
+
 export function formatDate(isoDate: string): string {
   const date = new Date(isoDate);
 
@@ -5,22 +17,28 @@ export function formatDate(isoDate: string): string {
     year: "numeric",
     month: "long",
     day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-    timeZone: "UTC", 
   };
 
   const formattedDate = date.toLocaleDateString("en-US", options);
+  const formattedTime = date.toTimeString().split(" ")[0]; // Get only the time (HH:MM:SS)
 
-  const time = date.toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-    timeZone: "UTC",
-  });
+  return `${formattedDate} | ${formattedTime}`;
+}
 
-  return `${formattedDate.split(",")[0]} | ${time}`;
+export function getSatuanObat(value: number): string {
+  if (value === 0) {
+    return "Botol";
+  } else if (value === 1) {
+    return "Strip";
+  } else if (value === 2) {
+    return "Tablet";
+  } else if (value === 3) {
+    return "Kapsul";
+  } else if (value === 4) {
+    return "Tube";
+  } else if (value === 5) {
+    return "Patch";
+  } else {
+    return "";
+  }
 }

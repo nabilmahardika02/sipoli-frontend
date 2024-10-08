@@ -1,10 +1,23 @@
-export interface RekamMedisForm {
-    beratBadan: number;
+export interface AddRekamMedisForm {
     tinggiBadan: number;
-    tensiDarah: string;
+    beratBadan: number;
+    tensi: string;
     diagnosis: string;
+    obatList?: { id: string; kuantitas: number }[]; // Optional
     resepObat?: string; // Optional
     rujukanKepada?: string; // Optional
     rujukanRumahSakit?: string; // Optional
-    obatList?: { id: string; kuantitas: number }[]; // Daftar obat yang dipilih dengan kuantitas
+    rujukanCatatan?: string; // Optional
+  }
+  
+export interface UpdateRekamMedisForm {
+  tinggiBadan: number;
+  beratBadan: number;
+  tensi: string;
+  diagnosis: string;
+  obatList?: { id: string; kuantitas: number }[]; // Optional
+  resepObat?: string; // Optional
+  rujukanKepada?: string; // Optional
+  rujukanRumahSakit?: string; // Optional
+  rujukanCatatan?: string; // Optional
 }

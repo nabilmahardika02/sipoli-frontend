@@ -9,243 +9,342 @@ import sendRequest from "@/lib/getApi";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Profile } from "@/types/entities/profile";
+import { AddRekamMedisForm } from "@/types/forms/rekamMedisForm";
 import { Obat } from "@/types/entities/obat";
-import useAuthStore from "@/store/useAuthStore";
+import { Kunjungan } from "@/types/entities/kunjungan";
 import Link from "next/link";
 
 const RekamMedisAddPage = () => {
-const user = useAuthStore.useUser();
-const { setTitle } = useDocumentTitle();
-const [profiles, setProfiles] = useState<Profile[]>([]);
-const [obatList, setObatList] = useState<Obat[]>([]);
-const [profile, setProfile] = useState<Profile | null>(null);
-const [obatSelected, setObatSelected] = useState<{id: string, kuantitas: number}[]>([]);
-const router = useRouter();
-    useEffect(() => {
-        setTitle("Tambah Rekam Medis");
-    }, [setTitle]);
+  const { setTitle } = useDocumentTitle();
+  const [kunjungan, setKunjungan] = useState<Kunjungan | null>(null);
+  const [obatList, setObatList] = useState<Obat[]>([]);
+  const [obatSelected, setObatSelected] = useState<{ id: string; kuantitas: number }[]>([]);
+  const router = useRouter();
+  const { kunjunganId } = router.query; // kunjunganId diambil dari query params
+  
+  useEffect(() => {
+    setTitle("Tambah Rekam Medis");
+  }, [setTitle]);
 
-    // Fetch profiles
-    useEffect(() => {
-        const fetchProfiles = async () => {
-            const [responseData, message, isSuccess] = await sendRequest(
-                "get",
-                "profile/all-profile"
-            );
-            if (isSuccess) {
-                setProfiles(responseData as Profile[]);
-            }
-        };
-
-        fetchProfiles();
-    }, []);
-
-    // Fetch obat data
-    useEffect(() => {
-        const fetchObat = async () => {
-            const [responseData, message, isSuccess] = await sendRequest(
-                "get",
-                "obat/all-obat"
-            );
-            if (isSuccess) {
-                setObatList(responseData as Obat[]);
-            }
-        };
-
-        fetchObat();
-    }, []);
-
-    const methods = useForm({
-        mode: "onTouched",
-    });
-
-    const { handleSubmit, watch, register, setValue } = methods;
-
-    const onSubmit: SubmitHandler<any> = async (data) => {
+  useEffect(() => {
+    if (router.isReady && kunjunganId) {
+      const fetchKunjungan = async () => {
         const [responseData, message, isSuccess] = await sendRequest(
-            "post",
-            "rekam-medis/add",
-            data,
-            true
+        "get",
+        `kunjungan/read?kunjunganId=${kunjunganId}`
         );
         if (isSuccess) {
-            router.push("/home");
+          setKunjungan(responseData as Kunjungan);
         }
+      };
+      fetchKunjungan();
+    }
+  }, [router.isReady, kunjunganId]);
+  
+  // Fetch available obat
+  useEffect(() => {
+    const fetchObat = async () => {
+      const [responseData, message, isSuccess] = await sendRequest(
+        "get",
+        "obat/available"
+      );
+      if (isSuccess) {
+        setObatList(responseData as Obat[]);
+      }
     };
 
-    const handleAddObat = () => {
-        const obatId = watch("obatId");
-        const kuantitas = watch("kuantitasObat");
-        if (obatId && kuantitas > 0) {
-            setObatSelected([...obatSelected, { id: obatId, kuantitas }]);
-        }
+    fetchObat();
+  }, []);
+
+  const methods = useForm<AddRekamMedisForm>({
+    mode: "onTouched",
+  });
+
+  const { handleSubmit, watch, setValue } = methods;
+
+  const onSubmit: SubmitHandler<AddRekamMedisForm> = async (data) => {
+    if (!kunjunganId) {
+      alert("Parameter kunjunganId is not present!");
+      return;
+    }
+  
+    const payload = {
+      ...data,
+      kunjunganId: kunjunganId,
+      kuantitasObat: obatSelected.map((obat) => ({
+        obatId: obat.id,
+        kuantitas: obat.kuantitas,
+      })),
     };
-
-    return (
-        <main>
-            <section>
-                {user && (
-                    <FormProvider {...methods}>
-                        <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
-                            <Typography variant="h4" weight="bold" className="text-primary-1 mb-5">
-                                Rekam Medis Pasien
-                            </Typography>
-
-                            {/* Informasi Pasien */}
-                            <Typography variant="h4" weight="bold" className="mt-8">
-                                Informasi Pasien
-                            </Typography>
-                            <div className="grid grid-cols-2 gap-5">
-                                <SelectInput
-                                    id="profileId"
-                                    label="Nama Pasien"
-                                    placeholder="Pilih profil"
-                                    validation={{ required: "Profil wajib diisi" }}
-                                    onChange={(e) => setValue("profileId", e.target.value)}
-                                >
-                                    {profiles.map((profile) => (
-                                        <option key={profile.id} value={profile.id}>
-                                            {profile.name}
-                                        </option>
-                                    ))}
-                                </SelectInput>
-
-                                <Input
-                                    id="tanggalKunjungan"
-                                    label="Tanggal Kunjungan"
-                                    type="date"
-                                    validation={{ required: "Tanggal kunjungan wajib diisi" }}
-                                />
-
-                                <Input
-                                    id="tinggiBadan"
-                                    label="Tinggi Badan"
-                                    type="number"
-                                    placeholder="Input Here"
-                                    validation={{ required: "Tinggi badan wajib diisi" }}
-                                />
-
-                                <Input
-                                    id="beratBadan"
-                                    label="Berat Badan"
-                                    type="number"
-                                    placeholder="Input Here"
-                                    validation={{ required: "Berat badan wajib diisi" }}
-                                />
-
-                                <Input
-                                    id="tensiDarah"
-                                    label="Tensi Darah"
-                                    placeholder="Input Here"
-                                    validation={{ required: "Tensi darah wajib diisi" }}
-                                />
-                            </div>
-
-                            {/* Keluhan */}
-                            <Typography variant="h4" weight="bold" className="mt-8">
-                                Keluhan
-                            </Typography>
-                            <TextArea
-                                id="keluhan"
-                                label="Detail Keluhan"
-                                placeholder="Input Here"
-                                validation={{ required: "Keluhan wajib diisi" }}
-                            />
-
-                            {/* Diagnosis */}
-                            <Typography variant="h4" weight="bold" className="mt-8">
-                                Diagnosis
-                            </Typography>
-                            <TextArea
-                                id="diagnosis"
-                                label="Detail Diagnosis"
-                                placeholder="Input Here"
-                                validation={{ required: "Diagnosis wajib diisi" }}
-                            />
-
-                            {/* Obat */}
-                            <Typography variant="h4" weight="bold" className="mt-8">
-                                Obat
-                            </Typography>
-                            <div className="grid grid-cols-3 gap-5">
-                                <SelectInput
-                                    id="obatId"
-                                    label="Nama Obat"
-                                    placeholder="Pilih Obat"
-                                    validation={{ required: "Pilih obat" }}
-                                >
-                                    {obatList.map((obat) => (
-                                        <option key={obat.id} value={obat.id}>
-                                            {obat.nama} (Stok: {obat.stok})
-                                        </option>
-                                    ))}
-                                </SelectInput>
-
-                                <Input
-                                    id="kuantitasObat"
-                                    label="Kuantitas"
-                                    type="number"
-                                    placeholder="1"
-                                    validation={{ required: "Kuantitas wajib diisi" }}
-                                />
-
-                                <Button type="button" onClick={handleAddObat}>
-                                    + Tambah
-                                </Button>
-                            </div>
-
-                            {/* Resep Obat */}
-                            <Typography variant="h4" weight="bold" className="mt-8">
-                                Resep Obat
-                            </Typography>
-                            <TextArea
-                                id="resepObat"
-                                label="Detail Resep Obat"
-                                placeholder="Input Here"
-                            />
-
-                            {/* Rujukan */}
-                            <Typography variant="h4" weight="bold" className="mt-8">
-                                Rujukan
-                            </Typography>
-                            <div className="grid grid-cols-3 gap-5">
-                                <Input id="rujukanKepada" label="Kepada" placeholder="Input Here" />
-                                <Input
-                                    id="rujukanRumahSakit"
-                                    label="Rumah Sakit"
-                                    placeholder="Input Here"
-                                />
-                                {/* gak jadi ada catatan internal! */}
-                                {/* <TextArea
-                                    id="rujukanCatatan"
-                                    label="Catatan"
-                                    placeholder="Input Here"
-                                /> */}
-                            </div>
-
-                            {/* Submit Buttons */}
-                            <div className="mt-5 flex items-center gap-4">
-                                <Button type="submit">Simpan</Button>
-                                <Link href="/home">
-                                    <Button variant="danger">Batal</Button>
-                                </Link>
-                            </div>
-                        </form>
-                    </FormProvider>
-                )}
-            </section>
-        </main>
+  
+    const [responseData, message, isSuccess] = await sendRequest(
+      "post",
+      "rekam-medis/add",
+      payload,
+      true
     );
+    
+    if (isSuccess) {
+      router.push("/home");
+    }
+  };  
 
+  const handleAddObat = () => {
+    const obatId = watch("obatId");
+    const kuantitas = watch("kuantitasObat");
+    if (obatId && kuantitas > 0) {
+      setObatSelected([...obatSelected, { id: obatId, kuantitas }]);
+      setValue("obatId", ""); // Reset input obat
+      setValue("kuantitasObat", ""); // Reset input kuantitas
+    }
+  };
+
+  const handleRemoveObat = (id: string) => {
+    setObatSelected(obatSelected.filter((obat) => obat.id !== id));
+  };
+
+  const handleEditObat = (id: string) => {
+    const obatToEdit = obatSelected.find((obat) => obat.id === id);
+    setValue("obatId", obatToEdit?.id);
+    setValue("kuantitasObat", obatToEdit?.kuantitas);
+    handleRemoveObat(id); // Hapus dulu sebelum di-edit
+  };
+
+  return (
+    <main>
+      <section>
+        <FormProvider {...methods}>
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
+            <Typography variant="h4" weight="bold" className="text-primary-1 mb-5">
+              Rekam Medis Pasien
+            </Typography>
+
+            {/* Informasi Pasien otomatis diisi dari Kunjungan */}
+            <Typography variant="h4" weight="bold" className="mt-8">
+                                Informasi Pasien
+            </Typography>
+            {kunjungan && (
+  <div className="grid grid-cols-2 gap-5">
+    {/* Nama Pasien di sebelah kiri */}
+    <div>
+      <textarea
+        value={`Nama Pasien: ${kunjungan.profile.name}`}
+        style={{
+          width: '100%',
+          resize: 'none',
+          border: 'none',
+          background: 'transparent',
+          outline: 'none',
+          fontSize: '22px',  // Mengatur ukuran font lebih besar
+          padding: '',   // Memberikan jarak agar teks tidak menempel ke tepi
+          lineHeight: ''
+        }}
+        readOnly
+      />
+    </div>
+
+    {/* Tanggal Kunjungan di sebelah kanan */}
+    <div className="text-right">
+      <textarea
+        value={`Tanggal Kunjungan: ${new Date(kunjungan.tanggal).toLocaleDateString('id-ID')}`}
+        style={{
+          width: '100%',
+          resize: 'none',
+          border: 'none',
+          background: 'transparent',
+          outline: 'none',
+          fontSize: '22px',  // Mengatur ukuran font lebih besar
+          padding: '',   // Memberikan jarak agar teks tidak menempel ke tepi
+          lineHeight: ''
+        }}
+        readOnly
+      />
+    </div>
+  </div>
+)}
+
+            {/* Tinggi Badan, Berat Badan, Tensi */}
+            <div className="grid grid-cols-2 gap-5 mt-1">
+              <Input
+                id="tinggiBadan"
+                label="Tinggi Badan (cm)"
+                type="number"
+                placeholder="Input Here"
+                validation={{ required: "Tinggi badan wajib diisi" }}
+              />
+              <Input
+                id="beratBadan"
+                label="Berat Badan (kg)"
+                type="number"
+                placeholder="Input Here"
+                validation={{ required: "Berat badan wajib diisi" }}
+              />
+            <Input
+                id="tensi"
+                label="Tensi Darah"
+                placeholder="Input Here"
+                validation={{ required: "Tensi darah wajib diisi" }}
+                />
+            </div>
+
+            {/* Keluhan */}
+            <Typography variant="h4" weight="bold" className="mt-8">
+                Keluhan
+            </Typography>
+            {kunjungan && (
+            <div>
+                <textarea
+                value={kunjungan.keluhan}
+                style={{
+                    width: '100%',
+                    resize: 'none',
+                    border: 'none',
+                    background: 'transparent',
+                    outline: 'none',
+                    fontSize: '22px',  // Mengatur ukuran font lebih besar
+                    padding: '',   // Memberikan padding untuk menambah ruang di dalam textarea
+                    lineHeight: '1.5'  // Mengatur jarak antar-baris agar lebih enak dibaca
+                }}
+                readOnly
+                />
+            </div>
+            )}
+
+            {/* Diagnosis */}
+            <Typography variant="h4" weight="bold" className="mt-1">
+              Diagnosis
+            </Typography>
+            <TextArea
+              id="diagnosis"
+              label="Detail Diagnosis"
+              placeholder="Input Here"
+              validation={{ required: "Diagnosis wajib diisi" }}
+            />
+
+{/* Obat */}
+<Typography variant="h4" weight="bold" className="mt-8">
+  Obat
+</Typography>
+<div className="grid grid-cols-2 gap-5 items-center">
+  <SelectInput
+    id="obatId"
+    label="Nama Obat"
+    placeholder="Pilih Obat"
+  >
+    {obatList.map((obat) => (
+      <option key={obat.id} value={obat.id}>
+        {obat.namaObat} (Stok: {obat.totalStok})
+      </option>
+    ))}
+  </SelectInput>
+
+  <Input
+    id="kuantitasObat"
+    label="Kuantitas"
+    type="number"
+    placeholder="1"
+  />
+
+  {/* Gunakan full-width pada grid untuk tombol */}
+  <div className="col-span-2 flex justify-center mt-2">
+    <Button type="button" onClick={handleAddObat}>
+      + Tambah
+    </Button>
+  </div>
+</div>
+
+
+
+{/* Table untuk Obat yang Dipilih */}
+{obatSelected.length > 0 && (
+  <table className="table-auto w-full mt-5 border-collapse border border-gray-300">
+    <thead>
+      <tr className="text-center bg-primary-1 text-white">
+        <th className="border border-gray-300 p-2">No</th>
+        <th className="border border-gray-300 p-2">Nama Obat</th>
+        <th className="border border-gray-300 p-2">Kuantitas</th>
+        <th className="border border-gray-300 p-2">Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      {obatSelected.map((obat, index) => {
+        const selectedObat = obatList.find((o) => o.id === obat.id);
+        return (
+          <tr key={obat.id} className="text-center">
+            <td className="border border-gray-300 p-2">{index + 1}</td>
+            <td className="border border-gray-300 p-2">{selectedObat?.namaObat}</td>
+            <td className="border border-gray-300 p-2">{obat.kuantitas}</td>
+            <td className="border border-gray-300 p-2">
+              <div className="flex justify-center space-x-2">
+                <Button
+                  type="button"
+                  className="shadow-none"
+                  onClick={() => handleEditObat(obat.id)}
+                >
+                  Edit
+                </Button>
+                <Button
+                  type="button"
+                  className="shadow-none"
+                  onClick={() => handleRemoveObat(obat.id)}
+                >
+                  Hapus
+                </Button>
+              </div>
+            </td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
+)}
+
+            {/* Resep Obat */}
+            <Typography variant="h4" weight="bold" className="mt-8">
+              Resep Obat
+            </Typography>
+            <TextArea
+              id="resepObat"
+              label="Detail Resep Obat"
+              placeholder="Input Here"
+            />
+
+            {/* Rujukan */}
+            <Typography variant="h4" weight="bold" className="mt-8">
+              Rujukan
+            </Typography>
+            <div className="grid grid-cols-3 gap-5">
+            <Input
+                id="tujuanRujukan"
+                label="Tujuan Rujukan"
+                placeholder="Input Here"
+                />
+                <Input
+                id="dokterRujukan"
+                label="Dokter"
+                placeholder="Input Here"
+                />
+                <Input
+                id="catatanRujukan"
+                label="Catatan"
+                placeholder="Input Here"
+                />
+            </div>
+
+            {/* Tombol Submit */}
+            <div className="mt-5 flex items-center gap-4">
+              <Button type="submit">Simpan</Button>
+              <Link href="/home">
+                <Button variant="danger">Batal</Button>
+              </Link>
+            </div>
+          </form>
+        </FormProvider>
+      </section>
+    </main>
+  );
 };
 
 export default withAuth(RekamMedisAddPage, "user");
-
-
-
-
-
-
 
 

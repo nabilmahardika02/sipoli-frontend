@@ -1,6 +1,18 @@
-// ini gue buat karena perlu, dan sebelumnya nggak ada entities kunjungan (gue belum pull yg terbaru)
 export interface Obat {
     id: string;
-    nama: string;
+    namaObat: string;
+    deskripsi: string;
+    jenisSatuan: number;
+    totalStok: number;
+    isDeleted: boolean;
+    createdAt: string;
+    updatedAt: string;
+    listRestockObat: RestockObat[];
+  }
+  
+  export interface RestockObat {
+    id: string;
+    tanggalPembelian: string;
     kuantitas: number;
-}
+  }
+  

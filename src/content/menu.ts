@@ -2,9 +2,8 @@ import { IconType } from "react-icons";
 import { BiSolidHome } from "react-icons/bi";
 import { FaBook, FaCapsules } from "react-icons/fa";
 import { FaPeopleCarryBox } from "react-icons/fa6";
-import { MdSwitchAccount } from "react-icons/md";
+import { MdOutlineSick, MdSwitchAccount } from "react-icons/md";
 import { VscGraphLine } from "react-icons/vsc";
-import { MdOutlineSick } from "react-icons/md";
 
 export type NavbarMenu = {
   name: string;
@@ -53,7 +52,7 @@ export const operatorMenu: NavbarMenu[] = [
       {
         name: "Daftar Obat",
         icon: FaCapsules,
-        href: "/obat/all",
+        href: "/obat",
         children: [],
       },
       {
@@ -61,10 +60,9 @@ export const operatorMenu: NavbarMenu[] = [
         icon: VscGraphLine,
         href: "/obat/dashboard",
         children: [],
-      }
+      },
     ],
   },
-  
 ];
 
 export const pasienMenu: NavbarMenu[] = [
@@ -92,7 +90,7 @@ export const dokterMenu: NavbarMenu[] = [
   {
     name: "Daftar Kunjungan",
     icon: FaBook,
-    href: "/kunjungan",
+    href: "/kunjungan/all",
     children: [],
   },
   {
@@ -119,7 +117,7 @@ export const perawatMenu: NavbarMenu[] = [
   {
     name: "Daftar Kunjungan",
     icon: FaBook,
-    href: "/kunjungan",
+    href: "/kunjungan/all",
     children: [],
   },
   {

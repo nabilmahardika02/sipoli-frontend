@@ -1,6 +1,6 @@
+import useAuthStore from "@/store/useAuthStore";
 import { FaBell, FaUserCircle } from "react-icons/fa";
 import Typography from "../elements/Typography";
-import useAuthStore from "@/store/useAuthStore";
 
 const DesktopTopNav = ({ title = "Home" }: { title?: string }) => {
   const user = useAuthStore.useUser();
@@ -12,8 +12,9 @@ const DesktopTopNav = ({ title = "Home" }: { title?: string }) => {
         </Typography>
         <div className="flex items-center gap-3">
           <button className="text-xl text-primary-1 hover:text-primary-2">
-            {(user?.role === "DOKTER" || user?.role === "PERAWAT") && <FaBell />
-            }
+            {(user?.role === "DOKTER" || user?.role === "PERAWAT") && (
+              <FaBell />
+            )}
           </button>
           <button className="text-xl text-primary-1 hover:text-primary-2">
             <FaUserCircle />
