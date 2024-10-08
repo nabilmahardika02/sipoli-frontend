@@ -26,7 +26,7 @@ const PasienPage = () => {
   const [usia, setUsia] = useState<number>();
   const [tanggalLahir, setTanggalLahir] = useState<Date>();
 
-  if (!checkRole(["OPERATOR", "PERAWAT"])) {
+  if (!checkRole(["OPERATOR", "PERAWAT", "DOKTER"])) {
     router.push("/403");
   }
 
@@ -44,6 +44,8 @@ const PasienPage = () => {
       if (isSuccess) {
         setPasien(responseData as Profile);
       }
+
+      console.log(router.query.id)
     };
 
     fetchProfile();
@@ -94,7 +96,7 @@ const PasienPage = () => {
             <Typography variant="p1" className="text-gray-600">
               Nama
             </Typography>
-            <Typography variant="h6" className="text-primary-1">
+            <Typography variant="h6" weight="light" className="text-primary-1">
               {pasien?.name}
             </Typography>
           </div>
@@ -102,7 +104,7 @@ const PasienPage = () => {
             <Typography variant="p1" className="text-gray-600">
               Nomor HP
             </Typography>
-            <Typography variant="h6" className="text-primary-1">
+            <Typography variant="h6" weight="light" className="text-primary-1">
               {pasien?.noHp}
             </Typography>
           </div>
@@ -110,7 +112,7 @@ const PasienPage = () => {
             <Typography variant="p1" className="text-gray-600">
               Usia
             </Typography>
-            <Typography variant="h6" className="text-primary-1">
+            <Typography variant="h6" weight="light" className="text-primary-1">
               {usia} tahun
             </Typography>
           </div>
@@ -118,7 +120,7 @@ const PasienPage = () => {
             <Typography variant="p1" className="text-gray-600">
               Jenis Kelamin
             </Typography>
-            <Typography variant="h6" className="text-primary-1">
+            <Typography variant="h6" weight="light" className="text-primary-1">
               {kelaminText}
             </Typography>
           </div>

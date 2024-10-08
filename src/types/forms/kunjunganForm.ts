@@ -6,3 +6,12 @@ export type KunjunganForm = {
     status: number,
     keluhan: string
 }
+
+export type CancelKunjunganForm = {
+    status: number
+}
+
+export type FilterKunjunganForm = {
+    startDate: string,
+    endDate: string
+}

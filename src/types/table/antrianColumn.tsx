@@ -81,19 +81,9 @@ export const kunjunganTableColumns: GridColDef[] = [
     renderCell: (params: CustomGridValueGetterParams) => {
       return (
         <div className="w-full flex items-center gap-2 justify-center h-full">
-          <Link href={`/pasien/${params.row.profile.id}`}>
-            <Button variant="outline" size="sm" fullRounded className="mx-auto">
-              Detail Pasien
-            </Button>
-          </Link>
-          <Link href={`/home`}>
-            <Button variant="primary" size="lg" fullRounded className="mx-auto">
-              <LuPencil />
-            </Button>
-          </Link>
-          <Link href={`/home`}>
-            <Button variant="danger" size="lg" fullRounded className="mx-auto">
-              <FaRegTrashAlt />
+          <Link href={`/kunjungan/${params.row.id}`}>
+            <Button variant="primary" size="sm" fullRounded className="mx-auto">
+              Detail
             </Button>
           </Link>
         </div>

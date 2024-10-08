@@ -1,7 +1,9 @@
 import Button from "@/components/elements/Button";
+import Divider from "@/components/elements/Divider";
 import SelectInput from "@/components/elements/forms/SelectInput";
 import Typography from "@/components/elements/Typography";
 import withAuth from "@/components/hoc/withAuth";
+import ModalLayout from "@/components/layouts/ModalLayout";
 import { useDocumentTitle } from "@/context/Title";
 import { removeToken } from "@/lib/cookies";
 import DataTable from "@/lib/datatable";
@@ -9,7 +11,6 @@ import sendRequest from "@/lib/getApi";
 import useAuthStore from "@/store/useAuthStore";
 import { Kunjungan } from "@/types/entities/kunjungan";
 import { Profile } from "@/types/entities/profile";
-import { SandboxForm } from "@/types/forms/SandboxForm";
 import {
   getRowIdKunjungans,
   kunjunganTableColumns,
@@ -18,8 +19,13 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { GoPlus } from "react-icons/go";
+import { SUCCESS_TOAST, showToast } from "@/components/elements/Toast";
+import {
+  CancelKunjunganForm,
+  KunjunganForm,
+} from "@/types/forms/kunjunganForm";
 
 const HomePage = () => {
   const user = useAuthStore.useUser();
@@ -27,8 +33,10 @@ const HomePage = () => {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [kunjungans, setKunjungans] = useState<Kunjungan[]>([]);
   const [selectedProfile, setProfile] = useState<Profile>();
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [cancelId, setCancelId] = useState<string>();
 
-  const methods = useForm<SandboxForm>({
+  const methods = useForm<KunjunganForm, CancelKunjunganForm>({
     mode: "onTouched",
   });
 
@@ -112,6 +120,19 @@ const HomePage = () => {
     }
   }, [user]);
 
+  const cancelKunjungan = async () => {
+    const [responseData, message, isSuccess] = await sendRequest(
+      "put",
+      "kunjungan/cancel?kunjunganId=" + cancelId,
+      true
+    );
+
+    if (isSuccess) {
+      router.push(`/`);
+      showToast("Berhasil membatalkan kunjungan", SUCCESS_TOAST);
+    }
+  };
+
   const logout = useAuthStore.useLogout();
   const router = useRouter();
 
@@ -127,27 +148,29 @@ const HomePage = () => {
         <title>SIPOLI</title>
       </Head>
 
-      <div className="flex items-center justify-between w-full">
-        {user?.role !== "PASIEN" ? (
-          <Typography variant="h6">Antrian Hari Ini</Typography>
-        ) : (
-          <Typography variant="h4" className=" text-primary-1 md:hidden">
-            Kunjungan Aktif
-          </Typography>
-        )}
+      {user?.role !== "PASIEN" ? (
+        <Typography variant="h6" className="my-5">
+          Daftar Antrian
+        </Typography>
+      ) : (
+        <Typography variant="h4" className=" text-primary-1 md:hidden">
+          Kunjungan Aktif
+        </Typography>
+      )}
 
-        {user?.role === "PASIEN" ? (
+      {user?.role === "PASIEN" ? (
+        <div className="flex justify-end">
           <Link href={"/kunjungan/add"}>
             <Button leftIcon={GoPlus}>Daftar Kunjungan</Button>
           </Link>
-        ) : (
-          <Link href={"/kunjungan/add"}>
-            <Button leftIcon={GoPlus}>Tambah Kunjungan</Button>
-          </Link>
-        )}
-      </div>
+        </div>
+      ) : (
+        <Link href={"/kunjungan/add"}>
+          <Button leftIcon={GoPlus}>Tambah Kunjungan</Button>
+        </Link>
+      )}
 
-      <div className="justify-between gap-5 md:grid-cols-2 mt-4">
+      <div className="justify-between gap-5 md:grid-cols-2 my-4">
         <FormProvider {...methods}>
           {user?.role === "PASIEN" && (
             <SelectInput
@@ -173,11 +196,11 @@ const HomePage = () => {
       {user?.role === "PASIEN" &&
         (selectedProfile ? (
           kunjungans.length > 0 ? (
-            <div className="lg:grid gap-4 w-full items-center md:grid grid-cols-2">
+            <div className="w-full flex gap-5 justify-center flex-shrink-0 flex-wrap">
               {kunjungans.map((kunjungan) => (
                 <div
                   key={kunjungan.id}
-                  className="bg-white shadow-lg rounded-lg p-6 mb-5 border border-gray-200"
+                  className="bg-white shadow-lg rounded-lg p-6 mb-5 border border-gray-200 w-full md:w-[40%] shrink-0"
                 >
                   <Typography variant="h6" className="font-semibold mb-2">
                     Antrian {kunjungan.antrian.noAntrian} - Sesi{" "}
@@ -193,7 +216,15 @@ const HomePage = () => {
                   </Typography>
                   <div className="flex justify-between">
                     <Link href={"/home"}>
-                      <Button variant="danger">Cancel</Button>
+                      <Button
+                        variant="danger"
+                        onClick={() => {
+                          setShowCancelModal(true);
+                          setCancelId(kunjungan.id);
+                        }}
+                      >
+                        Cancel
+                      </Button>
                     </Link>
                     <Link href={`/kunjungan/${kunjungan.id}`}>
                       <Button>Detail</Button>
@@ -240,9 +271,56 @@ const HomePage = () => {
         )}
       </div>
 
-      <Button className="mt-5 place-self-start" onClick={handleLogout}>
-        Logout
-      </Button>
+      <div className="flex justify-center">
+        <Button className="mt-5 place-self-start" onClick={handleLogout}>
+          Logout
+        </Button>
+      </div>
+
+      {showCancelModal && (
+        <ModalLayout setShowModal={setShowCancelModal}>
+          <div className="bg-white rounded-xl p-5 w-full md:w-[50%] flex flex-col">
+            <Typography variant="h6" className="text-primary-1">
+              Batalkan Kunjungan
+            </Typography>
+            <Divider className="my-2" weight="kurus" />
+            <Typography
+              variant="p2"
+              weight="semibold"
+              className="text-secondary-4"
+            >
+              Yakin ingin membatalkan kunjungan ini?
+            </Typography>
+            <Typography variant="p2" className="text-primary-1 mt-2">
+              <ul className="list-disc pl-4">
+                <li>
+                  Kunjungan yang sudah dibatalkan tidak dapat dibuka kembali.
+                </li>
+                <li>
+                  Anda tidak dapat melihat informasi kunjungan yang telah
+                  dibatalkan.
+                </li>
+              </ul>
+            </Typography>
+            <div className="flex items-center gap-2 mt-4 self-end">
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={() => cancelKunjungan()}
+              >
+                Batalkan Kunjungan
+              </Button>
+              <Button
+                variant="success"
+                size="sm"
+                onClick={() => setShowCancelModal(false)}
+              >
+                Batal
+              </Button>
+            </div>
+          </div>
+        </ModalLayout>
+      )}
     </main>
   );
 };
