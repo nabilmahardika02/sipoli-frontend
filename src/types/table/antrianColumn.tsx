@@ -73,7 +73,7 @@ export const kunjunganTableColumns: GridColDef[] = [
   },
   {
     field: "action",
-    headerName: "Detail",
+    headerName: "Action",
     headerAlign: "center",
     width: 400,
     align: "center",
