@@ -91,6 +91,26 @@ const DetailObatPage = () => {
     postData();
   };
 
+  const handleDelete = async () => {
+    try {
+      const [responseData, message, isSuccess] = await sendRequest(
+        "put", // Ganti dari 'delete' ke 'put'
+        `obat/delete/${router.query.id}`, // Endpoint soft delete
+        null, // Tidak perlu body data
+        true // True jika membutuhkan autentikasi
+      );
+
+      if (isSuccess) {
+        setShowDeleteModal(false);
+        router.push("/obat"); // Redirect to obat list page after deletion
+      } else {
+        showToast(message, DANGER_TOAST);
+      }
+    } catch (error) {
+      showToast("Gagal menghapus obat. Coba lagi.", DANGER_TOAST);
+    }
+};
+
   return (
     <main>
       <Head>
@@ -279,13 +299,7 @@ const DetailObatPage = () => {
               </ul>
             </Typography>
             <div className="flex items-center gap-2 mt-4 self-end">
-              <Button
-                variant="danger"
-                size="sm"
-                onClick={() =>
-                  showToast("Belum bisa ini kerjaan Nafriel", DANGER_TOAST)
-                }
-              >
+              <Button variant="danger" size="sm" onClick={handleDelete}>
                 Hapus
               </Button>
               <Button

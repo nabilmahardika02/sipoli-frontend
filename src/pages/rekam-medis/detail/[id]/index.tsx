@@ -34,7 +34,7 @@ const RekamMedisDetailPage = () => {
   }, [router.isReady, rekamMedisId]);
 
   if (!rekamMedis) {
-    return <Typography>data rekam medis masih belum terambil...</Typography>;
+    return <Typography>data rekam medis masih belum terambil</Typography>;
   }
 
   return (

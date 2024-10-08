@@ -86,7 +86,7 @@ const RekamMedisUpdatePage = () => {
 
   const onSubmit: SubmitHandler<any> = async (data) => {
     if (!rekamMedisId) {
-      alert("Parameter rekamMedisId is not present!");
+      alert("Required parameter 'kunjunganId' is not present!");
       return;
     }
 
