@@ -55,7 +55,7 @@ const KunjunganUpdatePage = () => {
         const fetchKunjungan = async () => {
             const [responseData, message, isSuccess] = await sendRequest(
                 "get",
-                `kunjungan/id?id=${id}`,  // Use a query parameter if necessary
+                `kunjungan/id?id=${id}`,
             );
 
             if (isSuccess) {
