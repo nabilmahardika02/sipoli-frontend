@@ -16,7 +16,6 @@ import Link from "next/link";
 import router from "next/router";
 import { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import kunjungan from ".";
 
 const sesi = [
   {
