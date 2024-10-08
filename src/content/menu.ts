@@ -67,7 +67,7 @@ export const operatorMenu: NavbarMenu[] = [
 
 export const pasienMenu: NavbarMenu[] = [
   {
-    name: "Home",
+    name: "Beranda",
     icon: BiSolidHome,
     href: "/home",
     children: [],
