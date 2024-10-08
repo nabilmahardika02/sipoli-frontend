@@ -251,6 +251,7 @@ const KunjunganAddPage = () => {
                     id="tanggalKunjungan"
                     label="Tanggal Kunjungan"
                     type="date"
+                    validation={{ required: "Mohon pilih tanggal kunjungan" }}
                   />
                 )}
                 {user.role !== "PASIEN" && (
