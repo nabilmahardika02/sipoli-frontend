@@ -85,7 +85,7 @@ export const kunjunganTables: GridColDef[] = [
     renderCell: (params: CustomGridValueGetterParams) => {
       return (
         <div className="w-full flex items-center gap-2 justify-center h-full">
-          <Link href={`/home`}>
+          <Link href={`/kunjungan/${params.row.id}`}>
             <Button variant="primary" size="sm" fullRounded className="mx-auto">
               Detail
             </Button>
