@@ -122,6 +122,7 @@ const KunjunganAddPage = () => {
       const listProfile = selectedAccount.listProfile;
 
       setProfiles(listProfile);
+      setProfile(listProfile[0]);
       setAccount(selectedAccount);
     }
   };
