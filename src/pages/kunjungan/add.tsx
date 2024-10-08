@@ -16,6 +16,7 @@ import Link from "next/link";
 import router from "next/router";
 import { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import kunjungan from ".";
 
 const sesi = [
   {
@@ -43,6 +44,7 @@ const KunjunganAddPage = () => {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [profile, setProfile] = useState<Profile>();
   const [account, setAccount] = useState<Account>();
+  const [status, setStatus] = useState<string>();
 
   useEffect(() => {
     if (user?.role === "PASIEN") {
@@ -139,6 +141,12 @@ const KunjunganAddPage = () => {
     }
   };
 
+  const handleStatus = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedStatus = event.target.value;
+
+    setStatus(selectedStatus);
+  }
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("id-ID", {
@@ -196,6 +204,7 @@ const KunjunganAddPage = () => {
                       validation={{ required: "Akun wajib diisi" }}
                       onChange={handleAccount}
                       helperText="Pilih akun terlebih dahulu"
+                      value={account?.id}
                     >
                       {accounts.length > 0 ? (
                         accounts.map((account) => (
@@ -218,6 +227,7 @@ const KunjunganAddPage = () => {
                     validation={{ required: "Profil wajib diisi" }}
                     onChange={handleProfile}
                     helperText="Pilih profil terlebih dahulu"
+                    value={profile?.id}
                   >
                     {profiles.length > 0 ? (
                       profiles.map((profile) => (
@@ -260,7 +270,9 @@ const KunjunganAddPage = () => {
                     id="status"
                     label="Status"
                     placeholder="Pilih status"
+                    onChange={handleStatus}
                     validation={{ required: "Status wajib diisi" }}
+                    value={status}
                   >
                     <option value="0">Belum Dilayani</option>
                     <option value="1">Sedang Dilayani</option>
