@@ -41,6 +41,11 @@ export default function DataTable({
           paginationModel: { page: 0, pageSize: 10 },
         },
       }}
+      sx={{
+        '& .MuiButtonBase-root': {
+          color: '#721E49', // Ganti warna teks dan ikon toolbar
+        },
+      }}
       pageSizeOptions={[5, 10, 20]}
       disableRowSelectionOnClick
     />
