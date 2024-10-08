@@ -42,3 +42,21 @@ export function getSatuanObat(value: number): string {
     return "";
   }
 }
+
+export function getRelative(value: number): string {
+  if (value === 0) {
+    return "Pegawai"
+  } else if (value === 1) {
+    return "Suami/Istri"
+  } else {
+    return "Anak"
+  }
+}
+
+export function getJenisKelamin(value: boolean) {
+  if (value === true) {
+    return "Perempuan"
+  } else {
+    return "Laki-laki"
+  }
+}
