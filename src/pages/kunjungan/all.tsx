@@ -24,8 +24,8 @@ import { GoPlus } from "react-icons/go";
 const KunjunganAllPage = () => {
   const { setTitle } = useDocumentTitle();
   const [kunjungans, setKunjungans] = useState<Kunjungan[]>();
-  const [startDate, setStartDate] = useState<Date>();
-  const [endDate, setEndDate] = useState<Date>();
+  const [startDate, setStartDate] = useState<string>();
+  const [endDate, setEndDate] = useState<string>();
   const router = useRouter();
 
   const methods = useForm<FilterKunjunganForm>({
@@ -40,29 +40,6 @@ const KunjunganAllPage = () => {
     setTitle("Daftar Kunjungan");
   }, [setTitle]);
 
-  useEffect(() => {
-    // Fungsi untuk mengambil data profil dari API
-    const fetchKunjungans = async () => {
-      const [responseData, message, isSuccess] = await sendRequest(
-        "get",
-        "kunjungan/all"
-      );
-
-      if (isSuccess) {
-        // Sort data di frontend berdasarkan tanggal (descending)
-        const sortedData = (responseData as Kunjungan[]).sort((a, b) => {
-          const dateA = new Date(a.tanggal).getTime();
-          const dateB = new Date(b.tanggal).getTime();
-          return dateB - dateA; // Urutan descending
-        });
-
-        setKunjungans(sortedData); // Set data kunjungan yang sudah di-sort
-      }
-    };
-
-    fetchKunjungans();
-  }, []);
-
   const { handleSubmit } = methods;
 
   const onSubmit: SubmitHandler<FilterKunjunganForm> = (data) => {
@@ -73,6 +50,8 @@ const KunjunganAllPage = () => {
       );
 
       if (isSuccess) {
+        setStartDate(data.startDate as string);
+        setEndDate(data.endDate as string);
         setKunjungans(responseData as Kunjungan[]);
       }
     };
@@ -112,8 +91,19 @@ const KunjunganAllPage = () => {
             <Button leftIcon={GoPlus}>Tambah</Button>
           </Link>
         </div>
+
         <div style={{ width: "100%", overflowX: "auto" }}>
-          {kunjungans && kunjungans.length > 0 ? (
+          {!startDate || !endDate ? (
+            <div className="w-full py-10 px-5 rounded-lg border border-gray-300 flex items-center justify-center">
+              <Typography
+                variant="p1"
+                weight="semibold"
+                className="text-gray-400"
+              >
+                Mohon pilih tanggal awal dan tanggal akhir untuk melihat kunjungan
+              </Typography>
+            </div>
+          ) : kunjungans && kunjungans.length > 0 ? (
             <DataTable
               columns={kunjunganTables}
               getRowId={getRowIdKunjungan}
