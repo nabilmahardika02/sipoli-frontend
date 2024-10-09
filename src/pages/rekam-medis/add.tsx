@@ -13,6 +13,7 @@ import { AddRekamMedisForm } from "@/types/forms/rekamMedisForm";
 import { Obat } from "@/types/entities/obat";
 import { Kunjungan } from "@/types/entities/kunjungan";
 import Link from "next/link";
+import { checkRole } from "@/lib/checkRole";
 
 const RekamMedisAddPage = () => {
   const { setTitle } = useDocumentTitle();
@@ -26,23 +27,27 @@ const RekamMedisAddPage = () => {
     setTitle("Tambah Rekam Medis");
   }, [setTitle]);
 
-useEffect(() => {
-  if (router.isReady && kunjunganId) {
-    // Lakukan fetch data berdasarkan kunjunganId
-    const fetchKunjungan = async () => {
-      const [responseData, message, isSuccess] = await sendRequest(
-        "get",
-        `kunjungan/read?kunjunganId=${kunjunganId}`
-      );
-      if (isSuccess) {
-        setKunjungan(responseData as Kunjungan);
-      } else {
-        alert("Gagal mendapatkan data kunjungan");
-      }
-    };
-    fetchKunjungan();
+  if (!checkRole(["OPERATOR", "DOKTER", "PERAWAT"])) {
+    router.push("/403");
   }
-}, [router.isReady, kunjunganId]);
+
+  useEffect(() => {
+    if (router.isReady && kunjunganId) {
+      // Lakukan fetch data berdasarkan kunjunganId
+      const fetchKunjungan = async () => {
+        const [responseData, message, isSuccess] = await sendRequest(
+          "get",
+          `kunjungan/read?kunjunganId=${kunjunganId}`
+        );
+        if (isSuccess) {
+          setKunjungan(responseData as Kunjungan);
+        } else {
+          alert("Gagal mendapatkan data kunjungan");
+        }
+      };
+      fetchKunjungan();
+    }
+  }, [router.isReady, kunjunganId]);
   
   // Fetch available obat
   useEffect(() => {
@@ -125,32 +130,31 @@ useEffect(() => {
 
             {/* Informasi Pasien otomatis diisi dari Kunjungan */}
             <Typography variant="h5" weight="bold" className="mt-8">
-            Informasi Pasien
+              Informasi Pasien
             </Typography>
             {kunjungan && (
-            <div className="grid grid-cols-2 gap-5">
+              <div className="grid grid-cols-2 gap-5">
                 {/* Nama Pasien di sebelah kiri */}
                 <div>
-                <Input
+                  <Input
                     id="namaPasien"
                     label="Nama Pasien"
                     value={kunjungan.profile.name || ""}
                     readOnly
-                />
+                  />
                 </div>
 
                 {/* Tanggal Kunjungan di sebelah kanan */}
                 <div>
-                <Input
+                  <Input
                     id="tanggalKunjungan"
                     label="Tanggal Kunjungan"
                     value={new Date(kunjungan.tanggal).toLocaleDateString('id-ID')}
                     readOnly
-                />
+                  />
                 </div>
-            </div>
+              </div>
             )}
-
 
             {/* Tinggi Badan, Berat Badan, Tensi */}
             <div className="grid grid-cols-2 gap-5 mt-5">
@@ -160,6 +164,7 @@ useEffect(() => {
                 type="number"
                 placeholder="Masukkan Tinggi Badan Pasien (Contoh: 175)"
                 validation={{ required: "Tinggi badan wajib diisi" }}
+                {...methods.register("tinggiBadan")} // Tambahkan ini
               />
               <Input
                 id="beratBadan"
@@ -167,29 +172,31 @@ useEffect(() => {
                 type="number"
                 placeholder="Masukkan Berat Badan Pasien (Contoh: 45)"
                 validation={{ required: "Berat badan wajib diisi" }}
+                {...methods.register("beratBadan")} // Tambahkan ini
               />
-            <Input
+              <Input
                 id="tensi"
                 label="Tensi Darah (mmHg)"
                 placeholder="Masukkan Tensi Darah Pasien (Contoh: 120/90)"
                 validation={{ required: "Tensi darah wajib diisi" }}
-                />
+                {...methods.register("tensi")} // Tambahkan ini
+              />
             </div>
 
             {/* Keluhan */}
             <Typography variant="h5" weight="bold" className="mt-8">
-                Keluhan
-                </Typography>
-                {kunjungan && (
-                <div>
-                    <TextArea
-                    id="keluhan"
-                    label="Detail Keluhan"
-                    value={kunjungan.keluhan || ""}
-                    readOnly
-                    />
-                </div>
-                )}
+              Keluhan
+            </Typography>
+            {kunjungan && (
+              <div>
+                <TextArea
+                  id="keluhan"
+                  label="Detail Keluhan"
+                  value={kunjungan.keluhan || ""}
+                  readOnly
+                />
+              </div>
+            )}
 
             {/* Diagnosis */}
             <Typography variant="h5" weight="bold" className="mt-8">
@@ -200,120 +207,120 @@ useEffect(() => {
               label="Detail Diagnosis"
               placeholder="Masukkan Hasil Diagnosis Pasien"
               validation={{ required: "Diagnosis wajib diisi" }}
+              {...methods.register("diagnosis")} // Tambahkan ini
             />
 
-{/* Obat */}
-<Typography variant="h5" weight="bold" className="mt-8">
-  Obat
-</Typography>
-<div className="grid grid-cols-2 gap-5 items-center">
-  <SelectInput
-    id="obatId"
-    label="Nama Obat"
-    placeholder="Pilih Obat"
-  >
-    {obatList.map((obat) => (
-      <option key={obat.id} value={obat.id}>
-        {obat.namaObat} (Stok: {obat.totalStok})
-      </option>
-    ))}
-  </SelectInput>
+            {/* Obat */}
+            <Typography variant="h5" weight="bold" className="mt-8">
+              Obat
+            </Typography>
+            <div className="grid grid-cols-2 gap-5 items-center">
+              <SelectInput
+                id="obatId"
+                label="Nama Obat"
+                placeholder="Pilih Obat"
+                {...methods.register("obatId")} // Tambahkan ini
+              >
+                {obatList.map((obat) => (
+                  <option key={obat.id} value={obat.id}>
+                    {obat.namaObat} (Stok: {obat.totalStok})
+                  </option>
+                ))}
+              </SelectInput>
 
-  <Input
-    id="kuantitasObat"
-    label="Kuantitas"
-    type="number"
-    placeholder="1"
-  />
+              <Input
+                id="kuantitasObat"
+                label="Kuantitas"
+                type="number"
+                placeholder="1"
+                {...methods.register("kuantitasObat")} // Tambahkan ini
+              />
 
-  {/* Gunakan full-width pada grid untuk tombol */}
-  <div className="col-span-2 flex justify-center mt-2">
-    <Button type="button" onClick={handleAddObat}>
-      + Tambah
-    </Button>
-  </div>
-</div>
-
-
-
-{/* Table untuk Obat yang Dipilih */}
-{obatSelected.length > 0 && (
-  <table className="table-auto w-full mt-5 border-collapse border border-gray-300">
-    <thead>
-      <tr className="text-center bg-primary-1 text-white">
-        <th className="border border-gray-300 p-2">No</th>
-        <th className="border border-gray-300 p-2">Nama Obat</th>
-        <th className="border border-gray-300 p-2">Kuantitas</th>
-        <th className="border border-gray-300 p-2">Aksi</th>
-      </tr>
-    </thead>
-    <tbody>
-      {obatSelected.map((obat, index) => {
-        const selectedObat = obatList.find((o) => o.id === obat.id);
-        return (
-          <tr key={obat.id} className="text-center">
-            <td className="border border-gray-300 p-2">{index + 1}</td>
-            <td className="border border-gray-300 p-2">{selectedObat?.namaObat}</td>
-            <td className="border border-gray-300 p-2">{obat.kuantitas}</td>
-            <td className="border border-gray-300 p-2">
-              <div className="flex justify-center space-x-2">
-                <Button
-                  type="button"
-                  className="shadow-none"
-                  onClick={() => handleEditObat(obat.id)}
-                >
-                  Edit
-                </Button>
-                <Button
-                  type="button"
-                  className="shadow-none"
-                  onClick={() => handleRemoveObat(obat.id)}
-                >
-                  Hapus
+              <div className="col-span-2 flex justify-center mt-2">
+                <Button type="button" onClick={handleAddObat}>
+                  + Tambah
                 </Button>
               </div>
-            </td>
-          </tr>
-        );
-      })}
-    </tbody>
-  </table>
-)}
+            </div>
+
+            {/* Table untuk Obat yang Dipilih */}
+            {obatSelected.length > 0 && (
+              <table className="table-auto w-full mt-5 border-collapse border border-gray-300">
+                <thead>
+                  <tr className="text-center bg-primary-1 text-white">
+                    <th className="border border-gray-300 p-2">No</th>
+                    <th className="border border-gray-300 p-2">Nama Obat</th>
+                    <th className="border border-gray-300 p-2">Kuantitas</th>
+                    <th className="border border-gray-300 p-2">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {obatSelected.map((obat, index) => {
+                    const selectedObat = obatList.find((o) => o.id === obat.id);
+                    return (
+                      <tr key={obat.id} className="text-center">
+                        <td className="border border-gray-300 p-2">{index + 1}</td>
+                        <td className="border border-gray-300 p-2">{selectedObat?.namaObat}</td>
+                        <td className="border border-gray-300 p-2">{obat.kuantitas}</td>
+                        <td className="border border-gray-300 p-2">
+                          <div className="flex justify-center space-x-2">
+                            <Button
+                              type="button"
+                              className="shadow-none"
+                              onClick={() => handleEditObat(obat.id)}
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              type="button"
+                              className="shadow-none"
+                              onClick={() => handleRemoveObat(obat.id)}
+                            >
+                              Hapus
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            )}
 
             {/* Resep Obat */}
             <Typography variant="h5" weight="bold" className="mt-8">
               Resep Obat
             </Typography>
             <TextArea
-              id="resepObat"
+              id="deskripsiResepObat"
               label="Detail Resep Obat"
               placeholder="Masukkan Resep Obat yang Dibutuhkan Pasien"
-              {...methods.register("resepObat")} // Tambahkan ini
+              {...methods.register("deskripsiResepObat")} // Tambahkan ini
             />
-
 
             {/* Rujukan */}
             <Typography variant="h5" weight="bold" className="mt-8">
               Rujukan
             </Typography>
             <div className="grid grid-cols-3 gap-5">
-            <Input
-              id="rujukanRumahSakit"
-              label="Rumah Sakit"
-              placeholder="Masukkan Nama Rumah Sakit Rujukan"
-            />
-            <Input
-              id="rujukanDokter"
-              label="Dokter"
-              placeholder="Masukkan Nama Dokter Rujukan"
-              {...methods.register("rujukanDokter")} // Tambahkan ini
-            />
-            <Input
-              id="rujukanCatatan"
-              label="Catatan"
-              placeholder="Masukkan Catatan Rujukan"
-              {...methods.register("rujukanCatatan")} // Tambahkan ini
-            />
+              <Input
+                id="tujuanRujukan"
+                label="Rumah Sakit"
+                placeholder="Masukkan Nama Rumah Sakit Rujukan"
+                {...methods.register("tujuanRujukan")} // Tambahkan ini
+              />
+              <Input
+                id="dokterRujukan"
+                label="Dokter"
+                placeholder="Masukkan Nama Dokter Rujukan"
+                {...methods.register("dokterRujukan")} // Tambahkan ini
+              />
+              <Input
+                id="catatanRujukan"
+                label="Catatan"
+                placeholder="Masukkan Catatan Rujukan"
+                {...methods.register("catatanRujukan")} // Tambahkan ini
+              />
             </div>
 
             {/* Tombol Submit */}
@@ -330,6 +337,4 @@ useEffect(() => {
   );
 };
 
-export default withAuth(RekamMedisAddPage, "OPERATOR");
-
-
+export default withAuth(RekamMedisAddPage, "user");

@@ -14,19 +14,24 @@ import { Obat } from "@/types/entities/obat";
 import { RekamMedis } from "@/types/entities/rekamMedis";
 import { Kunjungan } from "@/types/entities/kunjungan";
 import Link from "next/link";
+import { checkRole } from "@/lib/checkRole";
 
 const RekamMedisUpdatePage = () => {
   const { setTitle } = useDocumentTitle();
   const [rekamMedis, setRekamMedis] = useState<RekamMedis | null>(null);
-  const [kunjungan, setKunjungan] = useState<Kunjungan | null>(null); // Menyimpan data kunjungan
+  const [kunjungan, setKunjungan] = useState<Kunjungan | null>(null);
   const [obatList, setObatList] = useState<Obat[]>([]);
   const [obatSelected, setObatSelected] = useState<{ id: string; kuantitas: number }[]>([]);
   const router = useRouter();
-  const { id } = router.query; // ID diambil dari query params
+  const { id } = router.query;
 
   useEffect(() => {
     setTitle("Update Rekam Medis");
   }, [setTitle]);
+
+  if (!checkRole(["OPERATOR", "DOKTER", "PERAWAT"])) {
+    router.push("/403");
+  }
 
   // Fetch rekam medis data
   useEffect(() => {
@@ -34,16 +39,19 @@ const RekamMedisUpdatePage = () => {
       const fetchRekamMedis = async () => {
         const [responseData, message, isSuccess] = await sendRequest(
           "get",
-          `rekam-medis/read/${id}` // Mengambil rekam medis berdasarkan ID
+          `rekam-medis/read/${id}`
         );
         if (isSuccess) {
           setRekamMedis(responseData as RekamMedis);
           setObatSelected(
-            responseData.listKuantitasObat.map((obat: any) => ({
-              id: obat.obat.id,
-              kuantitas: obat.kuantitas,
-            }))
+            responseData.listKuantitasObat
+              .filter((kuantitasObat: any) => kuantitasObat.obat) // Filter data yang punya obat
+              .map((kuantitasObat: any) => ({
+                id: kuantitasObat.obat.id,
+                kuantitas: kuantitasObat.kuantitas,
+              }))
           );
+          
         } else {
           alert("Gagal mendapatkan data rekam medis");
         }
@@ -58,10 +66,10 @@ const RekamMedisUpdatePage = () => {
       const fetchKunjungan = async () => {
         const [responseData, message, isSuccess] = await sendRequest(
           "get",
-          `kunjungan/read-by-rekam-medis-id?rekamMedisId=${rekamMedis.id}` // Mengambil kunjungan berdasarkan rekam medis ID
+          `kunjungan/read-by-rekam-medis-id?rekamMedisId=${rekamMedis.id}`
         );
         if (isSuccess) {
-          setKunjungan(responseData as Kunjungan); // Set data kunjungan
+          setKunjungan(responseData as Kunjungan);
         } else {
           console.error("Gagal mendapatkan data kunjungan", message);
         }
@@ -75,7 +83,7 @@ const RekamMedisUpdatePage = () => {
     const fetchObat = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "get",
-        "obat/available" // Mengambil semua obat yang tersedia
+        "obat/available"
       );
       if (isSuccess) {
         setObatList(responseData as Obat[]);
@@ -91,26 +99,29 @@ const RekamMedisUpdatePage = () => {
 
   const { handleSubmit, watch, setValue } = methods;
 
+  // Set nilai default berdasarkan data rekam medis yang diambil
   useEffect(() => {
     if (rekamMedis) {
-      // Set nilai default berdasarkan data rekam medis yang diambil
       setValue("tinggiBadan", rekamMedis.tinggiBadan);
       setValue("beratBadan", rekamMedis.beratBadan);
       setValue("tensi", rekamMedis.tensi);
       setValue("diagnosis", rekamMedis.diagnosis);
-      setValue("deskripsiResepObat", rekamMedis.resepObat?.deskripsi || "");
-      setValue("tujuanRujukan", rekamMedis.rujukan?.tujuan || "");
-      setValue("dokterRujukan", rekamMedis.rujukan?.dokter || "");
-      setValue("catatanRujukan", rekamMedis.rujukan?.catatan || "");
-    }
-  }, [rekamMedis, setValue]);
+      setValue("deskripsiResepObat", rekamMedis.deskripsiResepObat || "");
+      setValue("tujuanRujukan", rekamMedis.tujuanRujukan || "");
+      setValue("dokterRujukan", rekamMedis.dokterRujukan || "");
+      setValue("catatanRujukan", rekamMedis.catatanRujukan || "");
+
+      // Set nilai default untuk obat yang sudah dipilih
+      setValue("obatList", obatSelected.map(obat => ({ id: obat.id, kuantitas: obat.kuantitas })));
+  }
+}, [rekamMedis, setValue, obatSelected]);
 
   // Set nilai default untuk keluhan, tanggal kunjungan, dan nama pasien dari kunjungan
   useEffect(() => {
     if (kunjungan) {
       setValue("keluhan", kunjungan.keluhan);
       setValue("tanggalKunjungan", kunjungan.tanggal);
-      setValue("namaPasien", kunjungan.profile.name); // Mengambil nama dari profile di Kunjungan
+      setValue("namaPasien", kunjungan.profile.name);
     }
   }, [kunjungan, setValue]);
 
@@ -128,10 +139,9 @@ const RekamMedisUpdatePage = () => {
       })),
     };
 
-    // Kirim ID rekam medis sebagai query parameter
     const [responseData, message, isSuccess] = await sendRequest(
       "put",
-      `rekam-medis/update/${id}`,  // Menggunakan ID rekam medis sebagai query parameter
+      `rekam-medis/update/${id}`,
       payload,
       true
     );
@@ -146,8 +156,8 @@ const RekamMedisUpdatePage = () => {
     const kuantitas = watch("kuantitasObat");
     if (obatId && kuantitas > 0) {
       setObatSelected([...obatSelected, { id: obatId, kuantitas }]);
-      setValue("obatId", ""); // Reset input obat
-      setValue("kuantitasObat", ""); // Reset input kuantitas
+      setValue("obatId", "");
+      setValue("kuantitasObat", "");
     }
   };
 
@@ -159,7 +169,7 @@ const RekamMedisUpdatePage = () => {
     const obatToEdit = obatSelected.find((obat) => obat.id === id);
     setValue("obatId", obatToEdit?.id);
     setValue("kuantitasObat", obatToEdit?.kuantitas);
-    handleRemoveObat(id); // Hapus dulu sebelum di-edit
+    handleRemoveObat(id);
   };
 
   return (
@@ -171,13 +181,11 @@ const RekamMedisUpdatePage = () => {
               Rekam Medis Pasien
             </Typography>
 
-            {/* Informasi Pasien otomatis diisi dari Kunjungan */}
             <Typography variant="h5" weight="bold" className="mt-8">
               Informasi Pasien
             </Typography>
             {kunjungan && (
               <div className="grid grid-cols-2 gap-5">
-                {/* Nama Pasien di sebelah kiri */}
                 <div>
                   <Input
                     id="namaPasien"
@@ -187,7 +195,6 @@ const RekamMedisUpdatePage = () => {
                   />
                 </div>
 
-                {/* Tanggal Kunjungan di sebelah kanan */}
                 <div>
                   <Input
                     id="tanggalKunjungan"
@@ -199,7 +206,6 @@ const RekamMedisUpdatePage = () => {
               </div>
             )}
 
-            {/* Tinggi Badan, Berat Badan, Tensi */}
             <div className="grid grid-cols-2 gap-5 mt-5">
               <Input
                 id="tinggiBadan"
@@ -223,7 +229,6 @@ const RekamMedisUpdatePage = () => {
               />
             </div>
 
-            {/* Keluhan */}
             <Typography variant="h5" weight="bold" className="mt-8">
               Keluhan
             </Typography>
@@ -238,7 +243,6 @@ const RekamMedisUpdatePage = () => {
               </div>
             )}
 
-            {/* Diagnosis */}
             <Typography variant="h5" weight="bold" className="mt-8">
               Diagnosis
             </Typography>
@@ -249,7 +253,6 @@ const RekamMedisUpdatePage = () => {
               validation={{ required: "Diagnosis wajib diisi" }}
             />
 
-            {/* Obat */}
             <Typography variant="h5" weight="bold" className="mt-8">
               Obat
             </Typography>
@@ -273,7 +276,6 @@ const RekamMedisUpdatePage = () => {
                 placeholder="1"
               />
 
-              {/* Gunakan full-width pada grid untuk tombol */}
               <div className="col-span-2 flex justify-center mt-2">
                 <Button type="button" onClick={handleAddObat}>
                   + Tambah
@@ -281,7 +283,6 @@ const RekamMedisUpdatePage = () => {
               </div>
             </div>
 
-            {/* Table untuk Obat yang Dipilih */}
             {obatSelected.length > 0 && (
               <table className="table-auto w-full mt-5 border-collapse border border-gray-300">
                 <thead>
@@ -325,39 +326,36 @@ const RekamMedisUpdatePage = () => {
               </table>
             )}
 
-            {/* Resep Obat */}
             <Typography variant="h5" weight="bold" className="mt-8">
               Resep Obat
             </Typography>
             <TextArea
-              id="resepObat"
+              id="deskripsiResepObat"
               label="Detail Resep Obat"
               placeholder="Masukkan Resep Obat yang Dibutuhkan Pasien"
             />
 
-            {/* Rujukan */}
             <Typography variant="h5" weight="bold" className="mt-8">
               Rujukan
             </Typography>
             <div className="grid grid-cols-3 gap-5">
               <Input
-                id="rujukanRumahSakit"
+                id="tujuanRujukan"
                 label="Rumah Sakit"
                 placeholder="Masukkan Nama Rumah Sakit Rujukan"
               />
               <Input
-                id="rujukanDokter"
+                id="dokterRujukan"
                 label="Dokter"
                 placeholder="Masukkan Nama Dokter Rujukan"
               />
               <Input
-                id="rujukanCatatan"
+                id="catatanRujukan"
                 label="Catatan"
                 placeholder="Masukkan Catatan Rujukan"
               />
             </div>
 
-            {/* Tombol Submit */}
             <div className="mt-5 flex items-center gap-4">
               <Button type="submit">Simpan</Button>
               <Link href="/home">
@@ -371,4 +369,4 @@ const RekamMedisUpdatePage = () => {
   );
 };
 
-export default withAuth(RekamMedisUpdatePage, "OPERATOR");
+export default withAuth(RekamMedisUpdatePage, "user");

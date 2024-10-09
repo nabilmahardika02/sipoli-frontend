@@ -11,9 +11,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { RekamMedis } from "@/types/entities/rekamMedis";
 import { Kunjungan } from "@/types/entities/kunjungan";
+import { checkRole } from "@/lib/checkRole";
+import useAuthStore from "@/store/useAuthStore";
 
 const RekamMedisDetailPage = () => {
   const { setTitle } = useDocumentTitle();
+  const user = useAuthStore.useUser();
   const [rekamMedis, setRekamMedis] = useState<RekamMedis | null>(null);
   const [kunjungan, setKunjungan] = useState<Kunjungan | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false); // Tambahkan untuk modal hapus
@@ -187,51 +190,44 @@ const RekamMedisDetailPage = () => {
             <Typography>Tidak ada obat yang diberikan.</Typography>
           )}
 
-          {/* Resep Obat */}
-          {rekamMedis.resepObat && (
-            <>
-              <Typography variant="h5" weight="bold" className="mt-8">
-                Resep Obat
-              </Typography>
-              <TextArea
-                id="resepObat"
-                label="Detail Resep Obat"
-                value={rekamMedis.resepObat.deskripsi}
-                readOnly
-              />
-            </>
-          )}
+          {/* Diagnosis */}
+          <Typography variant="h5" weight="bold" className="mt-8">
+            Resep Obat
+          </Typography>
+          <TextArea
+            id="deskripsiResepObat"
+            label="Detail Resep Obat"
+            value={rekamMedis.deskripsiResepObat}
+            readOnly
+          />
 
           {/* Rujukan */}
-          {rekamMedis.rujukan && (
-            <>
               <Typography variant="h5" weight="bold" className="mt-8">
                 Rujukan
               </Typography>
               <div className="grid grid-cols-3 gap-5">
                 <Input
-                  id="rujukanRumahSakit"
+                  id="tujuanRujukan"
                   label="Rumah Sakit"
-                  value={rekamMedis.rujukan.tujuan || ""}
+                  value={rekamMedis.tujuanRujukan || ""}
                   readOnly
                 />
                 <Input
-                  id="rujukanDokter"
+                  id="dokterRujukan"
                   label="Dokter"
-                  value={rekamMedis.rujukan.dokter || ""}
+                  value={rekamMedis.dokterRujukan || ""}
                   readOnly
                 />
                 <Input
-                  id="rujukanCatatan"
+                  id="catatanRujukan"
                   label="Catatan"
-                  value={rekamMedis.rujukan.catatan || ""}
+                  value={rekamMedis.catatanRujukan || ""}
                   readOnly
                 />
-              </div>
-            </>
-          )}
+          </div>
 
           {/* Tombol Edit dan Hapus */}
+          {user?.role === "OPERATOR" && (
           <div className="mt-5 flex justify-left gap-4">
             <Button
               variant="secondary"
@@ -246,6 +242,7 @@ const RekamMedisDetailPage = () => {
               Hapus Rekam Medis
             </Button>
           </div>
+        )}
 
           {/* Modal Hapus */}
           {showDeleteModal && (
@@ -275,4 +272,4 @@ const RekamMedisDetailPage = () => {
   );
 };
 
-export default withAuth(RekamMedisDetailPage, "OPERATOR");
+export default withAuth(RekamMedisDetailPage, "user");
