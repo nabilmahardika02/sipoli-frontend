@@ -54,11 +54,8 @@ const RegisterPage = () => {
     postData();
   };
 
-  const [role, setRole] = useState<string>();
-
   const handleChangeRole = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setIsPasien(event.target.value == "PASIEN");
-    setRole(event.target.value);
   };
 
   return (
@@ -73,7 +70,6 @@ const RegisterPage = () => {
                 placeholder="Role"
                 validation={{ required: "Role wajib diisi" }}
                 onChange={handleChangeRole}
-                value={role}
                 helperText="Pilih role terlebih dulu"
               >
                 <option value="DOKTER">DOKTER</option>

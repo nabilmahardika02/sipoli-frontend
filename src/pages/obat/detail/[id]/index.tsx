@@ -19,7 +19,7 @@ import { getRowIdRestock, restockColumn } from "@/types/table/obatColumn";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { FaPlus } from "react-icons/fa6";
 import { IoTrashBin } from "react-icons/io5";
@@ -30,20 +30,19 @@ const DetailObatPage = () => {
   const user = useAuthStore.useUser();
   const router = useRouter();
 
-  const [title, setPageTitle] = useState("Detail Obat");
   const [obat, setObat] = useState<Obat>();
   const [showRestockModal, setShowRestockModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     setTitle("Detail Obat");
-  }, [setTitle, title]);
+  }, [setTitle]);
 
   if (!checkRole(["OPERATOR", "DOKTER", "PERAWAT"])) {
     router.push("/403");
   }
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     const [responseData, message, isSuccess] = await sendRequest(
       "get",
       "obat/" + router.query.id
@@ -51,16 +50,12 @@ const DetailObatPage = () => {
 
     if (isSuccess) {
       setObat(responseData as Obat);
-
-      if (obat) {
-        setPageTitle(obat.namaObat);
-      }
     }
-  };
+  }, [router.query.id]);
 
   useEffect(() => {
     fetchData();
-  }, [router.query.id]);
+  }, [fetchData]);
 
   const methods = useForm<RestockForm>({
     mode: "onTouched",
@@ -94,7 +89,7 @@ const DetailObatPage = () => {
   return (
     <main>
       <Head>
-        <title>{title}</title>
+        <title>Detail Obat</title>
       </Head>
       <Typography variant="h4" className="mb-2 md:hidden text-primary-1">
         Detail Obat

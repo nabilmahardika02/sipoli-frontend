@@ -13,7 +13,8 @@ const DesktopTopNav = ({ title = "Beranda" }: { title?: string }) => {
         <div className="flex items-center gap-3">
           <div className="flex flex-col items-end mr-2">
             <Typography variant="p1" className="text-primary-1" font="ubuntu">
-              {user?.name || "Guest"} - {user?.role || "Role"} {/* Display user's role */}
+              {user?.name || "Guest"} - {user?.role || "Role"}{" "}
+              {/* Display user's role */}
             </Typography>
           </div>
           <button className="text-xl text-primary-1 hover:text-primary-2">

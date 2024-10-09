@@ -297,7 +297,7 @@ const TypographyExample = () => {
         </div>
       </div>
       <div className="hidden lg:flex px-10 py-2 mt-5 justify-between items-center bg-gray-200 rounded-full w-full overflow-x-auto no-scrollbar">
-      <Typography className="text-secondary-1">Light</Typography>
+        <Typography className="text-secondary-1">Light</Typography>
         <Typography className="text-secondary-1">Normal</Typography>
         <Typography className="text-secondary-1">Medium</Typography>
         <Typography className="text-secondary-1">Semibold</Typography>
