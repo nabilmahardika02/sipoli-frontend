@@ -26,20 +26,23 @@ const RekamMedisAddPage = () => {
     setTitle("Tambah Rekam Medis");
   }, [setTitle]);
 
-  useEffect(() => {
-    if (router.isReady && kunjunganId) {
-      const fetchKunjungan = async () => {
-        const [responseData, message, isSuccess] = await sendRequest(
+useEffect(() => {
+  if (router.isReady && kunjunganId) {
+    // Lakukan fetch data berdasarkan kunjunganId
+    const fetchKunjungan = async () => {
+      const [responseData, message, isSuccess] = await sendRequest(
         "get",
         `kunjungan/read?kunjunganId=${kunjunganId}`
-        );
-        if (isSuccess) {
-          setKunjungan(responseData as Kunjungan);
-        }
-      };
-      fetchKunjungan();
-    }
-  }, [router.isReady, kunjunganId]);
+      );
+      if (isSuccess) {
+        setKunjungan(responseData as Kunjungan);
+      } else {
+        alert("Gagal mendapatkan data kunjungan");
+      }
+    };
+    fetchKunjungan();
+  }
+}, [router.isReady, kunjunganId]);
   
   // Fetch available obat
   useEffect(() => {
@@ -70,24 +73,25 @@ const RekamMedisAddPage = () => {
   
     const payload = {
       ...data,
-      kunjunganId: kunjunganId,
       kuantitasObat: obatSelected.map((obat) => ({
         obatId: obat.id,
         kuantitas: obat.kuantitas,
       })),
     };
   
+    // Kirim kunjunganId sebagai query parameter
     const [responseData, message, isSuccess] = await sendRequest(
       "post",
-      "rekam-medis/add",
+      `rekam-medis/add?kunjunganId=${kunjunganId}`,  // kunjunganId sebagai query parameter
       payload,
       true
     );
-    
+  
     if (isSuccess) {
       router.push("/home");
     }
-  };  
+  };
+  
 
   const handleAddObat = () => {
     const obatId = watch("obatId");
@@ -115,114 +119,91 @@ const RekamMedisAddPage = () => {
       <section>
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
-            <Typography variant="h4" weight="bold" className="text-primary-1 mb-5">
+            <Typography variant="h5" weight="bold" className="text-primary-1 mb-5">
               Rekam Medis Pasien
             </Typography>
 
             {/* Informasi Pasien otomatis diisi dari Kunjungan */}
-            <Typography variant="h4" weight="bold" className="mt-8">
-                                Informasi Pasien
+            <Typography variant="h5" weight="bold" className="mt-8">
+            Informasi Pasien
             </Typography>
             {kunjungan && (
-  <div className="grid grid-cols-2 gap-5">
-    {/* Nama Pasien di sebelah kiri */}
-    <div>
-      <textarea
-        value={`Nama Pasien: ${kunjungan.profile.name}`}
-        style={{
-          width: '100%',
-          resize: 'none',
-          border: 'none',
-          background: 'transparent',
-          outline: 'none',
-          fontSize: '22px',  // Mengatur ukuran font lebih besar
-          padding: '',   // Memberikan jarak agar teks tidak menempel ke tepi
-          lineHeight: ''
-        }}
-        readOnly
-      />
-    </div>
+            <div className="grid grid-cols-2 gap-5">
+                {/* Nama Pasien di sebelah kiri */}
+                <div>
+                <Input
+                    id="namaPasien"
+                    label="Nama Pasien"
+                    value={kunjungan.profile.name || ""}
+                    readOnly
+                />
+                </div>
 
-    {/* Tanggal Kunjungan di sebelah kanan */}
-    <div className="text-right">
-      <textarea
-        value={`Tanggal Kunjungan: ${new Date(kunjungan.tanggal).toLocaleDateString('id-ID')}`}
-        style={{
-          width: '100%',
-          resize: 'none',
-          border: 'none',
-          background: 'transparent',
-          outline: 'none',
-          fontSize: '22px',  // Mengatur ukuran font lebih besar
-          padding: '',   // Memberikan jarak agar teks tidak menempel ke tepi
-          lineHeight: ''
-        }}
-        readOnly
-      />
-    </div>
-  </div>
-)}
+                {/* Tanggal Kunjungan di sebelah kanan */}
+                <div>
+                <Input
+                    id="tanggalKunjungan"
+                    label="Tanggal Kunjungan"
+                    value={new Date(kunjungan.tanggal).toLocaleDateString('id-ID')}
+                    readOnly
+                />
+                </div>
+            </div>
+            )}
+
 
             {/* Tinggi Badan, Berat Badan, Tensi */}
-            <div className="grid grid-cols-2 gap-5 mt-1">
+            <div className="grid grid-cols-2 gap-5 mt-5">
               <Input
                 id="tinggiBadan"
                 label="Tinggi Badan (cm)"
                 type="number"
-                placeholder="Input Here"
+                placeholder="Masukkan Tinggi Badan Pasien (Contoh: 175)"
                 validation={{ required: "Tinggi badan wajib diisi" }}
               />
               <Input
                 id="beratBadan"
                 label="Berat Badan (kg)"
                 type="number"
-                placeholder="Input Here"
+                placeholder="Masukkan Berat Badan Pasien (Contoh: 45)"
                 validation={{ required: "Berat badan wajib diisi" }}
               />
             <Input
                 id="tensi"
-                label="Tensi Darah"
-                placeholder="Input Here"
+                label="Tensi Darah (mmHg)"
+                placeholder="Masukkan Tensi Darah Pasien (Contoh: 120/90)"
                 validation={{ required: "Tensi darah wajib diisi" }}
                 />
             </div>
 
             {/* Keluhan */}
-            <Typography variant="h4" weight="bold" className="mt-8">
+            <Typography variant="h5" weight="bold" className="mt-8">
                 Keluhan
-            </Typography>
-            {kunjungan && (
-            <div>
-                <textarea
-                value={kunjungan.keluhan}
-                style={{
-                    width: '100%',
-                    resize: 'none',
-                    border: 'none',
-                    background: 'transparent',
-                    outline: 'none',
-                    fontSize: '22px',  // Mengatur ukuran font lebih besar
-                    padding: '',   // Memberikan padding untuk menambah ruang di dalam textarea
-                    lineHeight: '1.5'  // Mengatur jarak antar-baris agar lebih enak dibaca
-                }}
-                readOnly
-                />
-            </div>
-            )}
+                </Typography>
+                {kunjungan && (
+                <div>
+                    <TextArea
+                    id="keluhan"
+                    label="Detail Keluhan"
+                    value={kunjungan.keluhan || ""}
+                    readOnly
+                    />
+                </div>
+                )}
 
             {/* Diagnosis */}
-            <Typography variant="h4" weight="bold" className="mt-1">
+            <Typography variant="h5" weight="bold" className="mt-8">
               Diagnosis
             </Typography>
             <TextArea
               id="diagnosis"
               label="Detail Diagnosis"
-              placeholder="Input Here"
+              placeholder="Masukkan Hasil Diagnosis Pasien"
               validation={{ required: "Diagnosis wajib diisi" }}
             />
 
 {/* Obat */}
-<Typography variant="h4" weight="bold" className="mt-8">
+<Typography variant="h5" weight="bold" className="mt-8">
   Obat
 </Typography>
 <div className="grid grid-cols-2 gap-5 items-center">
@@ -300,35 +281,39 @@ const RekamMedisAddPage = () => {
 )}
 
             {/* Resep Obat */}
-            <Typography variant="h4" weight="bold" className="mt-8">
+            <Typography variant="h5" weight="bold" className="mt-8">
               Resep Obat
             </Typography>
             <TextArea
               id="resepObat"
               label="Detail Resep Obat"
-              placeholder="Input Here"
+              placeholder="Masukkan Resep Obat yang Dibutuhkan Pasien"
+              {...methods.register("resepObat")} // Tambahkan ini
             />
 
+
             {/* Rujukan */}
-            <Typography variant="h4" weight="bold" className="mt-8">
+            <Typography variant="h5" weight="bold" className="mt-8">
               Rujukan
             </Typography>
             <div className="grid grid-cols-3 gap-5">
             <Input
-                id="tujuanRujukan"
-                label="Tujuan Rujukan"
-                placeholder="Input Here"
-                />
-                <Input
-                id="dokterRujukan"
-                label="Dokter"
-                placeholder="Input Here"
-                />
-                <Input
-                id="catatanRujukan"
-                label="Catatan"
-                placeholder="Input Here"
-                />
+              id="rujukanRumahSakit"
+              label="Rumah Sakit"
+              placeholder="Masukkan Nama Rumah Sakit Rujukan"
+            />
+            <Input
+              id="rujukanDokter"
+              label="Dokter"
+              placeholder="Masukkan Nama Dokter Rujukan"
+              {...methods.register("rujukanDokter")} // Tambahkan ini
+            />
+            <Input
+              id="rujukanCatatan"
+              label="Catatan"
+              placeholder="Masukkan Catatan Rujukan"
+              {...methods.register("rujukanCatatan")} // Tambahkan ini
+            />
             </div>
 
             {/* Tombol Submit */}
@@ -345,6 +330,6 @@ const RekamMedisAddPage = () => {
   );
 };
 
-export default withAuth(RekamMedisAddPage, "user");
+export default withAuth(RekamMedisAddPage, "OPERATOR");
 
 
