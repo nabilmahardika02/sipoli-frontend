@@ -2,7 +2,7 @@ import useAuthStore from "@/store/useAuthStore";
 import { FaBell, FaUserCircle } from "react-icons/fa";
 import Typography from "../elements/Typography";
 
-const DesktopTopNav = ({ title = "Home" }: { title?: string }) => {
+const DesktopTopNav = ({ title = "Beranda" }: { title?: string }) => {
   const user = useAuthStore.useUser();
   return (
     <nav className="hidden md:block w-full px-8 pt-2">
@@ -11,6 +11,11 @@ const DesktopTopNav = ({ title = "Home" }: { title?: string }) => {
           {title}
         </Typography>
         <div className="flex items-center gap-3">
+          <div className="flex flex-col items-end mr-2">
+            <Typography variant="p1" className="text-primary-1" font="ubuntu">
+              {user?.name || "Guest"} - {user?.role || "Role"} {/* Display user's role */}
+            </Typography>
+          </div>
           <button className="text-xl text-primary-1 hover:text-primary-2">
             {(user?.role === "DOKTER" || user?.role === "PERAWAT") && (
               <FaBell />

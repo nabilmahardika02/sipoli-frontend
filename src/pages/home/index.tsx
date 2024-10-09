@@ -26,6 +26,8 @@ import {
   CancelKunjunganForm,
   KunjunganForm,
 } from "@/types/forms/kunjunganForm";
+import { LuPencil } from "react-icons/lu";
+
 
 const HomePage = () => {
   const user = useAuthStore.useUser();
@@ -41,7 +43,7 @@ const HomePage = () => {
   });
 
   useEffect(() => {
-    setTitle("Home");
+    setTitle("Beranda");
   }, [setTitle]);
 
   useEffect(() => {
