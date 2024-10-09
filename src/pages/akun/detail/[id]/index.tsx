@@ -1,4 +1,3 @@
-import useAuthStore from "@/store/useAuthStore";
 import withAuth from "@/components/hoc/withAuth";
 import { LoadingDiv } from "@/components/elements/Loading";
 import { useDocumentTitle } from "@/context/Title";
@@ -14,6 +13,9 @@ import Divider from "@/components/elements/Divider";
 import Button from "@/components/elements/Button";
 import DataTable from "@/lib/datatable";
 import { formatDate } from "@/lib/formater";
+import { LuPencil } from "react-icons/lu";
+import { IoTrashBin } from "react-icons/io5";
+import { TbPasswordUser } from "react-icons/tb";
 import {
   getRowIdProfile,
   profileTableColumns,
@@ -21,12 +23,12 @@ import {
 import Link from "next/link";
 
 const DetailPage = () => {
-  const user = useAuthStore.useUser();
   const { setTitle } = useDocumentTitle();
   const router = useRouter();
   const [selectedAccount, setAccount] = useState<Account>();
   const [profiles, setProfiles] = useState<Profile[]>();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isPasien, setIsPasien] = useState(true);
 
   useEffect(() => {
     setTitle("Detail Akun");
@@ -41,7 +43,7 @@ const DetailPage = () => {
 
       if (isSuccess) {
         setAccount(responseData as Account);
-        console.log(selectedAccount)
+        console.log(selectedAccount);
       }
     };
     fetchAccount();
@@ -55,9 +57,9 @@ const DetailPage = () => {
       );
       if (isSuccess) {
         setProfiles(responseData as Profile[]);
-        console.log(profiles)
+        console.log(profiles);
       } else {
-        console.log(message)
+        console.log(message);
       }
     };
     if (selectedAccount?.role === "PASIEN") {
@@ -65,13 +67,9 @@ const DetailPage = () => {
     }
   }, [selectedAccount]);
 
-  const logout = useAuthStore.useLogout();
-
-  const handleLogout = () => {
-    logout();
-    removeToken();
-    router.push("/login");
-  };
+  useEffect(() => {
+    setIsPasien(selectedAccount?.role === "PASIEN");
+  }, [selectedAccount]);
 
   const handleDelete = () => {
     const softDelete = async () => {
@@ -89,7 +87,9 @@ const DetailPage = () => {
   return (
     <main>
       <section>
-        <div className="flex justify-center md:hidden">
+        {selectedAccount && (
+          <div>
+          <div className="flex justify-center md:hidden">
           <Typography variant="h4" className="text-primary-1">
             Detail Akun
           </Typography>
@@ -98,24 +98,11 @@ const DetailPage = () => {
         <div className="grid grid-cols-3 justify-center gap-10 my-5">
           <div className="w-full">
             <Typography variant="p1" className="text-gray-600">
-              User ID
-            </Typography>
-            <Typography variant="p1" className="text-primary-1 font-medium">
-              {selectedAccount?.id}
-            </Typography>
-          </div>
-          <div className="w-full">
-            <Typography variant="p1" className="text-gray-600">
               Username
             </Typography>
             <Typography variant="p1" className="text-primary-1 font-medium">
               {selectedAccount?.username}
             </Typography>
-          </div>
-          <div className="w-full align-top">
-            <Button className="mt-5" onClick={handleLogout}>
-              Logout
-            </Button>
           </div>
           <div className="w-full">
             <Typography variant="p1" className="text-gray-600">
@@ -125,44 +112,52 @@ const DetailPage = () => {
               {selectedAccount?.role}
             </Typography>
           </div>
-          <div className="w-full">
-            <Typography variant="p1" className="text-gray-600">
-              NIP
-            </Typography>
-            <Typography variant="p1" className="text-primary-1 font-medium">
-              {selectedAccount?.nip}
-            </Typography>
-          </div>
-          <div className="w-full">
-            <Typography variant="p1" className="text-gray-600">
-              Jabatan
-            </Typography>
-            <Typography variant="p1" className="text-primary-1 font-medium">
-              {selectedAccount?.jabatan}
-            </Typography>
-          </div>
-          <div className="w-full">
-            <Typography variant="p1" className="text-gray-600">
-              Unit Kerja
-            </Typography>
-            <Typography variant="p1" className="text-primary-1 font-medium">
-              {selectedAccount?.unitKerja}
-            </Typography>
-          </div>
-          <div className="w-full">
-            <Typography variant="p1" className="text-gray-600">
-              Eselon
-            </Typography>
-            <Typography variant="p1" className="text-primary-1 font-medium">
-              {selectedAccount?.eselon}
-            </Typography>
-          </div>
+          {isPasien && (
+            <div className="w-full">
+              <Typography variant="p1" className="text-gray-600">
+                NIP
+              </Typography>
+              <Typography variant="p1" className="text-primary-1 font-medium">
+                {selectedAccount?.nip ?? "N/A"}
+              </Typography>
+            </div>
+          )}
+          {isPasien && (
+            <div className="w-full">
+              <Typography variant="p1" className="text-gray-600">
+                Jabatan
+              </Typography>
+              <Typography variant="p1" className="text-primary-1 font-medium">
+                {selectedAccount?.jabatan ?? "N/A"}
+              </Typography>
+            </div>
+          )}
+          {isPasien && (
+            <div className="w-full">
+              <Typography variant="p1" className="text-gray-600">
+                Unit Kerja
+              </Typography>
+              <Typography variant="p1" className="text-primary-1 font-medium">
+                {selectedAccount?.unitKerja ?? "N/A"}
+              </Typography>
+            </div>
+          )}
+          {isPasien && (
+            <div className="w-full">
+              <Typography variant="p1" className="text-gray-600">
+                Eselon
+              </Typography>
+              <Typography variant="p1" className="text-primary-1 font-medium">
+                {selectedAccount?.eselon ?? "N/A"}
+              </Typography>
+            </div>
+          )}
           <div className="w-full">
             <Typography variant="p1" className="text-gray-600">
               Created At
             </Typography>
             <Typography variant="p1" className="text-primary-1 font-medium">
-              {selectedAccount?.createdAt}
+            {selectedAccount?.createdAt ? formatDate(selectedAccount.createdAt) : "N/A"}
             </Typography>
           </div>
           <div className="w-full">
@@ -170,18 +165,18 @@ const DetailPage = () => {
               Updated At
             </Typography>
             <Typography variant="p1" className="text-primary-1 font-medium">
-              {selectedAccount?.updatedAt}
+              {selectedAccount?.updatedAt ? formatDate(selectedAccount.updatedAt) : "N/A"}
             </Typography>
           </div>
         </div>
         <div className="flex justify-center gap-5 my-5">
           <Link href={`/akun/detail/${router.query.id}/password-by-admin`}>
-            <Button variant="secondary" className="mt-5">
+            <Button variant="secondary" className="mt-5" leftIcon={TbPasswordUser}>
               Ubah Password
             </Button>
           </Link>
           <Link href={`/akun/detail/${router.query.id}/update`}>
-            <Button variant="secondary" className="mt-5">
+            <Button variant="secondary" className="mt-5" leftIcon={LuPencil}>
               Perbarui Akun
             </Button>
           </Link>
@@ -190,23 +185,30 @@ const DetailPage = () => {
               onClick={() => setShowDeleteModal(true)}
               variant="danger"
               className="mt-5"
+              leftIcon={IoTrashBin}
             >
               Hapus Akun
             </Button>
           </div>
         </div>
         <Divider />
-        <div style={{ width: "100%", overflowX: "auto" }}>
-          {profiles ? (
-            <DataTable
-              columns={profileTableColumns}
-              getRowId={getRowIdProfile}
-              rows={profiles}
-            />
-          ) : (
-            <LoadingDiv />
-          )}
+        {isPasien && (
+          <div style={{ width: "100%", overflowX: "auto" }}>
+            {profiles ? (
+              <DataTable
+                columns={profileTableColumns}
+                getRowId={getRowIdProfile}
+                rows={profiles}
+              />
+            ) : (
+              <Typography variant="p1" className="text-primary-1 font-medium">
+                -
+              </Typography>
+            )}
+          </div>
+        )}
         </div>
+        )}
       </section>
       {showDeleteModal && (
         <ModalLayout setShowModal={setShowDeleteModal}>

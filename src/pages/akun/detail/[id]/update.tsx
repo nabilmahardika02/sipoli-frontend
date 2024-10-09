@@ -64,6 +64,7 @@ const UpdatePage = () => {
   }, [router.query.id])
 
   const [isPasien, setIsPasien] = useState(true);
+  const [role, setRole] = useState(selectedAccount?.role || "");
   const methods = useForm<UpdateForm>({
     mode: "onTouched",
   });
@@ -75,7 +76,7 @@ const UpdatePage = () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "put",
         "auth/update-pasien-account",
-        data,
+        {...data, id:router.query.id},
         true
       );
 
@@ -85,15 +86,26 @@ const UpdatePage = () => {
     };
     postData();
   };
+  useEffect(() => {
+    if (selectedAccount?.role) {
+      setRole(selectedAccount.role);
+      setIsPasien(selectedAccount.role === "PASIEN");
+    }
+  }, [selectedAccount]);
+  
+  useEffect(() => {
+    setIsPasien(role === "PASIEN");
+  }, [role]);
 
   const handleChangeRole = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setIsPasien(event.target.value == "PASIEN");
+    setRole(event.target.value);
   };
 
   return (
     <main>
       <section className="mb-5">
-        <FormProvider {...methods}>
+        {selectedAccount && profile && (
+          <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <SelectInput
@@ -103,7 +115,8 @@ const UpdatePage = () => {
                 validation={{ required: "Role wajib diisi" }}
                 onChange={handleChangeRole}
                 helperText="Pilih role terlebih dulu"
-                value={selectedAccount?.role}
+                value={role || selectedAccount.role}
+                defaultValue={selectedAccount.role}
               >
                 <option value="DOKTER">DOKTER</option>
                 <option value="PASIEN">PASIEN</option>
@@ -111,17 +124,11 @@ const UpdatePage = () => {
                 <option value="OPERATOR">OPERATOR</option>
               </SelectInput>
               <Input
-                id="id"
-                placeholder="User ID"
-                label="User ID"
-                value={selectedAccount?.id}
-              />
-              <Input
                   id="username"
                   placeholder="username"
                   label="Username"
                   helperText="Default password sama dengan username"
-                  value={selectedAccount?.username}
+                  defaultValue={selectedAccount?.username}
                 />
               {isPasien && (
                 <Input
@@ -164,7 +171,7 @@ const UpdatePage = () => {
                   placeholder="Eselon"
                   validation={{ required: "Eselon wajib diisi" }}
                   label="Eselon"
-                  value={selectedAccount?.eselon.toString()}
+                  defaultValue={selectedAccount?.eselon}
                 />
               )}
               <Input 
@@ -185,10 +192,13 @@ const UpdatePage = () => {
                 label="Jenis Kelamin"
                 direction="grid"
                 validation={{ required: "Jenis kelamin wajib diisi" }}
-                value={profile?.jenisKelamin.toString()}
+                defaultValue={profile?.jenisKelamin !== null 
+                  && profile?.jenisKelamin !== undefined
+                  ? profile?.jenisKelamin.toString()
+                  : ""}
               />
             </div>
-            <div className="mt-5 flex items-center gap-4">
+            <div className="mt-5 flex items-center justify-center gap-4">
               <Button type="submit">Submit</Button>
               <Link href={`/akun/detail/${router.query.id}`}>
                 <Button variant="danger">Cancel</Button>
@@ -196,6 +206,7 @@ const UpdatePage = () => {
             </div>
           </form>
         </FormProvider>
+        )}
       </section>
     </main>
   );

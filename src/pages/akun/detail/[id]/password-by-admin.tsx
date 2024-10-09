@@ -29,12 +29,12 @@ const ChangePasswordByAdminPage = () => {
           const [responseData, message, isSuccess] = await sendRequest(
             "put",
             "auth/change-password-by-admin",
-            data,
+            {...data, accountId:router.query.id},
             true
           );
     
           if (isSuccess) {
-            router.push(`akun/detail/${router.query.id}`);
+            router.push(`/akun/detail/${router.query.id}`);
           }
         };
         postData();
@@ -47,23 +47,16 @@ const ChangePasswordByAdminPage = () => {
               <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <Input
-                    id="accountId"
-                    label="ID Akun"
-                    type="text"
-                    readOnly
-                    defaultValue={router.query.id}
-                  />
-                  <Input
-                    id="password"
+                    id="newPassword"
                     validation={{ required: "Password wajib diisi" }}
                     placeholder="*******"
-                    label="Password"
+                    label="Password Baru"
                     type="password"
                   />
                 </div>
-                <div className="mt-5 flex items-center gap-4">
+                <div className="mt-5 flex items-center justify-center gap-4">
                   <Button type="submit">
-                    Ubah
+                    Submit
                   </Button>
                   <Link href={`/akun/detail/${router.query.id}`}>
                     <Button variant="danger">

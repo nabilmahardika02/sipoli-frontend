@@ -31,7 +31,7 @@ export type UpdateForm = {
 }
 
 export type PasswordByAdminForm = {
-  id: string;
+  accountId: string;
   newPassword: string;
 }
 
