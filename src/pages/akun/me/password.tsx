@@ -69,7 +69,7 @@ const ChangePasswordPage = () => {
             </div>
             <div className="mt-5 flex items-center justify-center gap-4">
               <Button type="submit">Submit</Button>
-              <Link href={`/akun/me}`}>
+              <Link href={`/akun/me`}>
                 <Button variant="danger">Cancel</Button>
               </Link>
             </div>

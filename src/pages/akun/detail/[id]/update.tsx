@@ -127,6 +127,7 @@ const UpdatePage = () => {
                   id="username"
                   placeholder="username"
                   label="Username"
+                  validation={{ required: "Username wajib diisi" }}
                   helperText="Default password sama dengan username"
                   defaultValue={selectedAccount?.username}
                 />
@@ -137,7 +138,7 @@ const UpdatePage = () => {
                   placeholder="1234567890"
                   label="NIP"
                   helperText="NIP akan menjadi default password dan username"
-                  value={selectedAccount?.nip}
+                  defaultValue={selectedAccount?.nip}
                 />
               )}
               <Input
@@ -145,7 +146,7 @@ const UpdatePage = () => {
                 placeholder="Nama"
                 validation={{ required: "Nama wajib diisi" }}
                 label="Nama"
-                value={profile?.name}
+                defaultValue={profile?.name}
               />
               {isPasien && (
                 <Input
@@ -153,7 +154,7 @@ const UpdatePage = () => {
                   placeholder="Jabatan"
                   validation={{ required: "Jabatan wajib diisi" }}
                   label="Jabatan"
-                  value={selectedAccount?.jabatan}
+                  defaultValue={selectedAccount?.jabatan}
                 />
               )}
               {isPasien && (
@@ -162,7 +163,7 @@ const UpdatePage = () => {
                   placeholder="Unit Kerja"
                   validation={{ required: "Unit Kerja wajib diisi" }}
                   label="Unit Kerja"
-                  value={selectedAccount?.unitKerja}
+                  defaultValue={selectedAccount?.unitKerja}
                 />
               )}
               {isPasien && (
@@ -177,14 +178,16 @@ const UpdatePage = () => {
               <Input 
                 id="noHp" 
                 placeholder="081234567890" 
+                validation={{ required: "Nomor HP wajib diisi" }}
                 label="No HP" 
-                value={profile?.noHp}/>
+                defaultValue={profile?.noHp}/>
               <Input
                 id="tanggalLahir"
                 type="date"
                 placeholder="yyyy-MM-dd"
+                validation={{ required: "Tanggal lahir wajib diisi" }}
                 label="Tanggal Lahir"
-                value={profile?.tanggalLahir}
+                defaultValue={profile?.tanggalLahir}
               />
               <RadioButtonGroup
                 name="jenisKelamin"

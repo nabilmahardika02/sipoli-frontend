@@ -26,9 +26,11 @@ const DetailPage = () => {
   const { setTitle } = useDocumentTitle();
   const router = useRouter();
   const [selectedAccount, setAccount] = useState<Account>();
+  const [myAccount, setMyAccount] = useState<Account>();
   const [profiles, setProfiles] = useState<Profile[]>();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isPasien, setIsPasien] = useState(true);
+  const [isOperator, setIsOperator] = useState(true);
 
   useEffect(() => {
     setTitle("Detail Akun");
@@ -68,8 +70,27 @@ const DetailPage = () => {
   }, [selectedAccount]);
 
   useEffect(() => {
+    const fetchMyAccount = async () => {
+      const [responseData, message, isSuccess] = await sendRequest(
+        "get",
+        "auth/my-account"
+      );
+
+      if (isSuccess) {
+        setMyAccount(responseData as Account);
+      }
+      console.log("Data yang diterima:", responseData);
+    };
+    fetchMyAccount();
+  }, []);
+
+  useEffect(() => {
     setIsPasien(selectedAccount?.role === "PASIEN");
   }, [selectedAccount]);
+
+  useEffect(() => {
+    setIsOperator(myAccount?.role === "OPERATOR")
+  }, [myAccount?.role])
 
   const handleDelete = () => {
     const softDelete = async () => {
@@ -169,12 +190,15 @@ const DetailPage = () => {
             </Typography>
           </div>
         </div>
+
         <div className="flex justify-center gap-5 my-5">
-          <Link href={`/akun/detail/${router.query.id}/password-by-admin`}>
-            <Button variant="secondary" className="mt-5" leftIcon={TbPasswordUser}>
-              Ubah Password
-            </Button>
-          </Link>
+          {isOperator && (
+            <Link href={`/akun/detail/${router.query.id}/password-by-admin`}>
+              <Button variant="secondary" className="mt-5" leftIcon={TbPasswordUser}>
+                Ubah Password
+              </Button>
+            </Link>
+          )}
           <Link href={`/akun/detail/${router.query.id}/update`}>
             <Button variant="secondary" className="mt-5" leftIcon={LuPencil}>
               Perbarui Akun

@@ -129,11 +129,16 @@ const RegisterPage = () => {
                   label="Eselon"
                 />
               )}
-              <Input id="noHp" placeholder="081234567890" label="No HP" />
+              <Input 
+                id="noHp" 
+                placeholder="081234567890" 
+                label="No HP"
+                validation={{ required: "Nomor HP wajib diisi" }} />
               <Input
                 id="tanggalLahir"
                 type="date"
                 placeholder="yyyy-MM-dd"
+                validation={{ required: "Tanggal lahir wajib diisi" }}
                 label="Tanggal Lahir"
               />
               <RadioButtonGroup
