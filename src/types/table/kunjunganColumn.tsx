@@ -77,7 +77,7 @@ export const kunjunganTables: GridColDef[] = [
   },
   {
     field: "action",
-    headerName: "Action",
+    headerName: "Detail",
     headerAlign: "center",
     width: 200,
     align: "center",
@@ -85,14 +85,9 @@ export const kunjunganTables: GridColDef[] = [
     renderCell: (params: CustomGridValueGetterParams) => {
       return (
         <div className="w-full flex items-center gap-2 justify-center h-full">
-          <Link href={`/home`}>
-            <Button variant="primary" size="sm" fullRounded className="mx-auto">
+          <Link href={`/kunjungan/${params.row.id}`}>
+            <Button variant="outline" size="sm" fullRounded className="mx-auto">
               Detail
-            </Button>
-          </Link>
-          <Link href={`/home`}>
-            <Button variant="danger" size="lg" fullRounded className="mx-auto">
-              <FaRegTrashAlt />
             </Button>
           </Link>
         </div>

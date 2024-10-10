@@ -67,7 +67,7 @@ const ObatPage = () => {
       <Head>Daftar Obat</Head>
       <section className="mt-5">
         {listObat ? (
-          <DataTable columns={obatTableColumn} rows={listObat} />
+          <DataTable columns={obatTableColumn} rows={listObat} flexColumnIndexes={[1, 4]} />
         ) : (
           <LoadingDiv />
         )}

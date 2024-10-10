@@ -14,7 +14,7 @@ export type NavbarMenu = {
 
 export const operatorMenu: NavbarMenu[] = [
   {
-    name: "Home",
+    name: "Beranda",
     icon: BiSolidHome,
     href: "/home",
     children: [],
@@ -67,7 +67,7 @@ export const operatorMenu: NavbarMenu[] = [
 
 export const pasienMenu: NavbarMenu[] = [
   {
-    name: "Home",
+    name: "Beranda",
     icon: BiSolidHome,
     href: "/home",
     children: [],
@@ -82,7 +82,7 @@ export const pasienMenu: NavbarMenu[] = [
 
 export const dokterMenu: NavbarMenu[] = [
   {
-    name: "Home",
+    name: "Beranda",
     icon: BiSolidHome,
     href: "/home",
     children: [],
@@ -109,7 +109,7 @@ export const dokterMenu: NavbarMenu[] = [
 
 export const perawatMenu: NavbarMenu[] = [
   {
-    name: "Home",
+    name: "Beranda",
     icon: BiSolidHome,
     href: "/home",
     children: [],
@@ -142,7 +142,7 @@ export const perawatMenu: NavbarMenu[] = [
 
 export const defaultMenu: NavbarMenu[] = [
   {
-    name: "Home",
+    name: "Beranda",
     icon: BiSolidHome,
     href: "/home",
     children: [],

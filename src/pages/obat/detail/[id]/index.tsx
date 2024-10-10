@@ -127,21 +127,30 @@ const DetailObatPage = () => {
             </Typography>
             {user?.role === "OPERATOR" && (
               <div className="flex items-center gap-2">
-                <IconButton
-                  className="md:hidden"
-                  variant="secondary"
-                  icon={LuPencil}
-                />
+                <Link href={`/obat/detail/${router.query.id}/update`}>
+                  <IconButton
+                    className="md:hidden"
+                    variant="secondary"
+                    icon={LuPencil}
+                  />
+                </Link>
                 <IconButton
                   className="md:hidden"
                   icon={FaPlus}
                   onClick={() => setShowRestockModal(true)}
+                />
+                <IconButton
+                  className="md:hidden"
+                  variant="danger"
+                  icon={IoTrashBin}
+                  onClick={() => setShowDeleteModal(true)}
                 />
                 <Link href={`/obat/detail/${router.query.id}/update`}>
                   <Button
                     className="max-md:hidden"
                     leftIcon={LuPencil}
                     variant="secondary"
+                    size="sm"
                   >
                     Edit Data Obat
                   </Button>
@@ -150,6 +159,7 @@ const DetailObatPage = () => {
                   className="max-md:hidden"
                   leftIcon={FaPlus}
                   onClick={() => setShowRestockModal(true)}
+                  size="sm"
                 >
                   Restock Obat
                 </Button>
@@ -158,6 +168,7 @@ const DetailObatPage = () => {
                   className="max-md:hidden"
                   leftIcon={IoTrashBin}
                   variant="danger"
+                  size="sm"
                 >
                   Hapus Obat
                 </Button>

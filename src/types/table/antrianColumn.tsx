@@ -82,7 +82,7 @@ export const kunjunganTableColumns: GridColDef[] = [
       return (
         <div className="w-full flex items-center gap-2 justify-center h-full">
           <Link href={`/kunjungan/${params.row.id}`}>
-            <Button variant="primary" size="sm" fullRounded className="mx-auto">
+            <Button variant="outline" size="sm" fullRounded className="mx-auto">
               Detail
             </Button>
           </Link>

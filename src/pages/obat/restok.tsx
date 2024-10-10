@@ -48,6 +48,53 @@ const RestockPage = () => {
     });
   };
 
+  const handleAddRow = () => {
+    setRestockListValue((prevState) => ({
+      ...prevState,
+      restockItemList: [
+        ...prevState.restockItemList,
+        {
+          idObat: undefined,
+          qty: 0,
+        },
+      ],
+    }));
+  };
+
+  const handleChangeIdObat = (
+    i: number,
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const updatedRestockItemList = [...restockListValue.restockItemList];
+
+    updatedRestockItemList[i] = {
+      ...updatedRestockItemList[i],
+      idObat: event.target.value,
+    };
+
+    setRestockListValue({
+      ...restockListValue,
+      restockItemList: updatedRestockItemList,
+    });
+  };
+
+  const handleChangeQtyObat = (
+    i: number,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const updatedRestockItemList = [...restockListValue.restockItemList];
+
+    updatedRestockItemList[i] = {
+      ...updatedRestockItemList[i],
+      qty: Number(event.target.value),
+    };
+
+    setRestockListValue({
+      ...restockListValue,
+      restockItemList: updatedRestockItemList,
+    });
+  };
+
   const methods = useForm<RestockListForm>({
     mode: "onTouched",
   });
@@ -55,7 +102,20 @@ const RestockPage = () => {
   const { handleSubmit } = methods;
 
   const onSubmit: SubmitHandler<RestockListForm> = (data) => {
-    console.log(data);
+    const postData = async () => {
+      const [responseData, message, isSuccess] = await sendRequest(
+        "post",
+        "obat/restock-list",
+        restockListValue,
+        true
+      );
+
+      if (isSuccess) {
+        router.push("/obat");
+      }
+    };
+
+    postData();
   };
 
   return (
@@ -78,11 +138,14 @@ const RestockPage = () => {
               onChange={handleDateChange}
             />
           </div>
-          <Typography weight="bold" className="text-primary-1 mt-5">
-            Data Obat
-          </Typography>
-          <div className="rounded-lg overflow-hidden mt-4">
-            <table className="w-full rounded-xl">
+          <div className="mt-5 flex items-center justify-between">
+            <Typography weight="bold" className="text-primary-1">
+              Data Obat
+            </Typography>
+            <Button onClick={handleAddRow}>Tambah Input Pembelian</Button>
+          </div>
+          <div className="rounded-lg overflow-y-hidden overflow-x-auto mt-4 shadow-lg">
+            <table className="w-full rounded-xl border border-gray-300">
               <thead className="bg-primary-1 text-white">
                 <tr className="font-bold">
                   <th className="text-center px-5 py-2">Obat</th>
@@ -90,30 +153,41 @@ const RestockPage = () => {
                 </tr>
               </thead>
               <tbody className="align-top">
-                <tr>
-                  <td className="px-2 py-4">
-                    <SelectInput
-                      id="idObat"
-                      placeholder="Pilih Obat"
-                      validation={{ required: "Obat wajib dipilih" }}
-                      className="mt-0"
-                    >
-                      {listObat?.map((obat) => (
-                        <option key={obat.id} value={obat.id}>
-                          {obat.namaObat}
-                        </option>
-                      ))}
-                    </SelectInput>
-                  </td>
-                  <td className="px-2 py-4">
-                    <Input
-                      id="qty"
-                      placeholder="Kuantitas Restock"
-                      validation={{ required: "Kuantitas restock wajib diisi" }}
-                      type="number"
-                    />
-                  </td>
-                </tr>
+                {restockListValue.restockItemList.map((restockItem, index) => (
+                  <tr key={index}>
+                    <td className="px-4 py-4 border">
+                      <SelectInput
+                        id={`idObat_` + index}
+                        placeholder="Pilih Obat"
+                        validation={{ required: "Obat wajib dipilih" }}
+                        value={restockItem.idObat}
+                        className="mt-0"
+                        onChange={(
+                          event: React.ChangeEvent<HTMLSelectElement>
+                        ) => handleChangeIdObat(index, event)}
+                      >
+                        {listObat?.map((obat) => (
+                          <option key={obat.id} value={obat.id}>
+                            {obat.namaObat}
+                          </option>
+                        ))}
+                      </SelectInput>
+                    </td>
+                    <td className="px-4 py-4 border">
+                      <Input
+                        id={"qty" + index}
+                        placeholder="Kuantitas Restock"
+                        validation={{
+                          required: "Kuantitas restock wajib diisi",
+                        }}
+                        type="number"
+                        onChange={(
+                          event: React.ChangeEvent<HTMLInputElement>
+                        ) => handleChangeQtyObat(index, event)}
+                      />
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
