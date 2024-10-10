@@ -69,7 +69,7 @@ const UpdatePage = () => {
   return (
     <main>
       <Head>
-        <title>Update Data Obat</title>
+        <title>Ubah Data Obat</title>
       </Head>
       <Typography variant="h4" className="mb-2 md:hidden text-primary-1">
         Ubah Data Obat
