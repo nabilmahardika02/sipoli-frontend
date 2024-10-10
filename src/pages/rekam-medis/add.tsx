@@ -119,6 +119,16 @@ const RekamMedisAddPage = () => {
     handleRemoveObat(id); // Hapus dulu sebelum di-edit
   };
 
+  // State untuk menyimpan obat yang dipilih
+const [obatId, setObatId] = useState<string>("");
+
+// Handler untuk perubahan dropdown obat
+const handleObatChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const selectedObatId = event.target.value;
+  setObatId(selectedObatId); // Set nilai obat yang dipilih
+};
+
+
   return (
     <main>
       <section>
@@ -215,18 +225,20 @@ const RekamMedisAddPage = () => {
               Obat
             </Typography>
             <div className="grid grid-cols-2 gap-5 items-center">
-              <SelectInput
-                id="obatId"
-                label="Nama Obat"
-                placeholder="Pilih Obat"
-                {...methods.register("obatId")} // Tambahkan ini
-              >
-                {obatList.map((obat) => (
-                  <option key={obat.id} value={obat.id}>
-                    {obat.namaObat} (Stok: {obat.totalStok})
-                  </option>
-                ))}
-              </SelectInput>
+            <SelectInput
+            id="obatId"
+            label="Nama Obat"
+            placeholder="Pilih Obat"
+            value={obatId} // Set nilai yang dipilih
+            onChange={handleObatChange} // Handler ketika obat dipilih
+          >
+            <option value="">-- Pilih Obat --</option>
+            {obatList.map((obat) => (
+              <option key={obat.id} value={obat.id}>
+                {obat.namaObat} (Stok: {obat.totalStok})
+              </option>
+            ))}
+          </SelectInput>
 
               <Input
                 id="kuantitasObat"

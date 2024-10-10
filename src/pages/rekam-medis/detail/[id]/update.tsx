@@ -26,7 +26,7 @@ const RekamMedisUpdatePage = () => {
   const { id } = router.query;
 
   useEffect(() => {
-    setTitle("Update Rekam Medis");
+    setTitle("Memperbarui Rekam Medis");
   }, [setTitle]);
 
   if (!checkRole(["OPERATOR", "DOKTER", "PERAWAT"])) {
@@ -43,14 +43,7 @@ const RekamMedisUpdatePage = () => {
         );
         if (isSuccess) {
           setRekamMedis(responseData as RekamMedis);
-          setObatSelected(
-            responseData.listKuantitasObat
-              .filter((kuantitasObat: any) => kuantitasObat.obat) // Filter data yang punya obat
-              .map((kuantitasObat: any) => ({
-                id: kuantitasObat.obat.id,
-                kuantitas: kuantitasObat.kuantitas,
-              }))
-          );
+          setObatSelected(responseData.listKuantitasObat);
           
         } else {
           alert("Gagal mendapatkan data rekam medis");
@@ -110,9 +103,6 @@ const RekamMedisUpdatePage = () => {
       setValue("tujuanRujukan", rekamMedis.tujuanRujukan || "");
       setValue("dokterRujukan", rekamMedis.dokterRujukan || "");
       setValue("catatanRujukan", rekamMedis.catatanRujukan || "");
-
-      // Set nilai default untuk obat yang sudah dipilih
-      setValue("obatList", obatSelected.map(obat => ({ id: obat.id, kuantitas: obat.kuantitas })));
   }
 }, [rekamMedis, setValue, obatSelected]);
 
@@ -120,7 +110,7 @@ const RekamMedisUpdatePage = () => {
   useEffect(() => {
     if (kunjungan) {
       setValue("keluhan", kunjungan.keluhan);
-      setValue("tanggalKunjungan", kunjungan.tanggal);
+      // setValue("tanggalKunjungan", kunjungan.tanggal);
       setValue("namaPasien", kunjungan.profile.name);
     }
   }, [kunjungan, setValue]);
@@ -172,6 +162,21 @@ const RekamMedisUpdatePage = () => {
     handleRemoveObat(id);
   };
 
+  // Gabungkan data kuantitas obat dengan nama obat
+  const obatWithNames = obatSelected.map((obatItem) => {
+    const obatInfo = obatList.find((obat) => obat.id === obatItem.id);
+    return {
+      ...obatItem,
+      namaObat: obatInfo ? obatInfo.namaObat : "Nama obat"
+    };
+  });
+
+  const [obatId, setObatId] = useState<string>("");
+
+  const handleObatChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  setObatId(event.target.value); // Set nilai obat yang dipilih ke state
+};
+
   return (
     <main>
       <section>
@@ -196,11 +201,11 @@ const RekamMedisUpdatePage = () => {
                 </div>
 
                 <div>
-                  <Input
-                    id="tanggalKunjungan"
-                    label="Tanggal Kunjungan"
-                    value={new Date(kunjungan.tanggal).toLocaleDateString('id-ID')}
-                    readOnly
+                <Input
+                id="tanggalKunjungan"
+                label="Tanggal Kunjungan"
+                value={new Date(kunjungan.tanggal).toLocaleDateString("id-ID")}
+                readOnly
                   />
                 </div>
               </div>
@@ -257,17 +262,20 @@ const RekamMedisUpdatePage = () => {
               Obat
             </Typography>
             <div className="grid grid-cols-2 gap-5 items-center">
-              <SelectInput
-                id="obatId"
-                label="Nama Obat"
-                placeholder="Pilih Obat"
-              >
-                {obatList.map((obat) => (
-                  <option key={obat.id} value={obat.id}>
-                    {obat.namaObat} (Stok: {obat.totalStok})
-                  </option>
-                ))}
-              </SelectInput>
+            <SelectInput
+            id="obatId"
+            label="Nama Obat"
+            placeholder="Pilih Obat"
+            value={obatId} // Mengaitkan nilai ke state obatId
+            onChange={handleObatChange} // Mengubah state ketika ada perubahan
+          >
+            <option value="">-- Pilih Obat --</option>
+            {obatList.map((obat) => (
+              <option key={obat.id} value={obat.id}>
+                {obat.namaObat} (Stok: {obat.totalStok})
+              </option>
+            ))}
+          </SelectInput>
 
               <Input
                 id="kuantitasObat"
@@ -283,7 +291,7 @@ const RekamMedisUpdatePage = () => {
               </div>
             </div>
 
-            {obatSelected.length > 0 && (
+            {obatWithNames.length > 0 && (
               <table className="table-auto w-full mt-5 border-collapse border border-gray-300">
                 <thead>
                   <tr className="text-center bg-primary-1 text-white">
@@ -294,34 +302,31 @@ const RekamMedisUpdatePage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {obatSelected.map((obat, index) => {
-                    const selectedObat = obatList.find((o) => o.id === obat.id);
-                    return (
-                      <tr key={obat.id} className="text-center">
-                        <td className="border border-gray-300 p-2">{index + 1}</td>
-                        <td className="border border-gray-300 p-2">{selectedObat?.namaObat}</td>
-                        <td className="border border-gray-300 p-2">{obat.kuantitas}</td>
-                        <td className="border border-gray-300 p-2">
-                          <div className="flex justify-center space-x-2">
-                            <Button
-                              type="button"
-                              className="shadow-none"
-                              onClick={() => handleEditObat(obat.id)}
-                            >
-                              Edit
-                            </Button>
-                            <Button
-                              type="button"
-                              className="shadow-none"
-                              onClick={() => handleRemoveObat(obat.id)}
-                            >
-                              Hapus
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                  {obatWithNames.map((obat, index) => (
+                    <tr key={obat.id} className="text-center">
+                      <td className="border border-gray-300 p-2">{index + 1}</td>
+                      <td className="border border-gray-300 p-2">{obat.namaObat}</td>
+                      <td className="border border-gray-300 p-2">{obat.kuantitas}</td>
+                      <td className="border border-gray-300 p-2">
+                        <div className="flex justify-center space-x-2">
+                          <Button
+                            type="button"
+                            className="shadow-none"
+                            onClick={() => handleEditObat(obat.id)}
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            type="button"
+                            className="shadow-none"
+                            onClick={() => handleRemoveObat(obat.id)}
+                          >
+                            Hapus
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             )}
