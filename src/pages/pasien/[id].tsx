@@ -10,17 +10,13 @@ import { useDocumentTitle } from "@/context/Title";
 import { checkRole } from "@/lib/checkRole";
 import sendRequest from "@/lib/getApi";
 import router, { useRouter } from "next/router";
-import sendRequest from "@/lib/getApi";
 import { Profile } from "@/types/entities/profile";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import { Profile } from "@/types/entities/profile";
 import { Account } from "@/types/entities/account";
 import useAuthStore from "@/store/useAuthStore";
 import Link from "next/link";
 import { KunjunganForm } from "@/types/forms/kunjunganForm";
-import Divider from "@/components/elements/Divider";
 
 const jenisKelamin = [
   {
