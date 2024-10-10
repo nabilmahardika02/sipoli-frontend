@@ -91,6 +91,26 @@ const DetailObatPage = () => {
     postData();
   };
 
+  const handleDelete = async () => {
+    try {
+      const [responseData, message, isSuccess] = await sendRequest(
+        "put", // Ganti dari 'delete' ke 'put'
+        `obat/delete/${router.query.id}`, // Endpoint soft delete
+        null, // Tidak perlu body data
+        true // True jika membutuhkan autentikasi
+      );
+
+      if (isSuccess) {
+        setShowDeleteModal(false);
+        router.push("/obat"); // Redirect to obat list page after deletion
+      } else {
+        showToast(message, DANGER_TOAST);
+      }
+    } catch (error) {
+      showToast("Gagal menghapus obat. Coba lagi.", DANGER_TOAST);
+    }
+};
+
   return (
     <main>
       <Head>
@@ -107,30 +127,21 @@ const DetailObatPage = () => {
             </Typography>
             {user?.role === "OPERATOR" && (
               <div className="flex items-center gap-2">
-                <Link href={`/obat/detail/${router.query.id}/update`}>
-                  <IconButton
-                    className="md:hidden"
-                    variant="secondary"
-                    icon={LuPencil}
-                  />
-                </Link>
+                <IconButton
+                  className="md:hidden"
+                  variant="secondary"
+                  icon={LuPencil}
+                />
                 <IconButton
                   className="md:hidden"
                   icon={FaPlus}
                   onClick={() => setShowRestockModal(true)}
-                />
-                <IconButton
-                  className="md:hidden"
-                  variant="danger"
-                  icon={IoTrashBin}
-                  onClick={() => setShowDeleteModal(true)}
                 />
                 <Link href={`/obat/detail/${router.query.id}/update`}>
                   <Button
                     className="max-md:hidden"
                     leftIcon={LuPencil}
                     variant="secondary"
-                    size="sm"
                   >
                     Edit Data Obat
                   </Button>
@@ -139,7 +150,6 @@ const DetailObatPage = () => {
                   className="max-md:hidden"
                   leftIcon={FaPlus}
                   onClick={() => setShowRestockModal(true)}
-                  size="sm"
                 >
                   Restock Obat
                 </Button>
@@ -148,7 +158,6 @@ const DetailObatPage = () => {
                   className="max-md:hidden"
                   leftIcon={IoTrashBin}
                   variant="danger"
-                  size="sm"
                 >
                   Hapus Obat
                 </Button>
@@ -290,13 +299,7 @@ const DetailObatPage = () => {
               </ul>
             </Typography>
             <div className="flex items-center gap-2 mt-4 self-end">
-              <Button
-                variant="danger"
-                size="sm"
-                onClick={() =>
-                  showToast("Belum bisa ini kerjaan Nafriel", DANGER_TOAST)
-                }
-              >
+              <Button variant="danger" size="sm" onClick={handleDelete}>
                 Hapus
               </Button>
               <Button
