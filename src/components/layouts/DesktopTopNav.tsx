@@ -1,6 +1,7 @@
 import useAuthStore from "@/store/useAuthStore";
 import { FaBell, FaUserCircle } from "react-icons/fa";
 import Typography from "../elements/Typography";
+import Link from "next/link";
 
 const DesktopTopNav = ({ title = "Beranda" }: { title?: string }) => {
   const user = useAuthStore.useUser();
@@ -21,9 +22,11 @@ const DesktopTopNav = ({ title = "Beranda" }: { title?: string }) => {
               <FaBell />
             )}
           </button>
+          <Link href={"/akun/me"}>
           <button className="text-xl text-primary-1 hover:text-primary-2">
             <FaUserCircle />
           </button>
+          </Link>
         </div>
       </div>
     </nav>
