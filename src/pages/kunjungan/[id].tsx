@@ -149,7 +149,7 @@ const KunjunganPage = () => {
                 weight="light"
                 className="text-primary-1"
               >
-                {kunjungan.tanggal
+                {kunjungan?.tanggal
                   ? new Date(kunjungan.tanggal).toLocaleDateString("id-ID", {
                       weekday: "long",
                       day: "numeric",
@@ -167,10 +167,10 @@ const KunjunganPage = () => {
                 variant="h6"
                 weight="light"
                 className={`text-primary-1 ${getStatusColor(
-                  kunjungan.status
+                  kunjungan?.status
                 )}`}
               >
-                {getStatusText(kunjungan.status)}
+                {getStatusText(kunjungan?.status)}
               </Typography>
             </div>
             <div className="w-full">
@@ -182,7 +182,7 @@ const KunjunganPage = () => {
                 weight="light"
                 className="text-primary-1"
               >
-                {kunjungan.antrian.noAntrian}
+                {kunjungan?.antrian.noAntrian}
               </Typography>
             </div>
             <div className="w-full">
@@ -194,7 +194,7 @@ const KunjunganPage = () => {
                 weight="light"
                 className="text-primary-1"
               >
-                {getSesiText(kunjungan.antrian.sesi)}
+                {getSesiText(kunjungan?.antrian.sesi)}
               </Typography>
             </div>
             <div className="w-full">
@@ -206,12 +206,12 @@ const KunjunganPage = () => {
                 weight="light"
                 className="text-primary-1"
               >
-                {kunjungan.keluhan}
+                {kunjungan?.keluhan}
               </Typography>
             </div>
           </div>
           <Divider />
-          {user?.role !== "PASIEN" && kunjungan.rekamMedis === null && (
+          {user?.role !== "PASIEN" && kunjungan?.rekamMedis === null && (
             <div className="w-full flex justify-center rounded-lg border border-gray-300 py-8">
               <Link href={"/"} className="flex flex-col items-center group">
                 <FaCirclePlus className="text-gray-300 text-4xl group-hover:text-blue-200" />
@@ -224,19 +224,11 @@ const KunjunganPage = () => {
               </Link>
             </div>
           )}
-          {user?.role === "PASIEN" && kunjungan.rekamMedis !== null && (
+          {user?.role === "PASIEN" && kunjungan?.rekamMedis !== null && (
             <Button variant="primary">Lihat Rekam Medis</Button>
-<<<<<<< HEAD
         )}
 
       </section>
-=======
-          )}
-        </section>
-      ) : (
-        <LoadingDiv />
-      )}
->>>>>>> 7328dfdd739998f2eded843492ed516cf29217b5
     </main>
   );
 };
