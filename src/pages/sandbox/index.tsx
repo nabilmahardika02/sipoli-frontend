@@ -1,6 +1,5 @@
 import Button from "@/components/elements/Button";
 import Typography from "@/components/elements/Typography";
-import withAuth from "@/components/hoc/withAuth";
 import Link from "next/link";
 
 const SandboxPage = () => {

@@ -42,8 +42,6 @@ const KunjunganAddPage = () => {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [profile, setProfile] = useState<Profile>();
-  const [account, setAccount] = useState<Account>();
-  const [status, setStatus] = useState<string>();
 
   useEffect(() => {
     if (user?.role === "PASIEN") {
@@ -51,7 +49,7 @@ const KunjunganAddPage = () => {
     } else {
       setTitle("Tambah Kunjungan");
     }
-  }, [setTitle]);
+  }, [setTitle, user?.role]);
 
   useEffect(() => {
     // Fungsi untuk mengambil data profil dari API
@@ -85,7 +83,7 @@ const KunjunganAddPage = () => {
     if (user?.role === "PASIEN") {
       fetchProfiles();
     }
-  }, []);
+  }, [user]);
 
   const methods = useForm<KunjunganForm>({
     mode: "onTouched",
@@ -124,7 +122,6 @@ const KunjunganAddPage = () => {
 
       setProfiles(listProfile);
       setProfile(listProfile[0]);
-      setAccount(selectedAccount);
     }
   };
 
@@ -139,12 +136,6 @@ const KunjunganAddPage = () => {
       setProfile(selectedProfile);
     }
   };
-
-  const handleStatus = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedStatus = event.target.value;
-
-    setStatus(selectedStatus);
-  }
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -203,7 +194,6 @@ const KunjunganAddPage = () => {
                       validation={{ required: "Akun wajib diisi" }}
                       onChange={handleAccount}
                       helperText="Pilih akun terlebih dahulu"
-                      value={account?.id}
                     >
                       {accounts.length > 0 ? (
                         accounts.map((account) => (
@@ -226,7 +216,6 @@ const KunjunganAddPage = () => {
                     validation={{ required: "Profil wajib diisi" }}
                     onChange={handleProfile}
                     helperText="Pilih profil terlebih dahulu"
-                    value={profile?.id}
                   >
                     {profiles.length > 0 ? (
                       profiles.map((profile) => (
@@ -269,9 +258,7 @@ const KunjunganAddPage = () => {
                     id="status"
                     label="Status"
                     placeholder="Pilih status"
-                    onChange={handleStatus}
                     validation={{ required: "Status wajib diisi" }}
-                    value={status}
                   >
                     <option value="0">Belum Dilayani</option>
                     <option value="1">Sedang Dilayani</option>

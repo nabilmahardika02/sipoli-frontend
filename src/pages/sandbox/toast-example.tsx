@@ -40,7 +40,9 @@ const ToastExample = () => {
           Click Me!
         </Button>
         <Button
-          onClick={() => showToast("This is example of warning toast", WARNING_TOAST)}
+          onClick={() =>
+            showToast("This is example of warning toast", WARNING_TOAST)
+          }
           variant="warning"
         >
           Click Me!

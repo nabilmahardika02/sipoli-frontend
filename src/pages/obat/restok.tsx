@@ -160,7 +160,6 @@ const RestockPage = () => {
                         id={`idObat_` + index}
                         placeholder="Pilih Obat"
                         validation={{ required: "Obat wajib dipilih" }}
-                        value={restockItem.idObat}
                         className="mt-0"
                         onChange={(
                           event: React.ChangeEvent<HTMLSelectElement>

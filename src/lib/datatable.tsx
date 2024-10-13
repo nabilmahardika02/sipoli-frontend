@@ -42,8 +42,8 @@ export default function DataTable({
         },
       }}
       sx={{
-        '& .MuiButtonBase-root': {
-          color: '#721E49', // Ganti warna teks dan ikon toolbar
+        "& .MuiButtonBase-root": {
+          color: "#721E49",
         },
       }}
       pageSizeOptions={[5, 10, 20]}

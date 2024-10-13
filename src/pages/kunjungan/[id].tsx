@@ -1,5 +1,6 @@
 import Button from "@/components/elements/Button";
 import Divider from "@/components/elements/Divider";
+import { LoadingDiv } from "@/components/elements/Loading";
 import Typography from "@/components/elements/Typography";
 import withAuth from "@/components/hoc/withAuth";
 import { useDocumentTitle } from "@/context/Title";
@@ -9,9 +10,8 @@ import { Kunjungan } from "@/types/entities/kunjungan";
 import Link from "next/link";
 import router from "next/router";
 import { useEffect, useState } from "react";
-import { LuPencil } from "react-icons/lu";
-import { GoPlus } from "react-icons/go";
 import { FaCirclePlus } from "react-icons/fa6";
+import { LuPencil } from "react-icons/lu";
 
 const sesi = [
   {
@@ -73,7 +73,7 @@ const KunjunganPage = () => {
     };
 
     fetchKunjungan();
-  }, [router.query.id]);
+  }, []);
 
   const getSesiText = (sesiValue: number | undefined) => {
     const sesiItem = sesi.find((item) => Number(item.value) === sesiValue);
@@ -133,84 +133,110 @@ const KunjunganPage = () => {
           )}
         </div>
 
-        <div className="flex justify-center md:hidden">
-          <Typography variant="h4" className="text-primary-1">
-            Detail Kunjungan
-          </Typography>
-        </div>
-        <Divider className="md:hidden" />
-        <div className="grid grid-cols-2 gap-5 my-5">
-          <div className="w-full">
-            <Typography variant="p1" className="text-gray-600">
-              Tanggal Kunjungan
-            </Typography>
-            <Typography variant="h6" weight="light" className="text-primary-1">
-              {kunjungan?.tanggal
-                ? new Date(kunjungan.tanggal).toLocaleDateString("id-ID", {
-                    weekday: "long",
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })
-                : "Tanggal tidak tersedia"}
+          <div className="flex justify-center md:hidden">
+            <Typography variant="h4" className="text-primary-1">
+              Detail Kunjungan
             </Typography>
           </div>
-          <div className="w-full">
-            <Typography variant="p1" className="text-gray-600">
-              Status
-            </Typography>
-            <Typography
-              variant="h6"
-              weight="light"
-              className={`text-primary-1 ${getStatusColor(kunjungan?.status)}`}
-            >
-              {getStatusText(kunjungan?.status)}
-            </Typography>
-          </div>
-          <div className="w-full">
-            <Typography variant="p1" className="text-gray-600">
-              Nomor Antrian
-            </Typography>
-            <Typography variant="h6" weight="light" className="text-primary-1">
-              {kunjungan?.antrian.noAntrian}
-            </Typography>
-          </div>
-          <div className="w-full">
-            <Typography variant="p1" className="text-gray-600">
-              Sesi
-            </Typography>
-            <Typography variant="h6" weight="light" className="text-primary-1">
-              {getSesiText(kunjungan?.antrian.sesi)}
-            </Typography>
-          </div>
-          <div className="w-full">
-            <Typography variant="p1" className="text-gray-600">
-              Keluhan
-            </Typography>
-            <Typography variant="h6" weight="light" className="text-primary-1">
-              {kunjungan?.keluhan}
-            </Typography>
-          </div>
-        </div>
-        <Divider />
-        {user?.role !== "PASIEN" && kunjungan?.rekamMedis === null && (
-            <div className="w-full flex justify-center rounded-lg border border-gray-300 py-8">
-            <Link href={"/"} className="flex flex-col items-center group">
-              <FaCirclePlus className="text-gray-300 text-5xl group-hover:text-blue-200" />
+          <Divider className="md:hidden" />
+          <div className="grid grid-cols-2 gap-5 my-5">
+            <div className="w-full">
+              <Typography variant="p1" className="text-gray-600">
+                Tanggal Kunjungan
+              </Typography>
               <Typography
                 variant="h6"
-                className="text-gray-300 mt-4 group-hover:text-blue-200"
+                weight="light"
+                className="text-primary-1"
               >
-                Tambah Rekam Medis
+                {kunjungan.tanggal
+                  ? new Date(kunjungan.tanggal).toLocaleDateString("id-ID", {
+                      weekday: "long",
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })
+                  : "Tanggal tidak tersedia"}
               </Typography>
-            </Link>
+            </div>
+            <div className="w-full">
+              <Typography variant="p1" className="text-gray-600">
+                Status
+              </Typography>
+              <Typography
+                variant="h6"
+                weight="light"
+                className={`text-primary-1 ${getStatusColor(
+                  kunjungan.status
+                )}`}
+              >
+                {getStatusText(kunjungan.status)}
+              </Typography>
+            </div>
+            <div className="w-full">
+              <Typography variant="p1" className="text-gray-600">
+                Nomor Antrian
+              </Typography>
+              <Typography
+                variant="h6"
+                weight="light"
+                className="text-primary-1"
+              >
+                {kunjungan.antrian.noAntrian}
+              </Typography>
+            </div>
+            <div className="w-full">
+              <Typography variant="p1" className="text-gray-600">
+                Sesi
+              </Typography>
+              <Typography
+                variant="h6"
+                weight="light"
+                className="text-primary-1"
+              >
+                {getSesiText(kunjungan.antrian.sesi)}
+              </Typography>
+            </div>
+            <div className="w-full">
+              <Typography variant="p1" className="text-gray-600">
+                Keluhan
+              </Typography>
+              <Typography
+                variant="h6"
+                weight="light"
+                className="text-primary-1"
+              >
+                {kunjungan.keluhan}
+              </Typography>
+            </div>
           </div>
-        )}
-        {user?.role === "PASIEN" && kunjungan?.rekamMedis !== null && (
+          <Divider />
+          {user?.role !== "PASIEN" && kunjungan.rekamMedis === null && (
+            <div className="w-full flex justify-center rounded-lg border border-gray-300 py-8">
+              <Link href={"/"} className="flex flex-col items-center group">
+                <FaCirclePlus className="text-gray-300 text-4xl group-hover:text-blue-200" />
+                <Typography
+                  variant="h6"
+                  className="text-gray-300 mt-4 group-hover:text-blue-200"
+                >
+                  Tambah Rekam Medis
+                </Typography>
+              </Link>
+            </div>
+          )}
+          {user?.role === "PASIEN" && kunjungan.rekamMedis !== null && (
             <Button variant="primary">Lihat Rekam Medis</Button>
+<<<<<<< HEAD
         )}
 
       </section>
+=======
+          )}
+        </section>
+      ) : (
+        <LoadingDiv />
+      )}
+>>>>>>> 7328dfdd739998f2eded843492ed516cf29217b5
     </main>
   );
 };

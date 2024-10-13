@@ -4,6 +4,7 @@ import RadioButtonGroup from "@/components/elements/forms/RadioButtonGroup";
 import SelectInput from "@/components/elements/forms/SelectInput";
 import TextArea from "@/components/elements/forms/TextArea";
 import Divider from "@/components/elements/Divider";
+import { LoadingDiv } from "@/components/elements/Loading";
 import Typography from "@/components/elements/Typography";
 import withAuth from "@/components/hoc/withAuth";
 import { useDocumentTitle } from "@/context/Title";
@@ -55,7 +56,7 @@ const PasienPage = () => {
         setPasien(responseData as Profile);
       }
 
-      console.log(router.query.id)
+      console.log(router.query.id);
     };
 
     fetchProfile();
@@ -101,40 +102,60 @@ const PasienPage = () => {
           </Typography>
         </div>
         <Divider className="md:hidden" />
-        <div className="grid grid-cols-2 gap-5 my-5">
-          <div className="w-full">
-            <Typography variant="p1" className="text-gray-600">
-              Nama
-            </Typography>
-            <Typography variant="h6" weight="light" className="text-primary-1">
-              {pasien?.name}
-            </Typography>
+        {pasien ? (
+          <div className="grid grid-cols-2 gap-5 my-5">
+            <div className="w-full">
+              <Typography variant="p1" className="text-gray-600">
+                Nama
+              </Typography>
+              <Typography
+                variant="h6"
+                weight="light"
+                className="text-primary-1"
+              >
+                {pasien?.name}
+              </Typography>
+            </div>
+            <div className="w-full">
+              <Typography variant="p1" className="text-gray-600">
+                Nomor HP
+              </Typography>
+              <Typography
+                variant="h6"
+                weight="light"
+                className="text-primary-1"
+              >
+                {pasien?.noHp}
+              </Typography>
+            </div>
+            <div className="w-full">
+              <Typography variant="p1" className="text-gray-600">
+                Usia
+              </Typography>
+              <Typography
+                variant="h6"
+                weight="light"
+                className="text-primary-1"
+              >
+                {usia} tahun
+              </Typography>
+            </div>
+            <div className="w-full">
+              <Typography variant="p1" className="text-gray-600">
+                Jenis Kelamin
+              </Typography>
+              <Typography
+                variant="h6"
+                weight="light"
+                className="text-primary-1"
+              >
+                {kelaminText}
+              </Typography>
+            </div>
           </div>
-          <div className="w-full">
-            <Typography variant="p1" className="text-gray-600">
-              Nomor HP
-            </Typography>
-            <Typography variant="h6" weight="light" className="text-primary-1">
-              {pasien?.noHp}
-            </Typography>
-          </div>
-          <div className="w-full">
-            <Typography variant="p1" className="text-gray-600">
-              Usia
-            </Typography>
-            <Typography variant="h6" weight="light" className="text-primary-1">
-              {usia} tahun
-            </Typography>
-          </div>
-          <div className="w-full">
-            <Typography variant="p1" className="text-gray-600">
-              Jenis Kelamin
-            </Typography>
-            <Typography variant="h6" weight="light" className="text-primary-1">
-              {kelaminText}
-            </Typography>
-          </div>
-        </div>
+        ) : (
+          <LoadingDiv />
+        )}
         <Divider />
         <div className="flex justify-center my-5">
           <Typography variant="h6" className="text-gray-500">

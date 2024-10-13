@@ -30,7 +30,6 @@ export default function SelectInput({
   className,
   readOnly = false,
   defaultValue = "",
-  value = "",
   placeholder = "",
   labelClassName,
   children,
@@ -70,7 +69,6 @@ export default function SelectInput({
           id={id}
           name={id}
           defaultValue={defaultValue}
-          value={value}
           disabled={readOnly}
           className={clsxm(
             "w-full pl-3 pr-8 py-2.5 truncate rounded-md border-none mt-1 bg-transparent",

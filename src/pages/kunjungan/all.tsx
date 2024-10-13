@@ -92,7 +92,7 @@ const KunjunganAllPage = () => {
           </Link>
         </div>
 
-        <div style={{ width: "100%", overflowX: "auto" }}>
+        <div>
           {!startDate || !endDate ? (
             <div className="w-full py-10 px-5 rounded-lg border border-gray-300 flex items-center justify-center">
               <Typography
@@ -100,7 +100,8 @@ const KunjunganAllPage = () => {
                 weight="semibold"
                 className="text-gray-400"
               >
-                Mohon pilih tanggal awal dan tanggal akhir untuk melihat kunjungan
+                Mohon pilih tanggal awal dan tanggal akhir untuk melihat
+                kunjungan
               </Typography>
             </div>
           ) : kunjungans && kunjungans.length > 0 ? (

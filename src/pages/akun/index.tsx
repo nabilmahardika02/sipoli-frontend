@@ -47,6 +47,7 @@ const AkunPage = () => {
             columns={userTableColumns}
             getRowId={getRowIdUsers}
             rows={users}
+            flexColumnIndexes={[0, 4]}
           />
         ) : (
           <LoadingDiv />

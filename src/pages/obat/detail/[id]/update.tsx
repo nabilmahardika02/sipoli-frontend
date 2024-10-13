@@ -69,10 +69,10 @@ const UpdatePage = () => {
   return (
     <main>
       <Head>
-        <title>Update Data Obat</title>
+        <title>Ubah Data Obat</title>
       </Head>
       <Typography variant="h4" className="mb-2 md:hidden text-primary-1">
-        Update Data Obat
+        Ubah Data Obat
       </Typography>
       {obat && (
         <section className="mb-5">

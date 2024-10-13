@@ -1,6 +1,8 @@
 import Button from "@/components/elements/Button";
 import Divider from "@/components/elements/Divider";
 import SelectInput from "@/components/elements/forms/SelectInput";
+import { LoadingDiv } from "@/components/elements/Loading";
+import { SUCCESS_TOAST, showToast } from "@/components/elements/Toast";
 import Typography from "@/components/elements/Typography";
 import withAuth from "@/components/hoc/withAuth";
 import ModalLayout from "@/components/layouts/ModalLayout";
@@ -12,6 +14,10 @@ import useAuthStore from "@/store/useAuthStore";
 import { Kunjungan } from "@/types/entities/kunjungan";
 import { Profile } from "@/types/entities/profile";
 import {
+  CancelKunjunganForm,
+  KunjunganForm,
+} from "@/types/forms/kunjunganForm";
+import {
   getRowIdKunjungans,
   kunjunganTableColumns,
 } from "@/types/table/antrianColumn";
@@ -19,7 +25,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { GoPlus } from "react-icons/go";
 import { SUCCESS_TOAST, showToast } from "@/components/elements/Toast";
 import {
@@ -33,7 +39,7 @@ const HomePage = () => {
   const user = useAuthStore.useUser();
   const { setTitle } = useDocumentTitle();
   const [profiles, setProfiles] = useState<Profile[]>([]);
-  const [kunjungans, setKunjungans] = useState<Kunjungan[]>([]);
+  const [kunjungans, setKunjungans] = useState<Kunjungan[]>();
   const [selectedProfile, setProfile] = useState<Profile>();
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancelId, setCancelId] = useState<string>();
@@ -197,7 +203,7 @@ const HomePage = () => {
 
       {user?.role === "PASIEN" &&
         (selectedProfile ? (
-          kunjungans.length > 0 ? (
+          kunjungans && kunjungans.length > 0 ? (
             <div className="w-full flex gap-5 justify-center flex-shrink-0 flex-wrap">
               {kunjungans.map((kunjungan) => (
                 <div
@@ -250,28 +256,32 @@ const HomePage = () => {
           </div>
         ))}
 
-      <div style={{ width: "100%", overflowX: "auto" }}>
-        {user?.role !== "PASIEN" && kunjungans && kunjungans.length > 0 ? (
-          <DataTable
-            columns={kunjunganTableColumns}
-            getRowId={getRowIdKunjungans}
-            rows={kunjungans}
-            flexColumnIndexes={[2, 4]}
-          />
-        ) : user?.role !== "PASIEN" ? (
-          <div className="w-full py-10 px-5 rounded-lg border border-gray-300 flex items-center justify-center">
-            <Typography
-              variant="p1"
-              weight="semibold"
-              className="text-gray-400"
-            >
-              Belum ada Antrian
-            </Typography>
-          </div>
-        ) : (
-          <></>
-        )}
-      </div>
+      {user && user.role !== "PASIEN" && (
+        <div className="w-full">
+          {kunjungans ? (
+            kunjungans.length > 0 ? (
+              <DataTable
+                columns={kunjunganTableColumns}
+                getRowId={getRowIdKunjungans}
+                rows={kunjungans}
+                flexColumnIndexes={[2, 4]}
+              />
+            ) : (
+              <div className="w-full py-10 px-5 rounded-lg border border-gray-300 flex items-center justify-center">
+                <Typography
+                  variant="p1"
+                  weight="semibold"
+                  className="text-gray-400"
+                >
+                  Belum ada Antrian
+                </Typography>
+              </div>
+            )
+          ) : (
+            <LoadingDiv />
+          )}
+        </div>
+      )}
 
       <div className="flex justify-center">
         <Button className="mt-5 place-self-start" onClick={handleLogout}>

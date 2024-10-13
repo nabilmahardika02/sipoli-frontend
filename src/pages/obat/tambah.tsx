@@ -10,7 +10,7 @@ import { AddObatForm } from "@/types/forms/obatForm";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 
 const AddObatPage = () => {
@@ -44,14 +44,6 @@ const AddObatPage = () => {
     postData();
   };
 
-  const [jenisObat, setJenisObat] = useState<string>();
-
-  const handleJenisObat = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedJenisObat = event.target.value;
-
-    setJenisObat(selectedJenisObat);
-  }
-
   return (
     <main>
       <section className="mb-5">
@@ -79,8 +71,6 @@ const AddObatPage = () => {
                 label="Jenis Satuan"
                 placeholder="Jenis Satuan"
                 validation={{ required: "Jenis Satuan wajib diisi" }}
-                onChange={handleJenisObat}
-                value={jenisObat}
               >
                 <option value="0">Botol</option>
                 <option value="1">Strip</option>
