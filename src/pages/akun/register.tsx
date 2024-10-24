@@ -2,7 +2,9 @@ import Button from "@/components/elements/Button";
 import Input from "@/components/elements/forms/Input";
 import RadioButtonGroup from "@/components/elements/forms/RadioButtonGroup";
 import SelectInput from "@/components/elements/forms/SelectInput";
+import Typography from "@/components/elements/Typography";
 import withAuth from "@/components/hoc/withAuth";
+import { jenisKelamin } from "@/content/gender";
 import { useDocumentTitle } from "@/context/Title";
 import sendRequest from "@/lib/getApi";
 import { RegisterForm } from "@/types/forms/authForm";
@@ -10,17 +12,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-
-const jenisKelamin = [
-  {
-    value: "false",
-    text: "Laki-laki",
-  },
-  {
-    value: "true",
-    text: "Perempuan",
-  },
-];
 
 const RegisterPage = () => {
   const { setTitle } = useDocumentTitle();
@@ -61,6 +52,9 @@ const RegisterPage = () => {
   return (
     <main>
       <section className="mb-5">
+        <Typography variant="h4" className="mb-2 md:hidden">
+          Registrasi Akun
+        </Typography>
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -79,11 +73,11 @@ const RegisterPage = () => {
               </SelectInput>
               {isPasien && (
                 <Input
-                  id="nip"
-                  validation={{ required: "NIP wajib diisi" }}
-                  placeholder="1234567890"
-                  label="NIP"
-                  helperText="NIP akan menjadi default password dan username"
+                  id="nik"
+                  validation={{ required: "NIK wajib diisi" }}
+                  placeholder="Isi NIK"
+                  label="NIK"
+                  helperText="NIK akan menjadi default password dan username"
                 />
               )}
               {!isPasien && (
@@ -125,11 +119,12 @@ const RegisterPage = () => {
                   label="Eselon"
                 />
               )}
-              <Input 
-                id="noHp" 
-                placeholder="081234567890" 
+              <Input
+                id="noHp"
+                placeholder="081234567890"
                 label="No HP"
-                validation={{ required: "Nomor HP wajib diisi" }} />
+                validation={{ required: "Nomor HP wajib diisi" }}
+              />
               <Input
                 id="tanggalLahir"
                 type="date"
@@ -145,10 +140,10 @@ const RegisterPage = () => {
                 validation={{ required: "Jenis kelamin wajib diisi" }}
               />
             </div>
-            <div className="mt-5 flex items-center gap-4">
-              <Button type="submit">Submit</Button>
+            <div className="mt-5 flex items-center justify-center gap-4">
+              <Button type="submit">Simpan</Button>
               <Link href={"/akun"}>
-                <Button variant="danger">Cancel</Button>
+                <Button variant="danger">Batal</Button>
               </Link>
             </div>
           </form>

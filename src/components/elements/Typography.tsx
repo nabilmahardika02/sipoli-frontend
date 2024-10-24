@@ -22,10 +22,10 @@ enum TypographyVariant {
   "h4",
   "h5",
   "h6",
+  "h7",
   "p1",
   "p2",
   "p3",
-  
   "p4",
 }
 
@@ -101,6 +101,9 @@ export default function Typography<T extends React.ElementType>({
           ],
           variant === "h6" && [
             "text-[16px] font-bold leading-normal md:text-[24px] md:leading-tight",
+          ],
+          variant === "h7" && [
+            "text-[14px] font-bold leading-normal md:text-[20px] md:leading-tight",
           ],
           variant === "p1" && ["text-[16px] leading-normal md:leading-relaxed"],
           variant === "p2" && ["text-[14px] leading-normal md:leading-relaxed"],

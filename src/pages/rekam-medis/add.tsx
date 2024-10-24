@@ -5,24 +5,26 @@ import TextArea from "@/components/elements/forms/TextArea";
 import Typography from "@/components/elements/Typography";
 import withAuth from "@/components/hoc/withAuth";
 import { useDocumentTitle } from "@/context/Title";
-import sendRequest from "@/lib/getApi";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { AddRekamMedisForm } from "@/types/forms/rekamMedisForm";
-import { Obat } from "@/types/entities/obat";
-import { Kunjungan } from "@/types/entities/kunjungan";
-import Link from "next/link";
 import { checkRole } from "@/lib/checkRole";
+import sendRequest from "@/lib/getApi";
+import { Kunjungan } from "@/types/entities/kunjungan";
+import { Obat } from "@/types/entities/obat";
+import { AddRekamMedisForm } from "@/types/forms/rekamMedisForm";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 
 const RekamMedisAddPage = () => {
   const { setTitle } = useDocumentTitle();
   const [kunjungan, setKunjungan] = useState<Kunjungan | null>(null);
   const [obatList, setObatList] = useState<Obat[]>([]);
-  const [obatSelected, setObatSelected] = useState<{ id: string; kuantitas: number }[]>([]);
+  const [obatSelected, setObatSelected] = useState<
+    { id: string; kuantitas: number }[]
+  >([]);
   const router = useRouter();
   const { kunjunganId } = router.query; // kunjunganId diambil dari query params
-  
+
   useEffect(() => {
     setTitle("Tambah Rekam Medis");
   }, [setTitle]);
@@ -48,7 +50,7 @@ const RekamMedisAddPage = () => {
       fetchKunjungan();
     }
   }, [router.isReady, kunjunganId]);
-  
+
   // Fetch available obat
   useEffect(() => {
     const fetchObat = async () => {
@@ -75,7 +77,7 @@ const RekamMedisAddPage = () => {
       alert("Parameter kunjunganId is not present!");
       return;
     }
-  
+
     const payload = {
       ...data,
       kuantitasObat: obatSelected.map((obat) => ({
@@ -83,20 +85,19 @@ const RekamMedisAddPage = () => {
         kuantitas: obat.kuantitas,
       })),
     };
-  
+
     // Kirim kunjunganId sebagai query parameter
     const [responseData, message, isSuccess] = await sendRequest(
       "post",
-      `rekam-medis/add?kunjunganId=${kunjunganId}`,  // kunjunganId sebagai query parameter
+      `rekam-medis/add?kunjunganId=${kunjunganId}`, // kunjunganId sebagai query parameter
       payload,
       true
     );
-  
+
     if (isSuccess) {
       router.push("/home");
     }
   };
-  
 
   const handleAddObat = () => {
     const obatId = watch("obatId");
@@ -120,21 +121,24 @@ const RekamMedisAddPage = () => {
   };
 
   // State untuk menyimpan obat yang dipilih
-const [obatId, setObatId] = useState<string>("");
+  const [obatId, setObatId] = useState<string>("");
 
-// Handler untuk perubahan dropdown obat
-const handleObatChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-  const selectedObatId = event.target.value;
-  setObatId(selectedObatId); // Set nilai obat yang dipilih
-};
-
+  // Handler untuk perubahan dropdown obat
+  const handleObatChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedObatId = event.target.value;
+    setObatId(selectedObatId); // Set nilai obat yang dipilih
+  };
 
   return (
     <main>
       <section>
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
-            <Typography variant="h5" weight="bold" className="text-primary-1 mb-5">
+            <Typography
+              variant="h5"
+              weight="bold"
+              className="text-primary-1 mb-5"
+            >
               Rekam Medis Pasien
             </Typography>
 
@@ -159,7 +163,9 @@ const handleObatChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
                   <Input
                     id="tanggalKunjungan"
                     label="Tanggal Kunjungan"
-                    value={new Date(kunjungan.tanggal).toLocaleDateString('id-ID')}
+                    value={new Date(kunjungan.tanggal).toLocaleDateString(
+                      "id-ID"
+                    )}
                     readOnly
                   />
                 </div>
@@ -225,20 +231,20 @@ const handleObatChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
               Obat
             </Typography>
             <div className="grid grid-cols-2 gap-5 items-center">
-            <SelectInput
-            id="obatId"
-            label="Nama Obat"
-            placeholder="Pilih Obat"
-            value={obatId} // Set nilai yang dipilih
-            onChange={handleObatChange} // Handler ketika obat dipilih
-          >
-            <option value="">-- Pilih Obat --</option>
-            {obatList.map((obat) => (
-              <option key={obat.id} value={obat.id}>
-                {obat.namaObat} (Stok: {obat.totalStok})
-              </option>
-            ))}
-          </SelectInput>
+              <SelectInput
+                id="obatId"
+                label="Nama Obat"
+                placeholder="Pilih Obat"
+                value={obatId} // Set nilai yang dipilih
+                onChange={handleObatChange} // Handler ketika obat dipilih
+              >
+                <option value="">-- Pilih Obat --</option>
+                {obatList.map((obat) => (
+                  <option key={obat.id} value={obat.id}>
+                    {obat.namaObat} (Stok: {obat.totalStok})
+                  </option>
+                ))}
+              </SelectInput>
 
               <Input
                 id="kuantitasObat"
@@ -271,9 +277,15 @@ const handleObatChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
                     const selectedObat = obatList.find((o) => o.id === obat.id);
                     return (
                       <tr key={obat.id} className="text-center">
-                        <td className="border border-gray-300 p-2">{index + 1}</td>
-                        <td className="border border-gray-300 p-2">{selectedObat?.namaObat}</td>
-                        <td className="border border-gray-300 p-2">{obat.kuantitas}</td>
+                        <td className="border border-gray-300 p-2">
+                          {index + 1}
+                        </td>
+                        <td className="border border-gray-300 p-2">
+                          {selectedObat?.namaObat}
+                        </td>
+                        <td className="border border-gray-300 p-2">
+                          {obat.kuantitas}
+                        </td>
                         <td className="border border-gray-300 p-2">
                           <div className="flex justify-center space-x-2">
                             <Button

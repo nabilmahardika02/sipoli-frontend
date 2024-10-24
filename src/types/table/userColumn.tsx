@@ -6,6 +6,7 @@ import {
   GridValidRowModel,
 } from "@mui/x-data-grid";
 import Link from "next/link";
+import { Profile } from "../entities/profile";
 
 export const userTableColumns: GridColDef[] = [
   {
@@ -16,14 +17,6 @@ export const userTableColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "nip",
-    headerName: "NIP",
-    headerAlign: "center",
-    width: 200,
-    align: "center",
-    valueGetter: (value, row, column, apiRef) => `${value || "-"}`,
-  },
-  {
     field: "role",
     headerName: "Role",
     headerAlign: "center",
@@ -31,8 +24,20 @@ export const userTableColumns: GridColDef[] = [
     align: "center",
   },
   {
+    field: "nama",
+    headerName: "Nama",
+    headerAlign: "center",
+    width: 200,
+    align: "center",
+    valueGetter: (value, row, column, apiRef) =>
+      row.role !== "PASIEN"
+        ? row.listProfile[0].name
+        : row.listProfile.find((profile: Profile) => profile.relative === 0)
+            .name,
+  },
+  {
     field: "updatedAt",
-    headerName: "Last Update",
+    headerName: "Terakhir Diubah",
     headerAlign: "center",
     width: 200,
     align: "center",
@@ -40,7 +45,7 @@ export const userTableColumns: GridColDef[] = [
   },
   {
     field: "action",
-    headerName: "Action",
+    headerName: "Detail",
     headerAlign: "center",
     width: 150,
     align: "center",

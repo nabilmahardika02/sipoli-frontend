@@ -1,17 +1,17 @@
 export type KunjunganForm = {
-    sesi: number,
-    accountId: string,
-    profileId: string,
-    tanggalKunjungan: string,
-    status: number,
-    keluhan: string
-}
+  sesi: number;
+  accountId: string;
+  profileId: string;
+  tanggalKunjungan: string;
+  status: number;
+  keluhan: string;
+};
 
 export type CancelKunjunganForm = {
-    status: number
-}
+  status: number;
+};
 
 export type FilterKunjunganForm = {
-    startDate: string,
-    endDate: string
-}
+  startDate: string;
+  endDate: string;
+};

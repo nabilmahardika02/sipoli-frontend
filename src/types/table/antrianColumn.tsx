@@ -1,4 +1,5 @@
 import Button from "@/components/elements/Button";
+import { formatDateOnly } from "@/lib/formater";
 import { Kunjungan } from "@/types/entities/kunjungan";
 import {
   GridColDef,
@@ -6,8 +7,6 @@ import {
   GridValidRowModel,
 } from "@mui/x-data-grid";
 import Link from "next/link";
-import { FaRegTrashAlt } from "react-icons/fa";
-import { LuPencil } from "react-icons/lu";
 
 type CustomGridValueGetterParams = {
   row: Kunjungan;
@@ -17,7 +16,7 @@ export const kunjunganTableColumns: GridColDef[] = [
   {
     field: "sesi",
     headerName: "Sesi",
-    headerAlign: "center", 
+    headerAlign: "center",
     align: "center",
     width: 100,
     valueGetter: (value, row, column, apiRef) => {
@@ -31,7 +30,17 @@ export const kunjunganTableColumns: GridColDef[] = [
     width: 100,
     align: "center",
     valueGetter: (value, row, column, apiRef) => {
-      return row.antrian?.noAntrian ?? "-";
+      return row.antrian.noAntrian ?? "-";
+    },
+  },
+  {
+    field: "tanggal",
+    headerName: "Tanggal",
+    headerAlign: "center",
+    width: 200,
+    align: "center",
+    valueGetter: (value, row, column, apiRef) => {
+      return formatDateOnly(row.tanggal) ?? "-";
     },
   },
   {
@@ -75,7 +84,7 @@ export const kunjunganTableColumns: GridColDef[] = [
     field: "action",
     headerName: "Action",
     headerAlign: "center",
-    width: 400,
+    width: 200,
     align: "center",
     sortable: false,
     renderCell: (params: CustomGridValueGetterParams) => {
@@ -86,6 +95,15 @@ export const kunjunganTableColumns: GridColDef[] = [
               Detail
             </Button>
           </Link>
+          <Link href={"/home"}>
+          <Button
+            fullRounded
+            size="base"
+            variant="danger"
+          >
+            Cancel
+          </Button>
+        </Link>
         </div>
       );
     },

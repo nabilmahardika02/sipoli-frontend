@@ -52,7 +52,7 @@ export default Loading;
 
 export const LoadingDiv = () => {
   return (
-    <div className="flex w-full items-center justify-center py-10">
+    <div className="flex w-full items-center justify-center py-10 md:bg-white">
       <Loading />
     </div>
   );

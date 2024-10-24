@@ -54,7 +54,7 @@ const ObatPage = () => {
       <Typography variant="h4" className="mb-2 md:hidden">
         Daftar Obat
       </Typography>
-      {user?.role === "OPERATOR" && (
+      {user?.role === "PERAWAT" && (
         <div className="w-full flex items-center justify-start md:justify-end gap-4">
           <Link href={"/obat/tambah"}>
             <Button leftIcon={GoPlus}>Tambah Obat</Button>

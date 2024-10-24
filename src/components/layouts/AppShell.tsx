@@ -21,6 +21,8 @@ const AppShell = (props: AppShellProps) => {
     pathname.startsWith("/sandbox") ||
     pathname === "/";
 
+  const disableBg = pathname === ("/pasien/detail/[id]") || pathname === "/kunjungan/[id]";
+
   return (
     <section>
       <div className="md:flex md:flex-row-reverse">
@@ -39,11 +41,13 @@ const AppShell = (props: AppShellProps) => {
           )}
         >
           {!disable && <DesktopTopNav title={title} />}
-          <div className={clsxm("min-h-[80vh]", !disable && "p-8")}>
+          <div
+            className={clsxm("min-h-[80vh]", !disable && !disableBg && "p-8")}
+          >
             <div
               className={clsxm(
-                "bg-white md:rounded-xl md:shadow-xl",
-                !disable && "md:py-5 md:px-10"
+                !disableBg ? "bg-white md:rounded-xl md:shadow-xl" : "p-5",
+                !disable ? "md:py-5 md:px-8" : ""
               )}
             >
               {props.children}

@@ -5,23 +5,25 @@ import TextArea from "@/components/elements/forms/TextArea";
 import Typography from "@/components/elements/Typography";
 import withAuth from "@/components/hoc/withAuth";
 import { useDocumentTitle } from "@/context/Title";
+import { checkRole } from "@/lib/checkRole";
 import sendRequest from "@/lib/getApi";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { AddRekamMedisRequestDTO } from "@/types/forms/rekamMedisForm";
+import { Kunjungan } from "@/types/entities/kunjungan";
 import { Obat } from "@/types/entities/obat";
 import { RekamMedis } from "@/types/entities/rekamMedis";
-import { Kunjungan } from "@/types/entities/kunjungan";
+import { AddRekamMedisRequestDTO } from "@/types/forms/rekamMedisForm";
 import Link from "next/link";
-import { checkRole } from "@/lib/checkRole";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 
 const RekamMedisUpdatePage = () => {
   const { setTitle } = useDocumentTitle();
   const [rekamMedis, setRekamMedis] = useState<RekamMedis | null>(null);
   const [kunjungan, setKunjungan] = useState<Kunjungan | null>(null);
   const [obatList, setObatList] = useState<Obat[]>([]);
-  const [obatSelected, setObatSelected] = useState<{ id: string; kuantitas: number }[]>([]);
+  const [obatSelected, setObatSelected] = useState<
+    { id: string; kuantitas: number }[]
+  >([]);
   const router = useRouter();
   const { id } = router.query;
 
@@ -44,7 +46,6 @@ const RekamMedisUpdatePage = () => {
         if (isSuccess) {
           setRekamMedis(responseData as RekamMedis);
           setObatSelected(responseData.listKuantitasObat);
-          
         } else {
           alert("Gagal mendapatkan data rekam medis");
         }
@@ -103,8 +104,8 @@ const RekamMedisUpdatePage = () => {
       setValue("tujuanRujukan", rekamMedis.tujuanRujukan || "");
       setValue("dokterRujukan", rekamMedis.dokterRujukan || "");
       setValue("catatanRujukan", rekamMedis.catatanRujukan || "");
-  }
-}, [rekamMedis, setValue, obatSelected]);
+    }
+  }, [rekamMedis, setValue, obatSelected]);
 
   // Set nilai default untuk keluhan, tanggal kunjungan, dan nama pasien dari kunjungan
   useEffect(() => {
@@ -167,22 +168,26 @@ const RekamMedisUpdatePage = () => {
     const obatInfo = obatList.find((obat) => obat.id === obatItem.id);
     return {
       ...obatItem,
-      namaObat: obatInfo ? obatInfo.namaObat : "Nama obat"
+      namaObat: obatInfo ? obatInfo.namaObat : "Nama obat",
     };
   });
 
   const [obatId, setObatId] = useState<string>("");
 
   const handleObatChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-  setObatId(event.target.value); // Set nilai obat yang dipilih ke state
-};
+    setObatId(event.target.value); // Set nilai obat yang dipilih ke state
+  };
 
   return (
     <main>
       <section>
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
-            <Typography variant="h5" weight="bold" className="text-primary-1 mb-5">
+            <Typography
+              variant="h5"
+              weight="bold"
+              className="text-primary-1 mb-5"
+            >
               Rekam Medis Pasien
             </Typography>
 
@@ -201,11 +206,13 @@ const RekamMedisUpdatePage = () => {
                 </div>
 
                 <div>
-                <Input
-                id="tanggalKunjungan"
-                label="Tanggal Kunjungan"
-                value={new Date(kunjungan.tanggal).toLocaleDateString("id-ID")}
-                readOnly
+                  <Input
+                    id="tanggalKunjungan"
+                    label="Tanggal Kunjungan"
+                    value={new Date(kunjungan.tanggal).toLocaleDateString(
+                      "id-ID"
+                    )}
+                    readOnly
                   />
                 </div>
               </div>
@@ -262,20 +269,20 @@ const RekamMedisUpdatePage = () => {
               Obat
             </Typography>
             <div className="grid grid-cols-2 gap-5 items-center">
-            <SelectInput
-            id="obatId"
-            label="Nama Obat"
-            placeholder="Pilih Obat"
-            value={obatId} // Mengaitkan nilai ke state obatId
-            onChange={handleObatChange} // Mengubah state ketika ada perubahan
-          >
-            <option value="">-- Pilih Obat --</option>
-            {obatList.map((obat) => (
-              <option key={obat.id} value={obat.id}>
-                {obat.namaObat} (Stok: {obat.totalStok})
-              </option>
-            ))}
-          </SelectInput>
+              <SelectInput
+                id="obatId"
+                label="Nama Obat"
+                placeholder="Pilih Obat"
+                value={obatId} // Mengaitkan nilai ke state obatId
+                onChange={handleObatChange} // Mengubah state ketika ada perubahan
+              >
+                <option value="">-- Pilih Obat --</option>
+                {obatList.map((obat) => (
+                  <option key={obat.id} value={obat.id}>
+                    {obat.namaObat} (Stok: {obat.totalStok})
+                  </option>
+                ))}
+              </SelectInput>
 
               <Input
                 id="kuantitasObat"
@@ -304,9 +311,15 @@ const RekamMedisUpdatePage = () => {
                 <tbody>
                   {obatWithNames.map((obat, index) => (
                     <tr key={obat.id} className="text-center">
-                      <td className="border border-gray-300 p-2">{index + 1}</td>
-                      <td className="border border-gray-300 p-2">{obat.namaObat}</td>
-                      <td className="border border-gray-300 p-2">{obat.kuantitas}</td>
+                      <td className="border border-gray-300 p-2">
+                        {index + 1}
+                      </td>
+                      <td className="border border-gray-300 p-2">
+                        {obat.namaObat}
+                      </td>
+                      <td className="border border-gray-300 p-2">
+                        {obat.kuantitas}
+                      </td>
                       <td className="border border-gray-300 p-2">
                         <div className="flex justify-center space-x-2">
                           <Button

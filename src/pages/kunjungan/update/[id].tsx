@@ -16,6 +16,7 @@ import useAuthStore from "@/store/useAuthStore";
 import Link from "next/link";
 import { KunjunganForm } from "@/types/forms/kunjunganForm";
 import Divider from "@/components/elements/Divider";
+import { Kunjungan } from "@/types/entities/kunjungan";
 
 const sesi = [
     {
@@ -40,13 +41,7 @@ const KunjunganUpdatePage = () => {
     const user = useAuthStore.useUser();
     const { setTitle } = useDocumentTitle();
     const router = useRouter();
-    const { id } = router.query; // Get the kunjungan id from the URL
-    const [kunjungan, setKunjungan] = useState<KunjunganForm | null>(null);
-    const [profiles, setProfiles] = useState<Profile[]>([]);
-    const [accounts, setAccounts] = useState<Account[]>([]);
-    const [profile, setProfile] = useState<Profile>();
-    const [account, setAccount] = useState<Account>();
-      const [status, setStatus] = useState<string>();
+    const [kunjungan, setKunjungan] = useState<Kunjungan>();
 
     useEffect(() => {
         setTitle("Perbarui Kunjungan");
@@ -56,65 +51,25 @@ const KunjunganUpdatePage = () => {
         const fetchKunjungan = async () => {
             const [responseData, message, isSuccess] = await sendRequest(
                 "get",
-                `kunjungan/id?id=${id}`,  // Use a query parameter if necessary
+                "kunjungan?id=" + router.query.id,  // Use a query parameter if necessary
             );
 
             if (isSuccess) {
-                setKunjungan(responseData as KunjunganForm);
-                setProfiles(responseData.listProfile || []);
-                setProfile(responseData.profile || null);
-
-                // Set default account based on profile
-                const fetchedAccount = accounts.find((account) =>
-                    account.listProfile.some((p) => p.id === responseData.profile.id)
-                );
-                setAccount(fetchedAccount);
-
-                // Pre-fill the form with the fetched data
-                reset({
-                    sesi: responseData.antrian.sesi.toString(),
-                    profileId: responseData.profile.id,
-                    accountId: fetchedAccount?.id || "",
-                    tanggalKunjungan: responseData.tanggal.split("T")[0],
-                    status: responseData.status,
-                    keluhan: responseData.keluhan,
-                });
+                setKunjungan(responseData as Kunjungan);
             }
         };
 
-        if (id) {
+        if (router.query.id) {
             fetchKunjungan();  // Fetch existing kunjungan data
         }
-    }, [id, accounts]);
-
-    useEffect(() => {
-        // Fetch accounts as in the add page
-        const fetchAccounts = async () => {
-            const [responseData, message, isSuccess] = await sendRequest(
-                "get",
-                "auth/users?role=PASIEN",
-            );
-
-            if (isSuccess) {
-                setAccounts(responseData as Account[]);
-            }
-        };
-
-        fetchAccounts();
-    }, []);
+    }, [router.query.id]);
 
     const methods = useForm<KunjunganForm>({
         defaultValues: kunjungan || {},
         mode: "onTouched",
     });
 
-    const { handleSubmit, reset } = methods;
-
-    useEffect(() => {
-        if (kunjungan) {
-            reset(kunjungan); // Set the form values once kunjungan data is loaded
-        }
-    }, [kunjungan, reset]);
+    const { handleSubmit } = methods;
 
     const onSubmit: SubmitHandler<KunjunganForm> = (data) => {
       const postData = async () => {
@@ -137,53 +92,6 @@ const KunjunganUpdatePage = () => {
       postData();
   };
 
-    // Handle account change
-    const handleAccount = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedAccountId = event.target.value;
-        const selectedAccount = accounts.find(account => account.id === selectedAccountId);
-        console.log(selectedAccount);
-
-        if (selectedAccount) {
-            const listProfile = selectedAccount.listProfile;
-
-            setProfiles(listProfile);  // Update the profiles based on the selected account
-            setAccount(selectedAccount);
-
-            // Clear the selected profile and set it to null
-            setProfile(null);
-        }
-    };
-
-    // Handle profile change
-    const handleProfile = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedProfileId = event.target.value;
-        const selectedProfile = profiles.find(profile => profile.id === selectedProfileId);
-
-        if (selectedProfile) {
-            setProfile(selectedProfile);  // Update selected profile
-        }
-    };
-
-  const handleStatus = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedStatus = event.target.value;
-
-    setStatus(selectedStatus);
-  }
-
-    // Helper functions
-    const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('id-ID', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-        });
-    };
-
-    const formatGender = (isFemale: boolean) => {
-        return isFemale ? 'Perempuan' : 'Laki-laki';
-    };
-
     return (
         <main>
             <section>
@@ -203,72 +111,36 @@ const KunjunganUpdatePage = () => {
                                 validation={{ required: "Mohon pilih sesi" }}
                                 defaultValue={kunjungan?.antrian.sesi.toString()} // Preselect the sesi value
                             />
-                            <Divider/>
-                            <Typography variant="p1" weight="bold" className="text-primary-1 my-5">Data Pribadi</Typography>
+                            
                             <div className="justify-between gap-5 my-5">
-                                {user.role !== "PASIEN" && (
-                                    <SelectInput
-                                        id="accountId"
-                                        label="Akun"
-                                        placeholder="Pilih akun"
-                                        validation={{ required: "Akun wajib diisi" }}
-                                        onChange={handleAccount}
-                                        helperText="Pilih akun terlebih dahulu"
-                                        value={account?.id}  // Pre-fill the account field
-                                    >
-
-                                        {accounts.length > 0 ? (
-                                            accounts.map((account) => (
-                                                <option key={account.id} value={account.id}>
-                                                    {account.nip} - {account.listProfile.find(profile => profile.relative === 0)?.name ?? account.username}
-                                                </option>
-                                            ))
-                                        ) : (
-                                            <option value="">Tidak ada akun yang tersedia</option>
-                                        )}
-                                    </SelectInput>
-                                )}
+                              <Input
+                                id="id"
+                                defaultValue={kunjungan.id}
+                                className="hidden"
+                              >
+                              </Input>
+                                
                                 <SelectInput
                                     id="profileId"
-                                    label="Profil"
-                                    placeholder="Pilih profil"
-                                    validation={{ required: "Profil wajib diisi" }}
-                                    onChange={handleProfile}
-                                    helperText="Pilih profil terlebih dahulu"
-                                    value={profile?.id}  // Ensure the profile field is empty after account change
+                                    className="hidden"
                                 >
-                                    <option value={profile?.id}>{profile?.name}</option>  {/* Add placeholder option */}
-
-                                    {profiles.length > 0 ? (
-                                        profiles.map((profile) => (
-                                            <option key={profile.id} value={profile.id}>
-                                                {profile.name}
-                                            </option>
-                                        ))
-                                    ) : (
-                                        <option value="">Tidak ada profil yang tersedia</option>
-                                    )}
+                                  <option value={kunjungan.profile.id}></option>
                                 </SelectInput>
-
-                                <Typography variant="p1" className="mt-2">Nama: {profile?.name}</Typography>
-                                <Typography variant="p1">No. HP: {profile?.noHp}</Typography>
-                                <Typography variant="p1">Tanggal Lahir: {profile?.tanggalLahir ? formatDate(profile.tanggalLahir) : '-'}</Typography>
-                                <Typography variant="p1">Jenis Kelamin: {profile?.jenisKelamin !== undefined ? formatGender(profile.jenisKelamin) : '-'}</Typography>
                             </div>
                             <Divider/>
                             <Input
                                 id="tanggalKunjungan"
                                 label="Tanggal Kunjungan"
                                 type="date"
+                                defaultValue={kunjungan?.tanggal.toString().split("T")[0]}
                             />
-                            {user.role !== "PASIEN" && (
+                            {user?.role !== "PASIEN" && (
                                 <SelectInput
                                     id="status"
                                     label="Status"
                                     placeholder="Pilih status"
-                                    onChange={handleStatus}
                                     validation={{ required: "Status wajib diisi" }}
-                                    value={status}
+                                    defaultValue={kunjungan.status}
                                 >
                                     <option value="0">Belum Dilayani</option>
                                     <option value="1">Sedang Dilayani</option>
@@ -286,9 +158,9 @@ const KunjunganUpdatePage = () => {
                             />
                         </div>
                         <div className="mt-5 flex items-center justify-center gap-4">
-                            <Button type="submit">Perbarui</Button>
+                            <Button type="submit">Submit</Button>
                             <Link href={"/home"}>
-                                <Button variant="danger">Batalkan</Button>
+                                <Button variant="danger">Cancel</Button>
                             </Link>
                         </div>
                     </form>

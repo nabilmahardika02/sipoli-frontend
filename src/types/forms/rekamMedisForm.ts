@@ -3,9 +3,32 @@ export interface AddRekamMedisForm {
   beratBadan: number;
   tensi: string;
   diagnosis: string;
-  obatList?: { id: string; kuantitas: number }[]; // Daftar obat dengan kuantitas
-  deskripsiResepObat?: string; // Optional: Deskripsi resep obat
-  tujuanRujukan?: string;      // Optional: Tujuan rujukan
-  dokterRujukan?: string;      // Optional: Nama dokter rujukan
-  catatanRujukan?: string;     // Optional: Catatan rujukan
+  obatList?: { id: string; kuantitas: number }[];
+  deskripsiResepObat?: string;
+  tujuanRujukan?: string;
+  dokterRujukan?: string;
+  catatanRujukan?: string;
+}
+
+export interface UpdateRekamMedisForm {
+  profileId: string;
+  merokok: string;
+  alkohol: string;
+  olahraga: string;
+  obatObatan: string;
+  kelainanJantung: string;
+  penyakitHati: string;
+  kelainanSaluranCerna: string;
+  kencingManisPribadi: string;
+  rawatInap: string;
+  kecelakaan: string;
+  tindakanBedah: string;
+  riwayatSakitLainnya: string;
+  kencingManisKeluarga: string;
+  darahTinggi: string;
+  penyakitJantung: string;
+  tumor: string;
+  ginjal: string;
+  gangguanJiwa: string;
+  riwayatKeluargaLainnya: string;
 }

@@ -1,18 +1,17 @@
-import { useForm, FormProvider } from "react-hook-form";
+import Button from "@/components/elements/Button";
 import Input from "@/components/elements/forms/Input";
 import TextArea from "@/components/elements/forms/TextArea";
 import Typography from "@/components/elements/Typography";
-import Button from "@/components/elements/Button";
-import ModalLayout from "@/components/layouts/ModalLayout"; // Tambahkan untuk modal
 import withAuth from "@/components/hoc/withAuth";
+import ModalLayout from "@/components/layouts/ModalLayout"; // Tambahkan untuk modal
 import { useDocumentTitle } from "@/context/Title";
 import sendRequest from "@/lib/getApi";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { RekamMedis } from "@/types/entities/rekamMedis";
-import { Kunjungan } from "@/types/entities/kunjungan";
-import { checkRole } from "@/lib/checkRole";
 import useAuthStore from "@/store/useAuthStore";
+import { Kunjungan } from "@/types/entities/kunjungan";
+import { RekamMedis } from "@/types/entities/rekamMedis";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 
 const RekamMedisDetailPage = () => {
   const { setTitle } = useDocumentTitle();
@@ -72,7 +71,7 @@ const RekamMedisDetailPage = () => {
       );
 
       if (isSuccess) {
-        setShowDeleteModal(false); 
+        setShowDeleteModal(false);
         router.push("/home"); // Redirect ke daftar rekam medis
       } else {
         alert(message);
@@ -90,7 +89,11 @@ const RekamMedisDetailPage = () => {
     <FormProvider {...methods}>
       <main>
         <section>
-          <Typography variant="h5" weight="bold" className="text-primary-1 mb-5">
+          <Typography
+            variant="h5"
+            weight="bold"
+            className="text-primary-1 mb-5"
+          >
             Rekam Medis Pasien
           </Typography>
 
@@ -202,47 +205,44 @@ const RekamMedisDetailPage = () => {
           />
 
           {/* Rujukan */}
-              <Typography variant="h5" weight="bold" className="mt-8">
-                Rujukan
-              </Typography>
-              <div className="grid grid-cols-3 gap-5">
-                <Input
-                  id="tujuanRujukan"
-                  label="Rumah Sakit"
-                  value={rekamMedis.tujuanRujukan || ""}
-                  readOnly
-                />
-                <Input
-                  id="dokterRujukan"
-                  label="Dokter"
-                  value={rekamMedis.dokterRujukan || ""}
-                  readOnly
-                />
-                <Input
-                  id="catatanRujukan"
-                  label="Catatan"
-                  value={rekamMedis.catatanRujukan || ""}
-                  readOnly
-                />
+          <Typography variant="h5" weight="bold" className="mt-8">
+            Rujukan
+          </Typography>
+          <div className="grid grid-cols-3 gap-5">
+            <Input
+              id="tujuanRujukan"
+              label="Rumah Sakit"
+              value={rekamMedis.tujuanRujukan || ""}
+              readOnly
+            />
+            <Input
+              id="dokterRujukan"
+              label="Dokter"
+              value={rekamMedis.dokterRujukan || ""}
+              readOnly
+            />
+            <Input
+              id="catatanRujukan"
+              label="Catatan"
+              value={rekamMedis.catatanRujukan || ""}
+              readOnly
+            />
           </div>
 
           {/* Tombol Edit dan Hapus */}
           {user?.role === "OPERATOR" && (
-          <div className="mt-5 flex justify-left gap-4">
-            <Button
-              variant="secondary"
-              onClick={() => router.push(`/rekam-medis/detail/${id}/update`)}
-            >
-              Edit Rekam Medis
-            </Button>
-            <Button
-              variant="danger"
-              onClick={() => setShowDeleteModal(true)}
-            >
-              Hapus Rekam Medis
-            </Button>
-          </div>
-        )}
+            <div className="mt-5 flex justify-left gap-4">
+              <Button
+                variant="secondary"
+                onClick={() => router.push(`/rekam-medis/detail/${id}/update`)}
+              >
+                Edit Rekam Medis
+              </Button>
+              <Button variant="danger" onClick={() => setShowDeleteModal(true)}>
+                Hapus Rekam Medis
+              </Button>
+            </div>
+          )}
 
           {/* Modal Hapus */}
           {showDeleteModal && (
@@ -259,7 +259,10 @@ const RekamMedisDetailPage = () => {
                   <Button variant="danger" onClick={handleDelete}>
                     Hapus
                   </Button>
-                  <Button variant="success" onClick={() => setShowDeleteModal(false)}>
+                  <Button
+                    variant="success"
+                    onClick={() => setShowDeleteModal(false)}
+                  >
                     Batal
                   </Button>
                 </div>

@@ -5,7 +5,6 @@ export interface Account {
   username: string;
   password: string;
   role: string;
-  nip: string;
   isActive: boolean;
   isDefaultPassword: boolean;
   createdAt: string;

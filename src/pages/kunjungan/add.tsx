@@ -6,6 +6,7 @@ import SelectInput from "@/components/elements/forms/SelectInput";
 import TextArea from "@/components/elements/forms/TextArea";
 import Typography from "@/components/elements/Typography";
 import withAuth from "@/components/hoc/withAuth";
+import { sesi } from "@/content/kunjungan";
 import { useDocumentTitle } from "@/context/Title";
 import sendRequest from "@/lib/getApi";
 import useAuthStore from "@/store/useAuthStore";
@@ -16,25 +17,6 @@ import Link from "next/link";
 import router from "next/router";
 import { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-
-const sesi = [
-  {
-    value: "1",
-    text: "Sesi 1 (08:00 - 10:00 WITA)",
-  },
-  {
-    value: "2",
-    text: "Sesi 2 (10:00 - 12:00 WITA)",
-  },
-  {
-    value: "3",
-    text: "Sesi 3 (13:00 - 15:00 WITA)",
-  },
-  {
-    value: "4",
-    text: "Sesi 4 (15:00 - 16:30 WITA)",
-  },
-];
 
 const KunjunganAddPage = () => {
   const user = useAuthStore.useUser();
@@ -64,8 +46,10 @@ const KunjunganAddPage = () => {
       }
     };
 
-    fetchAccounts();
-  }, []);
+    if (user?.role !== "PASIEN") {
+      fetchAccounts();
+    }
+  }, [user?.role]);
 
   useEffect(() => {
     // Fungsi untuk mengambil data profil dari API
@@ -198,7 +182,7 @@ const KunjunganAddPage = () => {
                       {accounts.length > 0 ? (
                         accounts.map((account) => (
                           <option key={account.id} value={account.id}>
-                            {account.nip} -{" "}
+                            {account.listProfile[0].nik} -{" "}
                             {account.listProfile.find(
                               (profile) => profile.relative === 0
                             )?.name ?? account.username}
@@ -245,14 +229,12 @@ const KunjunganAddPage = () => {
                   </Typography>
                 </div>
                 <Divider />
-                {user.role !== "PASIEN" && (
-                  <Input
-                    id="tanggalKunjungan"
-                    label="Tanggal Kunjungan"
-                    type="date"
-                    validation={{ required: "Mohon pilih tanggal kunjungan" }}
-                  />
-                )}
+                <Input
+                  id="tanggalKunjungan"
+                  label="Tanggal Kunjungan"
+                  type="date"
+                  validation={{ required: "Mohon pilih tanggal kunjungan" }}
+                />
                 {user.role !== "PASIEN" && (
                   <SelectInput
                     id="status"
@@ -275,9 +257,9 @@ const KunjunganAddPage = () => {
                 />
               </div>
               <div className="mt-5 flex items-center justify-center gap-4">
-                <Button type="submit">Submit</Button>
+                <Button type="submit">Simpan</Button>
                 <Link href={"/home"}>
-                  <Button variant="danger">Cancel</Button>
+                  <Button variant="danger">Batal</Button>
                 </Link>
               </div>
             </form>

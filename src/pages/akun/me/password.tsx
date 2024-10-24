@@ -1,13 +1,13 @@
-import withAuth from "@/components/hoc/withAuth";
-import { useDocumentTitle } from "@/context/Title";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import { MyPasswordForm } from "@/types/forms/authForm";
-import sendRequest from "@/lib/getApi";
 import Button from "@/components/elements/Button";
 import Input from "@/components/elements/forms/Input";
+import withAuth from "@/components/hoc/withAuth";
+import { useDocumentTitle } from "@/context/Title";
+import sendRequest from "@/lib/getApi";
+import { MyPasswordForm } from "@/types/forms/authForm";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 
 const ChangePasswordPage = () => {
   const { setTitle } = useDocumentTitle();

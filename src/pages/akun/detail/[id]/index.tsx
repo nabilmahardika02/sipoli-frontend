@@ -1,36 +1,33 @@
-import withAuth from "@/components/hoc/withAuth";
-import { LoadingDiv } from "@/components/elements/Loading";
-import { useDocumentTitle } from "@/context/Title";
-import { Account } from "@/types/entities/account";
-import { Profile } from "@/types/entities/profile";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { removeToken } from "@/lib/cookies";
-import ModalLayout from "@/components/layouts/ModalLayout";
-import sendRequest from "@/lib/getApi";
-import Typography from "@/components/elements/Typography";
-import Divider from "@/components/elements/Divider";
 import Button from "@/components/elements/Button";
+import Divider from "@/components/elements/Divider";
+import { LoadingDiv } from "@/components/elements/Loading";
+import Typography from "@/components/elements/Typography";
+import withAuth from "@/components/hoc/withAuth";
+import ModalLayout from "@/components/layouts/ModalLayout";
+import { useDocumentTitle } from "@/context/Title";
 import DataTable from "@/lib/datatable";
-import { formatDate } from "@/lib/formater";
-import { LuPencil } from "react-icons/lu";
-import { IoTrashBin } from "react-icons/io5";
-import { TbPasswordUser } from "react-icons/tb";
+import { formatDate, formatDateOnly } from "@/lib/formater";
+import sendRequest from "@/lib/getApi";
+import { Account } from "@/types/entities/account";
 import {
   getRowIdProfile,
   profileTableColumns,
 } from "@/types/table/profileColumn";
+import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { GoPlus } from "react-icons/go";
+import { IoTrashBin } from "react-icons/io5";
+import { LuPencil } from "react-icons/lu";
+import { TbPasswordUser } from "react-icons/tb";
 
 const DetailPage = () => {
   const { setTitle } = useDocumentTitle();
   const router = useRouter();
   const [selectedAccount, setAccount] = useState<Account>();
-  const [myAccount, setMyAccount] = useState<Account>();
-  const [profiles, setProfiles] = useState<Profile[]>();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isPasien, setIsPasien] = useState(true);
-  const [isOperator, setIsOperator] = useState(true);
 
   useEffect(() => {
     setTitle("Detail Akun");
@@ -40,63 +37,25 @@ const DetailPage = () => {
     const fetchAccount = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "get",
-        `auth/get-account-by-id?id=${router.query.id}`
+        `auth/detail/${router.query.id}`
       );
 
       if (isSuccess) {
         setAccount(responseData as Account);
-        console.log(selectedAccount);
       }
     };
     fetchAccount();
   }, [router.query.id]);
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      const [responseData, message, isSuccess] = await sendRequest(
-        "get",
-        `profile/all?idAccount=${router.query.id}`
-      );
-      if (isSuccess) {
-        setProfiles(responseData as Profile[]);
-        console.log(profiles);
-      } else {
-        console.log(message);
-      }
-    };
-    if (selectedAccount?.role === "PASIEN") {
-      fetchProfile();
-    }
-  }, [selectedAccount]);
-
-  useEffect(() => {
-    const fetchMyAccount = async () => {
-      const [responseData, message, isSuccess] = await sendRequest(
-        "get",
-        "auth/my-account"
-      );
-
-      if (isSuccess) {
-        setMyAccount(responseData as Account);
-      }
-      console.log("Data yang diterima:", responseData);
-    };
-    fetchMyAccount();
-  }, []);
-
-  useEffect(() => {
     setIsPasien(selectedAccount?.role === "PASIEN");
   }, [selectedAccount]);
-
-  useEffect(() => {
-    setIsOperator(myAccount?.role === "OPERATOR")
-  }, [myAccount?.role])
 
   const handleDelete = () => {
     const softDelete = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
-        "put",
-        `auth/soft-delete-user?accountID=${router.query.id}`,
+        "delete",
+        `auth/delete/${router.query.id}`,
         true
       );
     };
@@ -107,133 +66,224 @@ const DetailPage = () => {
 
   return (
     <main>
-      <section>
-        {selectedAccount && (
+      <Head>
+        <title>Detail Akun</title>
+      </Head>
+      <section className="max-md:p-5 max-md:rounded-xl max-md:bg-white max-md:border max-md:border-gray-200 max-md:shadow-md">
+        {selectedAccount ? (
           <div>
-          <div className="flex justify-center md:hidden">
-          <Typography variant="h4" className="text-primary-1">
-            Detail Akun
-          </Typography>
-        </div>
-        <Divider className="md:hidden" />
-        <div className="grid grid-cols-3 justify-center gap-10 my-5">
-          <div className="w-full">
-            <Typography variant="p1" className="text-gray-600">
-              Username
-            </Typography>
-            <Typography variant="p1" className="text-primary-1 font-medium">
-              {selectedAccount?.username}
-            </Typography>
-          </div>
-          <div className="w-full">
-            <Typography variant="p1" className="text-gray-600">
-              Role
-            </Typography>
-            <Typography variant="p1" className="text-primary-1 font-medium">
-              {selectedAccount?.role}
-            </Typography>
-          </div>
-          {isPasien && (
-            <div className="w-full">
-              <Typography variant="p1" className="text-gray-600">
-                NIP
+            <div className="flex justify-between md:justify-end items-center">
+              <Typography variant="h5" className="text-primary-1 md:hidden">
+                Detail Akun
               </Typography>
-              <Typography variant="p1" className="text-primary-1 font-medium">
-                {selectedAccount?.nip ?? "N/A"}
-              </Typography>
+              <div className="flex flex-wrap md:justify-end gap-2">
+                <Link
+                  href={`/akun/detail/${router.query.id}/password-by-admin`}
+                >
+                  <Button
+                    variant="secondary"
+                    leftIcon={TbPasswordUser}
+                    leftIconClassName="max-md:mr-0"
+                  >
+                    <span className="max-md:hidden">Ubah Password</span>
+                  </Button>
+                </Link>
+                <Link href={`/akun/detail/${router.query.id}/update`}>
+                  <Button
+                    variant="success"
+                    leftIcon={LuPencil}
+                    leftIconClassName="max-md:mr-0"
+                  >
+                    <span className="max-md:hidden">Perbarui Akun</span>
+                  </Button>
+                </Link>
+                <div>
+                  <Button
+                    onClick={() => setShowDeleteModal(true)}
+                    variant="danger"
+                    leftIcon={IoTrashBin}
+                    leftIconClassName="max-md:mr-0"
+                  >
+                    <span className="max-md:hidden">Hapus Akun</span>
+                  </Button>
+                </div>
+              </div>
             </div>
-          )}
-          {isPasien && (
-            <div className="w-full">
-              <Typography variant="p1" className="text-gray-600">
-                Jabatan
-              </Typography>
-              <Typography variant="p1" className="text-primary-1 font-medium">
-                {selectedAccount?.jabatan ?? "N/A"}
-              </Typography>
+            <Divider className="md:hidden my-2" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
+              <div>
+                <Typography
+                  variant="p2"
+                  weight="semibold"
+                  className="text-gray-400"
+                >
+                  Username
+                </Typography>
+                <Typography className="text-primary-1">
+                  {selectedAccount.username}
+                </Typography>
+              </div>
+              <div>
+                <Typography
+                  variant="p2"
+                  weight="semibold"
+                  className="text-gray-400"
+                >
+                  Role
+                </Typography>
+                <Typography className="text-primary-1">
+                  {selectedAccount.role}
+                </Typography>
+              </div>
+              {isPasien ? (
+                <>
+                  <div>
+                    <Typography
+                      variant="p2"
+                      weight="semibold"
+                      className="text-gray-400"
+                    >
+                      Jabatan
+                    </Typography>
+                    <Typography className="text-primary-1">
+                      {selectedAccount.jabatan}
+                    </Typography>
+                  </div>
+                  <div>
+                    <Typography
+                      variant="p2"
+                      weight="semibold"
+                      className="text-gray-400"
+                    >
+                      Unit Kerja
+                    </Typography>
+                    <Typography className="text-primary-1">
+                      {selectedAccount.unitKerja}
+                    </Typography>
+                  </div>
+                  <div>
+                    <Typography
+                      variant="p2"
+                      weight="semibold"
+                      className="text-gray-400"
+                    >
+                      Eselon
+                    </Typography>
+                    <Typography className="text-primary-1">
+                      {selectedAccount.eselon}
+                    </Typography>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div>
+                    <Typography
+                      variant="p2"
+                      weight="semibold"
+                      className="text-gray-400"
+                    >
+                      Nama
+                    </Typography>
+                    <Typography className="text-primary-1">
+                      {selectedAccount.listProfile[0].name}
+                    </Typography>
+                  </div>
+                  <div>
+                    <Typography
+                      variant="p2"
+                      weight="semibold"
+                      className="text-gray-400"
+                    >
+                      Jenis Kelamin
+                    </Typography>
+                    <Typography className="text-primary-1">
+                      {selectedAccount.listProfile[0].jenisKelamin
+                        ? "Perempuan"
+                        : "Laki-laki"}
+                    </Typography>
+                  </div>
+                  <div>
+                    <Typography
+                      variant="p2"
+                      weight="semibold"
+                      className="text-gray-400"
+                    >
+                      Nomor HP
+                    </Typography>
+                    <Typography className="text-primary-1">
+                      {selectedAccount.listProfile[0].noHp || "-"}
+                    </Typography>
+                  </div>
+                  <div>
+                    <Typography
+                      variant="p2"
+                      weight="semibold"
+                      className="text-gray-400"
+                    >
+                      Tanggal Lahir
+                    </Typography>
+                    <Typography className="text-primary-1">
+                      {formatDateOnly(
+                        selectedAccount.listProfile[0].tanggalLahir
+                      )}
+                    </Typography>
+                  </div>
+                </>
+              )}
+              <div>
+                <Typography
+                  variant="p2"
+                  weight="semibold"
+                  className="text-gray-400"
+                >
+                  Tanggal Registrasi
+                </Typography>
+                <Typography className="text-primary-1">
+                  {formatDate(selectedAccount.createdAt)}
+                </Typography>
+              </div>
+              <div>
+                <Typography
+                  variant="p2"
+                  weight="semibold"
+                  className="text-gray-400"
+                >
+                  Terakhir Diubah
+                </Typography>
+                <Typography className="text-primary-1">
+                  {formatDate(selectedAccount.updatedAt)}
+                </Typography>
+              </div>
             </div>
-          )}
-          {isPasien && (
-            <div className="w-full">
-              <Typography variant="p1" className="text-gray-600">
-                Unit Kerja
-              </Typography>
-              <Typography variant="p1" className="text-primary-1 font-medium">
-                {selectedAccount?.unitKerja ?? "N/A"}
-              </Typography>
-            </div>
-          )}
-          {isPasien && (
-            <div className="w-full">
-              <Typography variant="p1" className="text-gray-600">
-                Eselon
-              </Typography>
-              <Typography variant="p1" className="text-primary-1 font-medium">
-                {selectedAccount?.eselon ?? "N/A"}
-              </Typography>
-            </div>
-          )}
-          <div className="w-full">
-            <Typography variant="p1" className="text-gray-600">
-              Created At
-            </Typography>
-            <Typography variant="p1" className="text-primary-1 font-medium">
-            {selectedAccount?.createdAt ? formatDate(selectedAccount.createdAt) : "N/A"}
-            </Typography>
-          </div>
-          <div className="w-full">
-            <Typography variant="p1" className="text-gray-600">
-              Updated At
-            </Typography>
-            <Typography variant="p1" className="text-primary-1 font-medium">
-              {selectedAccount?.updatedAt ? formatDate(selectedAccount.updatedAt) : "N/A"}
-            </Typography>
-          </div>
-        </div>
-
-        <div className="flex justify-center gap-5 my-5">
-          {isOperator && (
-            <Link href={`/akun/detail/${router.query.id}/password-by-admin`}>
-              <Button variant="secondary" className="mt-5" leftIcon={TbPasswordUser}>
-                Ubah Password
-              </Button>
-            </Link>
-          )}
-          <Link href={`/akun/detail/${router.query.id}/update`}>
-            <Button variant="secondary" className="mt-5" leftIcon={LuPencil}>
-              Perbarui Akun
-            </Button>
-          </Link>
-          <div>
-            <Button
-              onClick={() => setShowDeleteModal(true)}
-              variant="danger"
-              className="mt-5"
-              leftIcon={IoTrashBin}
-            >
-              Hapus Akun
-            </Button>
-          </div>
-        </div>
-        <Divider />
-        {isPasien && (
-          <div style={{ width: "100%", overflowX: "auto" }}>
-            {profiles ? (
-              <DataTable
-                columns={profileTableColumns}
-                getRowId={getRowIdProfile}
-                rows={profiles}
-              />
-            ) : (
-              <Typography variant="p1" className="text-primary-1 font-medium">
-                -
-              </Typography>
+            {isPasien && selectedAccount.listProfile && (
+              <>
+                <Divider weight="thin" />
+                <div className="flex items-center justify-between my-2">
+                  <Typography
+                    weight="bold"
+                    variant="h7"
+                    className="text-primary-1"
+                  >
+                    Daftar Profile
+                  </Typography>
+                  <Link href={`/akun/profile/tambah/${router.query.id}`}>
+                    <Button leftIcon={GoPlus}>Tambah</Button>
+                  </Link>
+                </div>
+                <DataTable
+                  columns={profileTableColumns}
+                  getRowId={getRowIdProfile}
+                  rows={selectedAccount.listProfile}
+                  flexColumnIndexes={[0]}
+                />
+              </>
             )}
           </div>
-        )}
-        </div>
+        ) : (
+          <LoadingDiv />
         )}
       </section>
+
       {showDeleteModal && (
         <ModalLayout setShowModal={setShowDeleteModal}>
           <div className="bg-white rounded-xl p-5 w-full md:w-[50%] flex flex-col">
@@ -249,8 +299,10 @@ const DetailPage = () => {
               Yakin ingin menghapus akun ini?
             </Typography>
             <Typography variant="p2" className="text-primary-1 mt-2">
-              {`Setelah dihapus, akun ${selectedAccount?.username} tidak dapat diakses lagi. 
-            Semua profil yang terkait dengan akun tersebut akan terhapus`}
+              Setelah dihapus, akun{" "}
+              <span className="font-bold">{selectedAccount?.username}</span>{" "}
+              tidak dapat diakses lagi. Semua profil yang terkait dengan akun
+              tersebut akan terhapus
             </Typography>
             <div className="flex items-center gap-2 mt-4 self-end">
               <Button variant="danger" size="sm" onClick={() => handleDelete()}>

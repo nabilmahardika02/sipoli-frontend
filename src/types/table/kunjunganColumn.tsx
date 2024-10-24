@@ -6,7 +6,6 @@ import {
   GridValidRowModel,
 } from "@mui/x-data-grid";
 import Link from "next/link";
-import { FaRegTrashAlt } from "react-icons/fa";
 
 type CustomGridValueGetterParams = {
   row: Kunjungan;

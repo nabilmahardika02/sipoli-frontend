@@ -2,54 +2,19 @@ import Button from "@/components/elements/Button";
 import Divider from "@/components/elements/Divider";
 import { LoadingDiv } from "@/components/elements/Loading";
 import Typography from "@/components/elements/Typography";
+import DataHasilPemeriksaan from "@/components/fragments/kunjungan/DataHasilPemeriksaan";
+import DataKunjungan from "@/components/fragments/kunjungan/DataKunjungan";
 import withAuth from "@/components/hoc/withAuth";
 import { useDocumentTitle } from "@/context/Title";
 import sendRequest from "@/lib/getApi";
 import useAuthStore from "@/store/useAuthStore";
 import { Kunjungan } from "@/types/entities/kunjungan";
+import Head from "next/head";
 import Link from "next/link";
 import router from "next/router";
 import { useEffect, useState } from "react";
 import { FaCirclePlus } from "react-icons/fa6";
 import { LuPencil } from "react-icons/lu";
-
-const sesi = [
-  {
-    value: "1",
-    text: "Sesi 1 (08:00 - 10:00 WITA)",
-  },
-  {
-    value: "2",
-    text: "Sesi 2 (10:00 - 12:00 WITA)",
-  },
-  {
-    value: "3",
-    text: "Sesi 3 (13:00 - 15:00 WITA)",
-  },
-  {
-    value: "4",
-    text: "Sesi 4 (15:00 - 16:30 WITA)",
-  },
-];
-
-const status = [
-  {
-    value: "0",
-    text: "Belum Dilayani",
-  },
-  {
-    value: "1",
-    text: "Sedang Dilayani",
-  },
-  {
-    value: "2",
-    text: "Selesai",
-  },
-  {
-    value: "3",
-    text: "Dibatalkan",
-  },
-];
 
 const KunjunganPage = () => {
   const { setTitle } = useDocumentTitle();
@@ -67,6 +32,8 @@ const KunjunganPage = () => {
         "kunjungan?id=" + router.query.id
       );
 
+      console.log(responseData);
+
       if (isSuccess) {
         setKunjungan(responseData as Kunjungan);
       }
@@ -75,160 +42,79 @@ const KunjunganPage = () => {
     fetchKunjungan();
   }, []);
 
-  const getSesiText = (sesiValue: number | undefined) => {
-    const sesiItem = sesi.find((item) => Number(item.value) === sesiValue);
-    return sesiItem ? sesiItem.text : "Sesi tidak tersedia";
-  };
-
-  const getStatusText = (statusValue: number | undefined) => {
-    const statusItem = status.find(
-      (item) => Number(item.value) === statusValue
-    );
-    return statusItem?.text;
-  };
-
-  const getStatusColor = (statusValue: number | undefined) => {
-    switch (statusValue) {
-      case 0:
-        return "text-red-500"; // Belum Dilayani
-      case 1:
-        return "text-blue-500"; // Sedang Dilayani
-      case 2:
-        return "text-green-500"; // Selesai
-      case 3:
-        return "text-gray-500"; // Dibatalkan
-      default:
-        return "text-gray-500"; // Default untuk status yang tidak dikenal
-    }
-  };
-
   return (
-    <main>
-      <section>
-        <div className="flex justify-end gap-2">
-          {user?.role !== "PASIEN" && (
-            <div className="flex justify-end">
-              <Link href={"/pasien/" + kunjungan?.profile.id}>
-                <Button variant="primary">Detail Pasien</Button>
-              </Link>
-            </div>
-          )}
-          {user?.role === "PASIEN" && (kunjungan?.status === 0)&& (
-            <div className="flex justify-end">
-              <Link href={`/kunjungan/update/${kunjungan.id}`}>
-                <Button variant="secondary" leftIcon={LuPencil}>
-                  Edit Data Kunjungan
-                </Button>
-              </Link>
-            </div>
-          )}
-          {user?.role !== "PASIEN" && (kunjungan?.status === 0 || kunjungan?.status === 1 )&& (
-              <div className="flex justify-end">
-                <Link href={`/kunjungan/update/${kunjungan.id}`}>
-                  <Button variant="secondary" leftIcon={LuPencil}>
-                    Edit Data Kunjungan
-                  </Button>
-                </Link>
-              </div>
-          )}
-        </div>
-
-          <div className="flex justify-center md:hidden">
-            <Typography variant="h4" className="text-primary-1">
+    <main className="flex flex-col gap-5">
+      <Head>
+        <title>Detail Kunjungan</title>
+      </Head>
+      {kunjungan ? (
+        <>
+          <section className="p-5 md:px-7 rounded-xl bg-white border border-gray-200 shadow-md">
+            <Typography
+              variant="h4"
+              className="text-primary-1 md:hidden text-center mx-auto"
+            >
               Detail Kunjungan
             </Typography>
-          </div>
-          <Divider className="md:hidden" />
-          <div className="grid grid-cols-2 gap-5 my-5">
-            <div className="w-full">
-              <Typography variant="p1" className="text-gray-600">
-                Tanggal Kunjungan
-              </Typography>
-              <Typography
-                variant="h6"
-                weight="light"
-                className="text-primary-1"
-              >
-                {kunjungan?.tanggal
-                  ? new Date(kunjungan.tanggal).toLocaleDateString("id-ID", {
-                      weekday: "long",
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })
-                  : "Tanggal tidak tersedia"}
-              </Typography>
+            <div className="flex justify-center md:justify-end gap-2 my-2">
+              {user?.role !== "PASIEN" && (
+                <div className="flex justify-end">
+                  <Link href={"/pasien/" + kunjungan?.profile.id}>
+                    <Button variant="primary">Detail Pasien</Button>
+                  </Link>
+                </div>
+              )}
+              {user?.role === "PASIEN" && kunjungan.status === 0 && (
+                <div className="flex justify-end">
+                  <Link href={`/kunjungan/update/${kunjungan.id}`}>
+                    <Button variant="secondary" leftIcon={LuPencil}>
+                      Edit Data Kunjungan
+                    </Button>
+                  </Link>
+                </div>
+              )}
+              {user?.role !== "PASIEN" && kunjungan.status < 2 && (
+                <div className="flex justify-end">
+                  <Link href={`/kunjungan/update/${kunjungan.id}`}>
+                    <Button variant="secondary" leftIcon={LuPencil}>
+                      Edit Data Kunjungan
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </div>
-            <div className="w-full">
-              <Typography variant="p1" className="text-gray-600">
-                Status
-              </Typography>
-              <Typography
-                variant="h6"
-                weight="light"
-                className={`text-primary-1 ${getStatusColor(
-                  kunjungan?.status
-                )}`}
-              >
-                {getStatusText(kunjungan?.status)}
-              </Typography>
-            </div>
-            <div className="w-full">
-              <Typography variant="p1" className="text-gray-600">
-                Nomor Antrian
-              </Typography>
-              <Typography
-                variant="h6"
-                weight="light"
-                className="text-primary-1"
-              >
-                {kunjungan?.antrian.noAntrian}
-              </Typography>
-            </div>
-            <div className="w-full">
-              <Typography variant="p1" className="text-gray-600">
-                Sesi
-              </Typography>
-              <Typography
-                variant="h6"
-                weight="light"
-                className="text-primary-1"
-              >
-                {getSesiText(kunjungan?.antrian.sesi)}
-              </Typography>
-            </div>
-            <div className="w-full">
-              <Typography variant="p1" className="text-gray-600">
-                Keluhan
-              </Typography>
-              <Typography
-                variant="h6"
-                weight="light"
-                className="text-primary-1"
-              >
-                {kunjungan?.keluhan}
-              </Typography>
-            </div>
-          </div>
-          <Divider />
-          {user?.role !== "PASIEN" && kunjungan?.rekamMedis === null && (
-            <div className="w-full flex justify-center rounded-lg border border-gray-300 py-8">
-              <Link href={"/"} className="flex flex-col items-center group">
-                <FaCirclePlus className="text-gray-300 text-4xl group-hover:text-blue-200" />
-                <Typography
-                  variant="h6"
-                  className="text-gray-300 mt-4 group-hover:text-blue-200"
-                >
-                  Tambah Rekam Medis
-                </Typography>
-              </Link>
-            </div>
-          )}
-          {user?.role === "PASIEN" && kunjungan?.rekamMedis !== null && (
-            <Button variant="primary">Lihat Rekam Medis</Button>
-        )}
+            <Divider className="md:hidden my-2" />
+            <DataKunjungan kunjungan={kunjungan} />
+          </section>
 
-      </section>
+          <section className="p-5 md:px-7 rounded-xl bg-white border border-gray-200 shadow-md">
+            <Typography variant="h6" className="text-primary-1">
+              Hasil Pemeriksaan
+            </Typography>
+            <Divider />
+            {user?.role !== "PASIEN" && kunjungan.hasilPemeriksaan == null ? (
+              <div className="w-full flex justify-center rounded-lg border border-gray-300 py-8 mt-3">
+                <Link
+                  href={"/kunjungan/hasil-pemeriksaan/tambah/" + kunjungan.id}
+                  className="flex flex-col items-center group"
+                >
+                  <FaCirclePlus className="text-gray-400 text-3xl group-hover:text-gray-500" />
+                  <Typography
+                    variant="h7"
+                    className="text-gray-400 mt-4 group-hover:text-gray-500"
+                  >
+                    Tambah Hasil Pemeriksaan
+                  </Typography>
+                </Link>
+              </div>
+            ) : (
+              <DataHasilPemeriksaan data={kunjungan.hasilPemeriksaan} />
+            )}
+          </section>
+        </>
+      ) : (
+        <LoadingDiv />
+      )}
     </main>
   );
 };

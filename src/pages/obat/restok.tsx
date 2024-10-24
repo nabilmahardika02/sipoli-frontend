@@ -202,4 +202,4 @@ const RestockPage = () => {
   );
 };
 
-export default withAuth(RestockPage, "OPERATOR");
+export default withAuth(RestockPage, "PERAWAT");
