@@ -86,7 +86,7 @@ const KunjunganPage = () => {
               Hasil Pemeriksaan
             </Typography>
             <Divider />
-            {(user?.role === "DOKTER" || user?.role === "PERAWAT") && kunjungan.hasilPemeriksaan == null ? (
+            {(user?.role === "DOKTER" || user?.role === "PERAWAT") && kunjungan.hasilPemeriksaan == null && kunjungan.status < 3 ? (
               <div className="w-full flex justify-center rounded-lg border border-gray-300 py-8 mt-3">
                 <Link
                   href={"/kunjungan/hasil-pemeriksaan/tambah/" + kunjungan.id}
