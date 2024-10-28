@@ -4,6 +4,12 @@ export type RujukanForm = {
   catatanRujukan: string;
 };
 
+export type UpdateRujukanForm = {
+  tujuanRujukan: string;
+  dokterRujukan: string;
+  catatanRujukan: string;
+}
+
 export type HasilPemeriksaanForm = {
   dokterPengirim: string;
   dokter: string;
@@ -58,4 +64,42 @@ export type HasilPemeriksaanFisikForm = {
   eye: number;
   verbal: number;
   motorik: number;
+}
+
+export type UpdatePemeriksaanFisikForm = {
+  tensi: string;
+  suhu: number;
+  meanArteri: number;
+  respiratoryRate: number;
+  heartRate: number;
+  oxygenSaturation: number;
+  kesadaran: string;
+  eye: number;
+  verbal: number;
+  motorik: number;
+}
+
+export type UpdateStatusPresentForm = {
+  mata: string;
+  telinga: string;
+  hidung: string;
+  tonsil: string;
+  faring: string;
+  cor: string;
+  pulmo: string;
+  abd: string;
+  ext: string;
+}
+
+export type UpdateHasilKunjunganForm = {
+  keluhanUtama: string;
+  riwayatPenyakitSekarang: string;
+  kie: string;
+}
+
+export type UpdateDiagnosaAkhirForm = {
+  icd10: string;
+  diagnosaKerja: string;
+  rencana: string;
+  tindakan: string;
 }

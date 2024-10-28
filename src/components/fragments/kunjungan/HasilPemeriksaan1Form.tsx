@@ -3,6 +3,7 @@ import Input from "@/components/elements/forms/Input";
 import SelectInput from "@/components/elements/forms/SelectInput";
 import { LoadingDiv } from "@/components/elements/Loading";
 import Typography from "@/components/elements/Typography";
+import { checkRole } from "@/lib/checkRole";
 import sendRequest from "@/lib/getApi";
 import { Account } from "@/types/entities/account";
 import { Kunjungan } from "@/types/entities/kunjungan";
@@ -27,6 +28,10 @@ const HasilPemeriksaan1Form = ({
   kunjungan: Kunjungan;
 }) => {
   const router = useRouter();
+
+  if (!checkRole(["PERAWAT", "DOKTER"])) {
+    router.push("/403");
+  }
 
   const [dokters, setDokters] = useState<Account[]>();
   const methods = useForm<HasilKunjunganForm>({
@@ -97,7 +102,7 @@ const HasilPemeriksaan1Form = ({
                 label="Dokter"
               >
                 {dokters?.map((dokter) => (
-                  <option key={dokter.id} value={dokter.id}>
+                  <option key={dokter.listProfile[0].id} value={dokter.listProfile[0].id}>
                     {dokter.listProfile[0].name}
                   </option>
                 ))}
@@ -112,7 +117,7 @@ const HasilPemeriksaan1Form = ({
                 placeholder="Riwayat Keluhan / Penyakit Saat Ini"
                 label="Riwayat Keluhan / Penyakit Saat Ini"
               />
-              <Input id="kie" placeholder="KIE" label="KIE" />
+              <Input id="kie" placeholder="Komunikasi Informasi dan Edukasi" label="Komunikasi Informasi dan Edukasi" />
             </div>
             <div className="flex items-center gap-3">
               <Link href={"/kunjungan/" + router.query.id}>

@@ -1,7 +1,61 @@
+import Button from "@/components/elements/Button";
+import Input from "@/components/elements/forms/Input";
+import IconButton from "@/components/elements/IconButton";
 import Typography from "@/components/elements/Typography";
-import { HasilPemeriksaan } from "@/types/entities/kunjungan";
+import ModalLayout from "@/components/layouts/ModalLayout";
+import sendRequest from "@/lib/getApi";
+import { Account } from "@/types/entities/account";
+import { HasilPemeriksaan, Kunjungan } from "@/types/entities/kunjungan";
+import { UpdateHasilKunjunganForm } from "@/types/forms/hasilPemeriksaanForm";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { LuPencil } from "react-icons/lu";
 
-const DataUtama = ({ data }: { data: HasilPemeriksaan }) => {
+const DataUtama = ({
+  data,
+  idPemeriksaan,
+  trigger,
+  setTrigger,
+}: {
+  data: HasilPemeriksaan;
+  idPemeriksaan: string;
+  trigger: boolean;
+  setTrigger: Dispatch<SetStateAction<boolean>>;
+}) => {
+  const [showModal, setShowModal] = useState(false);
+
+  const methods = useForm<UpdateHasilKunjunganForm>({
+    mode: "onTouched",
+  });
+  const { handleSubmit } = methods;
+
+  const onSubmit: SubmitHandler<UpdateHasilKunjunganForm> = (data) => {
+    const postData = async () => {
+      const [responseData, message, isSuccess] = await sendRequest(
+        "put",
+        `hasil-pemeriksaan/${idPemeriksaan}/basic-info`,
+        data,
+        true
+      );
+
+      if (isSuccess) {
+        setShowModal(false);
+        methods.reset();
+        setTrigger(!trigger);
+      }
+    };
+
+    postData();
+  };
+
+  useEffect(() => {
+    if (data) {
+      methods.setValue("keluhanUtama", data.keluhanUtama);
+      methods.setValue("riwayatPenyakitSekarang", data.riwayatPenyakitSekarang);
+      methods.setValue("kie", data.kie);
+    }
+  }, [data, methods]);
+
   return (
     <div>
       <div className="mt-5 flex items-center gap-2">
@@ -9,6 +63,11 @@ const DataUtama = ({ data }: { data: HasilPemeriksaan }) => {
         <Typography className="text-primary-1 font-semibold">
           Data Pemeriksaan Utama
         </Typography>
+        <IconButton
+          icon={LuPencil}
+          variant="primary"
+          onClick={() => setShowModal(true)}
+        />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
         <div>
@@ -34,6 +93,38 @@ const DataUtama = ({ data }: { data: HasilPemeriksaan }) => {
           <Typography className="text-primary-1">{data.kie || "-"}</Typography>
         </div>
       </div>
+      {showModal && (
+        <ModalLayout setShowModal={setShowModal}>
+          <div className="bg-white rounded-xl p-5 w-full md:w-[80%]">
+            <Typography variant="h6" className="text-primary-1">
+              Ubah Data Pemeriksaan Utama
+            </Typography>
+            <FormProvider {...methods}>
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="mt-5 items-end"
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
+                  <Input
+                    id="keluhanUtama"
+                    placeholder="Keluhan Utama"
+                    label="Keluhan Utama"
+                  />
+                  <Input
+                    id="riwayatPenyakitSekarang"
+                    placeholder="Riwayat Keluhan / Penyakit Saat Ini"
+                    label="Riwayat Keluhan / Penyakit Saat Ini"
+                  />
+                  <Input id="kie" placeholder="Komunikasi Informasi dan Edukasi" label="Komunikasi Informasi dan Edukasi" />
+                </div>
+                <Button type="submit" className="max-md:w-full">
+                  Save
+                </Button>
+              </form>
+            </FormProvider>
+          </div>
+        </ModalLayout>
+      )}
     </div>
   );
 };

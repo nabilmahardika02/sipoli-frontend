@@ -20,6 +20,7 @@ const KunjunganPage = () => {
   const { setTitle } = useDocumentTitle();
   const [kunjungan, setKunjungan] = useState<Kunjungan>();
   const user = useAuthStore.useUser();
+  const [trigger, setTrigger] = useState(false);
 
   useEffect(() => {
     setTitle("Detail Kunjungan");
@@ -29,7 +30,7 @@ const KunjunganPage = () => {
     const fetchKunjungan = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "get",
-        "kunjungan?id=" + router.query.id
+        `/kunjungan?id=${router.query.id}`
       );
 
       console.log(responseData);
@@ -39,8 +40,10 @@ const KunjunganPage = () => {
       }
     };
 
-    fetchKunjungan();
-  }, []);
+    if (router.query.id) {
+      fetchKunjungan();
+    }
+  }, [trigger, router.query.id]);
 
   return (
     <main className="flex flex-col gap-5">
@@ -57,27 +60,18 @@ const KunjunganPage = () => {
               Detail Kunjungan
             </Typography>
             <div className="flex justify-center md:justify-end gap-2 my-2">
-              {user?.role !== "PASIEN" && (
+              {(user?.role === "DOKTER" || user?.role === "PERAWAT") && (
                 <div className="flex justify-end">
-                  <Link href={"/pasien/" + kunjungan?.profile.id}>
+                  <Link href={`/pasien/detail/${kunjungan.profile.id}`}>
                     <Button variant="primary">Detail Pasien</Button>
                   </Link>
                 </div>
               )}
-              {user?.role === "PASIEN" && kunjungan.status === 0 && (
+              {kunjungan.status === 0 && (
                 <div className="flex justify-end">
                   <Link href={`/kunjungan/update/${kunjungan.id}`}>
                     <Button variant="secondary" leftIcon={LuPencil}>
-                      Edit Data Kunjungan
-                    </Button>
-                  </Link>
-                </div>
-              )}
-              {user?.role !== "PASIEN" && kunjungan.status < 2 && (
-                <div className="flex justify-end">
-                  <Link href={`/kunjungan/update/${kunjungan.id}`}>
-                    <Button variant="secondary" leftIcon={LuPencil}>
-                      Edit Data Kunjungan
+                      Ubah Data Kunjungan
                     </Button>
                   </Link>
                 </div>
@@ -87,12 +81,12 @@ const KunjunganPage = () => {
             <DataKunjungan kunjungan={kunjungan} />
           </section>
 
-          <section className="p-5 md:px-7 rounded-xl bg-white border border-gray-200 shadow-md">
+          {user?.role !== "OPERATOR" && <section className="p-5 md:px-7 rounded-xl bg-white border border-gray-200 shadow-md">
             <Typography variant="h6" className="text-primary-1">
               Hasil Pemeriksaan
             </Typography>
             <Divider />
-            {user?.role !== "PASIEN" && kunjungan.hasilPemeriksaan == null ? (
+            {(user?.role === "DOKTER" || user?.role === "PERAWAT") && kunjungan.hasilPemeriksaan == null ? (
               <div className="w-full flex justify-center rounded-lg border border-gray-300 py-8 mt-3">
                 <Link
                   href={"/kunjungan/hasil-pemeriksaan/tambah/" + kunjungan.id}
@@ -108,9 +102,13 @@ const KunjunganPage = () => {
                 </Link>
               </div>
             ) : (
-              <DataHasilPemeriksaan data={kunjungan.hasilPemeriksaan} />
+              <DataHasilPemeriksaan
+                data={kunjungan.hasilPemeriksaan}
+                trigger={trigger}
+                setTrigger={setTrigger}
+              />
             )}
-          </section>
+          </section>}
         </>
       ) : (
         <LoadingDiv />

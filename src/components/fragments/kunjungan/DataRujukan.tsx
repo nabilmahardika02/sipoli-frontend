@@ -1,7 +1,9 @@
 import Typography from "@/components/elements/Typography";
+import { formatDateOnly } from "@/lib/formater";
 import { Rujukan } from "@/types/entities/kunjungan";
 
 const DataRujukan = ({ data }: { data: Rujukan }) => {
+  console.log(data + "rujukan nih");
   return (
     <div>
       <div className="mt-5 flex items-center gap-2">
@@ -10,7 +12,7 @@ const DataRujukan = ({ data }: { data: Rujukan }) => {
           Rujukan
         </Typography>
       </div>
-      {data.dokter || data.catatan || data.maksimalBerlaku || data.tujuan ? (
+      {data?.dokter || data?.catatan || data?.maksimalBerlaku || data?.tujuan ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
           <div>
             <Typography
@@ -57,7 +59,7 @@ const DataRujukan = ({ data }: { data: Rujukan }) => {
               Maksimal Berlaku
             </Typography>
             <Typography className="text-primary-1">
-              {data.maksimalBerlaku || "-"}
+              {formatDateOnly(data.maksimalBerlaku) || "-"}
             </Typography>
           </div>
         </div>

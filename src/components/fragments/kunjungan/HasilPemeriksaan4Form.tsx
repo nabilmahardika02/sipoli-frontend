@@ -65,7 +65,7 @@ const HasilPemeriksaan4Form = ({
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} className="mt-5 items-end">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
-            <Input id="icd10" placeholder="ICD-10" label="ICD-10" />
+            <Input id="icd10" placeholder="ICD10" label="ICD10" />
             <Input
               id="diagnosaKerja"
               placeholder="Diagnosa Kerja"

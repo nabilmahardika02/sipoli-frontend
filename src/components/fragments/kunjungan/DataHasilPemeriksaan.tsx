@@ -5,16 +5,45 @@ import DataPemeriksaanFisik from "./DataPemeriksaanFisik";
 import DataRujukan from "./DataRujukan";
 import DataStatusPresent from "./DataStatusPresent";
 import DataUtama from "./DataUtama";
+import { Dispatch, SetStateAction } from "react";
 
-const DataHasilPemeriksaan = ({ data }: { data: HasilPemeriksaan }) => {
+const DataHasilPemeriksaan = ({
+  data,
+  trigger,
+  setTrigger,
+}: {
+  data: HasilPemeriksaan;
+  trigger: boolean;
+  setTrigger: Dispatch<SetStateAction<boolean>>;
+}) => {
   return (
     <section>
       {data ? (
         <>
-          <DataUtama data={data} />
-          <DataPemeriksaanFisik data={data.pemeriksaanFisik} />
-          <DataStatusPresent data={data.statusPresent} />
-          <DataDiagnosaAkhir data={data.diagnosaAkhir} />
+          <DataUtama
+            data={data}
+            idPemeriksaan={data.id}
+            trigger={trigger}
+            setTrigger={setTrigger}
+          />
+          <DataPemeriksaanFisik
+            data={data.pemeriksaanFisik}
+            idPemeriksaan={data.id}
+            trigger={trigger}
+            setTrigger={setTrigger}
+          />
+          <DataStatusPresent
+            data={data.statusPresent}
+            idPemeriksaan={data.id}
+            trigger={trigger}
+            setTrigger={setTrigger}
+          />
+          <DataDiagnosaAkhir
+            data={data.diagnosaAkhir}
+            idPemeriksaan={data.id}
+            trigger={trigger}
+            setTrigger={setTrigger}
+          />
           <DataRujukan data={data.rujukan} />
         </>
       ) : (

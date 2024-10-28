@@ -48,25 +48,23 @@ const HasilPemeriksaan5Form = ({
   }, [hasilPemeriksaan, methods]);
 
   const onSubmit: SubmitHandler<RujukanForm> = (data) => {
-    setHasilPemeriksaan((prevState) => ({
-      ...prevState,
-      rujukanRequestDTO: {
-        tujuanRujukan: data.tujuanRujukan,
-        dokterRujukan: data.dokterRujukan,
-        catatanRujukan: data.catatanRujukan,
-      },
-    }));
-
     const postData = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "post",
         "/hasil-pemeriksaan/add/" + router.query.id,
-        hasilPemeriksaan,
+        {
+          ...hasilPemeriksaan,
+          rujukanRequestDTO: {
+            tujuanRujukan: data.tujuanRujukan,
+            dokterRujukan: data.dokterRujukan,
+            catatanRujukan: data.catatanRujukan,
+          },
+        },
         true
       );
 
       if (isSuccess) {
-        router.push("/kunjungan/" + router.query.id)
+        router.push("/kunjungan/" + router.query.id);
       }
     };
 

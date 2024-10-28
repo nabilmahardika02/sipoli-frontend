@@ -190,7 +190,7 @@ const HomePasienView = () => {
                 size="sm"
                 onClick={() => setShowCancelModal(false)}
               >
-                Batal
+                Tidak
               </Button>
             </div>
           </div>

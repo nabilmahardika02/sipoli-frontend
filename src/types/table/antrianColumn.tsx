@@ -80,34 +80,6 @@ export const kunjunganTableColumns: GridColDef[] = [
       return <span style={{ color: color }}>{statusText}</span>;
     },
   },
-  {
-    field: "action",
-    headerName: "Action",
-    headerAlign: "center",
-    width: 200,
-    align: "center",
-    sortable: false,
-    renderCell: (params: CustomGridValueGetterParams) => {
-      return (
-        <div className="w-full flex items-center gap-2 justify-center h-full">
-          <Link href={`/kunjungan/${params.row.id}`}>
-            <Button variant="outline" size="sm" fullRounded className="mx-auto">
-              Detail
-            </Button>
-          </Link>
-          <Link href={"/home"}>
-          <Button
-            fullRounded
-            size="base"
-            variant="danger"
-          >
-            Cancel
-          </Button>
-        </Link>
-        </div>
-      );
-    },
-  },
 ];
 
 // Fungsi untuk mendapatkan Row ID

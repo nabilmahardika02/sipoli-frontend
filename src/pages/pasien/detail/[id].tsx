@@ -29,7 +29,7 @@ const PasienPage = () => {
   const fetchProfile = useCallback(async () => {
     const [responseData, message, isSuccess] = await sendRequest(
       "get",
-      "profile/detail/" + router.query.id
+      `/profile/detail/${router.query.id}`
     );
 
     if (isSuccess) {
@@ -38,7 +38,10 @@ const PasienPage = () => {
   }, [router.query.id]);
 
   useEffect(() => {
-    fetchProfile();
+    if (router.query.id) {
+      fetchProfile();
+    }
+    
   }, [router.query.id, fetchProfile, trigger]);
 
   return (

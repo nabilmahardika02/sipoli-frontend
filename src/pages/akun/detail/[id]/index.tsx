@@ -274,7 +274,7 @@ const DetailPage = () => {
                   columns={profileTableColumns}
                   getRowId={getRowIdProfile}
                   rows={selectedAccount.listProfile}
-                  flexColumnIndexes={[0]}
+                  flexColumnIndexes={[0, 2]}
                 />
               </>
             )}

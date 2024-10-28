@@ -62,7 +62,7 @@ const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
           Keluhan
         </Typography>
         <Typography className="text-primary-1">
-          {kunjungan.keluhan} anjay
+          {kunjungan.keluhan}
         </Typography>
       </div>
       {kunjungan.antrian && kunjungan.status < 2 && (

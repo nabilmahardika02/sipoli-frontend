@@ -60,7 +60,7 @@ export const profileTableColumns: GridColDef[] = [
   },
   {
     field: "action",
-    headerName: "Action",
+    headerName: "Ubah",
     headerAlign: "center",
     width: 150,
     align: "center",
@@ -70,7 +70,7 @@ export const profileTableColumns: GridColDef[] = [
         <div className="w-full flex items-center justify-center h-full">
           <Link href={`/akun/profile/update/${value.row.id}`}>
             <Button variant="outline" size="sm" fullRounded className="mx-auto">
-              Edit
+              Ubah
             </Button>
           </Link>
         </div>

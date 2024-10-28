@@ -86,13 +86,13 @@ const HasilPemeriksaan2Form = ({
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} className="mt-5 items-end">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
-            <Input id="tensi" placeholder="Tensi" label="Tensi" />
-            <Input id="suhu" type="number" placeholder="Suhu" label="Suhu" />
+            <Input id="suhu" type="number" placeholder="Temperature" label="Temperature" />
+            <Input id="tensi" placeholder="Blood Pressure" label="Blood Pressure" />
             <Input
               id="meanArteri"
               type="number"
-              placeholder="Mean Arteri"
-              label="Mean Arteri"
+              placeholder="Mean Arterial Pressure"
+              label="Mean Arterial Pressure"
             />
             <Input
               id="respiratoryRate"
