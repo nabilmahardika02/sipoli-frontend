@@ -59,7 +59,7 @@ const DetailPage = () => {
     if (user?.role === "PASIEN") {
       fetchProfile();
     }
-  }, []);
+  }, [user?.role]);
 
   const logout = useAuthStore.useLogout();
 

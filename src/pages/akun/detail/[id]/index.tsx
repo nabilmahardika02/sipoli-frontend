@@ -264,7 +264,7 @@ const DetailPage = () => {
                     variant="h7"
                     className="text-primary-1"
                   >
-                    Daftar Profile
+                    Daftar Profil
                   </Typography>
                   <Link href={`/akun/profile/tambah/${router.query.id}`}>
                     <Button leftIcon={GoPlus}>Tambah</Button>

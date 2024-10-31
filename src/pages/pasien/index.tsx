@@ -62,8 +62,8 @@ const PasienAllPage = () => {
         <Typography variant="h4" className="md:hidden">
           Daftar Pasien
         </Typography>
-        <Link href={"/pasien/register"}>
-          <Button leftIcon={GoPlus}>Tambah (Blm)</Button>
+        <Link href={"/pasien/tambah"}>
+          <Button leftIcon={GoPlus}>Tambah Pasien</Button>
         </Link>
       </div>
       <section className="mt-5">

@@ -18,7 +18,7 @@ const TambahProfilePage = () => {
   const { setTitle } = useDocumentTitle();
 
   useEffect(() => {
-    setTitle("Tambah Profile");
+    setTitle("Tambah Profil");
   }, [setTitle]);
 
   const router = useRouter();
@@ -52,10 +52,10 @@ const TambahProfilePage = () => {
   return (
     <main>
       <Head>
-        <title>Tambah Profile</title>
+        <title>Tambah Profil</title>
       </Head>
       <Typography variant="h4" className="mb-2 md:hidden">
-        Tambah Profile
+        Tambah Profil
       </Typography>
       <section className="mb-5">
         <FormProvider {...methods}>
