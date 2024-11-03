@@ -4,6 +4,7 @@ import HasilPemeriksaan2Form from "@/components/fragments/kunjungan/HasilPemerik
 import HasilPemeriksaan3Form from "@/components/fragments/kunjungan/HasilPemeriksaan3Form";
 import HasilPemeriksaan4Form from "@/components/fragments/kunjungan/HasilPemeriksaan4Form";
 import HasilPemeriksaan5Form from "@/components/fragments/kunjungan/HasilPemeriksaan5Form";
+import HasilPemeriksaan6Form from "@/components/fragments/kunjungan/HasilPemeriksaan6Form";
 import withAuth from "@/components/hoc/withAuth";
 import { useDocumentTitle } from "@/context/Title";
 import sendRequest from "@/lib/getApi";
@@ -118,6 +119,14 @@ const AddHasilPemeriksaanPage = () => {
           )}
           {section === 5 && (
             <HasilPemeriksaan5Form
+              hasilPemeriksaan={hasilPemeriksaanFields}
+              setHasilPemeriksaan={setHasilPemeriksaanFields}
+              setSection={setSection}
+              kunjungan={kunjungan}
+            />
+          )}
+          {section === 6 && (
+            <HasilPemeriksaan6Form
               hasilPemeriksaan={hasilPemeriksaanFields}
               setHasilPemeriksaan={setHasilPemeriksaanFields}
               setSection={setSection}

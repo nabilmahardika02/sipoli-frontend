@@ -103,3 +103,8 @@ export type UpdateDiagnosaAkhirForm = {
   rencana: string;
   tindakan: string;
 }
+
+export type UpdateResepObatRujukanForm = {
+  id: string;
+  deskripsi: string;
+}
