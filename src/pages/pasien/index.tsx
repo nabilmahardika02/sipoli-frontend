@@ -72,7 +72,15 @@ const PasienAllPage = () => {
             flexColumnIndexes={[0, 3]}
           />
         ) : (
-          <LoadingDiv />
+          <div className="w-full py-10 px-5 rounded-lg border border-gray-300 flex items-center justify-center">
+              <Typography
+                variant="p1"
+                weight="semibold"
+                className="text-gray-400"
+              >
+                Tidak ada pasien yang terdaftar
+              </Typography>
+            </div>
         )}
       </section>
     </main>
