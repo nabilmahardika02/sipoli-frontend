@@ -7,9 +7,9 @@ import { Line, Pie } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend, ArcElement } from 'chart.js';
 
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import sendRequest from "@/lib/getApi";
-import Modal from "@/components/modal";
+import Modal from "@/components/Modal";
 
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend, ArcElement);
 
@@ -17,7 +17,7 @@ const Dashboard = () => {
   const user = useAuthStore.useUser();
   const { setTitle } = useDocumentTitle();
 
-  const [kunjunganData, setKunjunganData] = useState(null);
+  const [kunjunganData, setKunjunganData] = useState<{ listKunjungan: any[]; labelChart: string[]; dataChart: number[]; totalPasien: number; pasienLakiLaki: number; pasienPerempuan: number; } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [filterChartBy, setFilterChartBy] = useState("");
   const [filterText, setFilterText] = useState("");
@@ -31,7 +31,7 @@ const Dashboard = () => {
     );
 
     if (isSuccess) {
-      setKunjunganData(responseData);
+      setKunjunganData(responseData as { listKunjungan: any[]; labelChart: string[]; dataChart: number[]; totalPasien: number; pasienLakiLaki: number; pasienPerempuan: number; });
       setIsLoading(false);
     } else {
       console.error(message);
@@ -43,11 +43,11 @@ const Dashboard = () => {
     fetchKunjungan(filterChartBy);
   }, [setTitle, filterChartBy]);
 
-  const handleFilterChange = (e) => {
+  const handleFilterChange = (e: { target: { value: SetStateAction<string>; }; }) => {
     setFilterChartBy(e.target.value);
   };
 
-  const handleDeleteClick = (id) => {
+  const handleDeleteClick = (id: SetStateAction<null>) => {
     setSelectedKunjunganId(id);
     setIsModalOpen(true);
   };
@@ -74,7 +74,7 @@ const Dashboard = () => {
     return <div>Memuat...</div>;
   }
 
-  const chartData = {
+  const chartData = kunjunganData ? {
     labels: kunjunganData.labelChart,
     datasets: [
       {
@@ -88,13 +88,13 @@ const Dashboard = () => {
         pointRadius: 4,
       },
     ],
-  };
+  } : { labels: [], datasets: [] };
 
   const chartOptions = {
     responsive: true,
     plugins: {
       legend: {
-        position: "top",
+        position: "top" as const,
         labels: {
           color: "#334155",
         },
@@ -109,7 +109,7 @@ const Dashboard = () => {
       },
       tooltip: {
         callbacks: {
-          footer: () => `Total Pasien: ${kunjunganData.totalPasien}`,
+          footer: () => `Total Pasien: ${kunjunganData ? kunjunganData.totalPasien : 0}`,
         },
       },
     },
@@ -131,7 +131,7 @@ const Dashboard = () => {
     labels: ["Pasien Laki-Laki", "Pasien Perempuan"],
     datasets: [
       {
-        data: [kunjunganData.pasienLakiLaki, kunjunganData.pasienPerempuan],
+        data: [kunjunganData?.pasienLakiLaki || 0, kunjunganData?.pasienPerempuan || 0],
         backgroundColor: ["rgba(54, 162, 235, 0.6)", "rgba(255, 99, 132, 0.6)"],
         borderColor: ["rgba(54, 162, 235, 1)", "rgba(255, 99, 132, 1)"],
         borderWidth: 1,
@@ -139,14 +139,14 @@ const Dashboard = () => {
     ],
   };
 
-  const getStatusStyle = (status) => {
+  const getStatusStyle = (status: number) => {
     if (status === 0) return { color: "red", fontWeight: "bold" };
     if (status === 1) return { color: "orange", fontWeight: "bold" };
     if (status === 2) return { color: "green", fontWeight: "bold" };
     return {};
   };
 
-  const filteredKunjungan = kunjunganData.listKunjungan.filter((kunjungan) => {
+  const filteredKunjungan = kunjunganData?.listKunjungan?.filter((kunjungan: { profile: { name: string; }; status: { toString: () => string | string[]; }; tanggal: string | number | Date; }) => {
     return (
       kunjungan.profile.name.toLowerCase().includes(filterText.toLowerCase()) ||
       kunjungan.status.toString().includes(filterText) ||
@@ -155,7 +155,7 @@ const Dashboard = () => {
   });
 
   // Menghitung sesi terbanyak
-  const sesiValues = filteredKunjungan.map((kunjungan) => kunjungan.antrian?.sesi);
+  const sesiValues = filteredKunjungan?.map((kunjungan) => kunjungan.antrian?.sesi) || [];
   const modesSession = sesiValues.reduce(
     (acc, val) => ({
       ...acc,
@@ -252,7 +252,7 @@ const Dashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredKunjungan.map((kunjungan) => (
+              {filteredKunjungan && filteredKunjungan.map((kunjungan) => (
                 <tr key={kunjungan.id} className="bg-white border-b hover:bg-gray-100">
                   <td className="px-4 py-2">{kunjungan.profile.name}</td>
                   <td className="px-4 py-2">{2024 - new Date(kunjungan.profile.tanggalLahir).getFullYear()}</td>

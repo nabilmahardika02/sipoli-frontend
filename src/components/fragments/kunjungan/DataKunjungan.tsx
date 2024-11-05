@@ -116,8 +116,8 @@ const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
               Tanggal Masuk
             </Typography>
             <Typography className="text-primary-1">
-              {kunjungan.hasilPemeriksaan.tanggalMasuk
-                ? formatDateOnly(kunjungan.hasilPemeriksaan.tanggalMasuk)
+              {kunjungan.tanggalMasuk
+                ? formatDateOnly(kunjungan.tanggalMasuk)
                 : "Belum tersedia"}
             </Typography>
           </div>
@@ -126,8 +126,8 @@ const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
               Tanggal Keluar
             </Typography>
             <Typography className="text-primary-1">
-              {kunjungan.hasilPemeriksaan.tanggalKeluar
-                ? formatDateOnly(kunjungan.hasilPemeriksaan.tanggalKeluar)
+              {kunjungan.tanggalKeluar
+                ? formatDateOnly(kunjungan.tanggalKeluar)
                 : "Belum tersedia"}
             </Typography>
           </div>
