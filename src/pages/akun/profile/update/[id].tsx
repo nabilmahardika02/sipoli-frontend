@@ -86,7 +86,7 @@ const UpdateProfilePage = () => {
               />
               <SelectInput
                 id="relative"
-                label="Relative"
+                label="Hubungan"
                 placeholder="Pilih status"
                 validation={{ required: "Relative status wajib diisi" }}
                 defaultValue={profile.relative}

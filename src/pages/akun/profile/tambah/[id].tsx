@@ -75,11 +75,10 @@ const TambahProfilePage = () => {
               />
               <SelectInput
                 id="relative"
-                label="Relative"
+                label="Hubungan"
                 placeholder="Pilih status"
                 validation={{ required: "Relative status wajib diisi" }}
               >
-                <option value="0">Pegawai</option>
                 <option value="1">Pasangan</option>
                 <option value="2">Anak</option>
               </SelectInput>
@@ -99,9 +98,9 @@ const TambahProfilePage = () => {
               />
             </div>
             <div className="mt-5 flex items-center gap-4">
-              <Button type="submit">Submit</Button>
+              <Button type="submit">Tambah</Button>
               <Link href={`/akun/detail/${router.query.id}`}>
-                <Button variant="danger">Cancel</Button>
+                <Button variant="danger">Batal</Button>
               </Link>
             </div>
           </form>
