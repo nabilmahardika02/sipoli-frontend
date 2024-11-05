@@ -93,6 +93,46 @@ const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
           </div>
         </>
       )}
+      {kunjungan.hasilPemeriksaan && (
+        <>
+          <div>
+            <Typography variant="p2" weight="semibold" className="text-gray-400">
+              Dokter Pengirim
+            </Typography>
+            <Typography className="text-primary-1">
+              {kunjungan.dokterPengirim}
+            </Typography>
+          </div>
+          <div>
+            <Typography variant="p2" weight="semibold" className="text-gray-400">
+              Dokter
+            </Typography>
+            <Typography className="text-primary-1">
+              {kunjungan.dokter.name}
+            </Typography>
+          </div>
+          <div>
+            <Typography variant="p2" weight="semibold" className="text-gray-400">
+              Tanggal Masuk
+            </Typography>
+            <Typography className="text-primary-1">
+              {kunjungan.tanggalMasuk
+                ? formatDateOnly(kunjungan.tanggalMasuk)
+                : "Belum tersedia"}
+            </Typography>
+          </div>
+          <div>
+            <Typography variant="p2" weight="semibold" className="text-gray-400">
+              Tanggal Keluar
+            </Typography>
+            <Typography className="text-primary-1">
+              {kunjungan.tanggalKeluar
+                ? formatDateOnly(kunjungan.tanggalKeluar)
+                : "Belum tersedia"}
+            </Typography>
+          </div>
+        </>
+      )}
     </div>
   );
 };

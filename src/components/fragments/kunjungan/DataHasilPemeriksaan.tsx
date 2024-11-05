@@ -6,6 +6,7 @@ import DataRujukan from "./DataRujukan";
 import DataStatusPresent from "./DataStatusPresent";
 import DataUtama from "./DataUtama";
 import { Dispatch, SetStateAction } from "react";
+import DataResepObatRujukan from "./DataResepObatRujukan";
 
 const DataHasilPemeriksaan = ({
   data,
@@ -45,6 +46,12 @@ const DataHasilPemeriksaan = ({
             setTrigger={setTrigger}
           />
           <DataRujukan data={data.rujukan} />
+          <DataResepObatRujukan
+            data={data.resepObatRujukan}
+            idPemeriksaan={data.id}
+            trigger={trigger}
+            setTrigger={setTrigger}
+          />
         </>
       ) : (
         <div className="w-full flex justify-center rounded-lg border border-gray-300 py-8 mt-3">

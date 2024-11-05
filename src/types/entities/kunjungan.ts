@@ -5,7 +5,7 @@ export interface Kunjungan {
   id: string;
   tanggal: string;
   dokterPengirim: string;
-  dokter: string;
+  dokter: Dokter;
   tanggalMasuk: string;
   tanggalKeluar: string;
   keluhan: string;
@@ -73,4 +73,19 @@ export interface HasilPemeriksaan {
   pemeriksaanFisik: PemeriksaanFisik;
   statusPresent: StatusPresent;
   diagnosaAkhir: DiagnosaAkhir;
+}
+
+export interface Dokter {
+  id: string;
+  name: string;
+  noHp: string;
+  tanggalLahir: string;
+  jenisKelamin: boolean;
+  nik: string;
+  noRekamMedis: string;
+  relative: number;
+  isActive: boolean;
+  isEmployee: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
