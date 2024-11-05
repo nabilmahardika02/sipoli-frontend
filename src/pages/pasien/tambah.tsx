@@ -20,7 +20,6 @@ const TambahPasienPage = () => {
   const { setTitle } = useDocumentTitle();
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [selectedAccountId, setSelectedAccountId] = useState<String>();
-  //const [options, setOptions] = useState<Array<{ value: string; label: string }>>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -46,16 +45,6 @@ const TambahPasienPage = () => {
     };
     fetchAccounts();
   }, []);
-
-  /*
-  useEffect (() => {
-    const transformedOptions = accounts.map(account => ({
-        value: account.id,
-        label: `${account.listProfile.find((profile) => profile.relative === 0)?.nik} - 
-        ${account.listProfile.find((profile) => profile.relative === 0)?.name ?? account.username}`
-      }));
-    setOptions(transformedOptions);
-  }, [accounts]) */
 
   const onSubmit: SubmitHandler<AddProfileForm> = (data) => {
     const postData = async () => {
@@ -90,18 +79,6 @@ const TambahPasienPage = () => {
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
             <div className="justify-between gap-5 my-5 grid grid-cols-1">
-            {/* 
-            {accounts && (
-                <SearcableSelect
-                id="idAccount"
-                label="Akun"
-                helperText="Cari nama pegawai yang sesuai"
-                validation={{ required: "Akun wajib diisi" }}
-                options={options}
-                >
-                </SearcableSelect>
-            )} 
-             */}
               <SelectInput
                 id="idAccount"
                 label="Akun"
