@@ -10,6 +10,8 @@ import Head from "next/head";
 import { SetStateAction, useEffect, useState } from "react";
 import sendRequest from "@/lib/getApi";
 import Modal from "@/components/Modal";
+import Link from "next/link";
+import Button from "@/components/elements/Button";
 
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend, ArcElement);
 
@@ -50,24 +52,6 @@ const Dashboard = () => {
   const handleDeleteClick = (id: SetStateAction<null>) => {
     setSelectedKunjunganId(id);
     setIsModalOpen(true);
-  };
-
-  const confirmDelete = async () => {
-    try {
-      const [responseData, message, isSuccess] = await sendRequest(
-        "put",
-        `kunjungan/delete/${selectedKunjunganId}`
-      );
-
-      if (isSuccess) {
-        fetchKunjungan(filterChartBy);
-        setIsModalOpen(false);
-      } else {
-        console.error(message);
-      }
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   if (isLoading) {
@@ -248,7 +232,7 @@ const Dashboard = () => {
                 <th className="px-4 py-2 text-left text-gray-600">Sesi</th>
                 <th className="px-4 py-2 text-left text-gray-600">Antrian</th>
                 <th className="px-4 py-2 text-left text-gray-600">Status</th>
-                <th className="px-4 py-2 text-left text-gray-600">Aksi</th>
+                <th className="px-4 py-2 text-left text-gray-600">Detail</th>
               </tr>
             </thead>
             <tbody>
@@ -264,12 +248,11 @@ const Dashboard = () => {
                     {kunjungan.status === 0 ? "Belum Dilayani" : kunjungan.status === 1 ? "Sedang Dilayani" : "Selesai"}
                   </td>
                   <td className="px-4 py-2">
-                    <button
-                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                      onClick={() => handleDeleteClick(kunjungan.id)}
-                    >
-                      Hapus
-                    </button>
+                  <Link href={`/kunjungan/${kunjungan.id}`}>
+                    <Button fullRounded>
+                      Detail
+                    </Button>
+                  </Link>
                   </td>
                 </tr>
               ))}
@@ -286,30 +269,6 @@ const Dashboard = () => {
           )}
         </div>
       </section>
-
-      {/* Modal Konfirmasi */}
-      {isModalOpen && (
-        <Modal onClose={() => setIsModalOpen(false)}>
-          <Typography variant="h5" className="text-primary-1 mb-4">
-            Konfirmasi Penghapusan
-          </Typography>
-          <p>Apakah Anda yakin ingin menghapus data ini?</p>
-          <div className="flex justify-end mt-4">
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-2"
-            >
-              Batal
-            </button>
-            <button
-              onClick={confirmDelete}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Konfirmasi
-            </button>
-          </div>
-        </Modal>
-      )}
     </main>
   );
 };
