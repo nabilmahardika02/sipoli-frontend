@@ -208,7 +208,7 @@ const KunjunganAddPage = () => {
                   onChange={handleDateChange}
                 />
                 {showInformationSunday && (
-                  <Typography variant="p2" className="my-2 text-success-2" size="sm">
+                  <Typography variant="p2" className="my-2 text-gray-600" size="sm">
                     Poliklinik hanya dapat melayani pada pukul 14:00 - 17:00 WITA di hari Minggu
                   </Typography>
                 )}
@@ -226,12 +226,12 @@ const KunjunganAddPage = () => {
                   validation={{ required: "Mohon pilih sesi" }}
                 />)}
                 {showAntrianInfo && antrianInfo === 0 && (
-                  <Typography variant="p2" className="my-2 text-primary-1" size="sm">
+                  <Typography variant="p2" className="my-2 text-gray-600" size="sm">
                     Belum ada antrian di sesi {selectedSesi} pada {formatDateOnly(selectedDate)}
                   </Typography>
                 )}
                 {showAntrianInfo && antrianInfo > 0 && (
-                  <Typography variant="p2" className="my-2 text-primary-1" size="sm">
+                  <Typography variant="p2" className="my-2 text-gray-600" size="sm">
                     Sudah ada {antrianInfo} antrian di sesi {selectedSesi} pada {formatDateOnly(selectedDate)}
                   </Typography>
                 )}
