@@ -27,7 +27,7 @@ const KunjunganCard = ({
         {formatDateOnly(kunjungan.tanggal)}
       </Typography>
       <div className="flex justify-between gap-2 mt-4">
-        <Link href={"/home"}>
+        {kunjungan.status === 0 && (<Link href={"/home"}>
           <Button
             fullRounded
             variant="danger"
@@ -38,7 +38,7 @@ const KunjunganCard = ({
           >
             Cancel
           </Button>
-        </Link>
+        </Link>)}
         <Link href={`/kunjungan/${kunjungan.id}`}>
           <Button fullRounded>
             Detail
