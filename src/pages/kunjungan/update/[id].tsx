@@ -10,13 +10,12 @@ import sendRequest from "@/lib/getApi";
 import router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import { Profile } from "@/types/entities/profile";
-import { Account } from "@/types/entities/account";
 import useAuthStore from "@/store/useAuthStore";
 import Link from "next/link";
 import { KunjunganForm } from "@/types/forms/kunjunganForm";
 import Divider from "@/components/elements/Divider";
 import { Kunjungan } from "@/types/entities/kunjungan";
+import { formatDateOnly } from "@/lib/formater";
 
 const sesi = [
     {
@@ -42,6 +41,13 @@ const KunjunganUpdatePage = () => {
     const { setTitle } = useDocumentTitle();
     const router = useRouter();
     const [kunjungan, setKunjungan] = useState<Kunjungan>();
+    const [showInformationSunday, setShowInformationSunday] = useState(false);
+    const [showInformationSaturday, setShowInformationSaturday] = useState(false);
+    const [showAntrianInfo, setShowAntrianInfo] = useState(false);
+    const [selectedDate, setSelectedDate] = useState("");
+    const [selectedSesi, setSelectedSesi] = useState("");
+    const [antrianInfo, setAntrianInfo] = useState(0);
+    const [showSesi, setShowSesi] = useState(false);
 
     useEffect(() => {
         setTitle("Perbarui Kunjungan");
@@ -62,6 +68,7 @@ const KunjunganUpdatePage = () => {
         if (router.query.id) {
             fetchKunjungan();  // Fetch existing kunjungan data
         }
+        console.log(kunjungan?.tanggal.toString().split("T")[0]);
     }, [router.query.id]);
 
     const methods = useForm<KunjunganForm>({
@@ -90,7 +97,54 @@ const KunjunganUpdatePage = () => {
       };
 
       postData();
-  };
+    };
+
+    const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedDate = event.target.value;
+        const date = new Date(selectedDate);
+        setSelectedDate(selectedDate); // Store the selected date
+    
+        if (date.getDay() === 0) { //sunday
+          setShowInformationSunday(true);
+          setShowInformationSaturday(false);
+          setShowSesi(false);
+          setShowAntrianInfo(false);
+        } else if (date.getDay() === 6) { //saturday
+          setShowInformationSaturday(true);
+          setShowInformationSunday(false);
+          setShowSesi(false);
+          setShowAntrianInfo(false);
+        } else {
+          setShowInformationSunday(false);
+          setShowInformationSaturday(false);
+          setShowSesi(true);
+          setShowAntrianInfo(false);
+        }
+    };
+
+    useEffect(() => {
+        // Fungsi untuk mengambil data profil dari API
+        const fetchAntrian = async () => {
+          const [responseData, message, isSuccess] = await sendRequest(
+            "get",
+            "kunjungan/antrian?sesi=" + selectedSesi + "&tanggal=" + selectedDate
+          );
+    
+          if (isSuccess) {
+            setAntrianInfo(responseData as number); 
+          }
+        };
+    
+        if (selectedSesi) {
+          fetchAntrian();
+        }
+    
+    }, [selectedSesi]);
+
+    const handleSesiChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSelectedSesi(event.target.value);
+        setShowAntrianInfo(true);
+    }
 
     return (
         <main>
@@ -103,15 +157,41 @@ const KunjunganUpdatePage = () => {
                     <FormProvider {...methods}>
                     <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
                         <div className="justify-between gap-5 my-5 md:grid-cols-2">
-                            <RadioButtonGroup
+                            <Input
+                                id="tanggalKunjungan"
+                                label="Tanggal Kunjungan"
+                                type="date"
+                                onChange={handleDateChange}
+                                defaultValue={kunjungan?.tanggal.toString().split("T")[0]}
+                            />
+                            {showInformationSunday && (
+                                <Typography variant="p2" className="my-2 text-gray-600" size="sm">
+                                    Poliklinik hanya dapat melayani pada pukul 14:00 - 17:00 WITA di hari Minggu
+                                </Typography>
+                            )}
+                            {showInformationSaturday && (
+                                <Typography variant="p2" className="my-2 text-danger-core" size="sm">
+                                    Poliklinik tidak dapat melayani di hari Sabtu
+                                </Typography>
+                            )}
+                            {showSesi && (<RadioButtonGroup
                                 name="sesi"
                                 options={sesi}
                                 label="Sesi"
                                 direction="horizontal"
-                                validation={{ required: "Mohon pilih sesi" }}
+                                onChange={handleSesiChange}
                                 defaultValue={kunjungan?.antrian.sesi.toString()} // Preselect the sesi value
-                            />
-                            
+                            />)}
+                            {showAntrianInfo && antrianInfo === 0 && (
+                                <Typography variant="p2" className="my-2 text-gray-600" size="sm">
+                                    Belum ada antrian di sesi {selectedSesi} pada {formatDateOnly(selectedDate)}
+                                </Typography>
+                            )}
+                            {showAntrianInfo && antrianInfo > 0 && (
+                                <Typography variant="p2" className="my-2 text-gray-600" size="sm">
+                                    Sudah ada {antrianInfo} antrian di sesi {selectedSesi} pada {formatDateOnly(selectedDate)}
+                                </Typography>
+                            )}
                             <div className="justify-between gap-5 my-5">
                               <Input
                                 id="id"
@@ -127,13 +207,6 @@ const KunjunganUpdatePage = () => {
                                   <option value={kunjungan.profile.id}></option>
                                 </SelectInput>
                             </div>
-                            <Divider/>
-                            <Input
-                                id="tanggalKunjungan"
-                                label="Tanggal Kunjungan"
-                                type="date"
-                                defaultValue={kunjungan?.tanggal.toString().split("T")[0]}
-                            />
                             {user?.role !== "PASIEN" && (
                                 <SelectInput
                                     id="status"
