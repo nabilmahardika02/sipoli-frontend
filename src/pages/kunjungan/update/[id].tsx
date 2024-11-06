@@ -221,6 +221,15 @@ const KunjunganUpdatePage = () => {
                                     <option value="3">Dibatalkan</option>
                                 </SelectInput>
                             )}
+                            {user?.role === "PASIEN" && (
+                                <SelectInput
+                                id="status"
+                                defaultValue={kunjungan.status}
+                                className="hidden"
+                            >
+                                <option value="0">Belum Dilayani</option>
+                            </SelectInput>
+                            )}
                             <TextArea
                                 id="keluhan"
                                 label="Keluhan"
