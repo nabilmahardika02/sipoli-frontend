@@ -16,9 +16,9 @@ import { Profile } from "@/types/entities/profile";
 import { KunjunganForm } from "@/types/forms/kunjunganForm";
 import Link from "next/link";
 import router from "next/router";
-import { useEffect, useState } from "react";
+import { format } from "path/win32";
+import React, { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import ModalLayout from "@/components/layouts/ModalLayout";
 
 const KunjunganAddPage = () => {
   const user = useAuthStore.useUser();
@@ -26,9 +26,13 @@ const KunjunganAddPage = () => {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [profile, setProfile] = useState<Profile>();
-  const [showInformationModal, setShowInformationModal] = useState(false);
+  const [showInformationSunday, setShowInformationSunday] = useState(false);
+  const [showInformationSaturday, setShowInformationSaturday] = useState(false);
+  const [showAntrianInfo, setShowAntrianInfo] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
-  const [showSesi, setShowSesi] = useState(true);
+  const [selectedSesi, setSelectedSesi] = useState("");
+  const [antrianInfo, setAntrianInfo] = useState(0);
+  const [showSesi, setShowSesi] = useState(false);
 
   useEffect(() => {
     if (user?.role === "PASIEN") {
@@ -135,16 +139,47 @@ const KunjunganAddPage = () => {
     const date = new Date(selectedDate);
     setSelectedDate(selectedDate); // Store the selected date
 
-    // Check if the selected date is Sunday
-    if (date.getDay() === 0) {
-      console.log("Tanggal yang dipilih adalah hari Minggu!");
-      setShowInformationModal(true); // Show the modal if it's Sunday
+    if (date.getDay() === 0) { //sunday
+      setShowInformationSunday(true);
+      setShowInformationSaturday(false);
       setShowSesi(false);
+      setShowAntrianInfo(false);
+    } else if (date.getDay() === 6) { //saturday
+      setShowInformationSaturday(true);
+      setShowInformationSunday(false);
+      setShowSesi(false);
+      setShowAntrianInfo(false);
     } else {
-      setShowInformationModal(false);
+      setShowInformationSunday(false);
+      setShowInformationSaturday(false);
       setShowSesi(true);
+      setShowAntrianInfo(false);
     }
   };
+
+  useEffect(() => {
+    // Fungsi untuk mengambil data profil dari API
+    const fetchAntrian = async () => {
+      const [responseData, message, isSuccess] = await sendRequest(
+        "get",
+        "kunjungan/antrian?sesi=" + selectedSesi + "&tanggal=" + selectedDate
+      );
+
+      if (isSuccess) {
+        setAntrianInfo(responseData as number); 
+      }
+    };
+
+    if (selectedSesi) {
+      fetchAntrian();
+    }
+
+  }, [selectedSesi]);
+
+  const handleSesiChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedSesi(event.target.value);
+    setShowAntrianInfo(true);
+  }
 
   return (
     <main>
@@ -166,14 +201,42 @@ const KunjunganAddPage = () => {
           <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
               <div className="justify-between gap-5 my-5 md:grid-cols-2">
+                <Input
+                  id="tanggalKunjungan"
+                  label="Tanggal Kunjungan"
+                  type="date"
+                  validation={{ required: "Mohon pilih tanggal kunjungan" }}
+                  onChange={handleDateChange}
+                />
+                {showInformationSunday && (
+                  <Typography variant="p2" className="my-2 text-success-2" size="sm">
+                    Poliklinik hanya dapat melayani pada pukul 14:00 - 17:00 WITA di hari Minggu
+                  </Typography>
+                )}
+                {showInformationSaturday && (
+                  <Typography variant="p2" className="my-2 text-danger-core" size="sm">
+                    Poliklinik tidak dapat melayani di hari Sabtu
+                  </Typography>
+                )}
                 {showSesi && (<RadioButtonGroup
                   name="sesi"
                   options={sesi}
                   label="Sesi"
                   direction="horizontal"
+                  onChange={handleSesiChange}
                   validation={{ required: "Mohon pilih sesi" }}
                 />)}
-                {showSesi && (<Divider />)}
+                {showAntrianInfo && antrianInfo === 0 && (
+                  <Typography variant="p2" className="my-2 text-primary-1" size="sm">
+                    Belum ada antrian di sesi {selectedSesi} pada {formatDateOnly(selectedDate)}
+                  </Typography>
+                )}
+                {showAntrianInfo && antrianInfo > 0 && (
+                  <Typography variant="p2" className="my-2 text-primary-1" size="sm">
+                    Sudah ada {antrianInfo} antrian di sesi {selectedSesi} pada {formatDateOnly(selectedDate)}
+                  </Typography>
+                )}
+                <Divider />
                 <Typography
                   variant="p1"
                   weight="bold"
@@ -241,13 +304,6 @@ const KunjunganAddPage = () => {
                   </Typography>
                 </div>
                 <Divider />
-                <Input
-                  id="tanggalKunjungan"
-                  label="Tanggal Kunjungan"
-                  type="date"
-                  validation={{ required: "Mohon pilih tanggal kunjungan" }}
-                  onChange={handleDateChange}
-                />
                 {user.role !== "PASIEN" && (
                   <SelectInput
                     id="status"
@@ -279,24 +335,6 @@ const KunjunganAddPage = () => {
           </FormProvider>
         )}
       </section>
-      {showInformationModal && (
-        <ModalLayout setShowModal={setShowInformationModal}>
-          <div className="bg-white rounded-xl p-5 w-full md:w-[50%] flex flex-col">
-            <Typography variant="h6" className="text-primary-1">
-              Informasi
-            </Typography>
-            <Divider className="my-2" weight="kurus" />
-            <Typography variant="p2" weight="semibold" className="text-secondary-4">
-              Poliklinik hanya dapat melayani pukul 14:00 - 17:00 WITA di hari Minggu. Anda akan terdaftar ke Sesi 3 (14:00 - 17:00 WITA)
-            </Typography>
-            <div className="flex items-center gap-2 mt-4 self-end">
-              <Button variant="success" size="sm" onClick={() => setShowInformationModal(false)}>
-                OK
-              </Button>
-            </div>
-          </div>
-        </ModalLayout>
-      )}
     </main>
   );
 };

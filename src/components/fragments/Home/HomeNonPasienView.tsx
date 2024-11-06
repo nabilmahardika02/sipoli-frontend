@@ -36,7 +36,7 @@ const HomeNonPasienView = () => {
     ...kunjunganTableColumns,
     {
       field: "action",
-      headerName: "Action",
+      headerName: "Aksi",
       headerAlign: "center",
       width: 200,
       align: "center",
@@ -48,7 +48,7 @@ const HomeNonPasienView = () => {
               Detail
             </Button>
           </Link>
-          <Link href={"/home"}>
+          {value.row.status === 0 && (<Link href={"/home"}>
             <Button
               fullRounded
               size="base"
@@ -57,7 +57,7 @@ const HomeNonPasienView = () => {
             >
               Cancel
             </Button>
-          </Link>
+          </Link>)}
         </div>
       ),
     },
