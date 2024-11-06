@@ -99,6 +99,16 @@ const KunjunganUpdatePage = () => {
       postData();
     };
 
+    useEffect(() => {
+        const date = new Date(kunjungan?.tanggal as string);
+        console.log(date);
+
+        if (date.getDay() > 0 && date.getDay() < 6) {
+            setShowSesi(true);
+        }
+
+    }, [kunjungan]);
+
     const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedDate = event.target.value;
         const date = new Date(selectedDate);
