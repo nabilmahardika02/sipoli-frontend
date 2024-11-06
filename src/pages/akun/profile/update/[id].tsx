@@ -84,7 +84,7 @@ const UpdateProfilePage = () => {
                 validation={{ required: "Nama wajib diisi" }}
                 defaultValue={profile.name}
               />
-              <SelectInput
+              {profile.relative > 0 && (<SelectInput
                 id="relative"
                 label="Hubungan"
                 placeholder="Pilih status"
@@ -93,7 +93,7 @@ const UpdateProfilePage = () => {
               >
                 <option value="1">Pasangan</option>
                 <option value="2">Anak</option>
-              </SelectInput>
+              </SelectInput>)}
               <Input
                 id="tanggalLahir"
                 type="date"
