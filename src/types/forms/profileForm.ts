@@ -7,3 +7,12 @@ export type AddProfileForm = {
   jenisKelamin: boolean;
   relative: number;
 };
+
+export type UpdateProfileForm = {
+  id: string;
+  name: string;
+  noHp: string;
+  tanggalLahir: string;
+  jenisKelamin: boolean;
+  relative: number;
+}
