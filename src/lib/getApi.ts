@@ -44,14 +44,10 @@ const sendRequest = async <T>(
     dismissLoadingToast();
 
     if (error instanceof AxiosError) {
-      if (toast) {
-        showToast(error.response?.data.message, DANGER_TOAST);
-      }
+      showToast(error.response?.data.message || "Service unavailable", DANGER_TOAST);
       return ["", error.response?.data.message, false];
     } else {
-      if (toast) {
-        showToast("Terjadi kesalahan", DANGER_TOAST);
-      }
+      showToast("Terjadi kesalahan", DANGER_TOAST);
       return ["", "Terjadi kesalahan", false];
     }
   }

@@ -1,14 +1,13 @@
 import { KuantitasObat } from "./kuantitasObat";
-import { ResepObat } from "./resepObat";
-import { Rujukan } from "./rujukan";
-
 export interface RekamMedis {
-    beratBadan: number;
-    tinggiBadan: number;
-    tensi: string;
-    catatanInternal: string;
-    diagnosis: string;
-    resepObat: ResepObat;
-    rujukan: Rujukan;
-    listKuantitasObat: KuantitasObat[];
+  id: string; // ID rekam medis
+  beratBadan: number;
+  tinggiBadan: number;
+  tensi: string;
+  diagnosis: string;
+  deskripsiResepObat: string; // Optional: Deskripsi resep obat
+  tujuanRujukan: string; // Optional: Tujuan rujukan
+  dokterRujukan: string; // Optional: Nama dokter rujukan
+  catatanRujukan: string; // Optional: Catatan rujukan
+  listKuantitasObat: KuantitasObat[];
 }

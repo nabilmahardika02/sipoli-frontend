@@ -123,4 +123,4 @@ const UpdatePage = () => {
   );
 };
 
-export default withAuth(UpdatePage, "OPERATOR");
+export default withAuth(UpdatePage, "PERAWAT");

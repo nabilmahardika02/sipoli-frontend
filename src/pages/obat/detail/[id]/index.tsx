@@ -1,7 +1,6 @@
 import Button from "@/components/elements/Button";
 import Divider from "@/components/elements/Divider";
 import Input from "@/components/elements/forms/Input";
-import IconButton from "@/components/elements/IconButton";
 import { LoadingDiv } from "@/components/elements/Loading";
 import { DANGER_TOAST, showToast } from "@/components/elements/Toast";
 import Typography from "@/components/elements/Typography";
@@ -86,6 +85,26 @@ const DetailObatPage = () => {
     postData();
   };
 
+  const handleDelete = async () => {
+    try {
+      const [responseData, message, isSuccess] = await sendRequest(
+        "put",
+        `obat/delete/${router.query.id}`,
+        null,
+        true
+      );
+
+      if (isSuccess) {
+        setShowDeleteModal(false);
+        router.push("/obat");
+      } else {
+        showToast(message, DANGER_TOAST);
+      }
+    } catch (error) {
+      showToast("Gagal menghapus obat. Coba lagi.", DANGER_TOAST);
+    }
+  };
+
   return (
     <main>
       <Head>
@@ -97,55 +116,40 @@ const DetailObatPage = () => {
       {obat ? (
         <section className="max-md:p-5 max-md:rounded-xl max-md:bg-white max-md:border max-md:border-gray-200 max-md:shadow-md">
           <div className="flex flex-wrap items-center justify-between">
-            <Typography variant="h6" className="text-secondary-2">
+            <Typography variant="h5" className="text-secondary-2">
               {obat?.namaObat}
             </Typography>
-            {user?.role === "OPERATOR" && (
+            {user?.role === "PERAWAT" && (
               <div className="flex items-center gap-2">
                 <Link href={`/obat/detail/${router.query.id}/update`}>
-                  <IconButton
-                    className="md:hidden"
-                    variant="secondary"
-                    icon={LuPencil}
-                  />
-                </Link>
-                <IconButton
-                  className="md:hidden"
-                  icon={FaPlus}
-                  onClick={() => setShowRestockModal(true)}
-                />
-                <IconButton
-                  className="md:hidden"
-                  variant="danger"
-                  icon={IoTrashBin}
-                  onClick={() => setShowDeleteModal(true)}
-                />
-                <Link href={`/obat/detail/${router.query.id}/update`}>
                   <Button
-                    className="max-md:hidden"
+                    className="max-md:aspect-square"
+                    size="sm"
+                    leftIconClassName="max-md:text-md max-md:mr-0"
                     leftIcon={LuPencil}
                     variant="secondary"
-                    size="sm"
                   >
-                    Edit Data Obat
+                    <span className="max-md:hidden">Edit Data Obat</span>
                   </Button>
                 </Link>
                 <Button
-                  className="max-md:hidden"
+                  className="max-md:aspect-square"
+                  size="sm"
+                  leftIconClassName="max-md:text-md max-md:mr-0"
                   leftIcon={FaPlus}
                   onClick={() => setShowRestockModal(true)}
-                  size="sm"
                 >
-                  Restock Obat
+                  <span className="max-md:hidden">Restock Obat</span>
                 </Button>
                 <Button
+                  className="max-md:aspect-square"
+                  size="sm"
                   onClick={() => setShowDeleteModal(true)}
-                  className="max-md:hidden"
+                  leftIconClassName="max-md:text-md max-md:mr-0"
                   leftIcon={IoTrashBin}
                   variant="danger"
-                  size="sm"
                 >
-                  Hapus Obat
+                  <span className="max-md:hidden">Hapus Obat</span>
                 </Button>
               </div>
             )}
@@ -285,13 +289,7 @@ const DetailObatPage = () => {
               </ul>
             </Typography>
             <div className="flex items-center gap-2 mt-4 self-end">
-              <Button
-                variant="danger"
-                size="sm"
-                onClick={() =>
-                  showToast("Belum bisa ini kerjaan Nafriel", DANGER_TOAST)
-                }
-              >
+              <Button variant="danger" size="sm" onClick={handleDelete}>
                 Hapus
               </Button>
               <Button

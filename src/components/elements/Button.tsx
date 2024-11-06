@@ -102,9 +102,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               variant === "outline"
                 ? "text-primary-1 group-hover:text-white"
                 : "text-white",
+              leftIconClassName,
             ])}
           >
-            <LeftIcon className={clsxm("font-semibold", leftIconClassName)} />
+            <LeftIcon className={clsxm("font-semibold")} />
           </div>
         )}
         <Typography
@@ -130,14 +131,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               variant === "outline"
                 ? "text-primary-1 group-hover:text-white"
                 : "text-white",
+              rightIconClassName,
             ])}
           >
-            <RightIcon
-              className={clsxm(
-                "text-sm font-semibold md:text-xl",
-                rightIconClassName
-              )}
-            />
+            <RightIcon className={clsxm("text-sm font-semibold md:text-xl")} />
           </div>
         )}
       </button>

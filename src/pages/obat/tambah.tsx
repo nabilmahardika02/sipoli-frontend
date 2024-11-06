@@ -106,4 +106,4 @@ const AddObatPage = () => {
   );
 };
 
-export default withAuth(AddObatPage, "OPERATOR");
+export default withAuth(AddObatPage, "PERAWAT");

@@ -3,8 +3,8 @@ import { Profile } from "./profile";
 export interface Account {
   id: string;
   username: string;
+  password: string;
   role: string;
-  nip: string;
   isActive: boolean;
   isDefaultPassword: boolean;
   createdAt: string;

@@ -1,4 +1,5 @@
 import useAuthStore from "@/store/useAuthStore";
+import Link from "next/link";
 import { FaBell, FaUserCircle } from "react-icons/fa";
 import Typography from "../elements/Typography";
 
@@ -11,20 +12,30 @@ const DesktopTopNav = ({ title = "Beranda" }: { title?: string }) => {
           {title}
         </Typography>
         <div className="flex items-center gap-3">
-          <div className="flex flex-col items-end mr-2">
-            <Typography variant="p1" className="text-primary-1" font="ubuntu">
-              {user?.name || "Guest"} - {user?.role || "Role"}{" "}
-              {/* Display user's role */}
-            </Typography>
-          </div>
-          <button className="text-xl text-primary-1 hover:text-primary-2">
-            {(user?.role === "DOKTER" || user?.role === "PERAWAT") && (
-              <FaBell />
-            )}
-          </button>
-          <button className="text-xl text-primary-1 hover:text-primary-2">
-            <FaUserCircle />
-          </button>
+          {user && (
+            <>
+              <div className="">
+                <Typography
+                  variant="p3"
+                  className="text-primary-1"
+                  font="ubuntu"
+                  weight="medium"
+                >
+                  {user.name || "Guest"} - {user.role || "Role"}
+                </Typography>
+              </div>
+              {(user.role === "DOKTER" || user.role === "PERAWAT") && (
+                <button className="text-xl text-primary-1 hover:text-primary-2">
+                  <FaBell />
+                </button>
+              )}
+            </>
+          )}
+          <Link href={"/akun/me"} className="leading-none">
+            <button className="text-xl text-primary-1 hover:text-primary-2">
+              <FaUserCircle />
+            </button>
+          </Link>
         </div>
       </div>
     </nav>

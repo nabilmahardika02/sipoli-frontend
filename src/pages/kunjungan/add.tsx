@@ -6,7 +6,9 @@ import SelectInput from "@/components/elements/forms/SelectInput";
 import TextArea from "@/components/elements/forms/TextArea";
 import Typography from "@/components/elements/Typography";
 import withAuth from "@/components/hoc/withAuth";
+import { sesi } from "@/content/kunjungan";
 import { useDocumentTitle } from "@/context/Title";
+import { formatDateOnly } from "@/lib/formater";
 import sendRequest from "@/lib/getApi";
 import useAuthStore from "@/store/useAuthStore";
 import { Account } from "@/types/entities/account";
@@ -14,27 +16,8 @@ import { Profile } from "@/types/entities/profile";
 import { KunjunganForm } from "@/types/forms/kunjunganForm";
 import Link from "next/link";
 import router from "next/router";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-
-const sesi = [
-  {
-    value: "1",
-    text: "Sesi 1 (08:00 - 10:00 WITA)",
-  },
-  {
-    value: "2",
-    text: "Sesi 2 (10:00 - 12:00 WITA)",
-  },
-  {
-    value: "3",
-    text: "Sesi 3 (13:00 - 15:00 WITA)",
-  },
-  {
-    value: "4",
-    text: "Sesi 4 (15:00 - 16:30 WITA)",
-  },
-];
 
 const KunjunganAddPage = () => {
   const user = useAuthStore.useUser();
@@ -42,6 +25,13 @@ const KunjunganAddPage = () => {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [profile, setProfile] = useState<Profile>();
+  const [showInformationSunday, setShowInformationSunday] = useState(false);
+  const [showInformationSaturday, setShowInformationSaturday] = useState(false);
+  const [showAntrianInfo, setShowAntrianInfo] = useState(false);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedSesi, setSelectedSesi] = useState("");
+  const [antrianInfo, setAntrianInfo] = useState(0);
+  const [showSesi, setShowSesi] = useState(false);
 
   useEffect(() => {
     if (user?.role === "PASIEN") {
@@ -64,8 +54,10 @@ const KunjunganAddPage = () => {
       }
     };
 
-    fetchAccounts();
-  }, []);
+    if (user?.role !== "PASIEN") {
+      fetchAccounts();
+    }
+  }, [user?.role]);
 
   useEffect(() => {
     // Fungsi untuk mengambil data profil dari API
@@ -137,18 +129,56 @@ const KunjunganAddPage = () => {
     }
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("id-ID", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
-  };
-
   const formatGender = (isFemale: boolean) => {
     return isFemale ? "Perempuan" : "Laki-laki";
   };
+
+  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedDate = event.target.value;
+    const date = new Date(selectedDate);
+    setSelectedDate(selectedDate); // Store the selected date
+
+    if (date.getDay() === 0) { //sunday
+      setShowInformationSunday(true);
+      setShowInformationSaturday(false);
+      setShowSesi(false);
+      setShowAntrianInfo(false);
+    } else if (date.getDay() === 6) { //saturday
+      setShowInformationSaturday(true);
+      setShowInformationSunday(false);
+      setShowSesi(false);
+      setShowAntrianInfo(false);
+    } else {
+      setShowInformationSunday(false);
+      setShowInformationSaturday(false);
+      setShowSesi(true);
+      setShowAntrianInfo(false);
+    }
+  };
+
+  useEffect(() => {
+    // Fungsi untuk mengambil data profil dari API
+    const fetchAntrian = async () => {
+      const [responseData, message, isSuccess] = await sendRequest(
+        "get",
+        "kunjungan/antrian?sesi=" + selectedSesi + "&tanggal=" + selectedDate
+      );
+
+      if (isSuccess) {
+        setAntrianInfo(responseData as number); 
+      }
+    };
+
+    if (selectedSesi) {
+      fetchAntrian();
+    }
+
+  }, [selectedSesi]);
+
+  const handleSesiChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedSesi(event.target.value);
+    setShowAntrianInfo(true);
+  }
 
   return (
     <main>
@@ -170,13 +200,41 @@ const KunjunganAddPage = () => {
           <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
               <div className="justify-between gap-5 my-5 md:grid-cols-2">
-                <RadioButtonGroup
+                <Input
+                  id="tanggalKunjungan"
+                  label="Tanggal Kunjungan"
+                  type="date"
+                  validation={{ required: "Mohon pilih tanggal kunjungan" }}
+                  onChange={handleDateChange}
+                />
+                {showInformationSunday && (
+                  <Typography variant="p2" className="my-2 text-gray-600" size="sm">
+                    Poliklinik hanya dapat melayani pada pukul 14:00 - 17:00 WITA di hari Minggu
+                  </Typography>
+                )}
+                {showInformationSaturday && (
+                  <Typography variant="p2" className="my-2 text-danger-core" size="sm">
+                    Poliklinik tidak dapat melayani di hari Sabtu
+                  </Typography>
+                )}
+                {showSesi && (<RadioButtonGroup
                   name="sesi"
                   options={sesi}
                   label="Sesi"
                   direction="horizontal"
+                  onChange={handleSesiChange}
                   validation={{ required: "Mohon pilih sesi" }}
-                />
+                />)}
+                {showAntrianInfo && antrianInfo === 0 && (
+                  <Typography variant="p2" className="my-2 text-gray-600" size="sm">
+                    Belum ada antrian di sesi {selectedSesi} pada {formatDateOnly(selectedDate)}
+                  </Typography>
+                )}
+                {showAntrianInfo && antrianInfo > 0 && (
+                  <Typography variant="p2" className="my-2 text-gray-600" size="sm">
+                    Sudah ada {antrianInfo} antrian di sesi {selectedSesi} pada {formatDateOnly(selectedDate)}
+                  </Typography>
+                )}
                 <Divider />
                 <Typography
                   variant="p1"
@@ -198,7 +256,7 @@ const KunjunganAddPage = () => {
                       {accounts.length > 0 ? (
                         accounts.map((account) => (
                           <option key={account.id} value={account.id}>
-                            {account.nip} -{" "}
+                            {account.listProfile[0].nik} -{" "}
                             {account.listProfile.find(
                               (profile) => profile.relative === 0
                             )?.name ?? account.username}
@@ -234,7 +292,7 @@ const KunjunganAddPage = () => {
                   <Typography variant="p1">
                     Tanggal Lahir:{" "}
                     {profile?.tanggalLahir
-                      ? formatDate(profile.tanggalLahir)
+                      ? formatDateOnly(profile.tanggalLahir)
                       : "-"}
                   </Typography>
                   <Typography variant="p1">
@@ -245,14 +303,6 @@ const KunjunganAddPage = () => {
                   </Typography>
                 </div>
                 <Divider />
-                {user.role !== "PASIEN" && (
-                  <Input
-                    id="tanggalKunjungan"
-                    label="Tanggal Kunjungan"
-                    type="date"
-                    validation={{ required: "Mohon pilih tanggal kunjungan" }}
-                  />
-                )}
                 {user.role !== "PASIEN" && (
                   <SelectInput
                     id="status"
@@ -275,9 +325,9 @@ const KunjunganAddPage = () => {
                 />
               </div>
               <div className="mt-5 flex items-center justify-center gap-4">
-                <Button type="submit">Submit</Button>
+                <Button type="submit">Simpan</Button>
                 <Link href={"/home"}>
-                  <Button variant="danger">Cancel</Button>
+                  <Button variant="danger">Batal</Button>
                 </Link>
               </div>
             </form>

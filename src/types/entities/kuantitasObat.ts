@@ -1,3 +1,9 @@
+import { Obat } from "./obat";
+import { RekamMedis } from "./rekamMedis";
+
 export interface KuantitasObat {
-    kuantitas: number;
+  id: string;
+  kuantitas: number;
+  obat: Obat;
+  rekamMedis: RekamMedis;
 }
