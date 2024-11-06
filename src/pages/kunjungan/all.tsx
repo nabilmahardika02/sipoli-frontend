@@ -38,19 +38,7 @@ const KunjunganAllPage = () => {
 
   useEffect(() => {
     setTitle("Daftar Kunjungan");
-
-    const fetchData = async () => {
-      if (!startDate && !endDate) {
-        const [responseData, message, isSuccess] = await sendRequest("get", "kunjungan/all");
-
-        if (isSuccess) {
-          setKunjungans(responseData as Kunjungan[]);
-        }
-      }
-    };
-
-    fetchData();
-  }, [setTitle, startDate, endDate]);
+  }, [setTitle]);
 
   const { handleSubmit } = methods;
 
@@ -58,7 +46,7 @@ const KunjunganAllPage = () => {
     const postData = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "get",
-        `kunjungan/all?startDate=${data.startDate}&endDate=${data.endDate}`
+        "kunjungan/all?startDate=" + data.startDate + "&endDate=" + data.endDate
       );
 
       if (isSuccess) {
@@ -79,9 +67,6 @@ const KunjunganAllPage = () => {
             Daftar Kunjungan
           </Typography>
         </div>
-        <Typography variant="h5" className="text-primary-1 hidden md:block">
-          Filter Kunjungan
-        </Typography>
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className="my-5">
             <div className="flex justify-center items-center max-md:flex-wrap gap-y-1 gap-x-2">
@@ -108,7 +93,18 @@ const KunjunganAllPage = () => {
         </div>
 
         <div>
-          {kunjungans && kunjungans.length > 0 ? (
+          {!startDate || !endDate ? (
+            <div className="w-full py-10 px-5 rounded-lg border border-gray-300 flex items-center justify-center">
+              <Typography
+                variant="p1"
+                weight="semibold"
+                className="text-gray-400"
+              >
+                Mohon pilih tanggal awal dan tanggal akhir untuk melihat
+                kunjungan
+              </Typography>
+            </div>
+          ) : kunjungans && kunjungans.length > 0 ? (
             <DataTable
               columns={kunjunganTables}
               getRowId={getRowIdKunjungan}
@@ -122,9 +118,7 @@ const KunjunganAllPage = () => {
                 weight="semibold"
                 className="text-gray-400"
               >
-                {startDate && endDate
-                  ? "Belum ada kunjungan untuk rentang tanggal yang dipilih"
-                  : "Belum ada kunjungan"}
+                Belum ada kunjungan
               </Typography>
             </div>
           )}
