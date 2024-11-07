@@ -14,6 +14,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { GoPlus } from "react-icons/go";
+import { MdNotes } from "react-icons/md";
 import { RiMedicineBottleFill } from "react-icons/ri";
 
 const ObatPage = () => {
@@ -51,20 +52,26 @@ const ObatPage = () => {
       <Head>
         <title>Daftar Obat</title>
       </Head>
-      <Typography variant="h4" className="mb-2 md:hidden">
+      <Typography variant="h4" className="mb-2 md:hidden text-primary-1">
         Daftar Obat
       </Typography>
-      {user?.role === "PERAWAT" && (
-        <div className="w-full flex items-center justify-start md:justify-end gap-4">
-          <Link href={"/obat/tambah"}>
-            <Button leftIcon={GoPlus}>Tambah Obat</Button>
-          </Link>
-          <Link href={"/obat/restok"}>
-            <Button leftIcon={RiMedicineBottleFill}>Restok</Button>
-          </Link>
-        </div>
-      )}
-      <Head>Daftar Obat</Head>
+      <div className="w-full flex flex-wrap items-center justify-start md:justify-end gap-4">
+        {user?.role === "PERAWAT" && (
+          <>
+            <Link href={"/obat/tambah"}>
+              <Button leftIcon={GoPlus}>Tambah Obat</Button>
+            </Link>
+            <Link href={"/obat/restok"}>
+              <Button leftIcon={RiMedicineBottleFill}>Restok</Button>
+            </Link>
+          </>
+        )}
+        <Link href={"/obat/permintaan-restock"}>
+          <Button variant="secondary" leftIcon={MdNotes}>
+            Pending Restok Input
+          </Button>
+        </Link>
+      </div>
       <section className="mt-5">
         {listObat ? (
           <DataTable

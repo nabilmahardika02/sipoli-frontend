@@ -2,7 +2,6 @@ export type AddObatForm = {
   namaObat: string;
   deskripsi: string;
   jenisSatuan: number;
-  totalStok: number;
 };
 
 export type UpdateObatForm = {
@@ -14,7 +13,9 @@ export type UpdateObatForm = {
 
 export type RestockForm = {
   tanggalPembelian: string;
+  tanggalKadaluarsa: string;
   qty: number;
+  hargaBeli: number;
 };
 
 export type RestockListForm = {
@@ -25,4 +26,6 @@ export type RestockListForm = {
 export type RestockListItem = {
   idObat: string | undefined;
   qty: number;
+  hargaBeli: number;
+  tanggalKadaluarsa: string | undefined;
 };
