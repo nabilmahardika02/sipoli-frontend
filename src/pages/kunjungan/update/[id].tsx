@@ -99,6 +99,16 @@ const KunjunganUpdatePage = () => {
       postData();
     };
 
+    useEffect(() => {
+        const date = new Date(kunjungan?.tanggal as string);
+        console.log(date);
+
+        if (date.getDay() > 0 && date.getDay() < 6) {
+            setShowSesi(true);
+        }
+
+    }, [kunjungan]);
+
     const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedDate = event.target.value;
         const date = new Date(selectedDate);
@@ -220,6 +230,15 @@ const KunjunganUpdatePage = () => {
                                     <option value="2">Selesai</option>
                                     <option value="3">Dibatalkan</option>
                                 </SelectInput>
+                            )}
+                            {user?.role === "PASIEN" && (
+                                <SelectInput
+                                id="status"
+                                defaultValue={kunjungan.status}
+                                className="hidden"
+                            >
+                                <option value="0">Belum Dilayani</option>
+                            </SelectInput>
                             )}
                             <TextArea
                                 id="keluhan"

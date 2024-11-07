@@ -69,8 +69,7 @@ const DetailObatPage = () => {
         "obat/restock",
         {
           idObat: router.query.id,
-          qty: data.qty,
-          tanggalPembelian: data.tanggalPembelian,
+          ...data,
         },
         true
       );
@@ -124,7 +123,7 @@ const DetailObatPage = () => {
                 <Link href={`/obat/detail/${router.query.id}/update`}>
                   <Button
                     className="max-md:aspect-square"
-                    size="sm"
+
                     leftIconClassName="max-md:text-md max-md:mr-0"
                     leftIcon={LuPencil}
                     variant="secondary"
@@ -134,7 +133,6 @@ const DetailObatPage = () => {
                 </Link>
                 <Button
                   className="max-md:aspect-square"
-                  size="sm"
                   leftIconClassName="max-md:text-md max-md:mr-0"
                   leftIcon={FaPlus}
                   onClick={() => setShowRestockModal(true)}
@@ -143,7 +141,6 @@ const DetailObatPage = () => {
                 </Button>
                 <Button
                   className="max-md:aspect-square"
-                  size="sm"
                   onClick={() => setShowDeleteModal(true)}
                   leftIconClassName="max-md:text-md max-md:mr-0"
                   leftIcon={IoTrashBin}
@@ -212,12 +209,13 @@ const DetailObatPage = () => {
           >
             Riwayat Restock
           </Typography>
-          <div className="w-full md:w-[50%]">
+          <div className="w-full md:w-[80%]">
             {obat.listRestockObat.length > 0 ? (
               <DataTable
                 columns={restockColumn}
                 getRowId={getRowIdRestock}
                 rows={obat.listRestockObat}
+                flexColumnIndexes={[0, 1, 2, 3]}
               />
             ) : (
               <Typography className="text-gray-500 p-4 rounded-lg border border-gray-300 w-full text-center">
@@ -244,19 +242,39 @@ const DetailObatPage = () => {
                   id="qty"
                   type="number"
                   placeholder="Kuantitas"
-                  validation={{ required: "Kuantitas restock wajib diisi" }}
+                  validation={{
+                    required: "Masukkan kuantitas restock",
+                    min: { value: 1, message: "Kuantitas invalid" },
+                  }}
                   helperText="Kuantitas yang diisi akan ditambahkan dengan stok saat ini"
                   label="Kuantitas"
                 />
                 <Input
+                  id="hargaBeli"
+                  type="number"
+                  placeholder="Harga Beli Satuan"
+                  validation={{
+                    required: "Masukkan harga beli",
+                    min: { value: 0, message: "Harga beli invalid" },
+                  }}
+                  label="Harga Beli Satuan"
+                />
+                <Input
                   id="tanggalPembelian"
                   type="date"
-                  placeholder="Kuantitas"
                   validation={{ required: "Tanggal pembelian wajib diisi" }}
                   label="Tanggal Pembelian"
                 />
+                <Input
+                  id="tanggalKadaluarsa"
+                  type="date"
+                  validation={{
+                    required: "Tanggal kadaluarsa obat wajib diisi",
+                  }}
+                  label="Tanggal Kadaluarsa"
+                />
                 <Button type="submit" className="max-md:w-full">
-                  Add
+                  Request
                 </Button>
               </form>
             </FormProvider>

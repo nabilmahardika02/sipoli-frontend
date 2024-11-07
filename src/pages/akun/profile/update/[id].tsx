@@ -84,16 +84,19 @@ const UpdateProfilePage = () => {
                 validation={{ required: "Nama wajib diisi" }}
                 defaultValue={profile.name}
               />
-              <SelectInput
+              {profile.relative > 0 && (<SelectInput
                 id="relative"
                 label="Hubungan"
                 placeholder="Pilih status"
                 validation={{ required: "Relative status wajib diisi" }}
-                defaultValue={profile.relative}
+                defaultValue={profile?.relative !== null 
+                  && profile?.relative !== undefined
+                  ? profile?.relative.toString()
+                  : ""}
               >
                 <option value="1">Pasangan</option>
                 <option value="2">Anak</option>
-              </SelectInput>
+              </SelectInput>)}
               <Input
                 id="tanggalLahir"
                 type="date"
@@ -113,6 +116,18 @@ const UpdateProfilePage = () => {
                   ? profile?.jenisKelamin.toString()
                   : ""}
               />
+              {profile.relative === 0 && (
+                <SelectInput
+                  id="relative"
+                  className="hidden"
+                  defaultValue={profile?.relative !== null 
+                    && profile?.relative !== undefined
+                    ? profile?.relative.toString()
+                    : ""}
+                >
+                  <option value="0"></option>
+                </SelectInput>
+              )}
             </div>
             <div className="mt-5 flex items-center gap-4">
               <Button type="submit">Submit</Button>
