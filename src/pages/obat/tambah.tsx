@@ -86,12 +86,6 @@ const AddObatPage = () => {
                 placeholder="Masukkan deskripsi obat"
                 maxLength={255}
               />
-              <Input
-                id="totalStok"
-                placeholder="0"
-                validation={{ required: "Jumlah stok obat wajib diisi" }}
-                label="Stok saat ini"
-              />
             </div>
             <div className="mt-5 flex items-center gap-4">
               <Button type="submit">Submit</Button>
