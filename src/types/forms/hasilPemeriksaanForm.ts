@@ -10,6 +10,14 @@ export type UpdateRujukanForm = {
   catatanRujukan: string;
 }
 
+// baru
+export type KuantitasObatRequest = {
+  obatId: string;
+  kuantitas: number;
+  petunjukPemakaian: string;
+};
+// baru
+
 export type HasilPemeriksaanForm = {
   dokterPengirim: string;
   dokter: string;
@@ -43,6 +51,8 @@ export type HasilPemeriksaanForm = {
   tindakan: string;
   deskripsi: string;
   rujukanRequestDTO: RujukanForm;
+  listKuantitasObat: KuantitasObatRequest[]; // baru
+  resepObatRujukan: string; // Tambahkan ini
 };
 
 export type HasilKunjunganForm = {

@@ -1,3 +1,4 @@
+// DataHasilPemeriksaan.tsx
 import Typography from "@/components/elements/Typography";
 import { HasilPemeriksaan } from "@/types/entities/kunjungan";
 import DataDiagnosaAkhir from "./DataDiagnosaAkhir";
@@ -5,6 +6,7 @@ import DataPemeriksaanFisik from "./DataPemeriksaanFisik";
 import DataRujukan from "./DataRujukan";
 import DataStatusPresent from "./DataStatusPresent";
 import DataUtama from "./DataUtama";
+import DataResepObat from "./DataResepObat"; // Tambahan
 import { Dispatch, SetStateAction } from "react";
 
 const DataHasilPemeriksaan = ({
@@ -44,7 +46,16 @@ const DataHasilPemeriksaan = ({
             trigger={trigger}
             setTrigger={setTrigger}
           />
-          <DataRujukan data={data.rujukan} />
+          <DataResepObat 
+            listKuantitasObat={data.listKuantitasObat || []} 
+            resepObatRujukan={data.resepObatRujukan?.deskripsi || ""} 
+          />
+          <DataRujukan
+            data={data.rujukan}
+            idPemeriksaan={data.id}
+            trigger={trigger}
+            setTrigger={setTrigger}
+          />
         </>
       ) : (
         <div className="w-full flex justify-center rounded-lg border border-gray-300 py-8 mt-3">

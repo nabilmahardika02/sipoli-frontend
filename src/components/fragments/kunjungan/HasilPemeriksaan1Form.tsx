@@ -45,11 +45,10 @@ const HasilPemeriksaan1Form = ({
       methods.setValue("dokterPengirim", hasilPemeriksaan.dokterPengirim);
       methods.setValue("dokter", hasilPemeriksaan.dokter);
       methods.setValue("keluhanUtama", hasilPemeriksaan.keluhanUtama);
-      methods.setValue(
-        "riwayatPenyakitSekarang",
-        hasilPemeriksaan.riwayatPenyakitSekarang
-      );
+      methods.setValue("riwayatPenyakitSekarang", hasilPemeriksaan.riwayatPenyakitSekarang);
       methods.setValue("kie", hasilPemeriksaan.kie);
+      methods.setValue("tanggalMasuk", hasilPemeriksaan.tanggalMasuk);
+      methods.setValue("tanggalKeluar", hasilPemeriksaan.tanggalKeluar);
     }
   }, [hasilPemeriksaan, methods]);
 
@@ -76,6 +75,8 @@ const HasilPemeriksaan1Form = ({
       keluhanUtama: data.keluhanUtama,
       riwayatPenyakitSekarang: data.riwayatPenyakitSekarang,
       kie: data.kie,
+      tanggalMasuk: data.tanggalMasuk,
+      tanggalKeluar: data.tanggalKeluar,
     }));
 
     setSection(2);
@@ -108,25 +109,41 @@ const HasilPemeriksaan1Form = ({
                 ))}
               </SelectInput>
               <Input
+                id="tanggalMasuk"
+                type="datetime-local"
+                placeholder="Tanggal Masuk"
+                label="Tanggal Masuk"
+              />
+              <Input
+                id="tanggalKeluar"
+                type="datetime-local"
+                placeholder="Tanggal Keluar"
+                label="Tanggal Keluar"
+              />
+              <Input
                 id="keluhanUtama"
                 placeholder="Keluhan Utama"
                 label="Keluhan Utama"
               />
               <Input
                 id="riwayatPenyakitSekarang"
-                placeholder="Riwayat Keluhan / Penyakit Saat Ini"
-                label="Riwayat Keluhan / Penyakit Saat Ini"
+                placeholder="Riwayat Penyakit dari Keluhan Utama"
+                label="Riwayat Penyakit dari Keluhan Utama"
               />
-              <Input id="kie" placeholder="Komunikasi Informasi dan Edukasi" label="Komunikasi Informasi dan Edukasi" />
+              <Input
+                id="kie"
+                placeholder="Komunikasi Informasi dan Edukasi"
+                label="Komunikasi Informasi dan Edukasi"
+              />
             </div>
             <div className="flex items-center gap-3">
               <Link href={"/kunjungan/" + router.query.id}>
                 <Button className="max-md:w-full" variant="danger">
-                  Cancel
+                  Batal
                 </Button>
               </Link>
               <Button type="submit" className="max-md:w-full">
-                Next
+                Berikutnya
               </Button>
             </div>
           </form>
@@ -139,3 +156,4 @@ const HasilPemeriksaan1Form = ({
 };
 
 export default HasilPemeriksaan1Form;
+

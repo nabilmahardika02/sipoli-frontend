@@ -5,6 +5,7 @@ import Typography from "@/components/elements/Typography";
 import ModalLayout from "@/components/layouts/ModalLayout";
 import sendRequest from "@/lib/getApi";
 import { Account } from "@/types/entities/account";
+import useAuthStore from "@/store/useAuthStore"; // supaya pasien & admin gak bisa edit
 import { HasilPemeriksaan, Kunjungan } from "@/types/entities/kunjungan";
 import { UpdateHasilKunjunganForm } from "@/types/forms/hasilPemeriksaanForm";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
@@ -22,6 +23,7 @@ const DataUtama = ({
   trigger: boolean;
   setTrigger: Dispatch<SetStateAction<boolean>>;
 }) => {
+  const user = useAuthStore.useUser(); // supaya pasien & admin gak bisa edit
   const [showModal, setShowModal] = useState(false);
 
   const methods = useForm<UpdateHasilKunjunganForm>({
@@ -62,12 +64,14 @@ const DataUtama = ({
         <div className="w-1 h-5 bg-primary-1"></div>
         <Typography className="text-primary-1 font-semibold">
           Data Pemeriksaan Utama
-        </Typography>
-        <IconButton
-          icon={LuPencil}
-          variant="primary"
-          onClick={() => setShowModal(true)}
-        />
+          </Typography>
+        {["DOKTER", "PERAWAT"].includes(user?.role) && ( // supaya pasien & admin gak bisa edit
+          <IconButton
+            icon={LuPencil}
+            variant="primary"
+            onClick={() => setShowModal(true)}
+          />
+        )}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
         <div>
@@ -118,7 +122,7 @@ const DataUtama = ({
                   <Input id="kie" placeholder="Komunikasi Informasi dan Edukasi" label="Komunikasi Informasi dan Edukasi" />
                 </div>
                 <Button type="submit" className="max-md:w-full">
-                  Save
+                  Simpan
                 </Button>
               </form>
             </FormProvider>

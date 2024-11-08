@@ -3,6 +3,7 @@ import DataKebiasaan from "@/components/fragments/pasien/DataKebiasaan";
 import DataRekamMedis from "@/components/fragments/pasien/DataRekamMedis";
 import DataRiwayatKeluarga from "@/components/fragments/pasien/DataRiwayatKeluarga";
 import DataRiwayatPenyakit from "@/components/fragments/pasien/DataRiwayatPenyakit";
+import DataDaftarRekamMedis from "@/components/fragments/pasien/DataDaftarRekamMedis";
 import withAuth from "@/components/hoc/withAuth";
 import { useDocumentTitle } from "@/context/Title";
 import { checkRole } from "@/lib/checkRole";
@@ -67,6 +68,11 @@ const PasienPage = () => {
             setTrigger={setTrigger}
           />
           <DataRiwayatKeluarga
+            pasien={pasien}
+            trigger={trigger}
+            setTrigger={setTrigger}
+          />
+            <DataDaftarRekamMedis
             pasien={pasien}
             trigger={trigger}
             setTrigger={setTrigger}

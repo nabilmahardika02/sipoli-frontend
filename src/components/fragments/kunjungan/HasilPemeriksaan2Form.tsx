@@ -86,31 +86,40 @@ const HasilPemeriksaan2Form = ({
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} className="mt-5 items-end">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
-            <Input id="suhu" type="number" placeholder="Temperature" label="Temperature" />
-            <Input id="tensi" placeholder="Blood Pressure" label="Blood Pressure" />
+            <Input 
+              id="suhu"
+              type="number"
+              placeholder="Temperature"
+              label="Temperature (°C)"
+            />
+            <Input
+              id="tensi"
+              placeholder="Blood Pressure"
+              label="Blood Pressure (mmHg)"
+            />
             <Input
               id="meanArteri"
               type="number"
               placeholder="Mean Arterial Pressure"
-              label="Mean Arterial Pressure"
+              label="Mean Arterial Pressure (mmHg)"
             />
             <Input
               id="respiratoryRate"
               type="number"
               placeholder="Respiratory Rate"
-              label="Respiratory Rate"
+              label="Respiratory Rate (per minute)"
             />
             <Input
               id="heartRate"
               type="number"
               placeholder="Heart Rate"
-              label="Heart Rate"
+              label="Heart Rate (bpm)"
             />
             <Input
               id="oxygenSaturation"
               type="number"
               placeholder="Oxygen Saturation"
-              label="Oxygen Saturation"
+              label="Oxygen Saturation (%)"
             />
             <Input id="kesadaran" placeholder="Kesadaran" label="Kesadaran" />
             <Input id="eye" type="number" placeholder="Eye" label="Eye" />
@@ -133,10 +142,10 @@ const HasilPemeriksaan2Form = ({
               variant="danger"
               onClick={() => handlePrev()}
             >
-              Previous
+              Kembali
             </Button>
             <Button type="submit" className="max-md:w-full">
-              Next
+              Berikutnya
             </Button>
           </div>
         </form>

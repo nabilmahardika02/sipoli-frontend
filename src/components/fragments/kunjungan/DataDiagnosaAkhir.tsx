@@ -4,6 +4,7 @@ import IconButton from "@/components/elements/IconButton";
 import Typography from "@/components/elements/Typography";
 import ModalLayout from "@/components/layouts/ModalLayout";
 import sendRequest from "@/lib/getApi";
+import useAuthStore from "@/store/useAuthStore"; // supaya pasien & admin gak bisa edit
 import { DiagnosaAkhir } from "@/types/entities/kunjungan";
 import { UpdateDiagnosaAkhirForm } from "@/types/forms/hasilPemeriksaanForm";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
@@ -21,6 +22,7 @@ const DataDiagnosaAkhir = ({
   trigger: boolean;
   setTrigger: Dispatch<SetStateAction<boolean>>;
 }) => {
+  const user = useAuthStore.useUser(); // supaya pasien & admin gak bisa edit
   const [showModal, setShowModal] = useState(false);
 
   const methods = useForm<UpdateDiagnosaAkhirForm>({
@@ -64,11 +66,13 @@ const DataDiagnosaAkhir = ({
         <Typography className="text-primary-1 font-semibold">
           Diagnosa Akhir
         </Typography>
-        <IconButton
-          icon={LuPencil}
-          variant="primary"
-          onClick={() => setShowModal(true)}
-        />
+        {["DOKTER", "PERAWAT"].includes(user?.role) && ( // supaya pasien & admin gak bisa edit
+          <IconButton
+            icon={LuPencil}
+            variant="primary"
+            onClick={() => setShowModal(true)}
+          />
+        )}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
         <div>
@@ -108,7 +112,7 @@ const DataDiagnosaAkhir = ({
         <ModalLayout setShowModal={setShowModal}>
           <div className="bg-white rounded-xl p-5 w-full md:w-[80%]">
             <Typography variant="h6" className="text-primary-1">
-              Ubah Data Status Present
+              Ubah Data Diagnosa Akhir
             </Typography>
             <FormProvider {...methods}>
               <form
@@ -126,7 +130,7 @@ const DataDiagnosaAkhir = ({
                   <Input id="tindakan" placeholder="Tindakan" label="Tindakan" />
                 </div>
                 <Button type="submit" className="max-md:w-full">
-                  Save
+                  Simpan
                 </Button>
               </form>
             </FormProvider>

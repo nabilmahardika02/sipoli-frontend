@@ -3,7 +3,8 @@ import HasilPemeriksaan1Form from "@/components/fragments/kunjungan/HasilPemerik
 import HasilPemeriksaan2Form from "@/components/fragments/kunjungan/HasilPemeriksaan2Form";
 import HasilPemeriksaan3Form from "@/components/fragments/kunjungan/HasilPemeriksaan3Form";
 import HasilPemeriksaan4Form from "@/components/fragments/kunjungan/HasilPemeriksaan4Form";
-import HasilPemeriksaan5Form from "@/components/fragments/kunjungan/HasilPemeriksaan5Form";
+import HasilPemeriksaan5Form from "@/components/fragments/kunjungan/HasilPemeriksaan5Form";  // Form baru untuk input obat dan resep rujukan
+import HasilPemeriksaan6Form from "@/components/fragments/kunjungan/HasilPemeriksaan6Form";  // Form yang sebelumnya ada di Section 5
 import withAuth from "@/components/hoc/withAuth";
 import { useDocumentTitle } from "@/context/Title";
 import sendRequest from "@/lib/getApi";
@@ -18,48 +19,49 @@ const AddHasilPemeriksaanPage = () => {
   const router = useRouter();
   const [section, setSection] = useState(1);
   const [kunjungan, setKunjungan] = useState<Kunjungan>();
-  const [hasilPemeriksaanFields, setHasilPemeriksaanFields] =
-    useState<HasilPemeriksaanForm>({
-      dokterPengirim: "",
-      dokter: "",
-      tanggalMasuk: "",
-      tanggalKeluar: "",
-      keluhanUtama: "",
-      riwayatPenyakitSekarang: "",
-      kie: "",
-      tensi: "",
-      suhu: 0,
-      meanArteri: 0,
-      respiratoryRate: 0,
-      heartRate: 0,
-      oxygenSaturation: 0,
-      kesadaran: "",
-      eye: 0,
-      verbal: 0,
-      motorik: 0,
-      mata: "",
-      telinga: "",
-      hidung: "",
-      tonsil: "",
-      faring: "",
-      cor: "",
-      pulmo: "",
-      abd: "",
-      ext: "",
-      icd10: "",
-      diagnosaKerja: "",
-      rencana: "",
-      tindakan: "",
-      deskripsi: "",
-      rujukanRequestDTO: {
-        tujuanRujukan: "",
-        dokterRujukan: "",
-        catatanRujukan: "",
-      },
-    });
+  const [hasilPemeriksaanFields, setHasilPemeriksaanFields] = useState<HasilPemeriksaanForm>({
+    dokterPengirim: "",
+    dokter: "",
+    tanggalMasuk: "",
+    tanggalKeluar: "",
+    keluhanUtama: "",
+    riwayatPenyakitSekarang: "",
+    kie: "",
+    tensi: "",
+    suhu: 0,
+    meanArteri: 0,
+    respiratoryRate: 0,
+    heartRate: 0,
+    oxygenSaturation: 0,
+    kesadaran: "",
+    eye: 0,
+    verbal: 0,
+    motorik: 0,
+    mata: "",
+    telinga: "",
+    hidung: "",
+    tonsil: "",
+    faring: "",
+    cor: "",
+    pulmo: "",
+    abd: "",
+    ext: "",
+    icd10: "",
+    diagnosaKerja: "",
+    rencana: "",
+    tindakan: "",
+    deskripsi: "",
+    rujukanRequestDTO: {
+      tujuanRujukan: "",
+      dokterRujukan: "",
+      catatanRujukan: "",
+    },
+    listKuantitasObat: [],
+    resepObatRujukan: "",
+  });
 
   useEffect(() => {
-    setTitle("Add Hasil Pemeriksaan");
+    setTitle("Tambah Hasil Pemeriksaan");
   }, [setTitle]);
 
   useEffect(() => {
@@ -118,6 +120,14 @@ const AddHasilPemeriksaanPage = () => {
           )}
           {section === 5 && (
             <HasilPemeriksaan5Form
+              hasilPemeriksaan={hasilPemeriksaanFields}
+              setHasilPemeriksaan={setHasilPemeriksaanFields}
+              setSection={setSection}
+              kunjungan={kunjungan}
+            />
+          )}
+          {section === 6 && (
+            <HasilPemeriksaan6Form
               hasilPemeriksaan={hasilPemeriksaanFields}
               setHasilPemeriksaan={setHasilPemeriksaanFields}
               setSection={setSection}
