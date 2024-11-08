@@ -6,7 +6,7 @@ export interface Kunjungan {
   id: string;
   tanggal: string;
   dokterPengirim: string;
-  dokter: string;
+  dokter: Dokter;
   tanggalMasuk: string;
   tanggalKeluar: string;
   keluhan: string;
@@ -84,4 +84,18 @@ export interface KuantitasObat {
   obat: Obat;  // Direct reference to the Obat entity
   kuantitas: number;
   petunjukPemakaian: string;
+}
+export interface Dokter {
+  id: string;
+  name: string;
+  noHp: string;
+  tanggalLahir: string;
+  jenisKelamin: boolean;
+  nik: string;
+  noRekamMedis: string;
+  relative: number;
+  isActive: boolean;
+  isEmployee: boolean;
+  createdAt: string;
+  updatedAt: string;
 }

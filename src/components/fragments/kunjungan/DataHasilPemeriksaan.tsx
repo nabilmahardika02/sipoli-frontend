@@ -8,6 +8,7 @@ import DataStatusPresent from "./DataStatusPresent";
 import DataUtama from "./DataUtama";
 import DataResepObat from "./DataResepObat"; // Tambahan
 import { Dispatch, SetStateAction } from "react";
+import DataResepObatRujukan from "./DataResepObatRujukan";
 
 const DataHasilPemeriksaan = ({
   data,

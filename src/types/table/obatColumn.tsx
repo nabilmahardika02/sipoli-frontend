@@ -1,5 +1,5 @@
 import Button from "@/components/elements/Button";
-import { formatDate, formatDateOnly, getSatuanObat } from "@/lib/formater";
+import { formatDate, formatDateOnly, getCurrency, getSatuanObat } from "@/lib/formater";
 import {
   GridColDef,
   GridRowIdGetter,
@@ -35,7 +35,7 @@ export const obatTableColumn: GridColDef[] = [
     field: "updatedAt",
     headerName: "Last Update",
     headerAlign: "center",
-    width: 200,
+    width: 250,
     align: "center",
     valueGetter: (value, row, column, apiRef) => `${formatDate(value)}`,
   },
@@ -62,6 +62,14 @@ export const obatTableColumn: GridColDef[] = [
 
 export const restockColumn: GridColDef[] = [
   {
+    field: "createdAt",
+    headerName: "Tanggal Input",
+    headerAlign: "center",
+    width: 200,
+    align: "center",
+    valueGetter: (value, row, column, apiRef) => `${formatDateOnly(value)}`,
+  },
+  {
     field: "tanggalPembelian",
     headerName: "Tanggal Pembelian",
     headerAlign: "center",
@@ -70,10 +78,67 @@ export const restockColumn: GridColDef[] = [
     valueGetter: (value, row, column, apiRef) => `${formatDateOnly(value)}`,
   },
   {
-    field: "kuantitas",
-    headerName: "Kuantitas",
+    field: "tanggalKadaluarsa",
+    headerName: "Tanggal Kadaluarsa",
     headerAlign: "center",
     width: 200,
+    align: "center",
+    valueGetter: (value, row, column, apiRef) => `${formatDateOnly(value)}`,
+  },
+  {
+    field: "kuantitas",
+    headerName: "Kuantitas Pembelian",
+    headerAlign: "center",
+    width: 200,
+    align: "center",
+  },
+];
+
+export const pendingRestockColumn: GridColDef[] = [
+  {
+    field: "namaObat",
+    headerName: "Nama Obat",
+    headerAlign: "center",
+    width: 180,
+    align: "center",
+  },
+  {
+    field: "hargaBeli",
+    headerName: "Harga Beli",
+    headerAlign: "center",
+    width: 180,
+    align: "center",
+    valueGetter: (value, row, column, apiRef) => `${getCurrency(value)}`,
+  },
+  {
+    field: "createdAt",
+    headerName: "Tanggal Input",
+    headerAlign: "center",
+    width: 180,
+    align: "center",
+    valueGetter: (value, row, column, apiRef) => `${formatDateOnly(value)}`,
+  },
+  {
+    field: "tanggalPembelian",
+    headerName: "Tanggal Pembelian",
+    headerAlign: "center",
+    width: 180,
+    align: "center",
+    valueGetter: (value, row, column, apiRef) => `${formatDateOnly(value)}`,
+  },
+  {
+    field: "tanggalKadaluarsa",
+    headerName: "Tanggal Kadaluarsa",
+    headerAlign: "center",
+    width: 180,
+    align: "center",
+    valueGetter: (value, row, column, apiRef) => `${formatDateOnly(value)}`,
+  },
+  {
+    field: "kuantitas",
+    headerName: "Kuantitas Pembelian",
+    headerAlign: "center",
+    width: 100,
     align: "center",
   },
 ];

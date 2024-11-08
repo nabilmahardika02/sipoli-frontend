@@ -1,5 +1,6 @@
 export interface Profile {
   id: string;
+  accountId: string | null;
   name: string;
   noHp: string;
   tanggalLahir: string;

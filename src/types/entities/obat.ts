@@ -13,5 +13,19 @@ export interface Obat {
 export interface RestockObat {
   id: string;
   tanggalPembelian: string;
+  tanggalKadaluarsa: string;
   kuantitas: number;
+  hargaBeli: string;
+  isApproved: number;
+}
+
+export interface RestockObatResponse {
+  id: string;
+  tanggalPembelian: string; 
+  tanggalKadaluarsa: string;
+  hargaBeli: number;
+  kuantitas: number;
+  isApproved: number;
+  namaObat: string;
+  createdAt: string; 
 }

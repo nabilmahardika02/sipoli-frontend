@@ -56,6 +56,8 @@ const RestockPage = () => {
         {
           idObat: undefined,
           qty: 0,
+          hargaBeli: 0,
+          tanggalKadaluarsa: undefined,
         },
       ],
     }));
@@ -87,6 +89,40 @@ const RestockPage = () => {
     updatedRestockItemList[i] = {
       ...updatedRestockItemList[i],
       qty: Number(event.target.value),
+    };
+
+    setRestockListValue({
+      ...restockListValue,
+      restockItemList: updatedRestockItemList,
+    });
+  };
+
+  const handleChangeHargaBeli = (
+    i: number,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const updatedRestockItemList = [...restockListValue.restockItemList];
+
+    updatedRestockItemList[i] = {
+      ...updatedRestockItemList[i],
+      hargaBeli: Number(event.target.value),
+    };
+
+    setRestockListValue({
+      ...restockListValue,
+      restockItemList: updatedRestockItemList,
+    });
+  };
+
+  const handleChangeTanggalKadaluarsa = (
+    i: number,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const updatedRestockItemList = [...restockListValue.restockItemList];
+
+    updatedRestockItemList[i] = {
+      ...updatedRestockItemList[i],
+      tanggalKadaluarsa: event.target.value,
     };
 
     setRestockListValue({
@@ -144,12 +180,14 @@ const RestockPage = () => {
             </Typography>
             <Button onClick={handleAddRow}>Tambah Input Pembelian</Button>
           </div>
-          <div className="rounded-lg overflow-y-hidden overflow-x-auto mt-4 shadow-lg">
-            <table className="w-full rounded-xl border border-gray-300">
+          <div className="rounded-lg overflow-y-hidden overflow-x-auto mt-4 pb-4">
+            <table className="w-full rounded-xl border border-gray-300 shadow-lg">
               <thead className="bg-primary-1 text-white">
                 <tr className="font-bold">
-                  <th className="text-center px-5 py-2">Obat</th>
+                  <th className="text-center px-5 py-2 md:w-[30%]">Obat</th>
                   <th className="text-center px-5 py-2">Kuantitas</th>
+                  <th className="text-center px-5 py-2">Harga Beli Satuan</th>
+                  <th className="text-center px-5 py-2">Tanggal Kadaluarsa</th>
                 </tr>
               </thead>
               <tbody className="align-top">
@@ -183,6 +221,32 @@ const RestockPage = () => {
                         onChange={(
                           event: React.ChangeEvent<HTMLInputElement>
                         ) => handleChangeQtyObat(index, event)}
+                      />
+                    </td>
+                    <td className="px-4 py-4 border">
+                      <Input
+                        id={"hargaBeli" + index}
+                        placeholder="Harga Beli"
+                        validation={{
+                          required: "Harga beli wajib diisi",
+                        }}
+                        type="number"
+                        onChange={(
+                          event: React.ChangeEvent<HTMLInputElement>
+                        ) => handleChangeHargaBeli(index, event)}
+                      />
+                    </td>
+                    <td className="px-4 py-4 border">
+                      <Input
+                        id={"tanggalKadaluarsa" + index}
+                        placeholder="Tanggal Kadaluarsa"
+                        validation={{
+                          required: "Tanggal kadaluarsa wajib diisi",
+                        }}
+                        type="date"
+                        onChange={(
+                          event: React.ChangeEvent<HTMLInputElement>
+                        ) => handleChangeTanggalKadaluarsa(index, event)}
                       />
                     </td>
                   </tr>

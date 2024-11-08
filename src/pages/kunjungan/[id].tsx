@@ -67,7 +67,16 @@ const KunjunganPage = () => {
                   </Link>
                 </div>
               )}
-              {kunjungan.status === 0 && (
+              {user?.role === "PASIEN" && kunjungan.status === 0 && (
+                <div className="flex justify-end">
+                  <Link href={`/kunjungan/update/${kunjungan.id}`}>
+                    <Button variant="secondary" leftIcon={LuPencil}>
+                      Ubah Data Kunjungan
+                    </Button>
+                  </Link>
+                </div>
+              )}
+              {user?.role !== "PASIEN" && kunjungan.status < 2 && (
                 <div className="flex justify-end">
                   <Link href={`/kunjungan/update/${kunjungan.id}`}>
                     <Button variant="secondary" leftIcon={LuPencil}>
