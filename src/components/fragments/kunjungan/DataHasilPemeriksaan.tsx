@@ -49,7 +49,7 @@ const DataHasilPemeriksaan = ({
           />
           <DataResepObat 
             listKuantitasObat={data.listKuantitasObat || []} 
-            resepObatRujukan={data.resepObatRujukan?.deskripsi || ""} 
+            resepObatRujukan={data.resepObatRujukan} 
           />
           <DataRujukan
             data={data.rujukan}

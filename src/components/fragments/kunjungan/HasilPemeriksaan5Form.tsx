@@ -2,12 +2,13 @@ import Button from "@/components/elements/Button";
 import Input from "@/components/elements/forms/Input";
 import SelectInput from "@/components/elements/forms/SelectInput";
 import Typography from "@/components/elements/Typography";
-import { HasilPemeriksaanForm, KuantitasObatRequest } from "@/types/forms/hasilPemeriksaanForm";
+import { HasilPemeriksaanForm } from "@/types/forms/hasilPemeriksaanForm";
 import { Obat } from "@/types/entities/obat";
 import { Kunjungan } from "@/types/entities/kunjungan";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useForm, FormProvider, SubmitHandler, useFieldArray } from "react-hook-form";
 import sendRequest from "@/lib/getApi";
+import TextArea from "@/components/elements/forms/TextArea";
 
 const HasilPemeriksaan5Form = ({
   hasilPemeriksaan,
@@ -23,12 +24,12 @@ const HasilPemeriksaan5Form = ({
   const methods = useForm<HasilPemeriksaanForm>({
     mode: "onTouched",
     defaultValues: {
-      listKuantitasObat: hasilPemeriksaan.listKuantitasObat || [{ obatId: "", kuantitas: 0, petunjukPemakaian: "" }],
-      resepObatRujukan: hasilPemeriksaan.resepObatRujukan || ""
+      listKuantitasObat: hasilPemeriksaan.listKuantitasObat || [{ obatId: "", namaObat: "", kuantitas: 0, petunjukPemakaian: "" }],
+      resepObatRujukan: hasilPemeriksaan.resepObatRujukan || { deskripsi: "" } // Ubah ke objek
     }
   });
 
-  const { handleSubmit, getValues, control } = methods;
+  const { handleSubmit, getValues, control, setValue } = methods;
   const { fields, append, remove } = useFieldArray({
     control,
     name: "listKuantitasObat"
@@ -47,7 +48,7 @@ const HasilPemeriksaan5Form = ({
   useEffect(() => {
     if (hasilPemeriksaan) {
       methods.setValue("listKuantitasObat", hasilPemeriksaan.listKuantitasObat || []);
-      methods.setValue("resepObatRujukan", hasilPemeriksaan.resepObatRujukan || "");
+      methods.setValue("resepObatRujukan", hasilPemeriksaan.resepObatRujukan || { deskripsi: "" });
     }
   }, [hasilPemeriksaan, methods]);
 
@@ -72,6 +73,13 @@ const HasilPemeriksaan5Form = ({
     setSection(4); // Kembali ke section sebelumnya
   };
 
+  const handleObatChange = (index: number, obatId: string) => {
+    const selectedObat = obatList.find(obat => obat.id === obatId);
+    if (selectedObat) {
+      setValue(`listKuantitasObat.${index}.namaObat`, selectedObat.namaObat);
+    }
+  };
+
   return (
     <section>
       <Typography variant="h7" className="text-primary-1">
@@ -86,7 +94,9 @@ const HasilPemeriksaan5Form = ({
                   id={`listKuantitasObat.${index}.obatId`}
                   placeholder="Pilih Obat"
                   label={`Obat ${index + 1}`}
-                  {...methods.register(`listKuantitasObat.${index}.obatId` as const)}
+                  {...methods.register(`listKuantitasObat.${index}.obatId` as const, {
+                    onChange: (e) => handleObatChange(index, e.target.value) // Set namaObat otomatis saat obat dipilih
+                  })}
                 >
                   {obatList.map((obat) => (
                     <option key={obat.id} value={obat.id}>
@@ -117,16 +127,16 @@ const HasilPemeriksaan5Form = ({
           </div >
           <Button 
             variant="primary" 
-            onClick={() => append({ obatId: "", kuantitas: 0, petunjukPemakaian: "" })} 
+            onClick={() => append({ obatId: "", namaObat: "", kuantitas: 0, petunjukPemakaian: "" })} 
             className="mb-4"
           >
             Tambah Obat
           </Button>
-          <Input
-            id="resepObatRujukan"
+          <TextArea
+            id="resepObatRujukan.deskripsi" // Ubah ke objek
             placeholder="Resep Obat di Luar Klinik"
             label="Resep Obat di Luar Klinik"
-            {...methods.register("resepObatRujukan")}
+            {...methods.register("resepObatRujukan.deskripsi" as const)} // Update untuk akses ke deskripsi
           />
           <div className="flex items-center gap-3 mt-5">
             <Button

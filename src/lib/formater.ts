@@ -12,20 +12,28 @@ export function formatDateOnly(dateString: string): string {
   }
   
   export function formatDate(isoDate: string): string {
-  const date = new Date(isoDate);
+    const date = new Date(isoDate);
   
-  const options: Intl.DateTimeFormatOptions = {
-  weekday: "long",
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-  };
+    const dateOptions: Intl.DateTimeFormatOptions = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    const timeOptions: Intl.DateTimeFormatOptions = {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+      timeZone: "Asia/Jakarta", // Pastikan menggunakan zona waktu lokal Anda
+    };
   
-  const formattedDate = date.toLocaleDateString("id-ID", options);
-  const formattedTime = date.toTimeString().split(" ")[0]; // Get only the time (HH:MM:SS)
+    const formattedDate = date.toLocaleDateString("id-ID", dateOptions);
+    const formattedTime = date.toLocaleTimeString("id-ID", timeOptions);
   
-  return `${formattedDate} | ${formattedTime}`;
+    return `${formattedDate} | ${formattedTime}`;
   }
+  
+  
   
   export function getSatuanObat(value: number): string {
   if (value === 0) {
