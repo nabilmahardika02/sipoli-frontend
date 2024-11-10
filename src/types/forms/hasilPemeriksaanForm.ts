@@ -7,7 +7,7 @@ export type RujukanForm = {
 // baru
 export type KuantitasObatRequest = {
   obatId: string;
-  namaObat: string; // Tambahkan namaObat di sini
+  // namaObat: string; // Tambahkan namaObat di sini
   kuantitas: number;
   petunjukPemakaian: string;
 };

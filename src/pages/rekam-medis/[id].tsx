@@ -33,8 +33,6 @@ const KunjunganPage = () => {
         `/kunjungan?id=${router.query.id}`
       );
 
-      console.log(responseData);
-
       if (isSuccess) {
         setKunjungan(responseData as Kunjungan);
       }
@@ -52,45 +50,47 @@ const KunjunganPage = () => {
       </Head>
       {kunjungan ? (
         <>
-          <section className="p-5 md:px-7 rounded-xl bg-white border border-gray-200 shadow-md">
-          <Typography variant="h6" className="text-primary-1">
-              Detail Kunjungan
-            </Typography>
-            <Divider />
-            <div className="flex justify-center md:justify-end gap-2 my-2">
-            </div>
-            <Divider className="md:hidden my-2" />
-            <DataKunjungan kunjungan={kunjungan} />
-          </section>
+<section className=" bg-white">
+  <div className="flex justify-between items-center">
+    <Typography variant="h6" className="text-primary-1">
+      Detail Kunjungan
+    </Typography>
+    {(user?.role === "PASIEN") && (
+      <Link href={`/pasien/detail/${kunjungan.profile.id}`}>
+        <Button variant="primary">Detail Pasien</Button>
+      </Link>
+    )}
+  </div>
+  <Divider />
+  <DataKunjungan kunjungan={kunjungan} />
+</section>
 
-          {user?.role !== "OPERATOR" && <section className="p-5 md:px-7 rounded-xl bg-white border border-gray-200 shadow-md">
-            <Typography variant="h6" className="text-primary-1">
-              Hasil Pemeriksaan
-            </Typography>
-            <Divider />
-            {(user?.role === "DOKTER" || user?.role === "PERAWAT") && kunjungan.hasilPemeriksaan == null && kunjungan.status < 3 ? (
-              <div className="w-full flex justify-center rounded-lg border border-gray-300 py-8 mt-3">
+
+          {user?.role !== "OPERATOR" && (
+            <section className=" bg-white">
+              <Typography variant="h6" className="text-primary-1">
+                Hasil Pemeriksaan
+              </Typography>
+              <Divider />
+              {(user?.role === "DOKTER" || user?.role === "PERAWAT") && !kunjungan.hasilPemeriksaan && kunjungan.status < 3 ? (
                 <Link
-                  href={"/kunjungan/hasil-pemeriksaan/tambah/" + kunjungan.id}
-                  className="flex flex-col items-center group"
+                  href={`/kunjungan/hasil-pemeriksaan/tambah/${kunjungan.id}`}
+                  className="w-full flex flex-col items-center py-8 mt-3 group"
                 >
                   <FaCirclePlus className="text-gray-400 text-3xl group-hover:text-gray-500" />
-                  <Typography
-                    variant="h7"
-                    className="text-gray-400 mt-4 group-hover:text-gray-500"
-                  >
+                  <Typography variant="h7" className="text-gray-400 mt-4 group-hover:text-gray-500">
                     Tambah Hasil Pemeriksaan
                   </Typography>
                 </Link>
-              </div>
-            ) : (
-              <DataHasilPemeriksaan
-                data={kunjungan.hasilPemeriksaan}
-                trigger={trigger}
-                setTrigger={setTrigger}
-              />
-            )}
-          </section>}
+              ) : (
+                <DataHasilPemeriksaan
+                  data={kunjungan.hasilPemeriksaan}
+                  trigger={trigger}
+                  setTrigger={setTrigger}
+                />
+              )}
+            </section>
+          )}
         </>
       ) : (
         <LoadingDiv />

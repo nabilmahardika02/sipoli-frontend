@@ -20,7 +20,7 @@ const DataResepObat = ({ listKuantitasObat, resepObatRujukan }: { listKuantitasO
                 Obat
               </Typography>
               <Typography className="text-primary-1">
-                {kuantitasObat.namaObat || "-"}
+                {kuantitasObat.obat.namaObat || "-"}
               </Typography>
 
               <Typography variant="p2" weight="semibold" className="text-gray-400 mt-2">
