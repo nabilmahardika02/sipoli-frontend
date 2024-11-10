@@ -10,8 +10,8 @@ import { checkRole } from "@/lib/checkRole";
 import DataTable from "@/lib/datatable";
 import sendRequest from "@/lib/getApi";
 import useAuthStore from "@/store/useAuthStore";
-import { RestockObatResponse } from "@/types/entities/obat";
-import { pendingRestockColumn } from "@/types/table/obatColumn";
+import { Obat } from "@/types/entities/obat";
+import { obatTableColumn } from "@/types/table/obatColumn";
 import { GridColDef } from "@mui/x-data-grid";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -19,22 +19,21 @@ import { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { IoClose } from "react-icons/io5";
 
-const RestockRequestPage = () => {
+const DeleteRequestPage = () => {
   const { setTitle } = useDocumentTitle();
   const user = useAuthStore.useUser();
   const router = useRouter();
 
-  const [listRestock, setListRestock] = useState<RestockObatResponse[]>();
-  const [listRejected, setListRejected] = useState<RestockObatResponse[]>();
+  const [listObat, setListObat] = useState<Obat[]>();
   const [rejectModal, setRejectModal] = useState(false);
   const [approveModal, setApproveModal] = useState(false);
-
   const [trigger, setTrigger] = useState(false);
-  const [rejectId, setRejectId] = useState<string>();
-  const [approveId, setApproveId] = useState<string>();
+
+  const [selectedId, setSelectedId] = useState<string>();
+  const [isApprove, setIsApprove] = useState<boolean>();
 
   useEffect(() => {
-    setTitle("Persetujuan Restock Obat");
+    setTitle("Persetujuan Hapus Obat");
   }, [setTitle]);
 
   if (!checkRole(["OPERATOR", "DOKTER", "PERAWAT"])) {
@@ -45,40 +44,22 @@ const RestockRequestPage = () => {
     const fetchData = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "get",
-        "obat/restock/pending"
+        "obat/delete-request"
       );
 
       if (isSuccess) {
-        setListRestock(responseData as RestockObatResponse[]);
+        setListObat(responseData as Obat[]);
       }
     };
 
     fetchData();
   }, [trigger]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const [responseData, message, isSuccess] = await sendRequest(
-        "get",
-        "obat/restock/rejected"
-      );
-
-      if (isSuccess) {
-        setListRejected(responseData as RestockObatResponse[]);
-      }
-    };
-
-    fetchData();
-  }, [trigger]);
-
-  const approveRestock = async (isApproveParam: boolean) => {
+  const approveDelete = async () => {
     const [responseData, message, isSuccess] = await sendRequest(
       "put",
-      "obat/approve-restock",
-      {
-        idRestock: isApproveParam ? approveId : rejectId,
-        isApprove: isApproveParam,
-      },
+      `obat/delete/${selectedId}/approval?is-approve=${isApprove}`,
+      null,
       true
     );
 
@@ -90,10 +71,10 @@ const RestockRequestPage = () => {
   };
 
   const adminColumns: GridColDef[] = [
-    ...pendingRestockColumn,
+    ...obatTableColumn,
     {
-      field: "action",
-      headerName: "Aksi",
+      field: "approval",
+      headerName: "Persetujuan",
       headerAlign: "center",
       width: 120,
       align: "center",
@@ -102,12 +83,12 @@ const RestockRequestPage = () => {
         <div className="w-full flex items-center gap-2 justify-center h-full">
           <IconButton
             icon={FaCheck}
-            onClick={() => handleApprove(value.row.id)}
+            onClick={() => handleApproval(value.row.id, true)}
             variant="success"
           />
           <IconButton
             icon={IoClose}
-            onClick={() => handleReject(value.row.id)}
+            onClick={() => handleApproval(value.row.id, false)}
             variant="danger"
           />
         </div>
@@ -115,61 +96,36 @@ const RestockRequestPage = () => {
     },
   ];
 
-  const handleReject = (id: string) => {
-    setRejectModal(true);
-    setRejectId(id);
-  };
-
-  const handleApprove = (id: string) => {
-    setApproveModal(true);
-    setApproveId(id);
+  const handleApproval = (id: string, isApprove: boolean) => {
+    setSelectedId(id);
+    setIsApprove(isApprove);
+    if (isApprove) {
+      setApproveModal(true);
+    } else {
+      setRejectModal(true);
+    }
   };
 
   return (
-    <main className="flex flex-col gap-5">
+    <main>
       <Head>
-        <title>Persetujuan Restock Obat</title>
+        <title>Persetujuan Hapus Obat</title>
       </Head>
 
-      <section className="data-section">
-        <Typography variant="h4" className="mb-2 md:hidden text-primary-1">
-          Persetujuan Restock Obat
-        </Typography>
+      <Typography variant="h4" className="mb-2 md:hidden text-primary-1">
+        Persetujuan Hapus Obat
+      </Typography>
 
-        <section className="mt-5 datatable-sm">
-          {listRestock && user ? (
-            <DataTable
-              columns={
-                user.role === "OPERATOR" ? adminColumns : pendingRestockColumn
-              }
-              rows={listRestock}
-              flexColumnIndexes={[0]}
-            />
-          ) : (
-            <LoadingDiv />
-          )}
-        </section>
-      </section>
-
-      <section className="data-section">
-        <div className="mt-5 flex items-center gap-2">
-          <div className="w-1 h-5 bg-primary-1"></div>
-          <Typography className="text-primary-1 font-semibold">
-            Rejected Requests
-          </Typography>
-        </div>
-
-        <section className="mt-5 datatable-sm">
-          {listRejected ? (
-            <DataTable
-              columns={pendingRestockColumn}
-              rows={listRejected}
-              flexColumnIndexes={[0]}
-            />
-          ) : (
-            <LoadingDiv />
-          )}
-        </section>
+      <section className="mt-5">
+        {listObat && user ? (
+          <DataTable
+            columns={user.role === "OPERATOR" ? adminColumns : obatTableColumn}
+            rows={listObat}
+            flexColumnIndexes={[0]}
+          />
+        ) : (
+          <LoadingDiv />
+        )}
       </section>
 
       {rejectModal && (
@@ -184,13 +140,13 @@ const RestockRequestPage = () => {
               weight="semibold"
               className="text-secondary-4"
             >
-              Yakin ingin menolak permintaan restock ini?
+              Yakin ingin menolak penghapusan obat ini?
             </Typography>
             <div className="flex items-center gap-2 mt-4 self-end">
               <Button
                 variant="danger"
                 size="sm"
-                onClick={() => approveRestock(false)}
+                onClick={() => approveDelete()}
               >
                 Ya
               </Button>
@@ -217,10 +173,10 @@ const RestockRequestPage = () => {
               weight="semibold"
               className="text-secondary-4"
             >
-              Setujui data restock ini?
+              Setujui hapus obat ini?
             </Typography>
             <div className="flex items-center gap-2 mt-4 self-end">
-              <Button size="sm" onClick={() => approveRestock(true)}>
+              <Button size="sm" onClick={() => approveDelete()}>
                 Ya
               </Button>
               <Button
@@ -238,4 +194,4 @@ const RestockRequestPage = () => {
   );
 };
 
-export default withAuth(RestockRequestPage, "user");
+export default withAuth(DeleteRequestPage, "user");

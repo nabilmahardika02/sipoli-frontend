@@ -4,17 +4,17 @@ import Input from "@/components/elements/forms/Input";
 import { LoadingDiv } from "@/components/elements/Loading";
 import { DANGER_TOAST, showToast } from "@/components/elements/Toast";
 import Typography from "@/components/elements/Typography";
+import RiwayatPemakaian from "@/components/fragments/obat/RiwayatPemakaian";
+import RiwayatRestock from "@/components/fragments/obat/RiwayatRestock";
 import withAuth from "@/components/hoc/withAuth";
 import ModalLayout from "@/components/layouts/ModalLayout";
 import { useDocumentTitle } from "@/context/Title";
 import { checkRole } from "@/lib/checkRole";
-import DataTable from "@/lib/datatable";
 import { formatDate, getSatuanObat } from "@/lib/formater";
 import sendRequest from "@/lib/getApi";
 import useAuthStore from "@/store/useAuthStore";
 import { Obat } from "@/types/entities/obat";
 import { RestockForm } from "@/types/forms/obatForm";
-import { getRowIdRestock, restockColumn } from "@/types/table/obatColumn";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -105,128 +105,115 @@ const DetailObatPage = () => {
   };
 
   return (
-    <main>
+    <main className="flex flex-col gap-5">
       <Head>
         <title>Detail Obat</title>
       </Head>
       <Typography variant="h4" className="mb-2 md:hidden text-primary-1">
         Detail Obat
       </Typography>
-      {obat ? (
-        <section className="max-md:p-5 max-md:rounded-xl max-md:bg-white max-md:border max-md:border-gray-200 max-md:shadow-md">
-          <div className="flex flex-wrap items-center justify-between">
-            <Typography variant="h5" className="text-secondary-2">
-              {obat?.namaObat}
-            </Typography>
-            {user?.role === "PERAWAT" && (
-              <div className="flex items-center gap-2">
-                <Link href={`/obat/detail/${router.query.id}/update`}>
+      <section className="data-section">
+        {obat ? (
+          <>
+            <div className="flex flex-wrap items-center justify-between">
+              <Typography variant="h5" className="text-secondary-2">
+                {obat?.namaObat}
+              </Typography>
+              {user?.role === "PERAWAT" && (
+                <div className="flex items-center gap-2">
+                  <Link href={`/obat/detail/${router.query.id}/update`}>
+                    <Button
+                      className="max-md:aspect-square"
+                      leftIconClassName="max-md:text-md max-md:mr-0"
+                      leftIcon={LuPencil}
+                      variant="secondary"
+                    >
+                      <span className="max-md:hidden">Edit Data Obat</span>
+                    </Button>
+                  </Link>
                   <Button
                     className="max-md:aspect-square"
-
                     leftIconClassName="max-md:text-md max-md:mr-0"
-                    leftIcon={LuPencil}
-                    variant="secondary"
+                    leftIcon={FaPlus}
+                    onClick={() => setShowRestockModal(true)}
                   >
-                    <span className="max-md:hidden">Edit Data Obat</span>
+                    <span className="max-md:hidden">Restock Obat</span>
                   </Button>
-                </Link>
-                <Button
-                  className="max-md:aspect-square"
-                  leftIconClassName="max-md:text-md max-md:mr-0"
-                  leftIcon={FaPlus}
-                  onClick={() => setShowRestockModal(true)}
+                  <Button
+                    className="max-md:aspect-square"
+                    onClick={() => setShowDeleteModal(true)}
+                    leftIconClassName="max-md:text-md max-md:mr-0"
+                    leftIcon={IoTrashBin}
+                    variant="danger"
+                    disabled={obat.deleteStatus == 1}
+                  >
+                    <span className="max-md:hidden">
+                      {obat.deleteStatus == 1
+                        ? "Penghapusan Sudah Direquest"
+                        : "Hapus Obat"}
+                    </span>
+                  </Button>
+                </div>
+              )}
+            </div>
+            <Divider />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
+              <div>
+                <Typography
+                  variant="p2"
+                  weight="semibold"
+                  className="text-gray-400"
                 >
-                  <span className="max-md:hidden">Restock Obat</span>
-                </Button>
-                <Button
-                  className="max-md:aspect-square"
-                  onClick={() => setShowDeleteModal(true)}
-                  leftIconClassName="max-md:text-md max-md:mr-0"
-                  leftIcon={IoTrashBin}
-                  variant="danger"
-                >
-                  <span className="max-md:hidden">Hapus Obat</span>
-                </Button>
+                  Tanggal Input
+                </Typography>
+                <Typography className="text-primary-1">
+                  {formatDate(obat.createdAt)}
+                </Typography>
               </div>
-            )}
-          </div>
-          <Divider />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
-            <div>
-              <Typography
-                variant="p2"
-                weight="semibold"
-                className="text-gray-400"
-              >
-                Tanggal Input
-              </Typography>
-              <Typography className="text-primary-1">
-                {formatDate(obat.createdAt)}
-              </Typography>
+              <div>
+                <Typography
+                  variant="p2"
+                  weight="semibold"
+                  className="text-gray-400"
+                >
+                  Terakhir update
+                </Typography>
+                <Typography className="text-primary-1">
+                  {formatDate(obat.updatedAt)}
+                </Typography>
+              </div>
+              <div>
+                <Typography
+                  variant="p2"
+                  weight="semibold"
+                  className="text-gray-400"
+                >
+                  Stok Obat
+                </Typography>
+                <Typography className="text-primary-1">
+                  {obat.totalStok} {getSatuanObat(obat.jenisSatuan)}
+                </Typography>
+              </div>
+              <div>
+                <Typography
+                  variant="p2"
+                  weight="semibold"
+                  className="text-gray-400"
+                >
+                  Deskripsi
+                </Typography>
+                <Typography className="text-primary-1">
+                  {obat.deskripsi}
+                </Typography>
+              </div>
             </div>
-            <div>
-              <Typography
-                variant="p2"
-                weight="semibold"
-                className="text-gray-400"
-              >
-                Terakhir update
-              </Typography>
-              <Typography className="text-primary-1">
-                {formatDate(obat.updatedAt)}
-              </Typography>
-            </div>
-            <div>
-              <Typography
-                variant="p2"
-                weight="semibold"
-                className="text-gray-400"
-              >
-                Stok Obat
-              </Typography>
-              <Typography className="text-primary-1">
-                {obat.totalStok} {getSatuanObat(obat.jenisSatuan)}
-              </Typography>
-            </div>
-            <div>
-              <Typography
-                variant="p2"
-                weight="semibold"
-                className="text-gray-400"
-              >
-                Deskripsi
-              </Typography>
-              <Typography className="text-primary-1">
-                {obat.deskripsi}
-              </Typography>
-            </div>
-          </div>
-          <Typography
-            variant="p1"
-            weight="semibold"
-            className="text-gray-400 mt-4 mb-2"
-          >
-            Riwayat Restock
-          </Typography>
-          <div className="w-full md:w-[80%]">
-            {obat.listRestockObat.length > 0 ? (
-              <DataTable
-                columns={restockColumn}
-                getRowId={getRowIdRestock}
-                rows={obat.listRestockObat}
-                flexColumnIndexes={[0, 1, 2, 3]}
-              />
-            ) : (
-              <Typography className="text-gray-500 p-4 rounded-lg border border-gray-300 w-full text-center">
-                Belum ada riwayat restock
-              </Typography>
-            )}
-          </div>
-        </section>
-      ) : (
-        <LoadingDiv />
-      )}
+          </>
+        ) : (
+          <LoadingDiv />
+        )}
+      </section>
+      {obat && <RiwayatRestock obat={obat} />}
+      {obat && <RiwayatPemakaian />}
       {showRestockModal && (
         <ModalLayout setShowModal={setShowRestockModal}>
           <div className="bg-white rounded-xl p-5 w-full md:w-[50%]">
