@@ -11,7 +11,7 @@ export const obatTableColumn: GridColDef[] = [
   {
     field: "namaObat",
     headerName: "Nama Obat",
-    headerAlign: "center",
+    headerAlign: "cettnter",
     width: 200,
     align: "center",
   },
@@ -141,6 +141,41 @@ export const pendingRestockColumn: GridColDef[] = [
     width: 100,
     align: "center",
   },
+];
+
+
+export const availableObatTableColumn: GridColDef[] = [
+  {
+    field: "namaObat",
+    headerName: "Nama Obat",
+    headerAlign: "center",
+    width: 200,
+    align: "center",
+  },
+  // {
+  //   field: "deskripsi",
+  //   headerName: "Deskripsi",
+  //   headerAlign: "center",
+  //   width: 200,
+  //   align: "center",
+  // },
+  {
+    field: "totalStok",
+    headerName: "Stok",
+    headerAlign: "center",
+    width: 150,
+    align: "center",
+    renderCell: (params) =>
+      `${params.row.totalStok} ${getSatuanObat(params.row.jenisSatuan)}`,
+  },
+  {
+    field: "tanggalKadaluarsa",
+    headerName: "Tanggal Kadaluarsa",
+    headerAlign: "center",
+    width: 200,
+    align: "center",
+    valueGetter: (value, row, column, apiRef) => `${formatDateOnly(value)}`,
+  },  
 ];
 
 export const getRowIdRestock: GridRowIdGetter<GridValidRowModel> = (row) =>

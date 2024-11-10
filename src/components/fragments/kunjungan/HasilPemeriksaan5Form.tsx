@@ -9,6 +9,8 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useForm, FormProvider, SubmitHandler, useFieldArray } from "react-hook-form";
 import sendRequest from "@/lib/getApi";
 import TextArea from "@/components/elements/forms/TextArea";
+import DataTable from "@/lib/datatable";
+import { availableObatTableColumn } from "@/types/table/obatColumn";
 
 const HasilPemeriksaan5Form = ({
   hasilPemeriksaan,
@@ -25,7 +27,7 @@ const HasilPemeriksaan5Form = ({
     mode: "onTouched",
     defaultValues: {
       listKuantitasObat: hasilPemeriksaan.listKuantitasObat || [{ obatId: "", namaObat: "", kuantitas: 0, petunjukPemakaian: "" }],
-      resepObatRujukan: hasilPemeriksaan.resepObatRujukan || { deskripsi: "" } // Ubah ke objek
+      resepObatRujukan: hasilPemeriksaan.resepObatRujukan || { deskripsi: "" }
     }
   });
 
@@ -81,77 +83,87 @@ const HasilPemeriksaan5Form = ({
   };
 
   return (
-    <section>
-      <Typography variant="h7" className="text-primary-1">
-        Resep Obat - {kunjungan.profile.name}
-      </Typography>
-      <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-5 items-end">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
-            {fields.map((item, index) => (
-              <div key={item.id} className="border p-4 grid grid-cols-1 md:grid-cols-1 gap-5 mb-2 rounded-md"> 
-                <SelectInput
-                  id={`listKuantitasObat.${index}.obatId`}
-                  placeholder="Pilih Obat"
-                  label={`Obat ${index + 1}`}
-                  {...methods.register(`listKuantitasObat.${index}.obatId` as const, {
-                    onChange: (e) => handleObatChange(index, e.target.value) // Set namaObat otomatis saat obat dipilih
-                  })}
-                >
-                  {obatList.map((obat) => (
-                    <option key={obat.id} value={obat.id}>
-                      {obat.namaObat}
-                    </option>
-                  ))}
-                </SelectInput>
-                <Input
-                  id={`listKuantitasObat.${index}.kuantitas`}
-                  type="number"
-                  placeholder="Kuantitas"
-                  label="Kuantitas"
-                  {...methods.register(`listKuantitasObat.${index}.kuantitas` as const)}
-                />
-                <Input
-                  id={`listKuantitasObat.${index}.petunjukPemakaian`}
-                  placeholder="Petunjuk Pemakaian"
-                  label="Petunjuk Pemakaian"
-                  {...methods.register(`listKuantitasObat.${index}.petunjukPemakaian` as const)}
-                />
-                <Button
-                  variant="danger" 
-                  onClick={() => remove(index)}>
-                  Hapus Obat
-                </Button>
-              </div>
-            ))}
-          </div >
-          <Button 
-            variant="primary" 
-            onClick={() => append({ obatId: "", namaObat: "", kuantitas: 0, petunjukPemakaian: "" })} 
-            className="mb-4"
-          >
-            Tambah Obat
-          </Button>
-          <TextArea
-            id="resepObatRujukan.deskripsi" // Ubah ke objek
-            placeholder="Resep Obat di Luar Klinik"
-            label="Resep Obat di Luar Klinik"
-            {...methods.register("resepObatRujukan.deskripsi" as const)} // Update untuk akses ke deskripsi
-          />
-          <div className="flex items-center gap-3 mt-5">
-            <Button
-              className="max-md:w-full"
-              variant="danger"
-              onClick={handlePrev}
+    <section className="space-y-8">
+      <div className="border p-4 rounded-md shadow-sm">
+        <Typography variant="h7" className="text-primary-1">
+          Resep Obat - {kunjungan.profile.name}
+        </Typography>
+        <FormProvider {...methods}>
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-2 items-end">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
+              {fields.map((item, index) => (
+                <div key={item.id} className="border p-4 grid grid-cols-1 md:grid-cols-1 gap-5 mb-2 rounded-md"> 
+                  <SelectInput
+                    id={`listKuantitasObat.${index}.obatId`}
+                    placeholder="Pilih Obat"
+                    label={`Obat ${index + 1}`}
+                    {...methods.register(`listKuantitasObat.${index}.obatId` as const, {
+                      onChange: (e) => handleObatChange(index, e.target.value) 
+                    })}
+                  >
+                    {obatList.map((obat) => (
+                      <option key={obat.id} value={obat.id}>
+                        {obat.namaObat}
+                      </option>
+                    ))}
+                  </SelectInput>
+                  <Input
+                    id={`listKuantitasObat.${index}.kuantitas`}
+                    type="number"
+                    placeholder="Kuantitas"
+                    label="Kuantitas"
+                    {...methods.register(`listKuantitasObat.${index}.kuantitas` as const)}
+                  />
+                  <Input
+                    id={`listKuantitasObat.${index}.petunjukPemakaian`}
+                    placeholder="Petunjuk Pemakaian"
+                    label="Petunjuk Pemakaian"
+                    {...methods.register(`listKuantitasObat.${index}.petunjukPemakaian` as const)}
+                  />
+                  <Button
+                    variant="danger" 
+                    onClick={() => remove(index)}>
+                    Hapus Obat
+                  </Button>
+                </div>
+              ))}
+            </div>
+            <Button 
+              variant="primary" 
+              onClick={() => append({ obatId: "", namaObat: "", kuantitas: 0, petunjukPemakaian: "" })} 
+              className="mb-4"
             >
-              Kembali
+              Tambah Obat
             </Button>
-            <Button type="submit" className="max-md:w-full">
-              Berikutnya
-            </Button>
-          </div>
-        </form>
-      </FormProvider>
+            <TextArea
+              id="resepObatRujukan.deskripsi"
+              placeholder="Resep Obat di Luar Klinik"
+              label="Resep Obat di Luar Klinik"
+              {...methods.register("resepObatRujukan.deskripsi" as const)}
+            />
+            <div className="flex items-center gap-3 mt-4">
+              <Button
+                className="max-md:w-full"
+                variant="danger"
+                onClick={handlePrev}
+              >
+                Kembali
+              </Button>
+              <Button type="submit" className="max-md:w-full">
+                Berikutnya
+              </Button>
+            </div>
+          </form>
+        </FormProvider>
+      </div>
+
+      {/* Kotak kedua untuk tampilan read-only daftar obat */}
+      <div className="border p-4 rounded-md shadow-sm">
+        <Typography variant="h7" className="text-primary-1 mb-4">
+          Daftar Obat Tersedia
+        </Typography>
+        <DataTable columns={availableObatTableColumn} rows={obatList} flexColumnIndexes={[1, 4]} />
+      </div>
     </section>
   );
 };

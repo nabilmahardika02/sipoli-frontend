@@ -4,7 +4,7 @@ import Typography from "@/components/elements/Typography";
 import Divider from "@/components/elements/Divider";
 import sendRequest from "@/lib/getApi";
 import { Kunjungan } from "@/types/entities/kunjungan";
-import { getRowIdKunjungan, kunjunganTables } from "@/types/table/kunjunganColumn";
+import { getRowIdKunjungan, kunjunganTables } from "@/types/table/hasilPemeriksaanColumn";
 import { Profile } from "@/types/entities/profile";
 
 const DataDaftarRekamMedis = ({
@@ -41,11 +41,11 @@ const DataDaftarRekamMedis = ({
           Daftar Rekam Medis
         </Typography>
         <Divider />
-        {kunjungans && kunjungans.length > 0 ? (
+        {kunjungans.length > 0 ? (
           <DataTable
             columns={kunjunganTables.filter(column => ["tanggal", "action"].includes(column.field))}
             getRowId={getRowIdKunjungan}
-            rows={kunjungans}
+            rows={kunjungans.filter(kunjungan => kunjungan.profile.id === pasien.id)} // Filter by profile ID
             flexColumnIndexes={[0, 1]}
           />
         ) : (
@@ -58,6 +58,5 @@ const DataDaftarRekamMedis = ({
       </section>
     );
   };
-  
 
 export default DataDaftarRekamMedis;
