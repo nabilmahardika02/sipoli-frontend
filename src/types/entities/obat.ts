@@ -4,7 +4,7 @@ export interface Obat {
   deskripsi: string;
   jenisSatuan: number;
   totalStok: number;
-  isDeleted: boolean;
+  deleteStatus: number;
   createdAt: string;
   updatedAt: string;
   listRestockObat: RestockObat[];
@@ -17,15 +17,24 @@ export interface RestockObat {
   kuantitas: number;
   hargaBeli: string;
   isApproved: number;
+  expiredStatus: number;
 }
 
 export interface RestockObatResponse {
   id: string;
-  tanggalPembelian: string; 
+  tanggalPembelian: string;
   tanggalKadaluarsa: string;
   hargaBeli: number;
   kuantitas: number;
   isApproved: number;
   namaObat: string;
-  createdAt: string; 
+  createdAt: string;
+}
+
+export interface PemakaianObat {
+  id: string;
+  tanggal: Date;
+  keterangan: string;
+  jenisPemakaian: number;
+  jumlah: number;
 }
