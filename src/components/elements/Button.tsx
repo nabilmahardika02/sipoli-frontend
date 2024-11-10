@@ -86,7 +86,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             ],
           ],
           //#endregion  //*======== Variants ===========
-          "disabled:cursor-not-allowed disabled:bg-opacity-70",
+          "disabled:cursor-not-allowed disabled:bg-opacity-70 disabled:active:ring-0",
           className
         )}
         {...rest}
