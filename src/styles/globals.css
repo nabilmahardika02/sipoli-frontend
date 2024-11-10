@@ -174,10 +174,15 @@ body {
   font-weight: 700 !important;
 }
 
-.datatable-sm .MuiDataGrid-cell, .datatable-sm .MuiDataGrid-columnHeaderTitle {
-  @apply text-[12px] leading-normal md:leading-relaxed text-wrap text-center
+.datatable-sm .MuiDataGrid-cell,
+.datatable-sm .MuiDataGrid-columnHeaderTitle {
+  @apply text-[12px] leading-normal md:leading-relaxed text-wrap text-center;
 }
 
 .MuiDataGrid-columnHeaderTitle {
-  @apply text-[12px] text-wrap
+  @apply text-wrap;
+}
+
+.data-section {
+  @apply p-5 md:p-8 rounded-xl bg-white border border-gray-200 shadow-md;
 }

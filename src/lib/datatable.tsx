@@ -2,8 +2,10 @@ import { useMediaQuery } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
+  GridRowClassNameParams,
   GridRowIdGetter,
   GridToolbar,
+  GridValidRowModel,
 } from "@mui/x-data-grid";
 
 export default function DataTable({
@@ -12,12 +14,14 @@ export default function DataTable({
   getRowId,
   useToolBar = true,
   flexColumnIndexes = [],
+  rowClassName,
 }: {
   columns: GridColDef[];
   rows: any[];
   useToolBar?: boolean;
   getRowId?: GridRowIdGetter;
   flexColumnIndexes?: number[];
+  rowClassName?: ((params: GridRowClassNameParams<GridValidRowModel>) => string) | undefined;
 }) {
   const isMobile = useMediaQuery("(max-width:768px)");
 
@@ -41,6 +45,7 @@ export default function DataTable({
           paginationModel: { page: 0, pageSize: 10 },
         },
       }}
+      getRowClassName={rowClassName}
       sx={{
         "& .MuiButtonBase-root": {
           color: "#721E49",
