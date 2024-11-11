@@ -33,9 +33,10 @@ const RekamMedisPage = () => {
 
     const fetchProfiles = async () => {
       const endpoint =
-        user?.role === "PASIEN"
-          ? `profile/all-profile?userId=${user.id}`
-          : "profile/all-profile";
+      user?.role === "PASIEN" && user?.profileId
+        ? `profile/all-profile?userId=${user.profileId}`
+        : "profile/all-profile";
+    
 
       const [responseData, message, isSuccess] = await sendRequest("get", endpoint);
 
@@ -47,7 +48,7 @@ const RekamMedisPage = () => {
     };
 
     fetchProfiles();
-  }, [setTitle, user?.role, user?.id]);
+  }, [setTitle, user?.role, user?.profileId]);
 
   const { handleSubmit } = methods;
 

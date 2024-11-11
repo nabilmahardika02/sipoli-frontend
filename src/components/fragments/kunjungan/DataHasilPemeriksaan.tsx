@@ -1,4 +1,3 @@
-// DataHasilPemeriksaan.tsx
 import Typography from "@/components/elements/Typography";
 import { HasilPemeriksaan } from "@/types/entities/kunjungan";
 import DataDiagnosaAkhir from "./DataDiagnosaAkhir";
@@ -9,6 +8,7 @@ import DataUtama from "./DataUtama";
 import DataResepObat from "./DataResepObat"; // Tambahan
 import { Dispatch, SetStateAction } from "react";
 import DataResepObatRujukan from "./DataResepObatRujukan";
+import { KuantitasObat } from "@/types/entities/kuantitasObat"; // Pastikan menggunakan KuantitasObat dari kuantitasObat
 
 const DataHasilPemeriksaan = ({
   data,
@@ -47,10 +47,10 @@ const DataHasilPemeriksaan = ({
             trigger={trigger}
             setTrigger={setTrigger}
           />
-          <DataResepObat 
-            listKuantitasObat={data.listKuantitasObat || []} 
-            resepObatRujukan={data.resepObatRujukan} 
-          />
+<DataResepObat 
+  listKuantitasObat={data.listKuantitasObat as unknown as KuantitasObat[]} 
+  resepObatRujukan={data.resepObatRujukan} 
+/>
           <DataRujukan
             data={data.rujukan}
             idPemeriksaan={data.id}

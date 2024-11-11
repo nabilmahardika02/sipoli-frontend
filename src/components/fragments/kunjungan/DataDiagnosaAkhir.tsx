@@ -66,13 +66,13 @@ const DataDiagnosaAkhir = ({
         <Typography className="text-primary-1 font-semibold">
           Diagnosa Akhir
         </Typography>
-        {["DOKTER", "PERAWAT"].includes(user?.role) && ( // supaya pasien & admin gak bisa edit
-          <IconButton
-            icon={LuPencil}
-            variant="primary"
-            onClick={() => setShowModal(true)}
-          />
-        )}
+        {["DOKTER", "PERAWAT"].includes(user?.role ?? "") && (
+  <IconButton
+    icon={LuPencil}
+    variant="primary"
+    onClick={() => setShowModal(true)}
+  />
+)}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
         <div>

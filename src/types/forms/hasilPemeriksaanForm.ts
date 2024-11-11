@@ -7,7 +7,7 @@ export type RujukanForm = {
 // baru
 export type KuantitasObatRequest = {
   obatId: string;
-  // namaObat: string; // Tambahkan namaObat di sini
+  namaObat: string; // Tambahkan namaObat di sini
   kuantitas: number;
   petunjukPemakaian: string;
 };
@@ -61,7 +61,9 @@ export type HasilKunjunganForm = {
   keluhanUtama: string;
   riwayatPenyakitSekarang: string;
   kie: string;
-}
+  tanggalMasuk: string; // baru
+  tanggalKeluar: string; // baru
+};
 
 export type HasilPemeriksaanFisikForm = {
   tensi: string;
