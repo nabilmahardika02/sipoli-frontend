@@ -11,6 +11,7 @@ import sendRequest from "@/lib/getApi";
 import TextArea from "@/components/elements/forms/TextArea";
 import DataTable from "@/lib/datatable";
 import { availableObatTableColumn } from "@/types/table/obatColumn";
+import Divider from "@/components/elements/Divider";
 
 const HasilPemeriksaan5Form = ({
   hasilPemeriksaan,
@@ -84,7 +85,7 @@ const HasilPemeriksaan5Form = ({
 
   return (
     <section className="space-y-8">
-      <div className="border p-4 rounded-md shadow-sm">
+      <div>
         <Typography variant="h7" className="text-primary-1">
           Resep Obat - {kunjungan.profile.name}
         </Typography>
@@ -156,9 +157,10 @@ const HasilPemeriksaan5Form = ({
           </form>
         </FormProvider>
       </div>
+      <Divider />
 
       {/* Kotak kedua untuk tampilan read-only daftar obat */}
-      <div className="border p-4 rounded-md shadow-sm">
+      <div>
         <Typography variant="h7" className="text-primary-1 mb-4">
           Daftar Obat Tersedia
         </Typography>

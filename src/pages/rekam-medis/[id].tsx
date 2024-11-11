@@ -67,7 +67,7 @@ const KunjunganPage = () => {
 
 
           {user?.role !== "OPERATOR" && (
-            <section className=" bg-white">
+            <section className="bg-white mt-4">
               <Typography variant="h6" className="text-primary-1">
                 Hasil Pemeriksaan
               </Typography>

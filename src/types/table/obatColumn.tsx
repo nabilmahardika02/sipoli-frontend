@@ -166,21 +166,21 @@ export const availableObatTableColumn: GridColDef[] = [
   // },
   {
     field: "totalStok",
-    headerName: "Stok",
+    headerName: "Stok Tersedia",
     headerAlign: "center",
     width: 150,
     align: "center",
     renderCell: (params) =>
       `${params.row.totalStok} ${getSatuanObat(params.row.jenisSatuan)}`,
   },
-  {
-    field: "tanggalKadaluarsa",
-    headerName: "Tanggal Kadaluarsa",
-    headerAlign: "center",
-    width: 200,
-    align: "center",
-    valueGetter: (value, row, column, apiRef) => `${formatDateOnly(value)}`,
-  },  
+  // {
+  //   field: "tanggalKadaluarsa",
+  //   headerName: "Tanggal Kadaluarsa",
+  //   headerAlign: "center",
+  //   width: 180,
+  //   align: "center",
+  //   valueGetter: (value, row, column, apiRef) => `${formatDateOnly(value)}`,
+  // },
 ];
 
 export const getRowIdRestock: GridRowIdGetter<GridValidRowModel> = (row) =>
