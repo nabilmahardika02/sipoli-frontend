@@ -24,7 +24,7 @@ export function formatDateOnly(dateString: string): string {
       hour: "2-digit",
       minute: "2-digit",
       hour12: false,
-      timeZone: "Asia/Jakarta", // Pastikan menggunakan zona waktu lokal Anda
+      timeZone: "Asia/Makassar", // Pastikan menggunakan zona waktu lokal Anda
     };
   
     const formattedDate = date.toLocaleDateString("id-ID", dateOptions);

@@ -50,14 +50,58 @@ const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
           {getStatusText(kunjungan?.status)}
         </Typography>
       </div>
-      <div>
+      {(new Date(kunjungan.tanggal).getDay() === 0 || kunjungan.hasilPemeriksaan)&& (
+        <>
+          <div>
+            <Typography variant="p2" weight="semibold" className="text-gray-400">
+              Tanggal Masuk
+            </Typography>
+            <Typography className="text-primary-1">
+              {kunjungan.tanggalMasuk
+                ? formatDate(kunjungan.tanggalMasuk)
+                : "-"}
+            </Typography>
+          </div>
+        </>
+      )}
+      {kunjungan.hasilPemeriksaan && (
+        <>
+          <div>
+            <Typography variant="p2" weight="semibold" className="text-gray-400">
+              Tanggal Keluar
+            </Typography>
+            <Typography className="text-primary-1">
+              {kunjungan.tanggalKeluar
+                ? formatDate(kunjungan.tanggalKeluar)
+                : "-"}
+            </Typography>
+          </div>
+          <div>
+            <Typography variant="p2" weight="semibold" className="text-gray-400">
+              Dokter Pengirim
+            </Typography>
+            <Typography className="text-primary-1">
+              {kunjungan.dokterPengirim}
+            </Typography>
+          </div>
+          <div>
+            <Typography variant="p2" weight="semibold" className="text-gray-400">
+              Dokter
+            </Typography>
+            <Typography className="text-primary-1">
+              {kunjungan.dokter.name}
+            </Typography>
+          </div>
+        </>
+      )}
+      {new Date(kunjungan.tanggal).getDay() !== 0 && !kunjungan.hasilPemeriksaan && (<div>
         <Typography variant="p2" weight="semibold" className="text-gray-400">
           Tanggal
         </Typography>
         <Typography className="text-primary-1">
           {formatDateOnly(kunjungan.tanggal)}
         </Typography>
-      </div>
+      </div>)}
       <div>
         <Typography variant="p2" weight="semibold" className="text-gray-400">
           Keluhan
@@ -91,46 +135,6 @@ const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
             <Typography className="text-primary-1">
               {kunjungan.antrian.noAntrian}
             </Typography>
-          </div>
-        </>
-      )}
-      {kunjungan.hasilPemeriksaan && (
-        <>
-          <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
-              Dokter Pengirim
-            </Typography>
-            <Typography className="text-primary-1">
-              {kunjungan.dokterPengirim}
-            </Typography>
-          </div>
-          <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
-              Dokter
-            </Typography>
-            <Typography className="text-primary-1">
-              {kunjungan.dokter.name}
-            </Typography>
-          </div>
-          <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
-              Tanggal Masuk
-            </Typography>
-<Typography className="text-primary-1">
-  {kunjungan.tanggalMasuk
-    ? formatDate(kunjungan.tanggalMasuk)
-    : "-"}
-</Typography>
-          </div>
-          <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
-              Tanggal Keluar
-            </Typography>
-            <Typography className="text-primary-1">
-  {kunjungan.tanggalKeluar
-    ? formatDate(kunjungan.tanggalKeluar)
-    : "-"}
-</Typography>
           </div>
         </>
       )}
