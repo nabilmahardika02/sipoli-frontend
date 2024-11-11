@@ -1,16 +1,17 @@
 import Button from "@/components/elements/Button";
 import Input from "@/components/elements/forms/Input";
-import TextArea from "@/components/elements/forms/TextArea";
+import SelectInput from "@/components/elements/forms/SelectInput";
 import Typography from "@/components/elements/Typography";
-import sendRequest from "@/lib/getApi";
+import { HasilPemeriksaanForm } from "@/types/forms/hasilPemeriksaanForm";
+import { Obat } from "@/types/entities/obat";
 import { Kunjungan } from "@/types/entities/kunjungan";
-import {
-  HasilPemeriksaanForm,
-  RujukanForm,
-} from "@/types/forms/hasilPemeriksaanForm";
-import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useEffect } from "react";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useForm, FormProvider, SubmitHandler, useFieldArray } from "react-hook-form";
+import sendRequest from "@/lib/getApi";
+import TextArea from "@/components/elements/forms/TextArea";
+import DataTable from "@/lib/datatable";
+import { availableObatTableColumn } from "@/types/table/obatColumn";
+import Divider from "@/components/elements/Divider";
 
 const HasilPemeriksaan5Form = ({
   hasilPemeriksaan,
@@ -23,106 +24,148 @@ const HasilPemeriksaan5Form = ({
   setSection: Dispatch<SetStateAction<number>>;
   kunjungan: Kunjungan;
 }) => {
-  const methods = useForm<RujukanForm>({
+  const methods = useForm<HasilPemeriksaanForm>({
     mode: "onTouched",
+    defaultValues: {
+      listKuantitasObat: hasilPemeriksaan.listKuantitasObat || [{ obatId: "", namaObat: "", kuantitas: 0, petunjukPemakaian: "" }],
+      resepObatRujukan: hasilPemeriksaan.resepObatRujukan || { deskripsi: "" }
+    }
   });
 
-  const { handleSubmit, getValues } = methods;
-  const router = useRouter();
+  const { handleSubmit, getValues, control, setValue } = methods;
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "listKuantitasObat"
+  });
+  const [obatList, setObatList] = useState<Obat[]>([]);
 
   useEffect(() => {
-    if (hasilPemeriksaan.rujukanRequestDTO) {
-      methods.setValue(
-        "tujuanRujukan",
-        hasilPemeriksaan.rujukanRequestDTO.tujuanRujukan
-      );
-      methods.setValue(
-        "dokterRujukan",
-        hasilPemeriksaan.rujukanRequestDTO.dokterRujukan
-      );
-      methods.setValue(
-        "catatanRujukan",
-        hasilPemeriksaan.rujukanRequestDTO.catatanRujukan
-      );
+    const fetchObatList = async () => {
+      const [responseData, message, isSuccess] = await sendRequest("get", "obat/available");
+      if (isSuccess) setObatList(responseData as Obat[]);
+    };
+
+    fetchObatList();
+  }, []);
+
+  useEffect(() => {
+    if (hasilPemeriksaan) {
+      methods.setValue("listKuantitasObat", hasilPemeriksaan.listKuantitasObat || []);
+      methods.setValue("resepObatRujukan", hasilPemeriksaan.resepObatRujukan || { deskripsi: "" });
     }
   }, [hasilPemeriksaan, methods]);
 
-  const onSubmit: SubmitHandler<RujukanForm> = (data) => {
-    const postData = async () => {
-      const [responseData, message, isSuccess] = await sendRequest(
-        "post",
-        "/hasil-pemeriksaan/add/" + router.query.id,
-        {
-          ...hasilPemeriksaan,
-          rujukanRequestDTO: {
-            tujuanRujukan: data.tujuanRujukan,
-            dokterRujukan: data.dokterRujukan,
-            catatanRujukan: data.catatanRujukan,
-          },
-        },
-        true
-      );
+  const onSubmit: SubmitHandler<HasilPemeriksaanForm> = (data) => {
+    setHasilPemeriksaan((prev) => ({
+      ...prev,
+      listKuantitasObat: data.listKuantitasObat,
+      resepObatRujukan: data.resepObatRujukan,
+    }));
 
-      if (isSuccess) {
-        router.push("/kunjungan/" + router.query.id);
-      }
-    };
-
-    postData();
+    setSection(6); // Pindah ke section berikutnya
   };
 
   const handlePrev = () => {
     const currentValues = getValues();
-    setHasilPemeriksaan((prevState) => ({
-      ...prevState,
-      rujukanRequestDTO: {
-        tujuanRujukan: currentValues.tujuanRujukan,
-        dokterRujukan: currentValues.dokterRujukan,
-        catatanRujukan: currentValues.catatanRujukan,
-      },
+    setHasilPemeriksaan((prev) => ({
+      ...prev,
+      listKuantitasObat: currentValues.listKuantitasObat,
+      resepObatRujukan: currentValues.resepObatRujukan,
     }));
 
-    setSection(4);
+    setSection(4); // Kembali ke section sebelumnya
+  };
+
+  const handleObatChange = (index: number, obatId: string) => {
+    const selectedObat = obatList.find(obat => obat.id === obatId);
+    if (selectedObat) {
+      setValue(`listKuantitasObat.${index}.namaObat`, selectedObat.namaObat);
+    }
   };
 
   return (
-    <section>
-      <Typography variant="h7" className="text-primary-1">
-        Rujukan - {kunjungan.profile.name}
-      </Typography>
-      <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-5 items-end">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
-            <Input
-              id="tujuanRujukan"
-              placeholder="Tujuan Rujukan"
-              label="Tujuan Rujukan"
-            />
-            <Input
-              id="dokterRujukan"
-              placeholder="Dokter Rujukan"
-              label="Dokter Rujukan"
-            />
-            <TextArea
-              id="catatanRujukan"
-              placeholder="Catatan Rujukan"
-              label="Catatan Rujukan"
-            />
-          </div>
-          <div className="flex items-center gap-3">
-            <Button
-              className="max-md:w-full"
-              variant="danger"
-              onClick={handlePrev}
+    <section className="space-y-8">
+      <div>
+        <Typography variant="h7" className="text-primary-1">
+          Resep Obat - {kunjungan.profile.name}
+        </Typography>
+        <FormProvider {...methods}>
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-2 items-end">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
+              {fields.map((item, index) => (
+                <div key={item.id} className="border p-4 grid grid-cols-1 md:grid-cols-1 gap-5 mb-2 rounded-md"> 
+                  <SelectInput
+                    id={`listKuantitasObat.${index}.obatId`}
+                    placeholder="Pilih Obat"
+                    label={`Obat ${index + 1}`}
+                    {...methods.register(`listKuantitasObat.${index}.obatId` as const, {
+                      onChange: (e) => handleObatChange(index, e.target.value) 
+                    })}
+                  >
+                    {obatList.map((obat) => (
+                      <option key={obat.id} value={obat.id}>
+                        {obat.namaObat}
+                      </option>
+                    ))}
+                  </SelectInput>
+                  <Input
+                    id={`listKuantitasObat.${index}.kuantitas`}
+                    type="number"
+                    placeholder="Kuantitas"
+                    label="Kuantitas"
+                    {...methods.register(`listKuantitasObat.${index}.kuantitas` as const)}
+                  />
+                  <Input
+                    id={`listKuantitasObat.${index}.petunjukPemakaian`}
+                    placeholder="Petunjuk Pemakaian"
+                    label="Petunjuk Pemakaian"
+                    {...methods.register(`listKuantitasObat.${index}.petunjukPemakaian` as const)}
+                  />
+                  <Button
+                    variant="danger" 
+                    onClick={() => remove(index)}>
+                    Hapus Obat
+                  </Button>
+                </div>
+              ))}
+            </div>
+            <Button 
+              variant="primary" 
+              onClick={() => append({ obatId: "", namaObat: "", kuantitas: 0, petunjukPemakaian: "" })} 
+              className="mb-4"
             >
-              Previous
+              Tambah Obat
             </Button>
-            <Button type="submit" className="max-md:w-full">
-              Submit
-            </Button>
-          </div>
-        </form>
-      </FormProvider>
+            <TextArea
+              id="resepObatRujukan.deskripsi"
+              placeholder="Resep Obat di Luar Klinik"
+              label="Resep Obat di Luar Klinik"
+              {...methods.register("resepObatRujukan.deskripsi" as const)}
+            />
+            <div className="flex items-center gap-3 mt-4">
+              <Button
+                className="max-md:w-full"
+                variant="danger"
+                onClick={handlePrev}
+              >
+                Kembali
+              </Button>
+              <Button type="submit" className="max-md:w-full">
+                Berikutnya
+              </Button>
+            </div>
+          </form>
+        </FormProvider>
+      </div>
+      <Divider />
+
+      {/* Kotak kedua untuk tampilan read-only daftar obat */}
+      <div>
+        <Typography variant="h7" className="text-primary-1 mb-4">
+          Daftar Obat Tersedia
+        </Typography>
+        <DataTable columns={availableObatTableColumn} rows={obatList} flexColumnIndexes={[1, 4]} />
+      </div>
     </section>
   );
 };

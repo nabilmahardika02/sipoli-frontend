@@ -1,6 +1,7 @@
 import Typography from "@/components/elements/Typography";
 import { sesi, status } from "@/content/kunjungan";
 import { formatDateOnly } from "@/lib/formater";
+import { formatDate } from "@/lib/formater";
 import { Kunjungan } from "@/types/entities/kunjungan";
 
 const getSesiText = (sesiValue: number | undefined) => {
@@ -115,21 +116,21 @@ const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
             <Typography variant="p2" weight="semibold" className="text-gray-400">
               Tanggal Masuk
             </Typography>
-            <Typography className="text-primary-1">
-              {kunjungan.tanggalMasuk
-                ? formatDateOnly(kunjungan.tanggalMasuk)
-                : "Belum tersedia"}
-            </Typography>
+<Typography className="text-primary-1">
+  {kunjungan.tanggalMasuk
+    ? formatDate(kunjungan.tanggalMasuk)
+    : "-"}
+</Typography>
           </div>
           <div>
             <Typography variant="p2" weight="semibold" className="text-gray-400">
               Tanggal Keluar
             </Typography>
             <Typography className="text-primary-1">
-              {kunjungan.tanggalKeluar
-                ? formatDateOnly(kunjungan.tanggalKeluar)
-                : "Belum tersedia"}
-            </Typography>
+  {kunjungan.tanggalKeluar
+    ? formatDate(kunjungan.tanggalKeluar)
+    : "-"}
+</Typography>
           </div>
         </>
       )}

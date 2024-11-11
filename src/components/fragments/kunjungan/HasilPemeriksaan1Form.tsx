@@ -1,6 +1,7 @@
 import Button from "@/components/elements/Button";
 import Input from "@/components/elements/forms/Input";
 import SelectInput from "@/components/elements/forms/SelectInput";
+import TextArea from "@/components/elements/forms/TextArea";
 import { LoadingDiv } from "@/components/elements/Loading";
 import Typography from "@/components/elements/Typography";
 import { checkRole } from "@/lib/checkRole";
@@ -45,11 +46,10 @@ const HasilPemeriksaan1Form = ({
       methods.setValue("dokterPengirim", hasilPemeriksaan.dokterPengirim);
       methods.setValue("dokter", hasilPemeriksaan.dokter);
       methods.setValue("keluhanUtama", hasilPemeriksaan.keluhanUtama);
-      methods.setValue(
-        "riwayatPenyakitSekarang",
-        hasilPemeriksaan.riwayatPenyakitSekarang
-      );
+      methods.setValue("riwayatPenyakitSekarang", hasilPemeriksaan.riwayatPenyakitSekarang);
       methods.setValue("kie", hasilPemeriksaan.kie);
+      methods.setValue("tanggalMasuk", hasilPemeriksaan.tanggalMasuk);
+      methods.setValue("tanggalKeluar", hasilPemeriksaan.tanggalKeluar);
     }
   }, [hasilPemeriksaan, methods]);
 
@@ -76,6 +76,8 @@ const HasilPemeriksaan1Form = ({
       keluhanUtama: data.keluhanUtama,
       riwayatPenyakitSekarang: data.riwayatPenyakitSekarang,
       kie: data.kie,
+      tanggalMasuk: data.tanggalMasuk,
+      tanggalKeluar: data.tanggalKeluar,
     }));
 
     setSection(2);
@@ -88,49 +90,73 @@ const HasilPemeriksaan1Form = ({
       </Typography>
       {dokters ? (
         <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(onSubmit)} className="mt-5 items-end">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
-              <Input
-                id="dokterPengirim"
-                placeholder="Dokter Pengirim"
-                label="Dokter Pengirim"
-              />
-              <SelectInput
-                id="dokter"
-                placeholder="Pilih Dokter"
-                validation={{ required: "Mohon pilih dokter yang menangani" }}
-                label="Dokter"
-              >
-                {dokters?.map((dokter) => (
-                  <option key={dokter.listProfile[0].id} value={dokter.listProfile[0].id}>
-                    {dokter.listProfile[0].name}
-                  </option>
-                ))}
-              </SelectInput>
-              <Input
-                id="keluhanUtama"
-                placeholder="Keluhan Utama"
-                label="Keluhan Utama"
-              />
-              <Input
-                id="riwayatPenyakitSekarang"
-                placeholder="Riwayat Keluhan / Penyakit Saat Ini"
-                label="Riwayat Keluhan / Penyakit Saat Ini"
-              />
-              <Input id="kie" placeholder="Komunikasi Informasi dan Edukasi" label="Komunikasi Informasi dan Edukasi" />
-            </div>
-            <div className="flex items-center gap-3">
-              <Link href={"/kunjungan/" + router.query.id}>
-                <Button className="max-md:w-full" variant="danger">
-                  Cancel
-                </Button>
-              </Link>
-              <Button type="submit" className="max-md:w-full">
-                Next
-              </Button>
-            </div>
-          </form>
-        </FormProvider>
+  <form onSubmit={handleSubmit(onSubmit)} className="mt-5 items-end">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
+      <Input
+        id="dokterPengirim"
+        placeholder="Dokter Pengirim"
+        label="Dokter Pengirim"
+        {...methods.register("dokterPengirim")}
+      />
+      <SelectInput
+        id="dokter"
+        placeholder="Pilih Dokter"
+        validation={{ required: "Mohon pilih dokter yang menangani" }}
+        label="Dokter"
+        {...methods.register("dokter")}
+      >
+        {dokters?.map((dokter) => (
+          <option key={dokter.listProfile[0].id} value={dokter.listProfile[0].id}>
+            {dokter.listProfile[0].name}
+          </option>
+        ))}
+      </SelectInput>
+      <Input
+        id="tanggalMasuk"
+        type="datetime-local"
+        placeholder="Tanggal Masuk"
+        label="Tanggal Masuk"
+        {...methods.register("tanggalMasuk")}
+      />
+      <Input
+        id="tanggalKeluar"
+        type="datetime-local"
+        placeholder="Tanggal Keluar"
+        label="Tanggal Keluar"
+        {...methods.register("tanggalKeluar")}
+      />
+      <Input
+        id="keluhanUtama"
+        placeholder="Keluhan Utama"
+        label="Keluhan Utama"
+        {...methods.register("keluhanUtama")}
+      />
+      <Input
+        id="riwayatPenyakitSekarang"
+        placeholder="Riwayat Penyakit dari Keluhan Utama"
+        label="Riwayat Penyakit dari Keluhan Utama"
+        {...methods.register("riwayatPenyakitSekarang")}
+      />
+      <TextArea
+        id="kie"
+        placeholder="Komunikasi Informasi dan Edukasi"
+        label="Komunikasi Informasi dan Edukasi"
+        {...methods.register("kie")}
+      />
+    </div>
+    <div className="flex items-center gap-3">
+      <Link href={"/kunjungan/" + router.query.id}>
+        <Button className="max-md:w-full" variant="danger">
+          Batal
+        </Button>
+      </Link>
+      <Button type="submit" className="max-md:w-full">
+        Berikutnya
+      </Button>
+    </div>
+  </form>
+</FormProvider>
+
       ) : (
         <LoadingDiv />
       )}
@@ -139,3 +165,4 @@ const HasilPemeriksaan1Form = ({
 };
 
 export default HasilPemeriksaan1Form;
+

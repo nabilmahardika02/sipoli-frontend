@@ -82,7 +82,7 @@ const HasilPemeriksaan5Form = ({
       },
     }));
 
-    setSection(4);
+    setSection(5);
   };
 
   return (
@@ -115,10 +115,10 @@ const HasilPemeriksaan5Form = ({
               variant="danger"
               onClick={handlePrev}
             >
-              Previous
+              Kembali
             </Button>
             <Button type="submit" className="max-md:w-full">
-              Submit
+              Simpan
             </Button>
           </div>
         </form>

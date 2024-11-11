@@ -75,7 +75,7 @@ export const pasienMenu: NavbarMenu[] = [
   {
     name: "Rekam Medis",
     icon: FaBook,
-    href: "/rekam-medis",
+    href: "/rekam-medis/all",
     children: [],
   },
 ];

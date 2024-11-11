@@ -80,10 +80,10 @@ const HasilPemeriksaan4Form = ({
               variant="danger"
               onClick={handlePrev}
             >
-              Previous
+              Kembali
             </Button>
             <Button type="submit" className="max-md:w-full">
-              Next
+              Berikutnya
             </Button>
           </div>
         </form>

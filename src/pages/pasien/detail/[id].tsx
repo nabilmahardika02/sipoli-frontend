@@ -3,10 +3,11 @@ import DataKebiasaan from "@/components/fragments/pasien/DataKebiasaan";
 import DataRekamMedis from "@/components/fragments/pasien/DataRekamMedis";
 import DataRiwayatKeluarga from "@/components/fragments/pasien/DataRiwayatKeluarga";
 import DataRiwayatPenyakit from "@/components/fragments/pasien/DataRiwayatPenyakit";
+import DataDaftarRekamMedis from "@/components/fragments/pasien/DataDaftarRekamMedis";
 import withAuth from "@/components/hoc/withAuth";
 import { useDocumentTitle } from "@/context/Title";
-import { checkRole } from "@/lib/checkRole";
 import sendRequest from "@/lib/getApi";
+import useAuthStore from "@/store/useAuthStore";
 import { Pasien } from "@/types/entities/profile";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -17,10 +18,13 @@ const PasienPage = () => {
   const [pasien, setPasien] = useState<Pasien>();
   const [trigger, setTrigger] = useState(false);
   const router = useRouter();
+  const user = useAuthStore.useUser();
 
-  if (!checkRole(["PERAWAT", "DOKTER"])) {
-    router.push("/403");
-  }
+  useEffect(() => {
+    if (!["PERAWAT", "DOKTER", "PASIEN"].includes(user?.role)) {
+      router.push("/403");
+    }
+  }, [user, router]);
 
   useEffect(() => {
     setTitle("Detail Pasien");
@@ -41,7 +45,6 @@ const PasienPage = () => {
     if (router.query.id) {
       fetchProfile();
     }
-    
   }, [router.query.id, fetchProfile, trigger]);
 
   return (
@@ -71,6 +74,13 @@ const PasienPage = () => {
             trigger={trigger}
             setTrigger={setTrigger}
           />
+          {["DOKTER", "PERAWAT"].includes(user?.role) && (
+            <DataDaftarRekamMedis
+              pasien={pasien}
+              trigger={trigger}
+              setTrigger={setTrigger}
+            />
+          )}
         </>
       ) : (
         <LoadingDiv />

@@ -32,3 +32,9 @@ export interface UpdateRekamMedisForm {
   gangguanJiwa: string;
   riwayatKeluargaLainnya: string;
 }
+
+export type FilterRekamMedisForm = {
+  profileId: string;   // ID pasien yang akan dipilih
+  startDate: string;   // Tanggal awal filter kunjungan
+  endDate: string;     // Tanggal akhir filter kunjungan
+};
