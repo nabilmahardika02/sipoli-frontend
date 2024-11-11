@@ -110,20 +110,22 @@ const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
           {kunjungan.keluhan}
         </Typography>
       </div>
+      {kunjungan.antrian && kunjungan.status < 2 && new Date(kunjungan.tanggal).getDay() !== 0 && (
+        <div>
+          <Typography
+            variant="p2"
+            weight="semibold"
+            className="text-gray-400"
+          >
+            Sesi
+          </Typography>
+          <Typography className="text-primary-1">
+            {getSesiText(kunjungan?.antrian.sesi)}
+          </Typography>
+        </div>
+      )}
       {kunjungan.antrian && kunjungan.status < 2 && (
         <>
-          <div>
-            <Typography
-              variant="p2"
-              weight="semibold"
-              className="text-gray-400"
-            >
-              Sesi
-            </Typography>
-            <Typography className="text-primary-1">
-              {getSesiText(kunjungan?.antrian.sesi)}
-            </Typography>
-          </div>
           <div>
             <Typography
               variant="p2"
