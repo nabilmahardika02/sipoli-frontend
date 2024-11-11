@@ -5,6 +5,7 @@ import IconButton from "@/components/elements/IconButton";
 import Typography from "@/components/elements/Typography";
 import ModalLayout from "@/components/layouts/ModalLayout";
 import sendRequest from "@/lib/getApi";
+import useAuthStore from "@/store/useAuthStore"; // Supaya pasien gabisa edit
 import { Pasien } from "@/types/entities/profile";
 import { UpdateRekamMedisForm } from "@/types/forms/rekamMedisForm";
 import { useRouter } from "next/router";
@@ -23,6 +24,7 @@ const DataRiwayatKeluarga = ({
 }) => {
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
+  const user = useAuthStore.useUser(); // ambil data user dari auth store, Supaya pasien gabisa edit
 
   const methods = useForm<UpdateRekamMedisForm>({
     mode: "onTouched",
@@ -86,11 +88,13 @@ const DataRiwayatKeluarga = ({
           <Typography variant="h6" className="text-primary-1">
             Data Riwayat Penyakit Keluarga
           </Typography>
-          <IconButton
-            icon={LuPencil}
-            variant="primary"
-            onClick={() => setShowModal(true)}
-          />
+          {["DOKTER", "PERAWAT"].includes(user?.role ?? "") && (
+  <IconButton
+    icon={LuPencil}
+    variant="primary"
+    onClick={() => setShowModal(true)}
+  />
+)}
         </div>
         <Divider />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">

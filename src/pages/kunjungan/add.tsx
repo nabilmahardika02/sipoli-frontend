@@ -29,6 +29,7 @@ const KunjunganAddPage = () => {
   const [showInformationSaturday, setShowInformationSaturday] = useState(false);
   const [showAntrianInfo, setShowAntrianInfo] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
   const [selectedSesi, setSelectedSesi] = useState("");
   const [antrianInfo, setAntrianInfo] = useState(0);
   const [showSesi, setShowSesi] = useState(false);
@@ -92,6 +93,7 @@ const KunjunganAddPage = () => {
         true
       );
 
+      console.log(data.jamMasuk);
       if (isSuccess) {
         router.push("/home");
       }
@@ -208,9 +210,21 @@ const KunjunganAddPage = () => {
                   onChange={handleDateChange}
                 />
                 {showInformationSunday && (
-                  <Typography variant="p2" className="my-2 text-gray-600" size="sm">
-                    Poliklinik hanya dapat melayani pada pukul 14:00 - 17:00 WITA di hari Minggu
-                  </Typography>
+                  <>
+                    <Typography variant="p2" weight="medium" font="inter" className="mt-5">Jam Kunjungan</Typography>
+                    <input 
+                      id="jamMasuk"
+                      type="time" 
+                      step="3600" 
+                      className="required w-full p-2 border-2 border-gray-300 rounded focus:border-blue-400 focus:outline-none"
+                      value={selectedTime}
+                      {...methods.register("jamMasuk", { required: "Jam kunjungan wajib diisi" })}
+                      onChange={(e) => setSelectedTime(e.target.value)}
+                    />
+                    <Typography variant="p2" className="my-2 text-gray-600" size="sm">
+                      Silahkan pilih waktu dalam WITA untuk berkunjung di hari Minggu
+                    </Typography>
+                  </>
                 )}
                 {showInformationSaturday && (
                   <Typography variant="p2" className="my-2 text-danger-core" size="sm">

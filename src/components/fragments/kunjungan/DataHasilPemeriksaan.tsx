@@ -5,8 +5,10 @@ import DataPemeriksaanFisik from "./DataPemeriksaanFisik";
 import DataRujukan from "./DataRujukan";
 import DataStatusPresent from "./DataStatusPresent";
 import DataUtama from "./DataUtama";
+import DataResepObat from "./DataResepObat"; // Tambahan
 import { Dispatch, SetStateAction } from "react";
 import DataResepObatRujukan from "./DataResepObatRujukan";
+import { KuantitasObat } from "@/types/entities/kuantitasObat"; // Pastikan menggunakan KuantitasObat dari kuantitasObat
 
 const DataHasilPemeriksaan = ({
   data,
@@ -45,9 +47,12 @@ const DataHasilPemeriksaan = ({
             trigger={trigger}
             setTrigger={setTrigger}
           />
-          <DataRujukan data={data.rujukan} />
-          <DataResepObatRujukan
-            data={data.resepObatRujukan}
+<DataResepObat 
+  listKuantitasObat={data.listKuantitasObat as unknown as KuantitasObat[]} 
+  resepObatRujukan={data.resepObatRujukan} 
+/>
+          <DataRujukan
+            data={data.rujukan}
             idPemeriksaan={data.id}
             trigger={trigger}
             setTrigger={setTrigger}

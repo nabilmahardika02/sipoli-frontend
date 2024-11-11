@@ -4,11 +4,19 @@ export type RujukanForm = {
   catatanRujukan: string;
 };
 
-export type UpdateRujukanForm = {
-  tujuanRujukan: string;
-  dokterRujukan: string;
-  catatanRujukan: string;
-}
+// baru
+export type KuantitasObatRequest = {
+  obatId: string;
+  namaObat: string; // Tambahkan namaObat di sini
+  kuantitas: number;
+  petunjukPemakaian: string;
+};
+// baru
+
+export type ResepObatRujukanForm = {
+  deskripsi: string;
+};
+
 
 export type HasilPemeriksaanForm = {
   dokterPengirim: string;
@@ -43,6 +51,8 @@ export type HasilPemeriksaanForm = {
   tindakan: string;
   deskripsi: string;
   rujukanRequestDTO: RujukanForm;
+  listKuantitasObat: KuantitasObatRequest[]; // baru
+  resepObatRujukan: ResepObatRujukanForm; // Sesuaikan jadi objek
 };
 
 export type HasilKunjunganForm = {
@@ -51,7 +61,9 @@ export type HasilKunjunganForm = {
   keluhanUtama: string;
   riwayatPenyakitSekarang: string;
   kie: string;
-}
+  tanggalMasuk: string; // baru
+  tanggalKeluar: string; // baru
+};
 
 export type HasilPemeriksaanFisikForm = {
   tensi: string;
@@ -107,4 +119,11 @@ export type UpdateDiagnosaAkhirForm = {
 export type UpdateResepObatRujukanForm = {
   id: string;
   deskripsi: string;
+};
+
+
+export type UpdateRujukanForm = {
+  tujuanRujukan: string;
+  dokterRujukan: string;
+  catatanRujukan: string;
 }

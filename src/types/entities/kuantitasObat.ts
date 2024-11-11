@@ -1,9 +1,11 @@
 import { Obat } from "./obat";
-import { RekamMedis } from "./rekamMedis";
+import { HasilPemeriksaan } from "./kunjungan";
 
 export interface KuantitasObat {
   id: string;
   kuantitas: number;
-  obat: Obat;
-  rekamMedis: RekamMedis;
+  petunjukPemakaian: string;
+  // namaObat: string; // Field untuk nama obat
+  obat: Obat;       // Referensi ke entitas Obat
+  hasilPemeriksaan: HasilPemeriksaan; // Referensi ke entitas HasilPemeriksaan
 }

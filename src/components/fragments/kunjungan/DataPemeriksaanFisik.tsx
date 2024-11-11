@@ -4,6 +4,7 @@ import IconButton from "@/components/elements/IconButton";
 import Typography from "@/components/elements/Typography";
 import ModalLayout from "@/components/layouts/ModalLayout";
 import sendRequest from "@/lib/getApi";
+import useAuthStore from "@/store/useAuthStore"; // supaya pasien & admin gak bisa edit
 import { PemeriksaanFisik } from "@/types/entities/kunjungan";
 import { UpdatePemeriksaanFisikForm } from "@/types/forms/hasilPemeriksaanForm";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
@@ -21,6 +22,7 @@ const DataPemeriksaanFisik = ({
   trigger: boolean;
   setTrigger: Dispatch<SetStateAction<boolean>>;
 }) => {
+  const user = useAuthStore.useUser(); // supaya pasien & admin gak bisa edit
   const [showModal, setShowModal] = useState(false);
 
   const methods = useForm<UpdatePemeriksaanFisikForm>({
@@ -68,12 +70,14 @@ const DataPemeriksaanFisik = ({
         <div className="w-1 h-5 bg-primary-1"></div>
         <Typography className="text-primary-1 font-semibold">
           Pemeriksaan Fisik
-        </Typography>
-        <IconButton
-          icon={LuPencil}
-          variant="primary"
-          onClick={() => setShowModal(true)}
-        />
+          </Typography>
+        {["DOKTER", "PERAWAT"].includes(user?.role ?? "") && (
+  <IconButton
+    icon={LuPencil}
+    variant="primary"
+    onClick={() => setShowModal(true)}
+  />
+)}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
         <div>
@@ -209,7 +213,7 @@ const DataPemeriksaanFisik = ({
                   />
                 </div>
                 <Button type="submit" className="max-md:w-full">
-                  Save
+                  Simpan
                 </Button>
               </form>
             </FormProvider>

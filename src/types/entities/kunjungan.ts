@@ -1,5 +1,6 @@
 import { Antrian } from "./antrian";
 import { Profile } from "./profile";
+import { Obat } from "./obat";
 
 export interface Kunjungan {
   id: string;
@@ -73,8 +74,17 @@ export interface HasilPemeriksaan {
   pemeriksaanFisik: PemeriksaanFisik;
   statusPresent: StatusPresent;
   diagnosaAkhir: DiagnosaAkhir;
+  listKuantitasObat: KuantitasObat[]; // tambahan
 }
 
+// baru
+export interface KuantitasObat {
+  id: string;
+  obatId: String;
+  obat: Obat;  // Direct reference to the Obat entity
+  kuantitas: number;
+  petunjukPemakaian: string;
+}
 export interface Dokter {
   id: string;
   name: string;

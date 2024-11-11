@@ -40,11 +40,13 @@ const KunjunganUpdatePage = () => {
     const user = useAuthStore.useUser();
     const { setTitle } = useDocumentTitle();
     const router = useRouter();
+    const { setValue } = useForm();
     const [kunjungan, setKunjungan] = useState<Kunjungan>();
     const [showInformationSunday, setShowInformationSunday] = useState(false);
     const [showInformationSaturday, setShowInformationSaturday] = useState(false);
     const [showAntrianInfo, setShowAntrianInfo] = useState(false);
     const [selectedDate, setSelectedDate] = useState("");
+    const [selectedTime, setSelectedTime] = useState("");
     const [selectedSesi, setSelectedSesi] = useState("");
     const [antrianInfo, setAntrianInfo] = useState(0);
     const [showSesi, setShowSesi] = useState(false);
@@ -68,7 +70,6 @@ const KunjunganUpdatePage = () => {
         if (router.query.id) {
             fetchKunjungan();  // Fetch existing kunjungan data
         }
-        console.log(kunjungan?.tanggal.toString().split("T")[0]);
     }, [router.query.id]);
 
     const methods = useForm<KunjunganForm>({
@@ -105,6 +106,8 @@ const KunjunganUpdatePage = () => {
 
         if (date.getDay() > 0 && date.getDay() < 6) {
             setShowSesi(true);
+        } else if (date.getDay() === 0) {
+            setShowInformationSunday(true);
         }
 
     }, [kunjungan]);
@@ -156,6 +159,19 @@ const KunjunganUpdatePage = () => {
         setShowAntrianInfo(true);
     }
 
+    useEffect(() => {
+        // Asumsikan kunjungan?.tanggalMasuk adalah Date atau string yang dapat di-parse ke Date
+        if (kunjungan?.tanggalMasuk) {
+          const dateObj = new Date(kunjungan.tanggalMasuk);
+          const hours = dateObj.getHours().toString().padStart(2, '0');
+          const minutes = dateObj.getMinutes().toString().padStart(2, '0');
+          const timeOnly = `${hours}:${minutes}`;
+    
+          // Set nilai default untuk input type="time"
+          setValue("jamMasuk", timeOnly);
+        }
+      }, [kunjungan, setValue]);
+      
     return (
         <main>
             <section>
@@ -175,9 +191,21 @@ const KunjunganUpdatePage = () => {
                                 defaultValue={kunjungan?.tanggal.toString().split("T")[0]}
                             />
                             {showInformationSunday && (
-                                <Typography variant="p2" className="my-2 text-gray-600" size="sm">
-                                    Poliklinik hanya dapat melayani pada pukul 14:00 - 17:00 WITA di hari Minggu
-                                </Typography>
+                                <>
+                                    <Typography variant="p2" weight="medium" font="inter" className="mt-5">Jam Kunjungan</Typography>
+                                    <input 
+                                        id="jamMasuk"
+                                        type="time" 
+                                        step="3600" 
+                                        className="required w-full p-2 border-2 border-gray-300 rounded focus:border-blue-400 focus:outline-none"
+                                        value={selectedTime}
+                                        {...methods.register("jamMasuk", { required: "Jam kunjungan wajib diisi" })}
+                                        onChange={(e) => setSelectedTime(e.target.value)}
+                                    />
+                                    <Typography variant="p2" className="my-2 text-gray-600" size="sm">
+                                        Silahkan pilih waktu dalam WITA untuk berkunjung di hari Minggu
+                                    </Typography>
+                                </>
                             )}
                             {showInformationSaturday && (
                                 <Typography variant="p2" className="my-2 text-danger-core" size="sm">
@@ -203,12 +231,12 @@ const KunjunganUpdatePage = () => {
                                 </Typography>
                             )}
                             <div className="justify-between gap-5 my-5">
-                              <Input
-                                id="id"
-                                defaultValue={kunjungan.id}
-                                className="hidden"
-                              >
-                              </Input>
+                                <Input
+                                    id="id"
+                                    defaultValue={kunjungan.id}
+                                    className="hidden"
+                                >
+                                </Input>
                                 
                                 <SelectInput
                                     id="profileId"

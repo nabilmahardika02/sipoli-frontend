@@ -148,6 +148,41 @@ export const pendingRestockColumn: GridColDef[] = [
   },
 ];
 
+
+export const availableObatTableColumn: GridColDef[] = [
+  {
+    field: "namaObat",
+    headerName: "Nama Obat",
+    headerAlign: "center",
+    width: 200,
+    align: "center",
+  },
+  // {
+  //   field: "deskripsi",
+  //   headerName: "Deskripsi",
+  //   headerAlign: "center",
+  //   width: 200,
+  //   align: "center",
+  // },
+  {
+    field: "totalStok",
+    headerName: "Stok Tersedia",
+    headerAlign: "center",
+    width: 150,
+    align: "center",
+    renderCell: (params) =>
+      `${params.row.totalStok} ${getSatuanObat(params.row.jenisSatuan)}`,
+  },
+  // {
+  //   field: "tanggalKadaluarsa",
+  //   headerName: "Tanggal Kadaluarsa",
+  //   headerAlign: "center",
+  //   width: 180,
+  //   align: "center",
+  //   valueGetter: (value, row, column, apiRef) => `${formatDateOnly(value)}`,
+  // },
+];
+
 export const getRowIdRestock: GridRowIdGetter<GridValidRowModel> = (row) =>
   row.id;
 
