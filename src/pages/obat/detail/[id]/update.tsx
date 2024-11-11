@@ -110,9 +110,9 @@ const UpdatePage = () => {
                 />
               </div>
               <div className="mt-5 flex items-center gap-4">
-                <Button type="submit">Submit</Button>
+                <Button type="submit">Perbarui</Button>
                 <Link href={"/obat/detail/" + router.query.id}>
-                  <Button variant="danger">Cancel</Button>
+                  <Button variant="danger">Batal</Button>
                 </Link>
               </div>
             </form>

@@ -11,7 +11,7 @@ const RiwayatRestock = ({ obat }: { obat: Obat }) => {
         weight="semibold"
         className="text-secondary-2 mb-2"
       >
-        Riwayat Restock
+        Riwayat Restok
       </Typography>
       <div className="w-full mt-3">
         {obat.listRestockObat.length > 0 ? (
@@ -45,7 +45,7 @@ const RiwayatRestock = ({ obat }: { obat: Obat }) => {
           </>
         ) : (
           <Typography className="text-gray-500 p-4 rounded-lg border border-gray-300 w-full text-center">
-            Belum ada riwayat restock
+            Belum ada riwayat restok
           </Typography>
         )}
       </div>

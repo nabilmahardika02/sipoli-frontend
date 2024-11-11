@@ -38,7 +38,7 @@ export const obatTableColumn: GridColDef[] = [
   },
   {
     field: "updatedAt",
-    headerName: "Last Update",
+    headerName: "Terakhir Diubah",
     headerAlign: "center",
     width: 250,
     align: "center",
@@ -46,7 +46,7 @@ export const obatTableColumn: GridColDef[] = [
   },
   {
     field: "action",
-    headerName: "Action",
+    headerName: "Detail",
     headerAlign: "center",
     width: 150,
     align: "center",
