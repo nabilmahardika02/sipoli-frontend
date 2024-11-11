@@ -1,5 +1,10 @@
 import Button from "@/components/elements/Button";
-import { formatDate, formatDateOnly, getCurrency, getSatuanObat } from "@/lib/formater";
+import {
+  formatDate,
+  formatDateOnly,
+  getCurrency,
+  getSatuanObat,
+} from "@/lib/formater";
 import {
   GridColDef,
   GridRowIdGetter,
@@ -180,3 +185,29 @@ export const availableObatTableColumn: GridColDef[] = [
 
 export const getRowIdRestock: GridRowIdGetter<GridValidRowModel> = (row) =>
   row.id;
+
+export const pemakaianObatColumn: GridColDef[] = [
+  {
+    field: "tanggal",
+    headerName: "Tanggal Pemakaian",
+    headerAlign: "center",
+    width: 250,
+    align: "center",
+    valueGetter: (value, row, column, apiRef) => `${formatDate(value)}`,
+  },
+  {
+    field: "jumlah",
+    headerName: "Kuantitas",
+    headerAlign: "center",
+    width: 200,
+    align: "center",
+  },
+  {
+    field: "keterangan",
+    headerName: "Keterangan",
+    headerAlign: "center",
+    width: 200,
+    align: "center",
+    valueGetter: (value, row, column, apiRef) => `-`,
+  },
+];

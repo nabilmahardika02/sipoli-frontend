@@ -64,7 +64,7 @@ const DataKebiasaan = ({
   }, [pasien, methods]);
 
   return (
-    <section className="p-5 md:p-8 rounded-xl bg-white border border-gray-200 shadow-md">
+    <section className="data-section">
       <section>
         <div className="flex max-md:justify-between gap-5 items-center">
           <Typography variant="h6" className="text-primary-1">

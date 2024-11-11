@@ -21,7 +21,11 @@ const AppShell = (props: AppShellProps) => {
     pathname.startsWith("/sandbox") ||
     pathname === "/";
 
-  const disableBg = pathname === ("/pasien/detail/[id]") || pathname === "/kunjungan/[id]" || pathname === "/obat/permintaan-restock";
+  const disableBg =
+    pathname === "/pasien/detail/[id]" ||
+    pathname === "/kunjungan/[id]" ||
+    pathname === "/obat/permintaan-restock" ||
+    pathname === "/obat/detail/[id]";
 
   return (
     <section>
