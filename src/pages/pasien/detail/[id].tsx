@@ -21,7 +21,7 @@ const PasienPage = () => {
   const user = useAuthStore.useUser();
 
   useEffect(() => {
-    if (!["PERAWAT", "DOKTER", "PASIEN"].includes(user?.role)) {
+    if (!["PERAWAT", "DOKTER", "PASIEN"].includes(user?.role ?? "")) {
       router.push("/403");
     }
   }, [user, router]);
@@ -74,7 +74,7 @@ const PasienPage = () => {
             trigger={trigger}
             setTrigger={setTrigger}
           />
-          {["DOKTER", "PERAWAT"].includes(user?.role) && (
+          {["DOKTER", "PERAWAT"].includes(user?.role ?? "") && (
             <DataDaftarRekamMedis
               pasien={pasien}
               trigger={trigger}

@@ -16,7 +16,7 @@ export const obatTableColumn: GridColDef[] = [
   {
     field: "namaObat",
     headerName: "Nama Obat",
-    headerAlign: "cettnter",
+    headerAlign: "center",
     width: 200,
     align: "center",
   },

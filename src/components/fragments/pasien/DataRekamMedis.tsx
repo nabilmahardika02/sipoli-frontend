@@ -67,13 +67,13 @@ const DataRekamMedis = ({
           <Typography variant="h6" className="text-primary-1">
             {pasien.noRekamMedis || "No Rekam medis: -"}
           </Typography>
-          {["DOKTER", "PERAWAT"].includes(user?.role) && ( // Supaya pasien gabisa edit
-          <IconButton
-            icon={LuPencil}
-            variant="primary"
-            onClick={() => setShowModal(true)}
-          />
-          )}
+          {["DOKTER", "PERAWAT"].includes(user?.role ?? "") && (
+  <IconButton
+    icon={LuPencil}
+    variant="primary"
+    onClick={() => setShowModal(true)}
+  />
+)}
         </div>
         <Divider />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">

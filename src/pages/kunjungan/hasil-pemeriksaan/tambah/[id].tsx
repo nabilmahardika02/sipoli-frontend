@@ -57,7 +57,7 @@ const AddHasilPemeriksaanPage = () => {
       catatanRujukan: "",
     },
     listKuantitasObat: [],
-    resepObatRujukan: "",
+    resepObatRujukan: { deskripsi: "" }, // Ubah ini menjadi objek dengan properti `deskripsi`
   });
 
   useEffect(() => {

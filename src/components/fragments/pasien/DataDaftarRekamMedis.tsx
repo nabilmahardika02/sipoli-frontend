@@ -5,14 +5,14 @@ import Divider from "@/components/elements/Divider";
 import sendRequest from "@/lib/getApi";
 import { Kunjungan } from "@/types/entities/kunjungan";
 import { getRowIdKunjungan, kunjunganTables } from "@/types/table/hasilPemeriksaanColumn";
-import { Profile } from "@/types/entities/profile";
+import { Pasien } from "@/types/entities/profile"; // Ubah import dari Profile ke Pasien
 
 const DataDaftarRekamMedis = ({
     pasien,
     trigger,
     setTrigger,
   }: {
-    pasien: Profile;
+    pasien: Pasien; // Ubah ke tipe Pasien
     trigger: boolean;
     setTrigger: (value: boolean) => void;
   }) => {

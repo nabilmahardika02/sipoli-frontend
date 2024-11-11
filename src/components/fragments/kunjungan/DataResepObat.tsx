@@ -1,5 +1,5 @@
 import Typography from "@/components/elements/Typography";
-import { KuantitasObat } from "@/types/entities/kuantitasObat";
+import { KuantitasObat } from "@/types/entities/kuantitasObat"; // Gunakan tipe yang sama dari kuantitasObat
 import { ResepObatRujukan } from "@/types/entities/kunjungan";
 
 const DataResepObat = ({ listKuantitasObat, resepObatRujukan }: { listKuantitasObat: KuantitasObat[], resepObatRujukan?: ResepObatRujukan }) => {
