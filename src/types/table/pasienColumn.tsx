@@ -41,7 +41,7 @@ export const pasienTableColumns: GridColDef[] = [
   },
   {
     field: "action",
-    headerName: "Action",
+    headerName: "Detail",
     headerAlign: "center",
     width: 150,
     align: "center",
