@@ -33,6 +33,7 @@ const KunjunganAddPage = () => {
   const [selectedSesi, setSelectedSesi] = useState("");
   const [antrianInfo, setAntrianInfo] = useState(0);
   const [showSesi, setShowSesi] = useState(false);
+  const [validationMessage, setValidationMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (user?.role === "PASIEN") {
@@ -138,7 +139,24 @@ const KunjunganAddPage = () => {
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedDate = event.target.value;
     const date = new Date(selectedDate);
-    setSelectedDate(selectedDate); // Store the selected date
+    setSelectedDate(selectedDate);
+
+    // Hitung tanggal maksimum (7 hari setelah hari ini)
+    const today = new Date();
+    const maxDate = new Date(today);
+    maxDate.setDate(today.getDate() + 7);
+
+    if (date > maxDate) {
+      setShowInformationSunday(false);
+      setShowInformationSaturday(false);
+      setShowSesi(false);
+      setShowAntrianInfo(false);
+      // Set pesan validasi
+      setValidationMessage(`Hanya bisa mendaftarkan kunjungan hingga ${formatDateOnly(maxDate.toDateString())}`);
+    } else {
+      // Reset pesan validasi jika tanggal valid
+      setValidationMessage(null);
+    }
 
     if (date.getDay() === 0) { //sunday
       setShowInformationSunday(true);
@@ -209,7 +227,12 @@ const KunjunganAddPage = () => {
                   validation={{ required: "Mohon pilih tanggal kunjungan" }}
                   onChange={handleDateChange}
                 />
-                {showInformationSunday && (
+                {validationMessage !== null && (
+                  <Typography variant="p2" className="my-2 text-danger-core" size="sm">
+                    {validationMessage}
+                  </Typography>
+                )}
+                {showInformationSunday && validationMessage === null && (
                   <>
                     <Typography variant="p2" weight="medium" font="inter" className="mt-5">Jam Kunjungan</Typography>
                     <input 
@@ -226,12 +249,12 @@ const KunjunganAddPage = () => {
                     </Typography>
                   </>
                 )}
-                {showInformationSaturday && (
+                {showInformationSaturday && validationMessage === null && (
                   <Typography variant="p2" className="my-2 text-danger-core" size="sm">
                     Poliklinik tidak dapat melayani di hari Sabtu
                   </Typography>
                 )}
-                {showSesi && (<RadioButtonGroup
+                {showSesi && validationMessage === null && (<RadioButtonGroup
                   name="sesi"
                   options={sesi}
                   label="Sesi"
