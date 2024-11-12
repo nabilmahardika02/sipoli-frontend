@@ -104,7 +104,7 @@ const DetailPage = () => {
                     leftIcon={IoTrashBin}
                     leftIconClassName="max-md:mr-0"
                   >
-                    <span className="max-md:hidden">Hapus Akun</span>
+                    <span className="max-md:hidden">Nonaktifkan Akun</span>
                   </Button>
                 </div>
               </div>
@@ -306,7 +306,7 @@ const DetailPage = () => {
             </Typography>
             <div className="flex items-center gap-2 mt-4 self-end">
               <Button variant="danger" size="sm" onClick={() => handleDelete()}>
-                Hapus
+                Nonaktifkan
               </Button>
               <Button
                 variant="success"
