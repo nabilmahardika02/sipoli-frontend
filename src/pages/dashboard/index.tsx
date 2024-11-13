@@ -162,7 +162,7 @@ const Dashboard = () => {
             ? "Penyembuhan adalah masalah waktu, tetapi kadang juga masalah kesempatan. - Hippocrates"
             : user?.role === "PERAWAT"
             ? "Perawatan adalah esensi dari keperawatan."
-            : "Mengelola data sistem dan pengguna."}
+            : "Analisis Kunjungan Pasien"}
         </Typography>
       </section>
 
@@ -201,6 +201,13 @@ const Dashboard = () => {
             <Line data={chartData} options={chartOptions} />
           </div>
         </div>
+      </section>
+      <section>
+          <div className="mt-4">
+              <Typography variant="h6" className="text-primary-1">
+                Sesi Terbanyak: 1
+              </Typography>
+          </div>
       </section>
     </main>
   );
