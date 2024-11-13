@@ -22,7 +22,6 @@
     "eslint": "^8.30.0",
     "immer": "^10.0.3",
     "next": "^14.2.13",
-    "node": "^22.11.0",
     "primereact": "^10.6.3",
     "propensi-fe-3": "file:",
     "react": "^18",
