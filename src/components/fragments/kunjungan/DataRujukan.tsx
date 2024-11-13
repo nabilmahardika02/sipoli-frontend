@@ -3,7 +3,6 @@ import Input from "@/components/elements/forms/Input";
 import IconButton from "@/components/elements/IconButton";
 import Typography from "@/components/elements/Typography";
 import ModalLayout from "@/components/layouts/ModalLayout";
-import { formatDateOnly } from "@/lib/formater";
 import sendRequest from "@/lib/getApi";
 import useAuthStore from "@/store/useAuthStore"; // supaya pasien & admin gak bisa edit
 import { Rujukan } from "@/types/entities/kunjungan";
@@ -16,12 +15,12 @@ const DataRujukan = ({
   data,
   idPemeriksaan,
   trigger,
-  setTrigger
+  setTrigger,
 }: {
-  data: Rujukan,
-  idPemeriksaan: string,
-  trigger: boolean,
-  setTrigger: Dispatch<SetStateAction<boolean>>
+  data: Rujukan;
+  idPemeriksaan: string;
+  trigger: boolean;
+  setTrigger: Dispatch<SetStateAction<boolean>>;
 }) => {
   const user = useAuthStore.useUser(); // supaya pasien & admin gak bisa edit
   const [showModal, setShowModal] = useState(false);
@@ -67,17 +66,24 @@ const DataRujukan = ({
           Rujukan
         </Typography>
         {["DOKTER", "PERAWAT"].includes(user?.role ?? "") && (
-  <IconButton
-    icon={LuPencil}
-    variant="primary"
-    onClick={() => setShowModal(true)}
-  />
-)}
+          <IconButton
+            icon={LuPencil}
+            variant="primary"
+            onClick={() => setShowModal(true)}
+          />
+        )}
       </div>
-      {data?.dokter || data?.catatan || data?.maksimalBerlaku || data?.tujuan ? (
+      {data?.dokter ||
+      data?.catatan ||
+      data?.maksimalBerlaku ||
+      data?.tujuan ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
           <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
+            <Typography
+              variant="p2"
+              weight="semibold"
+              className="text-gray-400"
+            >
               Tujuan Rujukan
             </Typography>
             <Typography className="text-primary-1">
@@ -85,7 +91,11 @@ const DataRujukan = ({
             </Typography>
           </div>
           <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
+            <Typography
+              variant="p2"
+              weight="semibold"
+              className="text-gray-400"
+            >
               Dokter Tujuan
             </Typography>
             <Typography className="text-primary-1">
@@ -93,7 +103,11 @@ const DataRujukan = ({
             </Typography>
           </div>
           <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
+            <Typography
+              variant="p2"
+              weight="semibold"
+              className="text-gray-400"
+            >
               Catatan
             </Typography>
             <Typography className="text-primary-1">
@@ -125,19 +139,35 @@ const DataRujukan = ({
               Ubah Data Rujukan
             </Typography>
             <FormProvider {...methods}>
-              <form onSubmit={handleSubmit(onSubmit)} className="mt-5 items-end">
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="mt-5 items-end"
+              >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
-                <Input id="dokterRujukan" placeholder="Dokter Rujukan" label="Dokter Rujukan" />
-                <Input id="tujuanRujukan" placeholder="Tujuan Rujukan" label="Tujuan Rujukan" />
-                <Input id="catatanRujukan" placeholder="Catatan" label="Catatan" />
+                  <Input
+                    id="dokterRujukan"
+                    placeholder="Dokter Rujukan"
+                    label="Dokter Rujukan"
+                  />
+                  <Input
+                    id="tujuanRujukan"
+                    placeholder="Tujuan Rujukan"
+                    label="Tujuan Rujukan"
+                  />
+                  <Input
+                    id="catatanRujukan"
+                    placeholder="Catatan"
+                    label="Catatan"
+                  />
                 </div>
                 <div className="flex justify-end gap-2">
-                  <Button variant="secondary" onClick={() => setShowModal(false)}>
+                  <Button
+                    variant="secondary"
+                    onClick={() => setShowModal(false)}
+                  >
                     Batal
                   </Button>
-                  <Button type="submit">
-                    Simpan
-                  </Button>
+                  <Button type="submit">Simpan</Button>
                 </div>
               </form>
             </FormProvider>

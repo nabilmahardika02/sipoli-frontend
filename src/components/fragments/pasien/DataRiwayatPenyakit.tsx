@@ -24,8 +24,7 @@ const DataRiwayatPenyakit = ({
 }) => {
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
-  const user = useAuthStore.useUser(); // ambil data user dari auth store, Supaya pasien gabisa edit
-
+  const user = useAuthStore.useUser();
 
   const methods = useForm<UpdateRekamMedisForm>({
     mode: "onTouched",
@@ -94,12 +93,12 @@ const DataRiwayatPenyakit = ({
             Data Riwayat Penyakit
           </Typography>
           {["DOKTER", "PERAWAT"].includes(user?.role ?? "") && (
-  <IconButton
-    icon={LuPencil}
-    variant="primary"
-    onClick={() => setShowModal(true)}
-  />
-)}
+            <IconButton
+              icon={LuPencil}
+              variant="primary"
+              onClick={() => setShowModal(true)}
+            />
+          )}
         </div>
         <Divider />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">

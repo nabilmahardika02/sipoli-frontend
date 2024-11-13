@@ -86,7 +86,7 @@ const HasilPemeriksaan2Form = ({
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} className="mt-5 items-end">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
-            <Input 
+            <Input
               id="suhu"
               type="number"
               placeholder="Temperature"

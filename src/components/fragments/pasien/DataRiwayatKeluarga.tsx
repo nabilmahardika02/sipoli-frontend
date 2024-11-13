@@ -89,12 +89,12 @@ const DataRiwayatKeluarga = ({
             Data Riwayat Penyakit Keluarga
           </Typography>
           {["DOKTER", "PERAWAT"].includes(user?.role ?? "") && (
-  <IconButton
-    icon={LuPencil}
-    variant="primary"
-    onClick={() => setShowModal(true)}
-  />
-)}
+            <IconButton
+              icon={LuPencil}
+              variant="primary"
+              onClick={() => setShowModal(true)}
+            />
+          )}
         </div>
         <Divider />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">

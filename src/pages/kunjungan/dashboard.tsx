@@ -1,12 +1,12 @@
-import { useRouter } from 'next/router';  // Import useRouter for navigation
-import { useEffect } from 'react';
 import withAuth from "@/components/hoc/withAuth";
+import { useRouter } from "next/router"; // Import useRouter for navigation
+import { useEffect } from "react";
 
 const KunjunganPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace('/dashboard');
+    router.replace("/dashboard");
   }, [router]);
 
   return null;

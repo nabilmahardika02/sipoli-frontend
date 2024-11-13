@@ -70,14 +70,14 @@ const DataPemeriksaanFisik = ({
         <div className="w-1 h-5 bg-primary-1"></div>
         <Typography className="text-primary-1 font-semibold">
           Pemeriksaan Fisik
-          </Typography>
+        </Typography>
         {["DOKTER", "PERAWAT"].includes(user?.role ?? "") && (
-  <IconButton
-    icon={LuPencil}
-    variant="primary"
-    onClick={() => setShowModal(true)}
-  />
-)}
+          <IconButton
+            icon={LuPencil}
+            variant="primary"
+            onClick={() => setShowModal(true)}
+          />
+        )}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
         <div>
@@ -171,8 +171,17 @@ const DataPemeriksaanFisik = ({
                 className="mt-5 items-end"
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
-                  <Input id="suhu" type="number" placeholder="Temperature" label="Temperature" />
-                  <Input id="tensi" placeholder="Blood Pressure" label="Blood Pressure" />
+                  <Input
+                    id="suhu"
+                    type="number"
+                    placeholder="Temperature"
+                    label="Temperature"
+                  />
+                  <Input
+                    id="tensi"
+                    placeholder="Blood Pressure"
+                    label="Blood Pressure"
+                  />
                   <Input
                     id="meanArteri"
                     type="number"
@@ -197,7 +206,11 @@ const DataPemeriksaanFisik = ({
                     placeholder="Oxygen Saturation"
                     label="Oxygen Saturation"
                   />
-                  <Input id="kesadaran" placeholder="Kesadaran" label="Kesadaran" />
+                  <Input
+                    id="kesadaran"
+                    placeholder="Kesadaran"
+                    label="Kesadaran"
+                  />
                   <Input id="eye" type="number" placeholder="Eye" label="Eye" />
                   <Input
                     id="verbal"
