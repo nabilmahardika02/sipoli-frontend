@@ -114,7 +114,7 @@ const HomePasienView = () => {
           <SelectInput
             id="profileId"
             onChange={handleProfile}
-            placeholder="Pilih Profile"
+            placeholder="Pilih Profil"
           >
             {profiles.map((profile) => (
               <option key={profile.id} value={profile.id}>

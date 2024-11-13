@@ -1,16 +1,21 @@
-import Typography from "@/components/elements/Typography";
-import IconButton from "@/components/elements/IconButton";
-import ModalLayout from "@/components/layouts/ModalLayout";
 import Button from "@/components/elements/Button";
 import Input from "@/components/elements/forms/Input";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import { LuPencil } from "react-icons/lu";
+import IconButton from "@/components/elements/IconButton";
+import Typography from "@/components/elements/Typography";
+import ModalLayout from "@/components/layouts/ModalLayout";
 import sendRequest from "@/lib/getApi";
 import { ResepObatRujukan } from "@/types/entities/kunjungan";
 import { UpdateResepObatRujukanForm } from "@/types/forms/hasilPemeriksaanForm";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { LuPencil } from "react-icons/lu";
 
-const DataResepObatRujukan = ({ data, idPemeriksaan, trigger, setTrigger }: {
+const DataResepObatRujukan = ({
+  data,
+  idPemeriksaan,
+  trigger,
+  setTrigger,
+}: {
   data: ResepObatRujukan;
   idPemeriksaan: string;
   trigger: boolean;
@@ -46,7 +51,6 @@ const DataResepObatRujukan = ({ data, idPemeriksaan, trigger, setTrigger }: {
     if (data) {
       methods.setValue("id", data.id);
       methods.setValue("deskripsi", data.deskripsi);
-      console.log(data);
     }
   }, [data, methods]);
 
@@ -66,15 +70,21 @@ const DataResepObatRujukan = ({ data, idPemeriksaan, trigger, setTrigger }: {
       {data?.id || data?.deskripsi ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
           <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
+            <Typography
+              variant="p2"
+              weight="semibold"
+              className="text-gray-400"
+            >
               ID
             </Typography>
-            <Typography className="text-primary-1">
-              {data.id || "-"}
-            </Typography>
+            <Typography className="text-primary-1">{data.id || "-"}</Typography>
           </div>
           <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
+            <Typography
+              variant="p2"
+              weight="semibold"
+              className="text-gray-400"
+            >
               Deskripsi
             </Typography>
             <Typography className="text-primary-1">
@@ -97,10 +107,17 @@ const DataResepObatRujukan = ({ data, idPemeriksaan, trigger, setTrigger }: {
               Ubah Data Resep atau Obat Rujukan
             </Typography>
             <FormProvider {...methods}>
-              <form onSubmit={handleSubmit(onSubmit)} className="mt-5 items-end">
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="mt-5 items-end"
+              >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
                   <Input id="id" placeholder="ID" label="ID" />
-                  <Input id="deskripsi" placeholder="Deskripsi" label="Deskripsi" />
+                  <Input
+                    id="deskripsi"
+                    placeholder="Deskripsi"
+                    label="Deskripsi"
+                  />
                 </div>
                 <Button type="submit" className="max-md:w-full">
                   Save

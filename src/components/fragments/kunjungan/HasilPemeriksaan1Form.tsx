@@ -121,6 +121,7 @@ const HasilPemeriksaan1Form = ({
         type="datetime-local"
         placeholder="Tanggal Masuk"
         label="Tanggal Masuk"
+        defaultValue={new Date(kunjungan.tanggalMasuk).toISOString().slice(0, 16)}
         {...methods.register("tanggalMasuk")}
       />
       <Input

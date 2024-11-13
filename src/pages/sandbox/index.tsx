@@ -22,6 +22,9 @@ const SandboxPage = () => {
         <Link href={"/sandbox/input-example"}>
           <Button variant="warning">Input</Button>
         </Link>
+        <Link href={"/sandbox/datetimepicker-example"}>
+          <Button variant="secondary">Datetime Picker</Button>
+        </Link>
       </div>
     </main>
   );

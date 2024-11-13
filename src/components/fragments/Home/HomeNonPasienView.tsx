@@ -28,10 +28,6 @@ const HomeNonPasienView = () => {
     setCancelId(id);
   };
 
-  useEffect(() => {
-    console.log(cancelId);
-  }, [cancelId]);
-
   const columns: GridColDef[] = [
     ...kunjunganTableColumns,
     {
@@ -77,8 +73,6 @@ const HomeNonPasienView = () => {
 
     fetchKunjungans();
   }, []);
-
-  console.log(kunjungans);
 
   const cancelKunjungan = async () => {
     const [responseData, message, isSuccess] = await sendRequest(

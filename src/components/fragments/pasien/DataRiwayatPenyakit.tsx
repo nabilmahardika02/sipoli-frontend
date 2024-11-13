@@ -24,8 +24,7 @@ const DataRiwayatPenyakit = ({
 }) => {
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
-  const user = useAuthStore.useUser(); // ambil data user dari auth store, Supaya pasien gabisa edit
-
+  const user = useAuthStore.useUser();
 
   const methods = useForm<UpdateRekamMedisForm>({
     mode: "onTouched",
