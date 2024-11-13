@@ -1,9 +1,11 @@
+import { Dayjs } from "dayjs";
+
 export type KunjunganForm = {
   sesi: number;
   accountId: string;
   profileId: string;
   tanggalKunjungan: string;
-  jamMasuk: string;
+  jamMasuk: Dayjs;
   status: number;
   keluhan: string;
 };

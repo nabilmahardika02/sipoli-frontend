@@ -4,11 +4,12 @@ import Input from "@/components/elements/forms/Input";
 import RadioButtonGroup from "@/components/elements/forms/RadioButtonGroup";
 import SelectInput from "@/components/elements/forms/SelectInput";
 import TextArea from "@/components/elements/forms/TextArea";
+import MyTimePicker from "@/components/elements/forms/TimePicker";
 import Typography from "@/components/elements/Typography";
 import withAuth from "@/components/hoc/withAuth";
 import { sesi } from "@/content/kunjungan";
 import { useDocumentTitle } from "@/context/Title";
-import { formatDateOnly } from "@/lib/formater";
+import { formatDateOnly, formatTimeDayjs } from "@/lib/formater";
 import sendRequest from "@/lib/getApi";
 import useAuthStore from "@/store/useAuthStore";
 import { Account } from "@/types/entities/account";
@@ -83,18 +84,17 @@ const KunjunganAddPage = () => {
     mode: "onTouched",
   });
 
-  const { handleSubmit } = methods;
+  const { handleSubmit, control } = methods;
 
   const onSubmit: SubmitHandler<KunjunganForm> = (data) => {
     const postData = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "post",
         "kunjungan/add",
-        data,
+        {...data, jamMasuk: formatTimeDayjs(data.jamMasuk)},
         true
       );
 
-      console.log(data.jamMasuk);
       if (isSuccess) {
         router.push("/home");
       }
@@ -234,15 +234,13 @@ const KunjunganAddPage = () => {
                 )}
                 {showInformationSunday && validationMessage === null && (
                   <>
-                    <Typography variant="p2" weight="medium" font="inter" className="mt-5">Jam Kunjungan</Typography>
-                    <input 
+                    <MyTimePicker
                       id="jamMasuk"
-                      type="time" 
-                      step="3600" 
-                      className="required w-full p-2 border-2 border-gray-300 rounded focus:border-blue-400 focus:outline-none"
-                      value={selectedTime}
-                      {...methods.register("jamMasuk", { required: "Jam kunjungan wajib diisi" })}
-                      onChange={(e) => setSelectedTime(e.target.value)}
+                      label="Jam Kunjungan"
+                      control={control}
+                      validation={{
+                        required: "Jam Kunjungan wajib diisi",
+                      }}
                     />
                     <Typography variant="p2" className="my-2 text-gray-600" size="sm">
                       Silahkan pilih waktu dalam WITA untuk berkunjung di hari Minggu

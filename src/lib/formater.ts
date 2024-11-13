@@ -32,7 +32,7 @@ export function formatDateOnly(dateString: string): string {
     const formattedDate = date.toLocaleDateString("id-ID", dateOptions);
     const formattedTime = date.toLocaleTimeString("id-ID", timeOptions);
   
-    return `${formattedDate} | ${formattedTime}`;
+    return `${formattedDate} | ${formattedTime} WITA`;
   }
   
   
@@ -112,5 +112,5 @@ export function formatDateDayjs(date: Dayjs): string {
 }
 
 export function formatTimeDayjs(date: Dayjs): string {
-  return date.format("HH:mm:ss");
+  return date.format("HH:mm");
 }
