@@ -155,7 +155,7 @@ const RestockRequestPage = () => {
         <div className="mt-5 flex items-center gap-2">
           <div className="w-1 h-5 bg-primary-1"></div>
           <Typography className="text-primary-1 font-semibold">
-            Rejected Requests
+            Permintaan Ditolak
           </Typography>
         </div>
 
@@ -184,7 +184,7 @@ const RestockRequestPage = () => {
               weight="semibold"
               className="text-secondary-4"
             >
-              Yakin ingin menolak permintaan restock ini?
+              Yakin ingin menolak permintaan restok ini?
             </Typography>
             <div className="flex items-center gap-2 mt-4 self-end">
               <Button
@@ -217,7 +217,7 @@ const RestockRequestPage = () => {
               weight="semibold"
               className="text-secondary-4"
             >
-              Setujui data restock ini?
+              Setujui permintaan restok ini?
             </Typography>
             <div className="flex items-center gap-2 mt-4 self-end">
               <Button size="sm" onClick={() => approveRestock(true)}>

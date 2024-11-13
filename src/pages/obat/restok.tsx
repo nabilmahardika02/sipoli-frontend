@@ -259,9 +259,9 @@ const RestockPage = () => {
             </div>
           </div>
           <div className="mt-5 flex items-center gap-4">
-            <Button type="submit">Submit</Button>
+            <Button type="submit">Ajukan</Button>
             <Link href={"/obat"}>
-              <Button variant="danger">Cancel</Button>
+              <Button variant="danger">Batal</Button>
             </Link>
           </div>
         </form>

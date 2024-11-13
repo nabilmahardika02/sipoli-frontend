@@ -3,6 +3,7 @@ export type KunjunganForm = {
   accountId: string;
   profileId: string;
   tanggalKunjungan: string;
+  jamMasuk: string;
   status: number;
   keluhan: string;
 };

@@ -128,7 +128,7 @@ const DetailObatPage = () => {
                       leftIcon={LuPencil}
                       variant="secondary"
                     >
-                      <span className="max-md:hidden">Edit Data Obat</span>
+                      <span className="max-md:hidden">Ubah Data Obat</span>
                     </Button>
                   </Link>
                   <Button
@@ -149,7 +149,7 @@ const DetailObatPage = () => {
                   >
                     <span className="max-md:hidden">
                       {obat.deleteStatus == 1
-                        ? "Penghapusan Sudah Direquest"
+                        ? "Penghapusan Sudah Diajukan"
                         : "Hapus Obat"}
                     </span>
                   </Button>
@@ -176,7 +176,7 @@ const DetailObatPage = () => {
                   weight="semibold"
                   className="text-gray-400"
                 >
-                  Terakhir update
+                  Terakhir Diubah
                 </Typography>
                 <Typography className="text-primary-1">
                   {formatDate(obat.updatedAt)}
@@ -218,7 +218,7 @@ const DetailObatPage = () => {
         <ModalLayout setShowModal={setShowRestockModal}>
           <div className="bg-white rounded-xl p-5 w-full md:w-[50%]">
             <Typography variant="h6" className="text-primary-1">
-              Restock Obat
+              Restok Obat
             </Typography>
             <FormProvider {...methods}>
               <form
@@ -261,7 +261,7 @@ const DetailObatPage = () => {
                   label="Tanggal Kadaluarsa"
                 />
                 <Button type="submit" className="max-md:w-full">
-                  Request
+                  Ajukan
                 </Button>
               </form>
             </FormProvider>

@@ -104,7 +104,7 @@ const DetailPage = () => {
                     leftIcon={IoTrashBin}
                     leftIconClassName="max-md:mr-0"
                   >
-                    <span className="max-md:hidden">Hapus Akun</span>
+                    <span className="max-md:hidden">Nonaktifkan Akun</span>
                   </Button>
                 </div>
               </div>
@@ -288,7 +288,7 @@ const DetailPage = () => {
         <ModalLayout setShowModal={setShowDeleteModal}>
           <div className="bg-white rounded-xl p-5 w-full md:w-[50%] flex flex-col">
             <Typography variant="h6" className="text-primary-1">
-              Hapus Akun
+              Nonaktifkan Akun
             </Typography>
             <Divider className="my-2" weight="kurus" />
             <Typography
@@ -296,17 +296,17 @@ const DetailPage = () => {
               weight="semibold"
               className="text-secondary-4"
             >
-              Yakin ingin menghapus akun ini?
+              Yakin ingin nonaktifkan akun ini?
             </Typography>
             <Typography variant="p2" className="text-primary-1 mt-2">
-              Setelah dihapus, akun{" "}
+              Setelah dinonaktifkan, akun{" "}
               <span className="font-bold">{selectedAccount?.username}</span>{" "}
               tidak dapat diakses lagi. Semua profil yang terkait dengan akun
               tersebut akan terhapus
             </Typography>
             <div className="flex items-center gap-2 mt-4 self-end">
               <Button variant="danger" size="sm" onClick={() => handleDelete()}>
-                Hapus
+                Nonaktifkan
               </Button>
               <Button
                 variant="success"

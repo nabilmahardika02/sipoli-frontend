@@ -11,31 +11,33 @@ export function formatDateOnly(dateString: string): string {
   };
 
   return date.toLocaleDateString("id-ID", options);
-}
-
-export function formatDate(isoDate: string): string {
-  const date = new Date(isoDate);
-
-  const dateOptions: Intl.DateTimeFormatOptions = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
-  const timeOptions: Intl.DateTimeFormatOptions = {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-    timeZone: "Asia/Jakarta", // Pastikan menggunakan zona waktu lokal Anda
-  };
-
-  const formattedDate = date.toLocaleDateString("id-ID", dateOptions);
-  const formattedTime = date.toLocaleTimeString("id-ID", timeOptions);
-
-  return `${formattedDate} | ${formattedTime}`;
-}
-
-export function getSatuanObat(value: number): string {
+  }
+  
+  export function formatDate(isoDate: string): string {
+    const date = new Date(isoDate);
+  
+    const dateOptions: Intl.DateTimeFormatOptions = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    const timeOptions: Intl.DateTimeFormatOptions = {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+      timeZone: "Asia/Makassar", // Pastikan menggunakan zona waktu lokal Anda
+    };
+  
+    const formattedDate = date.toLocaleDateString("id-ID", dateOptions);
+    const formattedTime = date.toLocaleTimeString("id-ID", timeOptions);
+  
+    return `${formattedDate} | ${formattedTime}`;
+  }
+  
+  
+  
+  export function getSatuanObat(value: number): string {
   if (value === 0) {
     return "Botol";
   } else if (value === 1) {

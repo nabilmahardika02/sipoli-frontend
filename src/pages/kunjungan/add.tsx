@@ -29,9 +29,11 @@ const KunjunganAddPage = () => {
   const [showInformationSaturday, setShowInformationSaturday] = useState(false);
   const [showAntrianInfo, setShowAntrianInfo] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
   const [selectedSesi, setSelectedSesi] = useState("");
   const [antrianInfo, setAntrianInfo] = useState(0);
   const [showSesi, setShowSesi] = useState(false);
+  const [validationMessage, setValidationMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (user?.role === "PASIEN") {
@@ -92,6 +94,7 @@ const KunjunganAddPage = () => {
         true
       );
 
+      console.log(data.jamMasuk);
       if (isSuccess) {
         router.push("/home");
       }
@@ -136,7 +139,24 @@ const KunjunganAddPage = () => {
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedDate = event.target.value;
     const date = new Date(selectedDate);
-    setSelectedDate(selectedDate); // Store the selected date
+    setSelectedDate(selectedDate);
+
+    // Hitung tanggal maksimum (7 hari setelah hari ini)
+    const today = new Date();
+    const maxDate = new Date(today);
+    maxDate.setDate(today.getDate() + 7);
+
+    if (date > maxDate) {
+      setShowInformationSunday(false);
+      setShowInformationSaturday(false);
+      setShowSesi(false);
+      setShowAntrianInfo(false);
+      // Set pesan validasi
+      setValidationMessage(`Hanya bisa mendaftarkan kunjungan hingga ${formatDateOnly(maxDate.toDateString())}`);
+    } else {
+      // Reset pesan validasi jika tanggal valid
+      setValidationMessage(null);
+    }
 
     if (date.getDay() === 0) { //sunday
       setShowInformationSunday(true);
@@ -207,17 +227,34 @@ const KunjunganAddPage = () => {
                   validation={{ required: "Mohon pilih tanggal kunjungan" }}
                   onChange={handleDateChange}
                 />
-                {showInformationSunday && (
-                  <Typography variant="p2" className="my-2 text-gray-600" size="sm">
-                    Poliklinik hanya dapat melayani pada pukul 14:00 - 17:00 WITA di hari Minggu
+                {validationMessage !== null && (
+                  <Typography variant="p2" className="my-2 text-danger-core" size="sm">
+                    {validationMessage}
                   </Typography>
                 )}
-                {showInformationSaturday && (
+                {showInformationSunday && validationMessage === null && (
+                  <>
+                    <Typography variant="p2" weight="medium" font="inter" className="mt-5">Jam Kunjungan</Typography>
+                    <input 
+                      id="jamMasuk"
+                      type="time" 
+                      step="3600" 
+                      className="required w-full p-2 border-2 border-gray-300 rounded focus:border-blue-400 focus:outline-none"
+                      value={selectedTime}
+                      {...methods.register("jamMasuk", { required: "Jam kunjungan wajib diisi" })}
+                      onChange={(e) => setSelectedTime(e.target.value)}
+                    />
+                    <Typography variant="p2" className="my-2 text-gray-600" size="sm">
+                      Silahkan pilih waktu dalam WITA untuk berkunjung di hari Minggu
+                    </Typography>
+                  </>
+                )}
+                {showInformationSaturday && validationMessage === null && (
                   <Typography variant="p2" className="my-2 text-danger-core" size="sm">
                     Poliklinik tidak dapat melayani di hari Sabtu
                   </Typography>
                 )}
-                {showSesi && (<RadioButtonGroup
+                {showSesi && validationMessage === null && (<RadioButtonGroup
                   name="sesi"
                   options={sesi}
                   label="Sesi"

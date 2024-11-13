@@ -50,52 +50,32 @@ const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
           {getStatusText(kunjungan?.status)}
         </Typography>
       </div>
-      <div>
-        <Typography variant="p2" weight="semibold" className="text-gray-400">
-          Tanggal
-        </Typography>
-        <Typography className="text-primary-1">
-          {formatDateOnly(kunjungan.tanggal)}
-        </Typography>
-      </div>
-      <div>
-        <Typography variant="p2" weight="semibold" className="text-gray-400">
-          Keluhan
-        </Typography>
-        <Typography className="text-primary-1">
-          {kunjungan.keluhan}
-        </Typography>
-      </div>
-      {kunjungan.antrian && kunjungan.status < 2 && (
+      {(new Date(kunjungan.tanggal).getDay() === 0 || kunjungan.hasilPemeriksaan)&& (
         <>
           <div>
-            <Typography
-              variant="p2"
-              weight="semibold"
-              className="text-gray-400"
-            >
-              Sesi
+            <Typography variant="p2" weight="semibold" className="text-gray-400">
+              Tanggal Masuk
             </Typography>
             <Typography className="text-primary-1">
-              {getSesiText(kunjungan?.antrian.sesi)}
-            </Typography>
-          </div>
-          <div>
-            <Typography
-              variant="p2"
-              weight="semibold"
-              className="text-gray-400"
-            >
-              No Antrian
-            </Typography>
-            <Typography className="text-primary-1">
-              {kunjungan.antrian.noAntrian}
+              {kunjungan.tanggalMasuk
+                ? formatDate(kunjungan.tanggalMasuk)
+                : "-"}
             </Typography>
           </div>
         </>
       )}
       {kunjungan.hasilPemeriksaan && (
         <>
+          <div>
+            <Typography variant="p2" weight="semibold" className="text-gray-400">
+              Tanggal Keluar
+            </Typography>
+            <Typography className="text-primary-1">
+              {kunjungan.tanggalKeluar
+                ? formatDate(kunjungan.tanggalKeluar)
+                : "-"}
+            </Typography>
+          </div>
           <div>
             <Typography variant="p2" weight="semibold" className="text-gray-400">
               Dokter Pengirim
@@ -112,25 +92,51 @@ const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
               {kunjungan.dokter.name}
             </Typography>
           </div>
+        </>
+      )}
+      {new Date(kunjungan.tanggal).getDay() !== 0 && !kunjungan.hasilPemeriksaan && (<div>
+        <Typography variant="p2" weight="semibold" className="text-gray-400">
+          Tanggal
+        </Typography>
+        <Typography className="text-primary-1">
+          {formatDateOnly(kunjungan.tanggal)}
+        </Typography>
+      </div>)}
+      <div>
+        <Typography variant="p2" weight="semibold" className="text-gray-400">
+          Keluhan
+        </Typography>
+        <Typography className="text-primary-1">
+          {kunjungan.keluhan}
+        </Typography>
+      </div>
+      {kunjungan.antrian && kunjungan.status < 2 && new Date(kunjungan.tanggal).getDay() !== 0 && (
+        <div>
+          <Typography
+            variant="p2"
+            weight="semibold"
+            className="text-gray-400"
+          >
+            Sesi
+          </Typography>
+          <Typography className="text-primary-1">
+            {getSesiText(kunjungan?.antrian.sesi)}
+          </Typography>
+        </div>
+      )}
+      {kunjungan.antrian && kunjungan.status < 2 && (
+        <>
           <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
-              Tanggal Masuk
-            </Typography>
-<Typography className="text-primary-1">
-  {kunjungan.tanggalMasuk
-    ? formatDate(kunjungan.tanggalMasuk)
-    : "-"}
-</Typography>
-          </div>
-          <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
-              Tanggal Keluar
+            <Typography
+              variant="p2"
+              weight="semibold"
+              className="text-gray-400"
+            >
+              No Antrian
             </Typography>
             <Typography className="text-primary-1">
-  {kunjungan.tanggalKeluar
-    ? formatDate(kunjungan.tanggalKeluar)
-    : "-"}
-</Typography>
+              {kunjungan.antrian.noAntrian}
+            </Typography>
           </div>
         </>
       )}
