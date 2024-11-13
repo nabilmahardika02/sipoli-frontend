@@ -15,13 +15,19 @@ export default function DataTable({
   useToolBar = true,
   flexColumnIndexes = [],
   rowClassName,
+  showPerPage,
+  initialPageSize,
 }: {
   columns: GridColDef[];
   rows: any[];
   useToolBar?: boolean;
   getRowId?: GridRowIdGetter;
   flexColumnIndexes?: number[];
-  rowClassName?: ((params: GridRowClassNameParams<GridValidRowModel>) => string) | undefined;
+  rowClassName?:
+    | ((params: GridRowClassNameParams<GridValidRowModel>) => string)
+    | undefined;
+  showPerPage?: number[];
+  initialPageSize?: number;
 }) {
   const isMobile = useMediaQuery("(max-width:768px)");
 
@@ -42,7 +48,7 @@ export default function DataTable({
       columns={responsiveColumns}
       initialState={{
         pagination: {
-          paginationModel: { page: 0, pageSize: 10 },
+          paginationModel: { pageSize: initialPageSize ? initialPageSize : 10 },
         },
       }}
       getRowClassName={rowClassName}
@@ -51,7 +57,7 @@ export default function DataTable({
           color: "#721E49",
         },
       }}
-      pageSizeOptions={[5, 10, 20]}
+      pageSizeOptions={showPerPage ? showPerPage : [5, 10, 20]}
       disableRowSelectionOnClick
     />
   );

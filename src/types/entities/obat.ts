@@ -15,6 +15,7 @@ export interface RestockObat {
   tanggalPembelian: string;
   tanggalKadaluarsa: string;
   kuantitas: number;
+  kuantitasSisa: number;
   hargaBeli: string;
   isApproved: number;
   expiredStatus: number;
