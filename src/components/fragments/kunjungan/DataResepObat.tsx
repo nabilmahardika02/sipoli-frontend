@@ -1,3 +1,4 @@
+import Divider from "@/components/elements/Divider";
 import Typography from "@/components/elements/Typography";
 import { KuantitasObat } from "@/types/entities/kuantitasObat"; // Gunakan tipe yang sama dari kuantitasObat
 import { ResepObatRujukan } from "@/types/entities/kunjungan";
@@ -11,6 +12,7 @@ const DataResepObat = ({
 }) => {
   return (
     <div>
+    <Divider weight="thin" className="my-5" />
       <div className="mt-5 flex items-center gap-2">
         <div className="w-1 h-5 bg-primary-1"></div>
         <Typography className="text-primary-1 font-semibold">

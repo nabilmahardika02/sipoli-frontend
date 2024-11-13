@@ -66,18 +66,23 @@ const DataKebiasaan = ({
   return (
     <section className="data-section">
       <section>
-        <div className="flex max-md:justify-between gap-5 items-center">
-          <Typography variant="h6" className="text-primary-1">
-            Data Kebiasaan
-          </Typography>
-          {["DOKTER", "PERAWAT"].includes(user?.role ?? "") && (
-            <IconButton
-              icon={LuPencil}
-              variant="primary"
-              onClick={() => setShowModal(true)}
-            />
-          )}
-        </div>
+      <div className="flex items-center justify-between gap-5">
+  <Typography variant="h6" className="text-primary-1">
+    Data Kebiasaan
+  </Typography>
+  {["DOKTER", "PERAWAT"].includes(user?.role ?? "") && (
+    <Button
+      className="max-md:aspect-square"
+      leftIcon={LuPencil}
+      onClick={() => setShowModal(true)}
+      variant="primary"
+    >
+      Ubah
+    </Button>
+  )}
+</div>
+
+
         <Divider />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
           <div>
@@ -98,10 +103,10 @@ const DataKebiasaan = ({
               weight="semibold"
               className="text-gray-400"
             >
-              Alkohol
+              Merokok
             </Typography>
             <Typography className="text-primary-1">
-              {pasien.kebiasaan.alkohol || "-"}
+              {pasien.kebiasaan.merokok || "-"}
             </Typography>
           </div>
           <div>
@@ -110,10 +115,10 @@ const DataKebiasaan = ({
               weight="semibold"
               className="text-gray-400"
             >
-              Merokok
+              Alkohol
             </Typography>
             <Typography className="text-primary-1">
-              {pasien.kebiasaan.merokok || "-"}
+              {pasien.kebiasaan.alkohol || "-"}
             </Typography>
           </div>
           <div>
@@ -134,7 +139,7 @@ const DataKebiasaan = ({
         <ModalLayout setShowModal={setShowModal}>
           <div className="bg-white rounded-xl p-5 w-full md:w-[80%]">
             <Typography variant="h6" className="text-primary-1">
-              Edit Data Kebiasaan
+              Ubah Data Kebiasaan
             </Typography>
             <FormProvider {...methods}>
               <form

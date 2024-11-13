@@ -1,4 +1,5 @@
 import Button from "@/components/elements/Button";
+import Divider from "@/components/elements/Divider";
 import Input from "@/components/elements/forms/Input";
 import TextArea from "@/components/elements/forms/TextArea";
 import Typography from "@/components/elements/Typography";
@@ -88,6 +89,10 @@ const HasilPemeriksaan5Form = ({
   return (
     <section>
       <Typography variant="h7" className="text-primary-1">
+        Formulir 6 
+      </Typography>
+      <Divider></Divider>
+      <Typography variant="h7" className="mt-5 text-primary-1">
         Rujukan - {kunjungan.profile.name}
       </Typography>
       <FormProvider {...methods}>

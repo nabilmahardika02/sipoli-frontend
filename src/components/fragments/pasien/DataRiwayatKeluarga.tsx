@@ -84,17 +84,20 @@ const DataRiwayatKeluarga = ({
   return (
     <section className="data-section">
       <section>
-        <div className="flex max-md:justify-between gap-5 items-center">
+        <div className="flex items-center justify-between gap-5">
           <Typography variant="h6" className="text-primary-1">
             Data Riwayat Penyakit Keluarga
           </Typography>
           {["DOKTER", "PERAWAT"].includes(user?.role ?? "") && (
-            <IconButton
-              icon={LuPencil}
-              variant="primary"
-              onClick={() => setShowModal(true)}
-            />
-          )}
+    <Button
+    className="max-md:aspect-square"
+    leftIcon={LuPencil}
+    onClick={() => setShowModal(true)}
+    variant="primary"
+  >
+    Ubah
+  </Button>
+)}
         </div>
         <Divider />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
@@ -188,7 +191,7 @@ const DataRiwayatKeluarga = ({
         <ModalLayout setShowModal={setShowModal}>
           <div className="bg-white rounded-xl p-5 w-full md:w-[80%]">
             <Typography variant="h6" className="text-primary-1">
-              Edit Data Riwayat Penyakit Keluarga
+              Ubah Data Riwayat Penyakit Keluarga
             </Typography>
             <FormProvider {...methods}>
               <form

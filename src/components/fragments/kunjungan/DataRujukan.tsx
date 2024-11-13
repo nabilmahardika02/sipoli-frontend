@@ -1,4 +1,5 @@
 import Button from "@/components/elements/Button";
+import Divider from "@/components/elements/Divider";
 import Input from "@/components/elements/forms/Input";
 import IconButton from "@/components/elements/IconButton";
 import Typography from "@/components/elements/Typography";
@@ -60,6 +61,7 @@ const DataRujukan = ({
 
   return (
     <div>
+    <Divider weight="thin" className="my-5" />
       <div className="mt-5 flex items-center gap-2">
         <div className="w-1 h-5 bg-primary-1"></div>
         <Typography className="text-primary-1 font-semibold">
