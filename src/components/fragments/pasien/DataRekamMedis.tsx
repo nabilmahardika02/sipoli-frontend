@@ -63,16 +63,19 @@ const DataRekamMedis = ({
   return (
     <section className="data-section">
       <section>
-        <div className="flex max-md:justify-between gap-5 items-center">
+        <div className="flex items-center justify-between gap-5">
           <Typography variant="h6" className="text-primary-1">
-            {pasien.noRekamMedis || "No Rekam medis: -"}
+            {pasien.noRekamMedis || "No Rekam Medis: -"}
           </Typography>
           {["DOKTER", "PERAWAT"].includes(user?.role ?? "") && (
-  <IconButton
-    icon={LuPencil}
-    variant="primary"
+    <Button
+    className="max-md:aspect-square"
+    leftIcon={LuPencil}
     onClick={() => setShowModal(true)}
-  />
+    variant="primary"
+  >
+    Ubah
+  </Button>
 )}
         </div>
         <Divider />
@@ -139,7 +142,7 @@ const DataRekamMedis = ({
         <ModalLayout setShowModal={setShowModal}>
           <div className="bg-white rounded-xl p-5 w-full md:w-[50%]">
             <Typography variant="h6" className="text-primary-1">
-              Edit Nomor Rekam Medis
+              Ubah Nomor Rekam Medis
             </Typography>
             <FormProvider {...methods}>
               <form

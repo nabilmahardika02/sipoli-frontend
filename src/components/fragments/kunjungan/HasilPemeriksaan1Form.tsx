@@ -1,4 +1,5 @@
 import Button from "@/components/elements/Button";
+import Divider from "@/components/elements/Divider";
 import Input from "@/components/elements/forms/Input";
 import SelectInput from "@/components/elements/forms/SelectInput";
 import TextArea from "@/components/elements/forms/TextArea";
@@ -86,6 +87,10 @@ const HasilPemeriksaan1Form = ({
   return (
     <section>
       <Typography variant="h7" className="text-primary-1">
+        Formulir 1
+      </Typography>
+      <Divider></Divider>
+      <Typography variant="h7" className="mt-5 text-primary-1">
         Data Kunjungan - {kunjungan.profile.name}
       </Typography>
       {dokters ? (
