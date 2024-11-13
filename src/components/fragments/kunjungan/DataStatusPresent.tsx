@@ -1,11 +1,11 @@
 import Button from "@/components/elements/Button";
+import Divider from "@/components/elements/Divider";
 import Input from "@/components/elements/forms/Input";
 import IconButton from "@/components/elements/IconButton";
 import Typography from "@/components/elements/Typography";
 import ModalLayout from "@/components/layouts/ModalLayout";
 import sendRequest from "@/lib/getApi";
 import useAuthStore from "@/store/useAuthStore"; // supaya pasien & admin gak bisa edit
-import { HasilPemeriksaan, Kunjungan } from "@/types/entities/kunjungan";
 import { StatusPresent } from "@/types/entities/kunjungan";
 import { UpdateStatusPresentForm } from "@/types/forms/hasilPemeriksaanForm";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
@@ -61,24 +61,24 @@ const DataStatusPresent = ({
       methods.setValue("cor", data.cor);
       methods.setValue("pulmo", data.pulmo);
       methods.setValue("ext", data.ext);
-      console.log(data);
     }
   }, [data, methods]);
 
   return (
     <div>
+    <Divider weight="thin" className="my-5" />
       <div className="mt-5 flex items-center gap-2">
         <div className="w-1 h-5 bg-primary-1"></div>
         <Typography className="text-primary-1 font-semibold">
           Status Present
         </Typography>
         {["DOKTER", "PERAWAT"].includes(user?.role ?? "") && (
-  <IconButton
-    icon={LuPencil}
-    variant="primary"
-    onClick={() => setShowModal(true)}
-  />
-)}
+          <IconButton
+            icon={LuPencil}
+            variant="primary"
+            onClick={() => setShowModal(true)}
+          />
+        )}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
         <div>
@@ -166,7 +166,11 @@ const DataStatusPresent = ({
                   <Input id="cor" placeholder="Cor" label="Cor" />
                   <Input id="pulmo" placeholder="Pulmo" label="Pulmo" />
                   <Input id="abd" placeholder="Abdomen" label="Abdomen" />
-                  <Input id="ext" placeholder="Ekstremitas" label="Ekstremitas" />
+                  <Input
+                    id="ext"
+                    placeholder="Ekstremitas"
+                    label="Ekstremitas"
+                  />
                 </div>
                 <Button type="submit" className="max-md:w-full">
                   Simpan

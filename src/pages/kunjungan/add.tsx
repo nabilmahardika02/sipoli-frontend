@@ -91,7 +91,9 @@ const KunjunganAddPage = () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "post",
         "kunjungan/add",
-        {...data, jamMasuk: formatTimeDayjs(data.jamMasuk)},
+        showInformationSunday
+          ? { ...data, jamMasuk: formatTimeDayjs(data.jamMasuk) }
+          : data,
         true
       );
 

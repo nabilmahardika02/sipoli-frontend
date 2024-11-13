@@ -1,4 +1,5 @@
 import Button from "@/components/elements/Button";
+import Divider from "@/components/elements/Divider";
 import Input from "@/components/elements/forms/Input";
 import IconButton from "@/components/elements/IconButton";
 import Typography from "@/components/elements/Typography";
@@ -55,24 +56,24 @@ const DataDiagnosaAkhir = ({
       methods.setValue("diagnosaKerja", data.diagnosaKerja);
       methods.setValue("rencana", data.rencana);
       methods.setValue("tindakan", data.tindakan);
-      console.log(data);
     }
   }, [data, methods]);
 
   return (
     <div>
+    <Divider weight="thin" className="my-5" />
       <div className="mt-5 flex items-center gap-2">
         <div className="w-1 h-5 bg-primary-1"></div>
         <Typography className="text-primary-1 font-semibold">
           Diagnosa Akhir
         </Typography>
         {["DOKTER", "PERAWAT"].includes(user?.role ?? "") && (
-  <IconButton
-    icon={LuPencil}
-    variant="primary"
-    onClick={() => setShowModal(true)}
-  />
-)}
+          <IconButton
+            icon={LuPencil}
+            variant="primary"
+            onClick={() => setShowModal(true)}
+          />
+        )}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
         <div>
@@ -127,7 +128,11 @@ const DataDiagnosaAkhir = ({
                     label="Diagnosa Kerja"
                   />
                   <Input id="rencana" placeholder="Rencana" label="Rencana" />
-                  <Input id="tindakan" placeholder="Tindakan" label="Tindakan" />
+                  <Input
+                    id="tindakan"
+                    placeholder="Tindakan"
+                    label="Tindakan"
+                  />
                 </div>
                 <Button type="submit" className="max-md:w-full">
                   Simpan

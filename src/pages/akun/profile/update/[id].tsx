@@ -41,7 +41,6 @@ const UpdateProfilePage = () => {
       if (isSuccess) {
         setProfile(responseData as Profile);
       }
-      console.log(responseData);
     }
     fetchProfile();
   }, [router.query.id])

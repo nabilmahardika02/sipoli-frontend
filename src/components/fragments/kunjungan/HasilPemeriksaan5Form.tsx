@@ -86,7 +86,11 @@ const HasilPemeriksaan5Form = ({
   return (
     <section className="space-y-8">
       <div>
-        <Typography variant="h7" className="text-primary-1">
+      <Typography variant="h7" className="text-primary-1">
+        Formulir 5
+      </Typography>
+      <Divider></Divider>
+      <Typography variant="h7" className="mt-5 text-primary-1">
           Resep Obat - {kunjungan.profile.name}
         </Typography>
         <FormProvider {...methods}>

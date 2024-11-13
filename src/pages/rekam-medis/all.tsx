@@ -1,21 +1,20 @@
-import Button from "@/components/elements/Button";
 import Divider from "@/components/elements/Divider";
 import SelectInput from "@/components/elements/forms/SelectInput";
+import IconButton from "@/components/elements/IconButton";
 import Typography from "@/components/elements/Typography";
+import { useDocumentTitle } from "@/context/Title";
 import DataTable from "@/lib/datatable";
 import sendRequest from "@/lib/getApi";
-import { useDocumentTitle } from "@/context/Title";
 import useAuthStore from "@/store/useAuthStore";
-import { Profile } from "@/types/entities/profile";
 import { Kunjungan } from "@/types/entities/kunjungan";
+import { Profile } from "@/types/entities/profile";
 import {
-    getRowIdKunjungan,
-    kunjunganTables
+  getRowIdKunjungan,
+  kunjunganTables,
 } from "@/types/table/hasilPemeriksaanColumn";
 import { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { FaSearch } from "react-icons/fa";
-import IconButton from "@/components/elements/IconButton";
 
 const RekamMedisPage = () => {
   const { setTitle } = useDocumentTitle();
@@ -33,17 +32,17 @@ const RekamMedisPage = () => {
 
     const fetchProfiles = async () => {
       const endpoint =
-      user?.role === "PASIEN" && user?.profileId
-        ? `profile/all-profile?userId=${user.profileId}`
-        : "profile/all-profile";
-    
+        user?.role === "PASIEN" && user?.profileId
+          ? `profile/all-profile?userId=${user.profileId}`
+          : "profile/all-profile";
 
-      const [responseData, message, isSuccess] = await sendRequest("get", endpoint);
+      const [responseData, message, isSuccess] = await sendRequest(
+        "get",
+        endpoint
+      );
 
       if (isSuccess) {
         setProfiles(responseData as Profile[]);
-      } else {
-        console.error("Failed to fetch profiles:", message);
       }
     };
 
@@ -62,8 +61,6 @@ const RekamMedisPage = () => {
       if (isSuccess) {
         setSelectedProfile(data.profileId);
         setKunjungans(responseData as Kunjungan[]);
-      } else {
-        console.error("Failed to fetch kunjungans:", message);
       }
     };
 
@@ -79,7 +76,9 @@ const RekamMedisPage = () => {
               <SelectInput
                 id="profileId"
                 label="Pilih Profil Pasien"
-                {...methods.register("profileId", { required: "Profil harus dipilih" })}
+                {...methods.register("profileId", {
+                  required: "Profil harus dipilih",
+                })}
               >
                 {profiles.length > 0 ? (
                   profiles.map((profile) => (
@@ -104,20 +103,30 @@ const RekamMedisPage = () => {
         <div>
           {!selectedProfile ? (
             <div className="w-full py-10 px-5 rounded-lg border border-gray-300 flex items-center justify-center">
-              <Typography variant="p1" weight="semibold" className="text-gray-400">
+              <Typography
+                variant="p1"
+                weight="semibold"
+                className="text-gray-400"
+              >
                 Mohon pilih profil pasien untuk melihat rekam medis
               </Typography>
             </div>
           ) : kunjungans && kunjungans.length > 0 ? (
             <DataTable
-              columns={kunjunganTables.filter((column) => ["tanggal", "action"].includes(column.field))} // Tampilkan hanya kolom tanggal dan detail
+              columns={kunjunganTables.filter((column) =>
+                ["tanggal", "action"].includes(column.field)
+              )}
               getRowId={getRowIdKunjungan}
               rows={kunjungans}
               flexColumnIndexes={[0, 1]}
             />
           ) : (
             <div className="w-full py-10 px-5 rounded-lg border border-gray-300 flex items-center justify-center">
-              <Typography variant="p1" weight="semibold" className="text-gray-400">
+              <Typography
+                variant="p1"
+                weight="semibold"
+                className="text-gray-400"
+              >
                 Tidak ada data rekam medis
               </Typography>
             </div>

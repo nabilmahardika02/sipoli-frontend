@@ -3,23 +3,46 @@ import Typography from "@/components/elements/Typography";
 import withAuth from "@/components/hoc/withAuth";
 import { useDocumentTitle } from "@/context/Title";
 import useAuthStore from "@/store/useAuthStore";
+import {
+  ArcElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+} from "chart.js";
 import { Line, Pie } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend, ArcElement } from 'chart.js';
 
+import sendRequest from "@/lib/getApi";
 import Head from "next/head";
 import { SetStateAction, useEffect, useState } from "react";
-import sendRequest from "@/lib/getApi";
-import Modal from "@/components/Modal";
-import Link from "next/link";
-import Button from "@/components/elements/Button";
 
-ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend, ArcElement);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement
+);
 
 const Dashboard = () => {
   const user = useAuthStore.useUser();
   const { setTitle } = useDocumentTitle();
 
-  const [kunjunganData, setKunjunganData] = useState<{ listKunjungan: any[]; labelChart: string[]; dataChart: number[]; totalPasien: number; pasienLakiLaki: number; pasienPerempuan: number; } | null>(null);
+  const [kunjunganData, setKunjunganData] = useState<{
+    listKunjungan: any[];
+    labelChart: string[];
+    dataChart: number[];
+    totalPasien: number;
+    pasienLakiLaki: number;
+    pasienPerempuan: number;
+  } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [filterChartBy, setFilterChartBy] = useState("");
   const [filterText, setFilterText] = useState("");
@@ -33,10 +56,17 @@ const Dashboard = () => {
     );
 
     if (isSuccess) {
-      setKunjunganData(responseData as { listKunjungan: any[]; labelChart: string[]; dataChart: number[]; totalPasien: number; pasienLakiLaki: number; pasienPerempuan: number; });
+      setKunjunganData(
+        responseData as {
+          listKunjungan: any[];
+          labelChart: string[];
+          dataChart: number[];
+          totalPasien: number;
+          pasienLakiLaki: number;
+          pasienPerempuan: number;
+        }
+      );
       setIsLoading(false);
-    } else {
-      console.error(message);
     }
   };
 
@@ -45,7 +75,9 @@ const Dashboard = () => {
     fetchKunjungan(filterChartBy);
   }, [setTitle, filterChartBy]);
 
-  const handleFilterChange = (e: { target: { value: SetStateAction<string>; }; }) => {
+  const handleFilterChange = (e: {
+    target: { value: SetStateAction<string> };
+  }) => {
     setFilterChartBy(e.target.value);
   };
 
@@ -58,21 +90,23 @@ const Dashboard = () => {
     return <div>Memuat...</div>;
   }
 
-  const chartData = kunjunganData ? {
-    labels: kunjunganData.labelChart,
-    datasets: [
-      {
-        label: "Kunjungan Pasien Seiring Waktu",
-        data: kunjunganData.dataChart,
-        fill: false,
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 2,
-        tension: 0.1,
-        pointRadius: 4,
-      },
-    ],
-  } : { labels: [], datasets: [] };
+  const chartData = kunjunganData
+    ? {
+        labels: kunjunganData.labelChart,
+        datasets: [
+          {
+            label: "Kunjungan Pasien Seiring Waktu",
+            data: kunjunganData.dataChart,
+            fill: false,
+            backgroundColor: "rgba(75, 192, 192, 0.6)",
+            borderColor: "rgba(75, 192, 192, 1)",
+            borderWidth: 2,
+            tension: 0.1,
+            pointRadius: 4,
+          },
+        ],
+      }
+    : { labels: [], datasets: [] };
 
   const chartOptions = {
     responsive: true,
@@ -93,7 +127,8 @@ const Dashboard = () => {
       },
       tooltip: {
         callbacks: {
-          footer: () => `Total Pasien: ${kunjunganData ? kunjunganData.totalPasien : 0}`,
+          footer: () =>
+            `Total Pasien: ${kunjunganData ? kunjunganData.totalPasien : 0}`,
         },
       },
     },
@@ -115,7 +150,10 @@ const Dashboard = () => {
     labels: ["Pasien Laki-Laki", "Pasien Perempuan"],
     datasets: [
       {
-        data: [kunjunganData?.pasienLakiLaki || 0, kunjunganData?.pasienPerempuan || 0],
+        data: [
+          kunjunganData?.pasienLakiLaki || 0,
+          kunjunganData?.pasienPerempuan || 0,
+        ],
         backgroundColor: ["rgba(54, 162, 235, 0.6)", "rgba(255, 99, 132, 0.6)"],
         borderColor: ["rgba(54, 162, 235, 1)", "rgba(255, 99, 132, 1)"],
         borderWidth: 1,
@@ -130,16 +168,25 @@ const Dashboard = () => {
     return {};
   };
 
-  const filteredKunjungan = kunjunganData?.listKunjungan?.filter((kunjungan: { profile: { name: string; }; status: { toString: () => string | string[]; }; tanggal: string | number | Date; }) => {
-    return (
-      kunjungan.profile.name.toLowerCase().includes(filterText.toLowerCase()) ||
-      kunjungan.status.toString().includes(filterText) ||
-      new Date(kunjungan.tanggal).toLocaleDateString().includes(filterText)
-    );
-  });
+  const filteredKunjungan = kunjunganData?.listKunjungan?.filter(
+    (kunjungan: {
+      profile: { name: string };
+      status: { toString: () => string | string[] };
+      tanggal: string | number | Date;
+    }) => {
+      return (
+        kunjungan.profile.name
+          .toLowerCase()
+          .includes(filterText.toLowerCase()) ||
+        kunjungan.status.toString().includes(filterText) ||
+        new Date(kunjungan.tanggal).toLocaleDateString().includes(filterText)
+      );
+    }
+  );
 
   // Menghitung sesi terbanyak
-  const sesiValues = filteredKunjungan?.map((kunjungan) => kunjungan.antrian?.sesi) || [];
+  const sesiValues =
+    filteredKunjungan?.map((kunjungan) => kunjungan.antrian?.sesi) || [];
   const modesSession = sesiValues.reduce(
     (acc, val) => ({
       ...acc,
@@ -155,7 +202,11 @@ const Dashboard = () => {
 
       <section className="w-full max-w-4xl mx-auto flex flex-col items-center bg-white rounded-lg shadow-lg p-6 mb-8">
         <Typography variant="h4" className="text-primary-1 mb-4">
-          {user?.role === "DOKTER" ? "Dashboard Dokter" : user?.role === "PERAWAT" ? "Dashboard Perawat" : "Dashboard Admin"}
+          {user?.role === "DOKTER"
+            ? "Dashboard Dokter"
+            : user?.role === "PERAWAT"
+            ? "Dashboard Perawat"
+            : "Dashboard Admin"}
         </Typography>
         <Typography variant="p2" className="text-gray-600 text-center">
           {user?.role === "DOKTER"
@@ -181,7 +232,10 @@ const Dashboard = () => {
           <Divider />
           <div className="w-full">
             <div className="col-span-1 rounded-lg">
-              <label htmlFor="filterChartBy" className="block text-gray-700 text-sm font-bold mb-2">
+              <label
+                htmlFor="filterChartBy"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
                 Filter Grafik Berdasarkan:
               </label>
               <select
@@ -203,11 +257,11 @@ const Dashboard = () => {
         </div>
       </section>
       <section>
-          <div className="mt-4">
-              <Typography variant="h6" className="text-primary-1">
-                Sesi Terbanyak: 1
-              </Typography>
-          </div>
+        <div className="mt-4">
+          <Typography variant="h6" className="text-primary-1">
+            Sesi Terbanyak: 1
+          </Typography>
+        </div>
       </section>
     </main>
   );

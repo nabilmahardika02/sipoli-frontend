@@ -1,4 +1,5 @@
 import Button from "@/components/elements/Button";
+import Divider from "@/components/elements/Divider";
 import Input from "@/components/elements/forms/Input";
 import Typography from "@/components/elements/Typography";
 import { Kunjungan } from "@/types/entities/kunjungan";
@@ -81,12 +82,16 @@ const HasilPemeriksaan2Form = ({
   return (
     <section>
       <Typography variant="h7" className="text-primary-1">
+        Formulir 2
+      </Typography>
+      <Divider></Divider>
+      <Typography variant="h7" className="mt-5 text-primary-1">
         Pemeriksaan Fisik - {kunjungan.profile.name}
       </Typography>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} className="mt-5 items-end">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
-            <Input 
+            <Input
               id="suhu"
               type="number"
               placeholder="Temperature"
