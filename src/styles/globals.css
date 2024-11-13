@@ -186,3 +186,25 @@ body {
 .data-section {
   @apply p-5 md:p-8 rounded-xl bg-white border border-gray-200 shadow-md;
 }
+
+.MuiInputBase-root input {
+  @apply h-full w-full rounded-md px-3 py-3 bg-transparent text-sm;
+}
+
+.MuiFormControl-root {
+  @apply !w-full;
+}
+
+/* -------------------------------------------------------------------------------- TABLE */
+
+.table-wrapper {
+  @apply rounded-lg overflow-y-hidden overflow-x-auto mt-4 pb-4;
+}
+
+.table-wrapper th {
+  @apply font-medium text-center px-5 py-2
+}
+
+.table-wrapper tbody td {
+  @apply px-4 py-4
+}

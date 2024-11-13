@@ -181,78 +181,82 @@ const RestockPage = () => {
             <Button onClick={handleAddRow}>Tambah Input Pembelian</Button>
           </div>
           <div className="rounded-lg overflow-y-hidden overflow-x-auto mt-4 pb-4">
-            <table className="w-full rounded-xl border border-gray-300 shadow-lg">
-              <thead className="bg-primary-1 text-white">
-                <tr className="font-bold">
-                  <th className="text-center px-5 py-2 md:w-[30%]">Obat</th>
-                  <th className="text-center px-5 py-2">Kuantitas</th>
-                  <th className="text-center px-5 py-2">Harga Beli Satuan</th>
-                  <th className="text-center px-5 py-2">Tanggal Kadaluarsa</th>
-                </tr>
-              </thead>
-              <tbody className="align-top">
-                {restockListValue.restockItemList.map((restockItem, index) => (
-                  <tr key={index}>
-                    <td className="px-4 py-4 border">
-                      <SelectInput
-                        id={`idObat_` + index}
-                        placeholder="Pilih Obat"
-                        validation={{ required: "Obat wajib dipilih" }}
-                        className="mt-0"
-                        onChange={(
-                          event: React.ChangeEvent<HTMLSelectElement>
-                        ) => handleChangeIdObat(index, event)}
-                      >
-                        {listObat?.map((obat) => (
-                          <option key={obat.id} value={obat.id}>
-                            {obat.namaObat}
-                          </option>
-                        ))}
-                      </SelectInput>
-                    </td>
-                    <td className="px-4 py-4 border">
-                      <Input
-                        id={"qty" + index}
-                        placeholder="Kuantitas Restock"
-                        validation={{
-                          required: "Kuantitas restock wajib diisi",
-                        }}
-                        type="number"
-                        onChange={(
-                          event: React.ChangeEvent<HTMLInputElement>
-                        ) => handleChangeQtyObat(index, event)}
-                      />
-                    </td>
-                    <td className="px-4 py-4 border">
-                      <Input
-                        id={"hargaBeli" + index}
-                        placeholder="Harga Beli"
-                        validation={{
-                          required: "Harga beli wajib diisi",
-                        }}
-                        type="number"
-                        onChange={(
-                          event: React.ChangeEvent<HTMLInputElement>
-                        ) => handleChangeHargaBeli(index, event)}
-                      />
-                    </td>
-                    <td className="px-4 py-4 border">
-                      <Input
-                        id={"tanggalKadaluarsa" + index}
-                        placeholder="Tanggal Kadaluarsa"
-                        validation={{
-                          required: "Tanggal kadaluarsa wajib diisi",
-                        }}
-                        type="date"
-                        onChange={(
-                          event: React.ChangeEvent<HTMLInputElement>
-                        ) => handleChangeTanggalKadaluarsa(index, event)}
-                      />
-                    </td>
+            <div className="table-wrapper">
+              <table className="w-full rounded-xl shadow-lg">
+                <thead className="bg-primary-1 text-white">
+                  <tr>
+                    <th className="md:w-[30%]">Obat</th>
+                    <th>Kuantitas</th>
+                    <th>Harga Beli Satuan</th>
+                    <th>Tanggal Kadaluarsa</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="align-top">
+                  {restockListValue.restockItemList.map(
+                    (restockItem, index) => (
+                      <tr key={index}>
+                        <td>
+                          <SelectInput
+                            id={`idObat_` + index}
+                            placeholder="Pilih Obat"
+                            validation={{ required: "Obat wajib dipilih" }}
+                            className="mt-0"
+                            onChange={(
+                              event: React.ChangeEvent<HTMLSelectElement>
+                            ) => handleChangeIdObat(index, event)}
+                          >
+                            {listObat?.map((obat) => (
+                              <option key={obat.id} value={obat.id}>
+                                {obat.namaObat}
+                              </option>
+                            ))}
+                          </SelectInput>
+                        </td>
+                        <td>
+                          <Input
+                            id={"qty" + index}
+                            placeholder="Kuantitas Restock"
+                            validation={{
+                              required: "Kuantitas restock wajib diisi",
+                            }}
+                            type="number"
+                            onChange={(
+                              event: React.ChangeEvent<HTMLInputElement>
+                            ) => handleChangeQtyObat(index, event)}
+                          />
+                        </td>
+                        <td>
+                          <Input
+                            id={"hargaBeli" + index}
+                            placeholder="Harga Beli"
+                            validation={{
+                              required: "Harga beli wajib diisi",
+                            }}
+                            type="number"
+                            onChange={(
+                              event: React.ChangeEvent<HTMLInputElement>
+                            ) => handleChangeHargaBeli(index, event)}
+                          />
+                        </td>
+                        <td>
+                          <Input
+                            id={"tanggalKadaluarsa" + index}
+                            placeholder="Tanggal Kadaluarsa"
+                            validation={{
+                              required: "Tanggal kadaluarsa wajib diisi",
+                            }}
+                            type="date"
+                            onChange={(
+                              event: React.ChangeEvent<HTMLInputElement>
+                            ) => handleChangeTanggalKadaluarsa(index, event)}
+                          />
+                        </td>
+                      </tr>
+                    )
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
           <div className="mt-5 flex items-center gap-4">
             <Button type="submit">Ajukan</Button>
