@@ -14,6 +14,7 @@ export type TextAreaProps = {
   helperText?: string;
   helperTextClassName?: string;
   hideError?: boolean;
+  parentClassName?: string;
 } & React.ComponentPropsWithoutRef<"textarea">;
 
 export default function TextArea({
@@ -27,6 +28,7 @@ export default function TextArea({
   className,
   maxLength = 255,
   readOnly = false,
+  parentClassName = "",
   ...rest
 }: TextAreaProps) {
   const [value, setValue] = React.useState("");
@@ -45,7 +47,7 @@ export default function TextArea({
   };
 
   return (
-    <div className="w-full space-y-1.5">
+    <div className={clsxm("w-full space-y-1.5", parentClassName)}>
       {label && (
         <label htmlFor={id} className="flex space-x-1">
           <Typography

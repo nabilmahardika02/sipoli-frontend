@@ -19,6 +19,7 @@ import Link from "next/link";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { FaInfoCircle } from "react-icons/fa";
 
 const KunjunganAddPage = () => {
   const user = useAuthStore.useUser();
@@ -30,11 +31,12 @@ const KunjunganAddPage = () => {
   const [showInformationSaturday, setShowInformationSaturday] = useState(false);
   const [showAntrianInfo, setShowAntrianInfo] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
-  const [selectedTime, setSelectedTime] = useState("");
   const [selectedSesi, setSelectedSesi] = useState("");
   const [antrianInfo, setAntrianInfo] = useState(0);
   const [showSesi, setShowSesi] = useState(false);
-  const [validationMessage, setValidationMessage] = useState<string | null>(null);
+  const [validationMessage, setValidationMessage] = useState<string | null>(
+    null
+  );
 
   useEffect(() => {
     if (user?.role === "PASIEN") {
@@ -45,15 +47,14 @@ const KunjunganAddPage = () => {
   }, [setTitle, user?.role]);
 
   useEffect(() => {
-    // Fungsi untuk mengambil data profil dari API
     const fetchAccounts = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "get",
-        "auth/users?role=PASIEN" // Endpoint API untuk mendapatkan seluruh data account
+        "auth/users?role=PASIEN"
       );
 
       if (isSuccess) {
-        setAccounts(responseData as Account[]); // Set data profil ke state
+        setAccounts(responseData as Account[]);
       }
     };
 
@@ -63,7 +64,6 @@ const KunjunganAddPage = () => {
   }, [user?.role]);
 
   useEffect(() => {
-    // Fungsi untuk mengambil data profil dari API
     const fetchProfiles = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "get",
@@ -71,7 +71,7 @@ const KunjunganAddPage = () => {
       );
 
       if (isSuccess) {
-        setProfiles(responseData as Profile[]); // Set data profil ke state
+        setProfiles(responseData as Profile[]);
       }
     };
 
@@ -154,18 +154,24 @@ const KunjunganAddPage = () => {
       setShowSesi(false);
       setShowAntrianInfo(false);
       // Set pesan validasi
-      setValidationMessage(`Hanya bisa mendaftarkan kunjungan hingga ${formatDateOnly(maxDate.toDateString())}`);
+      setValidationMessage(
+        `Hanya bisa mendaftarkan kunjungan hingga ${formatDateOnly(
+          maxDate.toDateString()
+        )}`
+      );
     } else {
       // Reset pesan validasi jika tanggal valid
       setValidationMessage(null);
     }
 
-    if (date.getDay() === 0) { //sunday
+    if (date.getDay() === 0) {
+      //sunday
       setShowInformationSunday(true);
       setShowInformationSaturday(false);
       setShowSesi(false);
       setShowAntrianInfo(false);
-    } else if (date.getDay() === 6) { //saturday
+    } else if (date.getDay() === 6) {
+      //saturday
       setShowInformationSaturday(true);
       setShowInformationSunday(false);
       setShowSesi(false);
@@ -187,20 +193,19 @@ const KunjunganAddPage = () => {
       );
 
       if (isSuccess) {
-        setAntrianInfo(responseData as number); 
+        setAntrianInfo(responseData as number);
       }
     };
 
     if (selectedSesi) {
       fetchAntrian();
     }
-
   }, [selectedSesi]);
 
   const handleSesiChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedSesi(event.target.value);
     setShowAntrianInfo(true);
-  }
+  };
 
   return (
     <main>
@@ -221,131 +226,186 @@ const KunjunganAddPage = () => {
         {user && (
           <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
-              <div className="justify-between gap-5 my-5 md:grid-cols-2">
-                <Input
-                  id="tanggalKunjungan"
-                  label="Tanggal Kunjungan"
-                  type="date"
-                  validation={{ required: "Mohon pilih tanggal kunjungan" }}
-                  onChange={handleDateChange}
-                />
-                {validationMessage !== null && (
-                  <Typography variant="p2" className="my-2 text-danger-core" size="sm">
-                    {validationMessage}
-                  </Typography>
-                )}
-                {showInformationSunday && validationMessage === null && (
-                  <>
-                    <MyTimePicker
-                      id="jamMasuk"
-                      label="Jam Kunjungan"
-                      control={control}
-                      validation={{
-                        required: "Jam Kunjungan wajib diisi",
-                      }}
-                    />
-                    <Typography variant="p2" className="my-2 text-gray-600" size="sm">
-                      Silahkan pilih waktu dalam WITA untuk berkunjung di hari Minggu
-                    </Typography>
-                  </>
-                )}
-                {showInformationSaturday && validationMessage === null && (
-                  <Typography variant="p2" className="my-2 text-danger-core" size="sm">
-                    Poliklinik tidak dapat melayani di hari Sabtu
-                  </Typography>
-                )}
-                {showSesi && validationMessage === null && (<RadioButtonGroup
-                  name="sesi"
-                  options={sesi}
-                  label="Sesi"
-                  direction="horizontal"
-                  onChange={handleSesiChange}
-                  validation={{ required: "Mohon pilih sesi" }}
-                />)}
-                {showAntrianInfo && antrianInfo === 0 && (
-                  <Typography variant="p2" className="my-2 text-gray-600" size="sm">
-                    Belum ada antrian di sesi {selectedSesi} pada {formatDateOnly(selectedDate)}
-                  </Typography>
-                )}
-                {showAntrianInfo && antrianInfo > 0 && (
-                  <Typography variant="p2" className="my-2 text-gray-600" size="sm">
-                    Sudah ada {antrianInfo} antrian di sesi {selectedSesi} pada {formatDateOnly(selectedDate)}
-                  </Typography>
-                )}
-                <Divider />
-                <Typography
-                  variant="p1"
-                  weight="bold"
-                  className="text-primary-1 my-5"
-                >
-                  Data Pribadi
-                </Typography>
-                <div className="justify-between gap-5 my-5">
-                  {user.role !== "PASIEN" && (
-                    <SelectInput
-                      id="accountId"
-                      label="Akun"
-                      placeholder="Pilih akun"
-                      validation={{ required: "Akun wajib diisi" }}
-                      onChange={handleAccount}
-                      helperText="Pilih akun terlebih dahulu"
+              <div className="flex flex-col gap-5">
+                <div>
+                  <Input
+                    id="tanggalKunjungan"
+                    label="Tanggal Kunjungan"
+                    type="date"
+                    className="lg:w-[50%]"
+                    validation={{ required: "Mohon pilih tanggal kunjungan" }}
+                    onChange={handleDateChange}
+                  />
+                  {validationMessage !== null && (
+                    <Typography
+                      variant="p2"
+                      className="my-2 text-danger-core"
+                      size="sm"
                     >
-                      {accounts.length > 0 ? (
-                        accounts.map((account) => (
-                          <option key={account.id} value={account.id}>
-                            {account.listProfile[0].nik} -{" "}
-                            {account.listProfile.find(
-                              (profile) => profile.relative === 0
-                            )?.name ?? account.username}
-                          </option>
-                        ))
-                      ) : (
-                        <option value="">Tidak ada akun yang tersedia</option>
-                      )}
-                    </SelectInput>
+                      {validationMessage}
+                    </Typography>
                   )}
-                  <SelectInput
-                    id="profileId"
-                    label="Profil"
-                    placeholder="Pilih profil"
-                    validation={{ required: "Profil wajib diisi" }}
-                    onChange={handleProfile}
-                    helperText="Pilih profil terlebih dahulu"
+                  {showInformationSaturday && validationMessage === null && (
+                    <Typography
+                      variant="p2"
+                      className="my-2 text-danger-core"
+                      size="sm"
+                    >
+                      Poliklinik tidak dapat melayani di hari Sabtu
+                    </Typography>
+                  )}
+                </div>
+                {showInformationSunday && validationMessage === null && (
+                  <MyTimePicker
+                    id="jamMasuk"
+                    label="Jam Kunjungan"
+                    control={control}
+                    validation={{
+                      required: "Jam Kunjungan wajib diisi",
+                    }}
+                    className="lg:w-[50%]"
+                    helperText="Silakan pilih waktu dalam WITA untuk berkunjung di hari
+                      Minggu"
+                  />
+                )}
+                {showSesi && validationMessage === null && (
+                  <RadioButtonGroup
+                    name="sesi"
+                    options={sesi}
+                    label="Sesi"
+                    className="lg:w-[50%]"
+                    directionClassName="grid grid-cols-1 lg:grid-cols-2"
+                    onChange={handleSesiChange}
+                    validation={{ required: "Mohon pilih sesi" }}
+                  />
+                )}
+                {showAntrianInfo && antrianInfo === 0 && (
+                  <Typography
+                    variant="p2"
+                    className="lg:w-[50%] py-3 px-5 rounded-lg chips-success"
+                    size="sm"
                   >
-                    {profiles.length > 0 ? (
-                      profiles.map((profile) => (
-                        <option key={profile.id} value={profile.id}>
-                          {profile.name}
+                    <FaInfoCircle className="text-xl" />
+                    {antrianInfo === 0
+                      ? `Belum ada antrian di sesi ${selectedSesi} pada ${formatDateOnly(
+                          selectedDate
+                        )}`
+                      : `Sudah ada ${antrianInfo} antrian di sesi ${selectedSesi} pada ${formatDateOnly(
+                          selectedDate
+                        )}`}
+                  </Typography>
+                )}
+              </div>
+
+              <Divider weight="thin" />
+
+              <Typography
+                variant="p1"
+                weight="bold"
+                className="text-primary-1 mt-5 mb-4"
+              >
+                Data Pribadi
+              </Typography>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                {user.role !== "PASIEN" && (
+                  <SelectInput
+                    id="accountId"
+                    label="Akun"
+                    placeholder="Pilih akun"
+                    validation={{ required: "Akun wajib diisi" }}
+                    onChange={handleAccount}
+                    helperText="Pilih akun terlebih dahulu"
+                  >
+                    {accounts.length > 0 ? (
+                      accounts.map((account) => (
+                        <option key={account.id} value={account.id}>
+                          {account.listProfile[0].nik} -{" "}
+                          {account.listProfile.find(
+                            (profile) => profile.relative === 0
+                          )?.name ?? account.username}
                         </option>
                       ))
                     ) : (
-                      <option value="">Tidak ada profil yang tersedia</option>
+                      <option value="">Tidak ada akun yang tersedia</option>
                     )}
                   </SelectInput>
-                  <Typography variant="p1" className="mt-2">
-                    Nama: {profile?.name}
-                  </Typography>
-                  <Typography variant="p1">No. HP: {profile?.noHp}</Typography>
-                  <Typography variant="p1">
-                    Tanggal Lahir:{" "}
-                    {profile?.tanggalLahir
-                      ? formatDateOnly(profile.tanggalLahir)
-                      : "-"}
-                  </Typography>
-                  <Typography variant="p1">
-                    Jenis Kelamin:{" "}
-                    {profile?.jenisKelamin !== undefined
-                      ? formatGender(profile.jenisKelamin)
-                      : "-"}
-                  </Typography>
+                )}
+                <SelectInput
+                  id="profileId"
+                  label="Profil"
+                  placeholder="Pilih profil"
+                  validation={{ required: "Profil wajib diisi" }}
+                  onChange={handleProfile}
+                  helperText="Pilih profil terlebih dahulu"
+                >
+                  {profiles.length > 0 ? (
+                    profiles.map((profile) => (
+                      <option key={profile.id} value={profile.id}>
+                        {profile.name}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="">Tidak ada profil yang tersedia</option>
+                  )}
+                </SelectInput>
+                <div className="lg:col-span-2 w-full lg:w-[50%] rounded-lg border grid lg:grid-cols-2 border-gray-300 p-4">
+                  <div>
+                    <Typography
+                      variant="p2"
+                      className="mt-2 font-semibold text-gray-400"
+                    >
+                      Nama
+                    </Typography>
+                    <Typography variant="p1" className="mt-1">
+                      {profile?.name || "-"}
+                    </Typography>
+                    <Typography
+                      variant="p2"
+                      className="mt-2 font-semibold text-gray-400"
+                    >
+                      No. HP
+                    </Typography>
+                    <Typography variant="p1" className="mt-1">
+                      {profile?.noHp || "-"}
+                    </Typography>
+                  </div>
+                  <div>
+                    <Typography
+                      variant="p2"
+                      className="mt-2 font-semibold text-gray-400"
+                    >
+                      Tanggal Lahir
+                    </Typography>
+                    <Typography variant="p1" className="mt-1">
+                      {profile?.tanggalLahir
+                        ? formatDateOnly(profile.tanggalLahir)
+                        : "-"}
+                    </Typography>
+                    <Typography
+                      variant="p2"
+                      className="mt-2 font-semibold text-gray-400"
+                    >
+                      Jenis Kelamin
+                    </Typography>
+                    <Typography variant="p1" className="mt-1">
+                      {profile?.jenisKelamin !== undefined
+                        ? formatGender(profile.jenisKelamin)
+                        : "-"}
+                    </Typography>
+                  </div>
                 </div>
-                <Divider />
+              </div>
+
+              <Divider weight="thin" />
+              <div className="flex flex-col gap-4 lg:flex-row-reverse">
                 {user.role !== "PASIEN" && (
                   <SelectInput
                     id="status"
                     label="Status"
                     placeholder="Pilih status"
                     validation={{ required: "Status wajib diisi" }}
+                    parentClassName="lg:w-[50%]"
                   >
                     <option value="0">Belum Dilayani</option>
                     <option value="1">Sedang Dilayani</option>
@@ -355,6 +415,7 @@ const KunjunganAddPage = () => {
                 )}
                 <TextArea
                   id="keluhan"
+                  parentClassName="lg:w-[50%]"
                   label="Keluhan"
                   placeholder="Keluhan yang dirasakan"
                   maxLength={255}

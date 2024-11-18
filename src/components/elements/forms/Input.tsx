@@ -77,8 +77,7 @@ export default function Input({
       >
         <div
           className={clsxm(
-            "pointer-events-none absolute h-full w-full rounded-md ring-1 ring-inset ring-gray-300 group-focus:ring-blue-500",
-            className
+            "pointer-events-none absolute h-full w-full rounded-md ring-1 ring-inset ring-gray-300 group-focus:ring-blue-500"
           )}
         />
 
@@ -128,8 +127,7 @@ export default function Input({
               readOnly && "cursor-not-allowed bg-gray-200",
               prefix && "rounded-l-none rounded-r-md",
               suffix && "rounded-l-md rounded-r-none",
-              prefix && suffix && "rounded-none",
-              className
+              prefix && suffix && "rounded-none"
             )}
             aria-describedby={id}
             {...rest}

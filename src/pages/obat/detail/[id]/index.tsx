@@ -1,5 +1,6 @@
 import Button from "@/components/elements/Button";
 import Divider from "@/components/elements/Divider";
+import MyDatePicker from "@/components/elements/forms/DatePicker";
 import Input from "@/components/elements/forms/Input";
 import { LoadingDiv } from "@/components/elements/Loading";
 import { DANGER_TOAST, showToast } from "@/components/elements/Toast";
@@ -10,7 +11,7 @@ import withAuth from "@/components/hoc/withAuth";
 import ModalLayout from "@/components/layouts/ModalLayout";
 import { useDocumentTitle } from "@/context/Title";
 import { checkRole } from "@/lib/checkRole";
-import { formatDate, getSatuanObat } from "@/lib/formater";
+import { formatDate, formatDateDayjs, getSatuanObat } from "@/lib/formater";
 import sendRequest from "@/lib/getApi";
 import useAuthStore from "@/store/useAuthStore";
 import { Obat } from "@/types/entities/obat";
@@ -60,7 +61,7 @@ const DetailObatPage = () => {
     mode: "onTouched",
   });
 
-  const { handleSubmit } = methods;
+  const { handleSubmit, control } = methods;
 
   const onSubmit: SubmitHandler<RestockForm> = (data) => {
     const postData = async () => {
@@ -68,8 +69,10 @@ const DetailObatPage = () => {
         "put",
         "obat/restock",
         {
-          idObat: router.query.id,
           ...data,
+          idObat: router.query.id,
+          tanggalPembelian: formatDateDayjs(data.tanggalPembelian),
+          tanggalKadaluarsa: formatDateDayjs(data.tanggalKadaluarsa),
         },
         true
       );
@@ -246,19 +249,30 @@ const DetailObatPage = () => {
                   }}
                   label="Harga Beli Satuan"
                 />
-                <Input
+                <MyDatePicker
                   id="tanggalPembelian"
-                  type="date"
-                  validation={{ required: "Tanggal pembelian wajib diisi" }}
                   label="Tanggal Pembelian"
-                />
-                <Input
-                  id="tanggalKadaluarsa"
-                  type="date"
+                  control={control}
                   validation={{
-                    required: "Tanggal kadaluarsa obat wajib diisi",
+                    required: "Tanggal pembelian wajib diisi",
+                    validate: (value) => {
+                      if (!value) return true;
+                      return (
+                        value <= new Date() ||
+                        "Tanggal pembelian invalid, tidak bisa tanggal besok atau setelahnya"
+                      );
+                    },
                   }}
+                  disableFuture
+                />
+                <MyDatePicker
+                  id="tanggalKadaluarsa"
                   label="Tanggal Kadaluarsa"
+                  control={control}
+                  validation={{
+                    required: "Tanggal kadaluarsa wajib diisi",
+                  }}
+                  disablePast
                 />
                 <Button type="submit" className="max-md:w-full">
                   Ajukan
