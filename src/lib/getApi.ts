@@ -14,10 +14,13 @@ const sendRequest = async <T>(
   httpMethod: string,
   url: string,
   data?: any,
-  toast?: boolean
+  toast?: boolean,
+  isShowLoading?: boolean,
 ): Promise<[T | "", string, boolean]> => {
   try {
-    showLoadingToast();
+    if (!isShowLoading) {
+      showLoadingToast();
+    }
     const addAuthorizationHeader = (
       config: AxiosRequestConfig
     ): AxiosRequestConfig => {
