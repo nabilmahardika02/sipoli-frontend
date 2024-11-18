@@ -1,10 +1,11 @@
+import clsxm from "@/lib/clsxm";
+import sendRequest from "@/lib/getApi";
 import useAuthStore from "@/store/useAuthStore";
 import Link from "next/link";
+import { useCallback, useEffect } from "react";
 import { FaBell, FaUserCircle } from "react-icons/fa";
+import { KUNJUNGAN_TOAST, showToast } from "../elements/Toast";
 import Typography from "../elements/Typography";
-import clsxm from "@/lib/clsxm";
-import { useEffect, useCallback } from "react";
-import sendRequest from "@/lib/getApi";
 
 const DesktopTopNav = ({ title = "Beranda" }: { title?: string }) => {
   const user = useAuthStore.useUser();
@@ -16,20 +17,29 @@ const DesktopTopNav = ({ title = "Beranda" }: { title?: string }) => {
       "get",
       "notifikasi/is-exist"
     );
-  
-    console.log(responseData);
+
     if (isSuccess) {
-      setIsNotif(responseData as boolean);
+      const data = responseData as NewNotifikasiResponse;
+      setIsNotif(data.isExists);
+
+      data.newNotifications.forEach((notifikasi, i) => {
+        showToast(
+          notifikasi.title + "\n" + notifikasi.message,
+          KUNJUNGAN_TOAST
+        );
+      });
+
+      console.log(data.newNotifications)
     }
   }, []);
-  
+
   useEffect(() => {
     if (user?.role === "DOKTER" || user?.role === "PERAWAT") {
       fetchData();
       const interval = setInterval(() => {
         fetchData();
-      }, 60000); // 1 minute in milliseconds
-  
+      }, 60000);
+
       return () => clearInterval(interval);
     }
   }, [user, fetchData]);
@@ -54,10 +64,15 @@ const DesktopTopNav = ({ title = "Beranda" }: { title?: string }) => {
                 </Typography>
               </div>
               {(user.role === "DOKTER" || user.role === "PERAWAT") && (
-                <button className={clsxm("text-xl relative text-primary-1 hover:text-primary-2")}>
+                <button
+                  className={clsxm(
+                    "text-xl relative text-primary-1 hover:text-primary-2"
+                  )}
+                >
                   <FaBell />
-                  {isNewNotif && <div className="w-2.5 h-2.5 rounded-full bg-red-400 absolute top-0 left-0">
-                  </div>}
+                  {isNewNotif && (
+                    <div className="w-2.5 h-2.5 rounded-full bg-red-400 absolute top-0 left-0"></div>
+                  )}
                 </button>
               )}
             </>
