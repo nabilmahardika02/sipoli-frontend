@@ -2,9 +2,38 @@ import useAuthStore from "@/store/useAuthStore";
 import Link from "next/link";
 import { FaBell, FaUserCircle } from "react-icons/fa";
 import Typography from "../elements/Typography";
+import clsxm from "@/lib/clsxm";
+import { useEffect, useCallback } from "react";
+import sendRequest from "@/lib/getApi";
 
 const DesktopTopNav = ({ title = "Beranda" }: { title?: string }) => {
   const user = useAuthStore.useUser();
+  const isNewNotif = useAuthStore.useIsNewNotif();
+  const setIsNotif = useAuthStore.useSetIsNotif();
+
+  const fetchData = useCallback(async () => {
+    const [responseData, message, isSuccess] = await sendRequest(
+      "get",
+      "notifikasi/is-exist"
+    );
+  
+    console.log(responseData);
+    if (isSuccess) {
+      setIsNotif(responseData as boolean);
+    }
+  }, []);
+  
+  useEffect(() => {
+    if (user?.role === "DOKTER" || user?.role === "PERAWAT") {
+      fetchData();
+      const interval = setInterval(() => {
+        fetchData();
+      }, 60000); // 1 minute in milliseconds
+  
+      return () => clearInterval(interval);
+    }
+  }, [user, fetchData]);
+
   return (
     <nav className="hidden md:block w-full px-8 pt-2">
       <div className="w-full shadow-lg px-5 py-2 rounded-lg flex items-center justify-between bg-white">
@@ -25,8 +54,10 @@ const DesktopTopNav = ({ title = "Beranda" }: { title?: string }) => {
                 </Typography>
               </div>
               {(user.role === "DOKTER" || user.role === "PERAWAT") && (
-                <button className="text-xl text-primary-1 hover:text-primary-2">
+                <button className={clsxm("text-xl relative text-primary-1 hover:text-primary-2")}>
                   <FaBell />
+                  {isNewNotif && <div className="w-2.5 h-2.5 rounded-full bg-red-400 absolute top-0 left-0">
+                  </div>}
                 </button>
               )}
             </>
