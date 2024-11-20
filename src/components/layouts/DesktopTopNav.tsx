@@ -29,7 +29,7 @@ const DesktopTopNav = ({ title = "Beranda" }: { title?: string }) => {
         );
       });
 
-      console.log(data.newNotifications)
+      console.log(data.newNotifications);
     }
   }, []);
 
@@ -64,16 +64,18 @@ const DesktopTopNav = ({ title = "Beranda" }: { title?: string }) => {
                 </Typography>
               </div>
               {(user.role === "DOKTER" || user.role === "PERAWAT") && (
-                <button
-                  className={clsxm(
-                    "text-xl relative text-primary-1 hover:text-primary-2"
-                  )}
-                >
-                  <FaBell />
-                  {isNewNotif && (
-                    <div className="w-2.5 h-2.5 rounded-full bg-red-400 absolute top-0 left-0"></div>
-                  )}
-                </button>
+                <Link href={"/notifikasi"}>
+                  <button
+                    className={clsxm(
+                      "text-xl relative text-primary-1 hover:text-primary-2"
+                    )}
+                  >
+                    <FaBell />
+                    {isNewNotif && (
+                      <div className="w-2.5 h-2.5 rounded-full bg-red-400 absolute top-0 left-0"></div>
+                    )}
+                  </button>
+                </Link>
               )}
             </>
           )}

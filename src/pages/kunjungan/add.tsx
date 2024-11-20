@@ -207,6 +207,10 @@ const KunjunganAddPage = () => {
     setShowAntrianInfo(true);
   };
 
+  const handleBack = () => {
+    router.back();
+  };
+
   return (
     <main>
       <section>
@@ -232,7 +236,7 @@ const KunjunganAddPage = () => {
                     id="tanggalKunjungan"
                     label="Tanggal Kunjungan"
                     type="date"
-                    className="lg:w-[50%]"
+                    className="lg:w-full"
                     validation={{ required: "Mohon pilih tanggal kunjungan" }}
                     onChange={handleDateChange}
                   />
@@ -263,7 +267,7 @@ const KunjunganAddPage = () => {
                     validation={{
                       required: "Jam Kunjungan wajib diisi",
                     }}
-                    className="lg:w-[50%]"
+                    className="lg:w-full"
                     helperText="Silakan pilih waktu dalam WITA untuk berkunjung di hari
                       Minggu"
                   />
@@ -273,8 +277,8 @@ const KunjunganAddPage = () => {
                     name="sesi"
                     options={sesi}
                     label="Sesi"
-                    className="lg:w-[50%]"
-                    directionClassName="grid grid-cols-1 lg:grid-cols-2"
+                    className="lg:w-full"
+                    directionClassName="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
                     onChange={handleSesiChange}
                     validation={{ required: "Mohon pilih sesi" }}
                   />
@@ -282,7 +286,7 @@ const KunjunganAddPage = () => {
                 {showAntrianInfo && antrianInfo === 0 && (
                   <Typography
                     variant="p2"
-                    className="lg:w-[50%] py-3 px-5 rounded-lg chips-success"
+                    className="py-3 px-5 rounded-lg chips-success"
                     size="sm"
                   >
                     <FaInfoCircle className="text-xl" />
@@ -349,7 +353,7 @@ const KunjunganAddPage = () => {
                     <option value="">Tidak ada profil yang tersedia</option>
                   )}
                 </SelectInput>
-                <div className="lg:col-span-2 w-full lg:w-[50%] rounded-lg border grid lg:grid-cols-2 border-gray-300 p-4">
+                <div className="lg:col-span-2 w-full rounded-lg border grid lg:grid-cols-2 border-gray-300 p-4">
                   <div>
                     <Typography
                       variant="p2"
@@ -424,9 +428,7 @@ const KunjunganAddPage = () => {
               </div>
               <div className="mt-5 flex items-center justify-center gap-4">
                 <Button type="submit">Simpan</Button>
-                <Link href={"/home"}>
-                  <Button variant="danger">Batal</Button>
-                </Link>
+                <Button variant="danger" onClick={handleBack}>Batal</Button>
               </div>
             </form>
           </FormProvider>

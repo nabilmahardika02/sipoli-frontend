@@ -9,7 +9,7 @@ type AppShellProps = {
   children: React.ReactNode;
 };
 
-const disableNav = ["/404", "/403", "/500", "/login"];
+const disableNav = ["/404", "/403", "/500", "/login", "/notifikasi"];
 
 const AppShell = (props: AppShellProps) => {
   const { title } = useDocumentTitle();
