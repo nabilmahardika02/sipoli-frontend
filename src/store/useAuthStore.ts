@@ -9,15 +9,18 @@ type AuthStoreType = {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  isNewNotif: boolean;
   login: (user: User & withToken) => void;
   logout: () => void;
   stopLoading: () => void;
+  setIsNotif: (status: boolean) => void;
 };
 
 const useAuthStoreBase = create<AuthStoreType>((set) => ({
   user: null,
   isAuthenticated: false,
   isLoading: true,
+  isNewNotif: false,
   login: (user) => {
     setToken(user.token);
     set(
@@ -40,6 +43,13 @@ const useAuthStoreBase = create<AuthStoreType>((set) => ({
     set(
       produce<AuthStoreType>((state) => {
         state.isLoading = false;
+      })
+    );
+  },
+  setIsNotif: (status: boolean) => {
+    set(
+      produce<AuthStoreType>((state) => {
+        state.isNewNotif = status;
       })
     );
   },

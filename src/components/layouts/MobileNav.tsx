@@ -8,13 +8,15 @@ import {
 import clsxm from "@/lib/clsxm";
 import useAuthStore from "@/store/useAuthStore";
 import Link from "next/link";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { RxHamburgerMenu } from "react-icons/rx";
 import Logo from "../elements/Logo";
 import Typography from "../elements/Typography";
 import SubNav from "./SubNav";
+import { FaBell } from "react-icons/fa";
+import sendRequest from "@/lib/getApi";
 
 const MobileNav = ({ className }: { className?: string }) => {
   const [isOpen, setOpen] = useState(false);
@@ -62,6 +64,32 @@ const MobileNav = ({ className }: { className?: string }) => {
     });
   };
 
+  const isNewNotif = useAuthStore.useIsNewNotif();
+  const setIsNotif = useAuthStore.useSetIsNotif();
+
+  const fetchData = useCallback(async () => {
+    const [responseData, message, isSuccess] = await sendRequest(
+      "get",
+      "notifikasi/is-exist"
+    );
+
+    console.log(responseData);
+    if (isSuccess) {
+      setIsNotif(responseData as boolean);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (user?.role === "DOKTER" || user?.role === "PERAWAT") {
+      fetchData();
+      const interval = setInterval(() => {
+        fetchData();
+      }, 60000); // 1 minute in milliseconds
+
+      return () => clearInterval(interval);
+    }
+  }, [user, fetchData]);
+
   return (
     <>
       <nav
@@ -71,12 +99,22 @@ const MobileNav = ({ className }: { className?: string }) => {
         )}
       >
         <Logo size="sm" />
-        <button
-          className="text-white text-2xl active:rotate-90 active:transition-all active:duration-300"
-          onClick={isOpen ? handleClose : handleOpen}
-        >
-          {isOpen ? <IoClose /> : <RxHamburgerMenu />}
-        </button>
+        <div className="flex items-center gap-2">
+          {(user?.role === "DOKTER" || user?.role === "PERAWAT") && (
+            <button className={clsxm("text-xl relative text-white")}>
+              <FaBell />
+              {isNewNotif && (
+                <div className="w-2.5 h-2.5 rounded-full bg-red-400 absolute top-0 left-0"></div>
+              )}
+            </button>
+          )}
+          <button
+            className="text-white text-2xl active:rotate-90 active:transition-all active:duration-300"
+            onClick={isOpen ? handleClose : handleOpen}
+          >
+            {isOpen ? <IoClose /> : <RxHamburgerMenu />}
+          </button>
+        </div>
       </nav>
       {isVisible && (
         <>

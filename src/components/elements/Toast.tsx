@@ -1,6 +1,7 @@
 import { toast, ToastBar, Toaster, ToastOptions } from "react-hot-toast";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { BiSolidBadgeCheck, BiSolidError } from "react-icons/bi";
+import { FaInfoCircle } from "react-icons/fa";
 import { HiX } from "react-icons/hi";
 import { MdErrorOutline } from "react-icons/md";
 import { RiErrorWarningLine } from "react-icons/ri";
@@ -59,7 +60,7 @@ export const createCustomToast = (options: ToastOptions) => {
   return { ...DEFAULT_TOAST, ...options };
 };
 
-export const showToast = (message: string, options?: ToastOptions) => {
+export const showToast = (message: string, options?: ToastOptions, title?: string) => {
   return toast(message, options || DEFAULT_TOAST);
 };
 
@@ -118,4 +119,15 @@ export const WARNING_TOAST = createCustomToast({
   className: "w-[375px] [&>div]:justify-start",
   position: "top-center",
   duration: 4000,
+});
+
+export const KUNJUNGAN_TOAST = createCustomToast({
+  style: {
+    background: "#60a5fa",
+    color: "#ffffff",
+  },
+  icon: <FaInfoCircle size={20} />,
+  className: "w-[375px] [&>div]:justify-start",
+  position: "top-center",
+  duration: 10000,
 });
