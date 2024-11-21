@@ -17,6 +17,7 @@ export type SelectInputProps = {
   validation?: RegisterOptions;
   readOnly?: boolean;
   placeholder?: string;
+  parentClassName?: string;
 } & React.ComponentPropsWithoutRef<"select">;
 
 export default function SelectInput({
@@ -33,6 +34,7 @@ export default function SelectInput({
   placeholder = "",
   labelClassName,
   children,
+  parentClassName = "",
   ...rest
 }: SelectInputProps) {
   const {
@@ -43,7 +45,7 @@ export default function SelectInput({
   const error = get(errors, id);
 
   return (
-    <div className="w-full space-y-1.5 rounded-md">
+    <div className={clsxm("w-full space-y-1.5 rounded-md", parentClassName)}>
       <div
         className={clsxm(
           labelDirection === "horizontal" && "md:flex md:items-center gap-2"

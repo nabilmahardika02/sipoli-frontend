@@ -1,3 +1,5 @@
+import { Dayjs } from "dayjs";
+
 export type AddObatForm = {
   namaObat: string;
   deskripsi: string;
@@ -12,8 +14,8 @@ export type UpdateObatForm = {
 };
 
 export type RestockForm = {
-  tanggalPembelian: string;
-  tanggalKadaluarsa: string;
+  tanggalPembelian: Dayjs;
+  tanggalKadaluarsa: Dayjs;
   qty: number;
   hargaBeli: number;
 };

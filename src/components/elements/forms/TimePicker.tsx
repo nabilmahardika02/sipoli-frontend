@@ -1,4 +1,5 @@
-import { MobileTimePicker, TimePicker } from "@mui/x-date-pickers";
+import clsxm from "@/lib/clsxm";
+import { MobileTimePicker } from "@mui/x-date-pickers";
 import { Dayjs } from "dayjs";
 import {
   Control,
@@ -9,6 +10,7 @@ import {
 } from "react-hook-form";
 import Typography from "../Typography";
 import ErrorMessage from "./ErrorMessage";
+import HelperText from "./HelperText";
 
 const MyTimePicker = ({
   label,
@@ -21,6 +23,8 @@ const MyTimePicker = ({
   disabled = false,
   defaultValue,
   minuteStep = 1,
+  helperText,
+  className = "",
 }: {
   disableFuture?: boolean;
   label?: string;
@@ -32,6 +36,8 @@ const MyTimePicker = ({
   disabled?: boolean;
   defaultValue?: Dayjs;
   minuteStep?: 1 | 5 | 10 | 15 | 20 | 30 | 60;
+  helperText?: string;
+  className?: string;
 }) => {
   const {
     formState: { errors },
@@ -40,7 +46,7 @@ const MyTimePicker = ({
   const error = get(errors, id);
 
   return (
-    <div className="w-full space-y-1.5 rounded-md">
+    <div className={clsxm("w-full space-y-1.5 rounded-md", className)}>
       {label && (
         <label className="flex items-center space-x-1">
           <Typography
@@ -59,7 +65,7 @@ const MyTimePicker = ({
         defaultValue={defaultValue ? defaultValue : null}
         rules={validation}
         render={({ field }) => (
-        <MobileTimePicker
+          <MobileTimePicker
             {...field}
             value={field.value}
             readOnly={readonly}
@@ -74,6 +80,7 @@ const MyTimePicker = ({
         )}
       />
       {error && <ErrorMessage>{error.message}</ErrorMessage>}
+      {!error && helperText && <HelperText>{helperText}</HelperText>}
     </div>
   );
 };

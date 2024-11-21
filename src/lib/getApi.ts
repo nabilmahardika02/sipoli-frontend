@@ -17,7 +17,10 @@ const sendRequest = async <T>(
   toast?: boolean
 ): Promise<[T | "", string, boolean]> => {
   try {
-    showLoadingToast();
+    if (url !== "notifikasi/is-exist") {
+      showLoadingToast();
+    }
+
     const addAuthorizationHeader = (
       config: AxiosRequestConfig
     ): AxiosRequestConfig => {
@@ -44,7 +47,10 @@ const sendRequest = async <T>(
     dismissLoadingToast();
 
     if (error instanceof AxiosError) {
-      showToast(error.response?.data.message || "Service unavailable", DANGER_TOAST);
+      showToast(
+        error.response?.data.message || "Service unavailable",
+        DANGER_TOAST
+      );
       return ["", error.response?.data.message, false];
     } else {
       showToast("Terjadi kesalahan", DANGER_TOAST);

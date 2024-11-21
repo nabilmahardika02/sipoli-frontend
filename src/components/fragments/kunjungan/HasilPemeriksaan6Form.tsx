@@ -89,7 +89,7 @@ const HasilPemeriksaan5Form = ({
   return (
     <section>
       <Typography variant="h7" className="text-primary-1">
-        Formulir 6 
+        Formulir 6
       </Typography>
       <Divider></Divider>
       <Typography variant="h7" className="mt-5 text-primary-1">

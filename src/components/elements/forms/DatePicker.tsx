@@ -9,23 +9,28 @@ import {
 } from "react-hook-form";
 import Typography from "../Typography";
 import ErrorMessage from "./ErrorMessage";
+import HelperText from "./HelperText";
 
 const MyDatePicker = ({
   label,
   labelClassName,
   disableFuture = false,
+  disablePast = false,
   id,
   control,
   validation,
   defaultValue,
+  helperText,
 }: {
   disableFuture?: boolean;
+  disablePast?: boolean;
   label?: string;
   labelClassName?: string;
   id: string;
   control: Control<any>;
   validation?: RegisterOptions;
   defaultValue?: Dayjs;
+  helperText?: string;
 }) => {
   const {
     formState: { errors },
@@ -60,6 +65,7 @@ const MyDatePicker = ({
               field.onChange(newValue);
             }}
             disableFuture={disableFuture}
+            disablePast={disablePast}
             views={["year", "month", "day"]}
             className="w-full"
             format="DD/MM/YYYY"
@@ -67,6 +73,7 @@ const MyDatePicker = ({
         )}
       />
       {error && <ErrorMessage>{error.message}</ErrorMessage>}
+      {!error && helperText && <HelperText>{helperText}</HelperText>}
     </div>
   );
 };

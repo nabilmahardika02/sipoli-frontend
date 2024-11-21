@@ -66,7 +66,7 @@ const DataStatusPresent = ({
 
   return (
     <div>
-    <Divider weight="thin" className="my-5" />
+      <Divider weight="thin" className="my-5" />
       <div className="mt-5 flex items-center gap-2">
         <div className="w-1 h-5 bg-primary-1"></div>
         <Typography className="text-primary-1 font-semibold">

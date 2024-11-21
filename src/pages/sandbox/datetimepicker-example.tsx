@@ -26,7 +26,7 @@ const DatepickerExample = () => {
     time: Dayjs;
   }> = (data) => {
     console.log(formatDateDayjs(data.disableFuture));
-    console.log(formatTimeDayjs(data.time))
+    console.log(formatTimeDayjs(data.time));
   };
 
   return (

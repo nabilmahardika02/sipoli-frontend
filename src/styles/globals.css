@@ -202,9 +202,15 @@ body {
 }
 
 .table-wrapper th {
-  @apply font-medium text-center px-5 py-2
+  @apply font-medium text-center px-5 py-2;
 }
 
 .table-wrapper tbody td {
-  @apply px-4 py-4
+  @apply px-4 py-4;
+}
+
+/* -------------------------------------------------------------------------------- TABLE */
+
+.chips-success {
+  @apply bg-gradient-to-br opacity-50 from-gray-500 to-gray-400 text-white flex items-center gap-3;
 }
