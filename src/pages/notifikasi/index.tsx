@@ -87,17 +87,17 @@ const NotifikasiPage = () => {
     }
   };
 
-  const handleNotificationClick = async  (notifikasi: Notifikasi) => {
+  const handleNotificationClick = async (notifikasi: Notifikasi) => {
     const [responseData, message, isSuccess] = await sendRequest(
       "put",
       "notifikasi/mark-read",
       [notifikasi.id], // Kirim ID notifikasi dalam bentuk array
       false
     );
-  
+
     if (isSuccess) {
       fetchData();
-    router.push(`/kunjungan/${notifikasi.kunjunganId}`);
+      router.push(`/kunjungan/${notifikasi.kunjunganId}`);
     }
   };
 
@@ -120,8 +120,8 @@ const NotifikasiPage = () => {
     } else {
       setSelectAll(false);
     }
-  }, [selectedNotifications, notifications]);  
-  
+  }, [selectedNotifications, notifications]);
+
   return (
     <main className="w-full p-8 bg-gray-100 h-screen flex flex-col items-center gap-2">
       <div className="w-[90%] lg:w-[70%]">
@@ -154,17 +154,17 @@ const NotifikasiPage = () => {
         </div>
         <Divider />
         <div className="space-y-4">
-        {notifications && notifications.length > 0 && (
-    <div className="flex items-center gap-4">
-      <input
-        type="checkbox"
-        checked={selectAll}
-        onChange={handleSelectAll}
-        className="form-checkbox h-5 w-5 text-primary-1"
-      />
-      <Typography weight="semibold">Pilih Semua</Typography>
-    </div>
-  )}
+          {notifications && notifications.length > 0 && (
+            <div className="flex items-center gap-4">
+              <input
+                type="checkbox"
+                checked={selectAll}
+                onChange={handleSelectAll}
+                className="form-checkbox h-5 w-5 text-primary-1"
+              />
+              <Typography weight="semibold">Pilih Semua</Typography>
+            </div>
+          )}
           {notifications && notifications.length > 0 ? (
             notifications.map((notification, index) => (
               <div key={index} className="flex items-center gap-4">

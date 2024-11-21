@@ -21,7 +21,7 @@ export type RestockForm = {
 };
 
 export type RestockListForm = {
-  tanggalPembelian: Dayjs;
+  tanggalPembelian: string;
   restockItemList: RestockListItem[];
 };
 
