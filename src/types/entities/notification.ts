@@ -9,4 +9,5 @@ interface Notifikasi {
   message?: string;
   readStatus: number;
   createdAt: string;
+  kunjunganId: string;
 }

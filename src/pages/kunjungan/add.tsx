@@ -194,6 +194,7 @@ const KunjunganAddPage = () => {
 
       if (isSuccess) {
         setAntrianInfo(responseData as number);
+        console.log(responseData);
       }
     };
 
@@ -283,7 +284,7 @@ const KunjunganAddPage = () => {
                     validation={{ required: "Mohon pilih sesi" }}
                   />
                 )}
-                {showAntrianInfo && antrianInfo === 0 && (
+                {showAntrianInfo && antrianInfo != null && (
                   <Typography
                     variant="p2"
                     className="py-3 px-5 rounded-lg chips-success"
