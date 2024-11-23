@@ -214,3 +214,7 @@ body {
 .chips-success {
   @apply bg-gradient-to-br opacity-50 from-gray-500 to-gray-400 text-white flex items-center gap-3;
 }
+
+.css-1evyvmv-MuiChartsSurface-root {
+  @apply flex flex-col;
+}
