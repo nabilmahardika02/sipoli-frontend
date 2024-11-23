@@ -39,7 +39,7 @@ const StatisticJumlahKunjugan = ({
       if (isSuccess) {
         const data = responseData as JumlahKunjunganStatistic[];
         setJumlahKunjunganData(responseData as JumlahKunjunganStatistic[]);
-        setLabels(data.map((item) => item.bulan));
+        setLabels(data.map((item) => item.period));
         setValues(data.map((item) => item.jumlah));
         setNoData(data.every((item) => item.jumlah === 0));
       }

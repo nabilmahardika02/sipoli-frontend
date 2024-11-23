@@ -11,11 +11,9 @@ const DashboardPage = () => {
   }
 
   return (
-    <main className="grid grid-cols-2 gap-10">
-      <StatisticJumlahKunjugan className="col-span-2"/>
-      <div>
-        <StatisticJumlahPasien />
-      </div>
+    <main className="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <StatisticJumlahKunjugan className="md:col-span-2" />
+      <StatisticJumlahPasien className="md:col-span-2" />
     </main>
   );
 };
