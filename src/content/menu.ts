@@ -88,22 +88,42 @@ export const dokterMenu: NavbarMenu[] = [
     children: [],
   },
   {
-    name: "Daftar Kunjungan",
-    icon: FaBook,
-    href: "/kunjungan/all",
-    children: [],
+    name: "Kunjungan",
+    icon: FaPeopleCarryBox,
+    href: "/kunjungan",
+    children: [
+      {
+        name: "Daftar Kunjungan",
+        icon: FaBook,
+        href: "/kunjungan/all",
+        children: [],
+      },
+      {
+        name: "Dashboard Kunjungan",
+        icon: VscGraphLine,
+        href: "/kunjungan/dashboard",
+        children: [],
+      },
+    ],
   },
   {
-    name: "Daftar Obat",
+    name: "Obat",
     icon: FaCapsules,
     href: "/obat",
-    children: [],
-  },
-  {
-    name: "Dashboard",
-    icon: VscGraphLine,
-    href: "/dashboard",
-    children: [],
+    children: [
+      {
+        name: "Daftar Obat",
+        icon: FaCapsules,
+        href: "/obat",
+        children: [],
+      },
+      {
+        name: "Dashboard Obat",
+        icon: VscGraphLine,
+        href: "/obat/dashboard",
+        children: [],
+      },
+    ],
   },
 ];
 
@@ -115,28 +135,48 @@ export const perawatMenu: NavbarMenu[] = [
     children: [],
   },
   {
-    name: "Daftar Kunjungan",
-    icon: FaBook,
-    href: "/kunjungan/all",
-    children: [],
-  },
-  {
-    name: "Daftar Obat",
-    icon: FaCapsules,
-    href: "/obat",
-    children: [],
-  },
-  {
     name: "Daftar Pasien",
     icon: MdOutlineSick,
     href: "/pasien",
     children: [],
   },
   {
-    name: "Dashboard",
-    icon: VscGraphLine,
-    href: "/dashboard",
-    children: [],
+    name: "Kunjungan",
+    icon: FaPeopleCarryBox,
+    href: "/kunjungan",
+    children: [
+      {
+        name: "Daftar Kunjungan",
+        icon: FaBook,
+        href: "/kunjungan/all",
+        children: [],
+      },
+      {
+        name: "Dashboard Kunjungan",
+        icon: VscGraphLine,
+        href: "/kunjungan/dashboard",
+        children: [],
+      },
+    ],
+  },
+  {
+    name: "Obat",
+    icon: FaCapsules,
+    href: "/obat",
+    children: [
+      {
+        name: "Daftar Obat",
+        icon: FaCapsules,
+        href: "/obat",
+        children: [],
+      },
+      {
+        name: "Dashboard Obat",
+        icon: VscGraphLine,
+        href: "/obat/dashboard",
+        children: [],
+      },
+    ],
   },
 ];
 
