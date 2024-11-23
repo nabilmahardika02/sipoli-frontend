@@ -2,6 +2,7 @@ import StatisticJumlahKunjugan from "@/components/fragments/dashboard/StatisticJ
 import StatisticJumlahPasien from "@/components/fragments/dashboard/StatisticJumlahPasien";
 import withAuth from "@/components/hoc/withAuth";
 import { checkRole } from "@/lib/checkRole";
+import Head from "next/head";
 import { useRouter } from "next/router";
 
 const DashboardPage = () => {
@@ -12,6 +13,9 @@ const DashboardPage = () => {
 
   return (
     <main className="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <Head>
+        <title>Dashboard Kunjungan</title>
+      </Head>
       <StatisticJumlahKunjugan className="md:col-span-2" />
       <StatisticJumlahPasien className="md:col-span-2" />
     </main>

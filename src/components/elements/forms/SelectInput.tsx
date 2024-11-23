@@ -5,6 +5,7 @@ import ErrorMessage from "./ErrorMessage";
 import HelperText from "./HelperText";
 
 import clsxm from "@/lib/clsxm";
+import { FaAngleDown } from "react-icons/fa6";
 
 export type SelectInputProps = {
   id: string;
@@ -48,6 +49,7 @@ export default function SelectInput({
     <div className={clsxm("w-full space-y-1.5 rounded-md", parentClassName)}>
       <div
         className={clsxm(
+          "relative",
           labelDirection === "horizontal" && "md:flex md:items-center gap-2"
         )}
       >
@@ -66,28 +68,31 @@ export default function SelectInput({
           </label>
         )}
 
-        <select
-          {...register(id, validation)}
-          id={id}
-          name={id}
-          defaultValue={defaultValue}
-          disabled={readOnly}
-          className={clsxm(
-            "w-full pl-3 pr-8 py-2.5 truncate rounded-md border-none mt-1 bg-transparent",
-            "focus:ring-inset focus:ring-theme-primary-main ring-1 ring-inset ring-gray-300 focus:outline-blue-500 focus:outline-1",
-            readOnly && "cursor-not-allowed",
-            className
-          )}
-          aria-describedby={id}
-          {...rest}
-        >
-          {placeholder && (
-            <option value="" disabled hidden>
-              {placeholder}
-            </option>
-          )}
-          {children}
-        </select>
+        <div className="relative">
+          <select
+            {...register(id, validation)}
+            id={id}
+            name={id}
+            defaultValue={defaultValue}
+            disabled={readOnly}
+            className={clsxm(
+              "w-full pl-3 pr-8 py-2.5 truncate rounded-md border-none mt-1 bg-transparent",
+              "focus:ring-inset focus:ring-theme-primary-main ring-1 ring-inset ring-gray-300 focus:outline-blue-500 focus:outline-1",
+              readOnly && "cursor-not-allowed",
+              className
+            )}
+            aria-describedby={id}
+            {...rest}
+          >
+            {placeholder && (
+              <option value="" disabled hidden>
+                {placeholder}
+              </option>
+            )}
+            {children}
+          </select>
+          <FaAngleDown className="text-gray-500 absolute top-1/2 right-4 text-xl -translate-y-1/2" />
+        </div>
       </div>
 
       {!hideError && error && <ErrorMessage>{error.message}</ErrorMessage>}

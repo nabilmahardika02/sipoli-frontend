@@ -9,14 +9,14 @@ export const statisticTableColumn: GridColDef[] = [
     field: "label",
     headerName: "Kategori",
     headerAlign: "center",
-    width: 200,
+    width: 150,
     align: "center",
   },
   {
     field: "amount",
     headerName: "Jumlah",
     headerAlign: "center",
-    width: 200,
+    width: 150,
     align: "center",
   },
 ];

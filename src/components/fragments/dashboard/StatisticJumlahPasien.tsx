@@ -1,3 +1,4 @@
+import SelectInput from "@/components/elements/forms/SelectInput";
 import { LoadingDiv } from "@/components/elements/Loading";
 import Typography from "@/components/elements/Typography";
 import clsxm from "@/lib/clsxm";
@@ -10,6 +11,7 @@ import {
 } from "@/types/table/statistiColumn";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { useEffect, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 import NoDataState from "./NoDataState";
 
 function getTotalAmount(data: GeneralStatistic[]): number {
@@ -32,15 +34,15 @@ const StatisticJumlahPasien = ({ className = "" }: { className?: string }) => {
   const [noData, setNoData] = useState<boolean>();
   const [data, setData] = useState<GeneralStatistic[]>();
   const [dataPercentage, setDataPercentage] = useState<PieChartData[]>();
-  const [chartHeight, setChartheight] = useState(200);
+  const [chartHeight, setChartheight] = useState(300);
 
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
       if (width >= 768) {
-        setChartheight(200);
+        setChartheight(500);
       } else {
-        setChartheight(150);
+        setChartheight(300);
       }
     };
 
@@ -68,20 +70,52 @@ const StatisticJumlahPasien = ({ className = "" }: { className?: string }) => {
     fetchData();
   }, [byAttribute]);
 
+  const setSelectedAttribute = (event: { target: { value: string } }) => {
+    setAttribute(event.target.value);
+  };
+
+  const methods = useForm<{ category: string }>({
+    mode: "onTouched",
+  });
+
   return (
     <section className={clsxm("data-section", className)}>
-      <Typography variant="h6" className="text-primary-1">
-        Data Pasien
-      </Typography>
-      <Typography variant="p2" className="text-gray-400 font-medium mt-2">
-        Data pasien terdaftar
-      </Typography>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
+        <div>
+          <Typography variant="h6" className="text-primary-1">
+            Data Pasien
+          </Typography>
+          <Typography variant="p2" className="text-gray-400 font-medium mt-2">
+            Data pasien terdaftar
+          </Typography>
+        </div>
+        <div className="w-full md:w-[50%]">
+          <FormProvider {...methods}>
+            <form>
+              <SelectInput
+                id="category"
+                className="rounded-full"
+                onChange={setSelectedAttribute}
+              >
+                <option className="text-center" value="gender">
+                  Jenis Kelamin
+                </option>
+                <option className="text-center" value="relative">
+                  Relatif
+                </option>
+                <option className="text-center" value="age">
+                  Usia
+                </option>
+              </SelectInput>
+            </form>
+          </FormProvider>
+        </div>
+      </div>
       {data && noData != null ? (
         !noData ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-4">
             {dataPercentage ? (
               <PieChart
-                colors={["#dc2626", "#2563eb"]}
                 series={[
                   {
                     // @ts-ignore
@@ -96,7 +130,21 @@ const StatisticJumlahPasien = ({ className = "" }: { className?: string }) => {
                       v === null ? "" : `${v.value.toFixed(2)} %`,
                   },
                 ]}
-                height={chartHeight}
+                width={chartHeight}
+                height={300}
+                slotProps={{
+                  legend: {
+                    direction: "row",
+                    position: { vertical: "bottom", horizontal: "middle" },
+                    padding: 0,
+                    labelStyle: {
+                      fontSize: 14,
+                    },
+                    itemMarkWidth: 11,
+                    itemMarkHeight: 10,
+                  },
+                }}
+                margin={{ top: 0, bottom: 70, left: 0, right: 0 }}
               />
             ) : (
               <LoadingDiv />
@@ -111,7 +159,7 @@ const StatisticJumlahPasien = ({ className = "" }: { className?: string }) => {
             </div>
           </div>
         ) : (
-          <NoDataState msg="Belum ada pasien terdaftar"/>
+          <NoDataState msg="Belum ada pasien terdaftar" />
         )
       ) : (
         <LoadingDiv />
