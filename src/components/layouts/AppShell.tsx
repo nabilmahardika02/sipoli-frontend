@@ -25,7 +25,8 @@ const AppShell = (props: AppShellProps) => {
     pathname === "/pasien/detail/[id]" ||
     pathname === "/kunjungan/[id]" ||
     pathname === "/obat/permintaan-restock" ||
-    pathname === "/obat/detail/[id]";
+    pathname === "/obat/detail/[id]" ||
+    pathname.startsWith("/dashboard");
 
   return (
     <section>
