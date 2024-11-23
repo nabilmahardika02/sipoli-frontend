@@ -25,7 +25,7 @@ const StatisticJumlahKunjugan = ({
   const [values, setValues] = useState<number[]>();
   const [noData, setNoData] = useState<boolean>();
 
-  const methods = useForm<{ year: number }>({
+  const methods = useForm<{}>({
     mode: "onTouched",
   });
 
@@ -38,7 +38,7 @@ const StatisticJumlahKunjugan = ({
 
       if (isSuccess) {
         const data = responseData as JumlahKunjunganStatistic[];
-        setJumlahKunjunganData(responseData as JumlahKunjunganStatistic[]);
+        setJumlahKunjunganData(data);
         setLabels(data.map((item) => item.period));
         setValues(data.map((item) => item.jumlah));
         setNoData(data.every((item) => item.jumlah === 0));

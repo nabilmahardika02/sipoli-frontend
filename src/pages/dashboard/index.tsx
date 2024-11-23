@@ -1,11 +1,20 @@
 import StatisticJumlahKunjugan from "@/components/fragments/dashboard/StatisticJumlahKunjungan";
 import StatisticJumlahPasien from "@/components/fragments/dashboard/StatisticJumlahPasien";
+import StatisticSesi from "@/components/fragments/dashboard/StatisticSesi";
 import withAuth from "@/components/hoc/withAuth";
+import { useDocumentTitle } from "@/context/Title";
 import { checkRole } from "@/lib/checkRole";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 const DashboardPage = () => {
+  const { setTitle } = useDocumentTitle();
+
+  useEffect(() => {
+    setTitle("Statistik Data Kunjungan");
+  }, [setTitle]);
+
   const router = useRouter();
   if (!checkRole(["DOKTER", "PERAWAT", "OPERATOR"])) {
     router.push("/403");
@@ -17,6 +26,7 @@ const DashboardPage = () => {
         <title>Dashboard Kunjungan</title>
       </Head>
       <StatisticJumlahKunjugan className="md:col-span-2" />
+      <StatisticSesi />
       <StatisticJumlahPasien className="md:col-span-2" />
     </main>
   );

@@ -29,7 +29,7 @@ function convertToPieChartData(data: GeneralStatistic[]): PieChartData[] {
 }
 
 const StatisticJumlahPasien = ({ className = "" }: { className?: string }) => {
-  const [byAttribute, setAttribute] = useState("gender");
+  const [byAttribute, setAttribute] = useState("age");
 
   const [noData, setNoData] = useState<boolean>();
   const [data, setData] = useState<GeneralStatistic[]>();
@@ -97,14 +97,14 @@ const StatisticJumlahPasien = ({ className = "" }: { className?: string }) => {
                 className="rounded-full"
                 onChange={setSelectedAttribute}
               >
+                <option className="text-center" value="age">
+                  Usia
+                </option>
                 <option className="text-center" value="gender">
                   Jenis Kelamin
                 </option>
                 <option className="text-center" value="relative">
                   Relatif
-                </option>
-                <option className="text-center" value="age">
-                  Usia
                 </option>
               </SelectInput>
             </form>
