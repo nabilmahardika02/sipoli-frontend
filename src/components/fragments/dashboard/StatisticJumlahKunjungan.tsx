@@ -155,6 +155,7 @@ const StatisticJumlahKunjugan = ({
               height={400}
               series={[
                 {
+                  curve: "linear",
                   data: values,
                   label: "Jumlah Kunjungan",
                   showMark: true,
