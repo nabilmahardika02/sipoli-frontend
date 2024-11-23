@@ -47,8 +47,9 @@ const HomeNonPasienView = () => {
           {value.row.status === 0 && (<Link href={"/home"}>
             <Button
               fullRounded
-              size="base"
+              size="sm"
               variant="danger"
+              className="border border-danger-2"
               onClick={() => handleOpenModal(value.row.id)}
             >
               Cancel
