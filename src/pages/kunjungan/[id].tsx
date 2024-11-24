@@ -15,12 +15,20 @@ import router from "next/router";
 import { useEffect, useState } from "react";
 import { FaCirclePlus } from "react-icons/fa6";
 import { LuPencil } from "react-icons/lu";
+import { FaRegFilePdf } from "react-icons/fa";
+import ModalLayout from "@/components/layouts/ModalLayout";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { SuratIzinForm } from "@/types/forms/suratIzinForm";
+import Input from "@/components/elements/forms/Input";
+import { SuratIzin } from "@/types/entities/suratIzin";
 
 const KunjunganPage = () => {
   const { setTitle } = useDocumentTitle();
   const [kunjungan, setKunjungan] = useState<Kunjungan>();
   const user = useAuthStore.useUser();
   const [trigger, setTrigger] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [suratIzin, setSuratIzin] = useState<SuratIzin | null>(null);
 
   useEffect(() => {
     setTitle("Detail Kunjungan");
@@ -42,6 +50,53 @@ const KunjunganPage = () => {
       fetchKunjungan();
     }
   }, [trigger, router.query.id]);
+
+  const methods = useForm<SuratIzinForm>({
+    mode: "onTouched",
+  });
+
+  const { handleSubmit } = methods;
+
+  const onSubmit: SubmitHandler<SuratIzinForm> = (data) => {
+    const postData = async () => {
+      const payload = {
+        ...data,
+        kunjunganId: router.query.id, // Ambil kunjunganId langsung dari router.query.id
+      };
+      const [responseData, message, isSuccess] = await sendRequest(
+        "post",
+        `surat-izin/add`,
+        payload,
+        true
+      );
+
+      if (isSuccess) {
+        setShowModal(false);
+        methods.reset();
+        setTrigger(!trigger);
+        setSuratIzin(responseData as SuratIzin);
+      }
+    };
+
+    postData();
+  };
+
+  useEffect(() => {
+    const fetchSuratIzin = async () => {
+      const [responseData, message, isSuccess] = await sendRequest(
+        "get",
+        `surat-izin/${router.query.id}`
+      );
+
+      if (isSuccess && responseData) {
+        setSuratIzin(responseData as SuratIzin);
+      } else {
+        setSuratIzin(null);
+      }
+    };
+
+    fetchSuratIzin();
+  }, [router.query.id]);
 
   return (
     <main className="flex flex-col gap-5">
@@ -83,6 +138,30 @@ const KunjunganPage = () => {
                   </Link>
                 </div>
               )}
+              {(user?.role === "PERAWAT" || user?.role === "DOKTER") &&
+                kunjungan.hasilPemeriksaan !== null &&
+                suratIzin === null && (
+                  <div className="flex justify-end">
+                    <Button
+                      variant="outline"
+                      leftIcon={FaRegFilePdf}
+                      onClick={() => setShowModal(true)}
+                    >
+                      Buat Surat Izin
+                    </Button>
+                  </div>
+                )}
+              {(user?.role === "PERAWAT" || user?.role === "DOKTER") &&
+                suratIzin !== null && (
+                  <div className="flex justify-end">
+                    <Button
+                      variant="outline"
+                      leftIcon={FaRegFilePdf}
+                    >
+                      Unduh Surat Izin
+                    </Button>
+                  </div>
+                )}
             </div>
             <Divider className="md:hidden my-2" />
             <DataKunjungan kunjungan={kunjungan} />
@@ -123,6 +202,37 @@ const KunjunganPage = () => {
         </>
       ) : (
         <LoadingDiv />
+      )}
+      {showModal && (
+        <ModalLayout setShowModal={setShowModal}>
+          <div className="bg-white rounded-xl p-5 w-full md:w-[80%]">
+            <Typography variant="h6" className="text-primary-1">
+              Buat Surat Izin
+            </Typography>
+            <FormProvider {...methods}>
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="mt-5 items-end"
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
+                  <Input
+                    type="date"
+                    id="tanggalAwal"
+                    label="Tanggal Awal Istirahat"
+                  />
+                  <Input
+                    type="date"
+                    id="tanggalAkhir"
+                    label="Tanggal Berakhir Istirahat"
+                  />
+                </div>
+                <Button type="submit" className="max-md:w-full">
+                  Unduh
+                </Button>
+              </form>
+            </FormProvider>
+          </div>
+        </ModalLayout>
       )}
     </main>
   );
