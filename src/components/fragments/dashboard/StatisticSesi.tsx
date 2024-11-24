@@ -19,7 +19,7 @@ const chartSetting = {
 };
 
 const StatisticSesi = ({ className = "" }: { className?: string }) => {
-  const [month, setMonth] = useState(11);
+  const [month, setMonth] = useState(1);
 
   const [data, setData] = useState<GeneralStatistic[]>();
   const [labels, setLabels] = useState<string[]>();
