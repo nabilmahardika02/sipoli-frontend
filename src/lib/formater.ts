@@ -73,6 +73,14 @@ export function getJenisKelamin(value: boolean) {
   }
 }
 
+export function getKewarganegaraan(value: boolean) {
+  if (value === true) {
+    return "Warga Negara Indonesia";
+  } else {
+    return "Warga Negara Asing";
+  }
+}
+
 export function calculateAge(dateOfBirth: string): string {
   const today = new Date();
   const birthDate = new Date(dateOfBirth);

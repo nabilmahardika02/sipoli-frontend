@@ -85,7 +85,7 @@ const KunjunganPage = () => {
     const fetchSuratIzin = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "get",
-        `surat-izin/${router.query.id}`
+        `surat-izin/kunjungan/${router.query.id}`
       );
 
       if (isSuccess && responseData) {
@@ -229,9 +229,12 @@ const KunjunganPage = () => {
                     label="Tanggal Berakhir Istirahat"
                   />
                 </div>
+                <div className="flex justify-end">
                 <Button type="submit" className="max-md:w-full">
                   Unduh
                 </Button>
+                </div>
+                
               </form>
             </FormProvider>
           </div>

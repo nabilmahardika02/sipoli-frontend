@@ -12,6 +12,7 @@ export interface Profile {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+  kewarganegaraan: boolean;
 }
 
 export interface RiwayatPenyakitDahulu {
