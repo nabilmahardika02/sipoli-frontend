@@ -20,7 +20,7 @@ const UpdatePage = () => {
   const [obat, setObat] = useState<Obat>();
 
   useEffect(() => {
-    setTitle("Update Obat");
+    setTitle("Ubah Obat");
   }, [setTitle]);
 
   useEffect(() => {

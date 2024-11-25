@@ -13,4 +13,5 @@ export interface Account {
   unitKerja: string;
   eselon: number;
   listProfile: Profile[];
+  alamat: string;
 }

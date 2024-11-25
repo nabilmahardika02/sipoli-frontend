@@ -126,20 +126,6 @@ const UpdateProfilePage = () => {
                       : ""
                   }
                 />
-                {profile.relative === 0 && (
-                  <SelectInput
-                    id="relative"
-                    className="hidden"
-                    defaultValue={
-                      profile?.relative !== null &&
-                      profile?.relative !== undefined
-                        ? profile?.relative.toString()
-                        : ""
-                    }
-                  >
-                    <option value="0"></option>
-                  </SelectInput>
-                )}
               </div>
               <div className="mt-5 flex items-center gap-4">
                 <Button type="submit">Submit</Button>

@@ -134,6 +134,7 @@ const StatisticRujukan = ({ className = "" }: { className?: string }) => {
             rows={data}
             showPerPage={[5]}
             initialPageSize={5}
+            flexColumnIndexes={[0, 1]}
           />
         </>
       ) : (

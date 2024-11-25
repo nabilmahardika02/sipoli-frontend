@@ -9,10 +9,12 @@ import DataTable from "@/lib/datatable";
 import { formatDate, formatDateOnly } from "@/lib/formater";
 import sendRequest from "@/lib/getApi";
 import { Account } from "@/types/entities/account";
+import { Profile } from "@/types/entities/profile";
 import {
   getRowIdProfile,
   profileTableColumns,
 } from "@/types/table/profileColumn";
+import { GridColDef } from "@mui/x-data-grid";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -27,6 +29,10 @@ const DetailPage = () => {
   const router = useRouter();
   const [selectedAccount, setAccount] = useState<Account>();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDeleteProfileModal, setShowDeleteProfileModal] = useState(false);
+  const [selectedProfileDelete, setSelectedProfileDelete] = useState<
+    Profile | undefined
+  >();
   const [isPasien, setIsPasien] = useState(true);
 
   useEffect(() => {
@@ -56,13 +62,80 @@ const DetailPage = () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "delete",
         `auth/delete/${router.query.id}`,
+        null,
         true
       );
+
+      if (isSuccess) {
+        setShowDeleteModal(false);
+        router.push("/akun");
+      }
     };
+
     softDelete();
-    setShowDeleteModal(false);
-    router.push("/akun");
   };
+
+  const handleDeleteProfile = () => {
+    const deleteProfile = async () => {
+      const [responseData, message, isSuccess] = await sendRequest(
+        "delete",
+        `profile/delete/${selectedProfileDelete?.id}`,
+        null,
+        true
+      );
+
+      if (isSuccess) {
+        setShowDeleteProfileModal(false);
+        router.push("/akun");
+      }
+    };
+
+    if (selectedProfileDelete) {
+      deleteProfile();
+    }
+  };
+
+  const profileColumns: GridColDef[] = [
+    ...profileTableColumns,
+    {
+      field: "action",
+      headerName: "Aksi",
+      headerAlign: "center",
+      width: 150,
+      align: "center",
+      sortable: false,
+      renderCell: (value) => {
+        return (
+          <div className="w-full flex items-center justify-center h-full gap-3">
+            <Link href={`/akun/profile/update/${value.row.id}`}>
+              <Button
+                variant="outline"
+                size="sm"
+                fullRounded
+                className="mx-auto"
+              >
+                Ubah
+              </Button>
+            </Link>
+            {value.row.relative !== 0 && (
+              <Button
+                variant="danger"
+                size="sm"
+                fullRounded
+                className="mx-auto outline outline-danger-2"
+                onClick={() => {
+                  setSelectedProfileDelete(value.row);
+                  setShowDeleteProfileModal(true);
+                }}
+              >
+                Hapus
+              </Button>
+            )}
+          </div>
+        );
+      },
+    },
+  ];
 
   return (
     <main>
@@ -173,6 +246,18 @@ const DetailPage = () => {
                       {selectedAccount.eselon}
                     </Typography>
                   </div>
+                  <div>
+                    <Typography
+                      variant="p2"
+                      weight="semibold"
+                      className="text-gray-400"
+                    >
+                      Alamat
+                    </Typography>
+                    <Typography className="text-primary-1">
+                      {selectedAccount.alamat || "-"}
+                    </Typography>
+                  </div>
                 </>
               ) : (
                 <>
@@ -271,10 +356,9 @@ const DetailPage = () => {
                   </Link>
                 </div>
                 <DataTable
-                  columns={profileTableColumns}
+                  columns={profileColumns}
                   getRowId={getRowIdProfile}
                   rows={selectedAccount.listProfile}
-                  flexColumnIndexes={[0, 2]}
                 />
               </>
             )}
@@ -302,7 +386,7 @@ const DetailPage = () => {
               Setelah dinonaktifkan, akun{" "}
               <span className="font-bold">{selectedAccount?.username}</span>{" "}
               tidak dapat diakses lagi. Semua profil yang terkait dengan akun
-              tersebut akan terhapus
+              tersebut akan terhapus.
             </Typography>
             <div className="flex items-center gap-2 mt-4 self-end">
               <Button variant="danger" size="sm" onClick={() => handleDelete()}>
@@ -312,6 +396,48 @@ const DetailPage = () => {
                 variant="success"
                 size="sm"
                 onClick={() => setShowDeleteModal(false)}
+              >
+                Batal
+              </Button>
+            </div>
+          </div>
+        </ModalLayout>
+      )}
+      {showDeleteProfileModal && (
+        <ModalLayout setShowModal={setShowDeleteProfileModal}>
+          <div className="bg-white rounded-xl p-5 w-full md:w-[50%] flex flex-col">
+            <Typography variant="h6" className="text-primary-1">
+              Hapus Profil
+            </Typography>
+            <Divider className="my-2" weight="kurus" />
+            <Typography
+              variant="p2"
+              weight="semibold"
+              className="text-secondary-4"
+            >
+              Yakin ingin menghapus profil ini?
+            </Typography>
+            <Typography variant="p2" className="text-primary-1 mt-2">
+              Setelah dihapus, profil{" "}
+              <span className="font-bold">{selectedProfileDelete?.name}</span>{" "}
+              tidak dapat diakses lagi. Profil baru dengan NIK yang sama dapat
+              dibuat, tetapi dengan data yang berbeda.
+            </Typography>
+            <div className="flex items-center gap-2 mt-4 self-end">
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={() => handleDeleteProfile()}
+              >
+                Hapus
+              </Button>
+              <Button
+                variant="success"
+                size="sm"
+                onClick={() => {
+                  setSelectedProfileDelete(undefined);
+                  setShowDeleteProfileModal(false);
+                }}
               >
                 Batal
               </Button>
