@@ -3,6 +3,7 @@ import Logo from "@/components/elements/Logo";
 import Typography from "@/components/elements/Typography";
 import {
   formatDateOnly,
+  formatDateWithoutDays,
   getJenisKelamin,
   getKewarganegaraan,
 } from "@/lib/formater";
@@ -72,6 +73,7 @@ const SuratIzinPage = () => {
 
   useEffect(() => {
     const fetchAccount = async () => {
+      if (!suratIzin?.kunjungan?.profile?.id) return
       const [responseData, message, isSuccess] = await sendRequest(
         "get",
         "auth/profile/" + suratIzin?.kunjungan.profile.id
@@ -83,7 +85,7 @@ const SuratIzinPage = () => {
     };
 
     fetchAccount();
-  }, [router.query.id]);
+  }, [suratIzin]);
 
   return (
     <main className="w-full h-full p-8 bg-gray-100 flex flex-col items-center gap-5">
@@ -99,16 +101,16 @@ const SuratIzinPage = () => {
               <span className="text-primary-1 font-bold">
                 {jumlahHari} hari
               </span>{" "}
-              terhitung mulai tanggal{" "}
+              terhitung mulai tanggal {" "}
               <span className="text-primary-1 font-bold">
                 {suratIzin?.tanggalAwal
-                  ? formatDateOnly(suratIzin.tanggalAwal)
+                  ? formatDateWithoutDays(suratIzin.tanggalAwal)
                   : "-"}
               </span>{" "}
-              s.d tanggal{" "}
+              s.d tanggal {" "}
               <span className="text-primary-1 font-bold">
                 {suratIzin?.tanggalAkhir
-                  ? formatDateOnly(suratIzin.tanggalAkhir)
+                  ? formatDateWithoutDays(suratIzin.tanggalAkhir)
                   : "-"}
               </span>
             </Typography>

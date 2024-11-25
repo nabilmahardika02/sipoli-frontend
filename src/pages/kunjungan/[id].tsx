@@ -17,10 +17,13 @@ import { FaCirclePlus } from "react-icons/fa6";
 import { LuPencil } from "react-icons/lu";
 import { FaRegFilePdf } from "react-icons/fa";
 import ModalLayout from "@/components/layouts/ModalLayout";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { SuratIzinForm } from "@/types/forms/suratIzinForm";
 import Input from "@/components/elements/forms/Input";
 import { SuratIzin } from "@/types/entities/suratIzin";
+import SuratIzinPDF from "@/components/PDF/SuratIzinPDF";
+import { RxCross2 } from "react-icons/rx";
+import IconButton from "@/components/elements/IconButton";
 
 const KunjunganPage = () => {
   const { setTitle } = useDocumentTitle();
@@ -29,6 +32,8 @@ const KunjunganPage = () => {
   const [trigger, setTrigger] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [suratIzin, setSuratIzin] = useState<SuratIzin | null>(null);
+  const [tanggalAwal, setTanggalAwal] = useState("");
+  const [tanggalAkhir, setTanggalAkhir] = useState("");
 
   useEffect(() => {
     setTitle("Detail Kunjungan");
@@ -55,48 +60,35 @@ const KunjunganPage = () => {
     mode: "onTouched",
   });
 
-  const { handleSubmit } = methods;
+  const fetchSuratIzin = async () => {
+    const [responseData, message, isSuccess] = await sendRequest(
+      "get",
+      `surat-izin/kunjungan/${router.query.id}`
+    );
 
-  const onSubmit: SubmitHandler<SuratIzinForm> = (data) => {
-    const postData = async () => {
-      const payload = {
-        ...data,
-        kunjunganId: router.query.id, // Ambil kunjunganId langsung dari router.query.id
-      };
-      const [responseData, message, isSuccess] = await sendRequest(
-        "post",
-        `surat-izin/add`,
-        payload,
-        true
-      );
-
-      if (isSuccess) {
-        setShowModal(false);
-        methods.reset();
-        setTrigger(!trigger);
-        setSuratIzin(responseData as SuratIzin);
-      }
-    };
-
-    postData();
+    if (isSuccess && responseData) {
+      setSuratIzin(responseData as SuratIzin);
+    } else {
+      setSuratIzin(null);
+    }
   };
 
   useEffect(() => {
-    const fetchSuratIzin = async () => {
-      const [responseData, message, isSuccess] = await sendRequest(
-        "get",
-        `surat-izin/kunjungan/${router.query.id}`
-      );
-
-      if (isSuccess && responseData) {
-        setSuratIzin(responseData as SuratIzin);
-      } else {
-        setSuratIzin(null);
-      }
-    };
-
     fetchSuratIzin();
   }, [router.query.id]);
+
+  const handleTanggalAwal = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTanggalAwal(event.target.value);
+  }
+
+  const handleTanggalAkhir = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTanggalAkhir(event.target.value);
+  }
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    fetchSuratIzin();
+  }
 
   return (
     <main className="flex flex-col gap-5">
@@ -209,32 +201,35 @@ const KunjunganPage = () => {
       {showModal && (
         <ModalLayout setShowModal={setShowModal}>
           <div className="bg-white rounded-xl p-5 w-full md:w-[80%]">
+            <div className="flex justify-between">
             <Typography variant="h6" className="text-primary-1">
               Buat Surat Izin
             </Typography>
+            <IconButton variant="outline" onClick={() => handleCloseModal()} icon={RxCross2} fullRounded></IconButton>
+            
+            </div>
+            <Divider/>
             <FormProvider {...methods}>
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="mt-5 items-end"
-              >
+              <form>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
                   <Input
                     type="date"
                     id="tanggalAwal"
                     label="Tanggal Awal Istirahat"
+                    onChange={handleTanggalAwal}
                   />
                   <Input
                     type="date"
                     id="tanggalAkhir"
                     label="Tanggal Berakhir Istirahat"
+                    onChange={handleTanggalAkhir}
                   />
                 </div>
-                <div className="flex justify-end">
-                <Button type="submit" className="max-md:w-full">
-                  Unduh
-                </Button>
-                </div>
-                
+                <SuratIzinPDF 
+                  tanggalAwal={tanggalAwal}
+                  tanggalAkhir={tanggalAkhir}
+                  kunjungan={kunjungan}
+                />
               </form>
             </FormProvider>
           </div>
