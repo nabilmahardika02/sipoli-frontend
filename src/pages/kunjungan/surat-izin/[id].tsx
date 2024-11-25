@@ -175,9 +175,7 @@ const SuratIzinPage = () => {
             </Typography>
             <Typography weight="bold" className="text-primary-1">
               {suratIzin?.kunjungan.profile.name} (
-              {suratIzin?.kunjungan.profile.jenisKelamin === null
-                ? getJenisKelamin(suratIzin?.kunjungan.profile.jenisKelamin)
-                : "-"}
+              {suratIzin ? getJenisKelamin(suratIzin?.kunjungan.profile.jenisKelamin) : "-"}
               )
             </Typography>
           </div>
