@@ -154,12 +154,15 @@ const KunjunganPage = () => {
               {(user?.role === "PERAWAT" || user?.role === "DOKTER") &&
                 suratIzin !== null && (
                   <div className="flex justify-end">
+                    <Link href={`/surat-izin/${suratIzin.id}`}>
                     <Button
                       variant="outline"
                       leftIcon={FaRegFilePdf}
                     >
                       Unduh Surat Izin
                     </Button>
+                    </Link>
+                    
                   </div>
                 )}
             </div>

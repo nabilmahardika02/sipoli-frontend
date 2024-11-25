@@ -14,6 +14,8 @@ export type RegisterForm = {
   eselon: number;
   nik: string;
   username: string;
+  alamat: string;
+  kewarganegaraan: boolean;
 };
 
 export type UpdateAkunForm = {
@@ -26,6 +28,7 @@ export type UpdateAkunForm = {
   jenisKelamin: boolean;
   noHp: string;
   tanggalLahir: string;
+  alamat: string;
 };
 
 export type PasswordByAdminForm = {
