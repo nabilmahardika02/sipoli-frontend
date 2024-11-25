@@ -31,6 +31,7 @@ const KunjunganPage = () => {
   const user = useAuthStore.useUser();
   const [trigger, setTrigger] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   const [suratIzin, setSuratIzin] = useState<SuratIzin | null>(null);
   const [tanggalAwal, setTanggalAwal] = useState("");
   const [tanggalAkhir, setTanggalAkhir] = useState("");
@@ -87,6 +88,7 @@ const KunjunganPage = () => {
 
   const handleCloseModal = () => {
     setShowModal(false);
+    setShowPreview(false);
     fetchSuratIzin();
   }
 
@@ -132,7 +134,7 @@ const KunjunganPage = () => {
               )}
               {(user?.role === "PERAWAT" || user?.role === "DOKTER") &&
                 kunjungan.hasilPemeriksaan !== null &&
-                suratIzin === null && (
+                suratIzin === null && kunjungan.profile.relative === 0 && (
                   <div className="flex justify-end">
                     <Button
                       variant="outline"
@@ -146,14 +148,13 @@ const KunjunganPage = () => {
               {(user?.role === "PERAWAT" || user?.role === "DOKTER") &&
                 suratIzin !== null && (
                   <div className="flex justify-end">
-                    <Link href={`/surat-izin/${suratIzin.id}`}>
                     <Button
                       variant="outline"
                       leftIcon={FaRegFilePdf}
+                      onClick={(() => setShowPreview(true))}
                     >
                       Unduh Surat Izin
                     </Button>
-                    </Link>
                     
                   </div>
                 )}
@@ -233,6 +234,22 @@ const KunjunganPage = () => {
               </form>
             </FormProvider>
           </div>
+        </ModalLayout>
+      )}
+      {showPreview && (
+        <ModalLayout setShowModal={setShowPreview}>
+          <div className="bg-white rounded-xl p-5 w-full md:w-[80%]">
+          <div className="flex justify-end">
+            <IconButton variant="outline" onClick={() => handleCloseModal()} icon={RxCross2} fullRounded></IconButton>
+            
+            </div>
+          <SuratIzinPDF 
+                  tanggalAwal={suratIzin?.tanggalAwal}
+                  tanggalAkhir={suratIzin?.tanggalAkhir}
+                  kunjungan={kunjungan}
+                />
+          </div>
+          
         </ModalLayout>
       )}
     </main>

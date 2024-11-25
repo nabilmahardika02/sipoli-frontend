@@ -7,4 +7,5 @@ export interface SuratIzin {
     isActive: boolean;
     createdAt: string;
     kunjungan: Kunjungan;
+    nomorSurat: string;
 }

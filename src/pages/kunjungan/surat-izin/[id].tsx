@@ -40,7 +40,7 @@ const SuratIzinPage = () => {
       if (!router.isReady) return;
       const [responseData, message, isSuccess] = await sendRequest(
         "get",
-        "surat-izin/" + router.query.id
+        "surat-izin/kunjungan/" + router.query.id
       );
 
       if (isSuccess && responseData) {

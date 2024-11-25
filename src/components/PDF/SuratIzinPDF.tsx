@@ -9,10 +9,12 @@ import { formatDate, formatDateWithoutDays } from "@/lib/formater";
 import sendRequest from "@/lib/getApi";
 import { Account } from "@/types/entities/account";
 import { Kunjungan } from "@/types/entities/kunjungan";
+import QRCodeGenerator from "./QRCodeGenerator";
+import { SuratIzin } from "@/types/entities/suratIzin";
 
 interface SuratIzinPDFProps {
-  tanggalAwal: string | Date; // Sesuaikan jika tanggal dalam format string atau Date
-  tanggalAkhir: string | Date;
+  tanggalAwal: string | Date | undefined; // Sesuaikan jika tanggal dalam format string atau Date
+  tanggalAkhir: string | Date | undefined;
   kunjungan: Kunjungan | undefined;
 }
 
@@ -25,7 +27,8 @@ const SuratIzinPDF: React.FC<SuratIzinPDFProps> = ({
   const [jumlahHari, setJumlahHari] = useState<number>();
   const [account, setAccount] = useState<Account>();
   const [nomorSurat, setNomorSurat] = useState<string>();
-  const [createdAt, setCreatedAt] = useState<Date>();
+  const [createdAt, setCreatedAt] = useState<string | Date>();
+  const [suratIzin, setSuratIzin] = useState<SuratIzin | null>(null);
 
   useEffect(() => {
     const fetchJumlahHari = async () => {
@@ -68,8 +71,6 @@ const SuratIzinPDF: React.FC<SuratIzinPDFProps> = ({
         "surat-izin/jumlah-surat"
       );
 
-      console.log(responseData);
-
       if (isSuccess && responseData !== undefined) {
         const jumlahSurat = responseData as number;
 
@@ -101,7 +102,6 @@ const SuratIzinPDF: React.FC<SuratIzinPDFProps> = ({
     };
 
     fetchData();
-    console.log(nomorSurat);
   }, []);
 
   const handleGeneratePDF = async () => {
@@ -112,50 +112,48 @@ const SuratIzinPDF: React.FC<SuratIzinPDFProps> = ({
   
     const pdf = new jsPDF("p", "mm", "a4");
     const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = pdf.internal.pageSize.getHeight();
     const imgHeight = (canvas.height * pdfWidth) / canvas.width;
   
-    // Menggambar latar belakang putih
-    pdf.setFillColor(255, 255, 255); // Set warna putih
-    pdf.rect(0, 0, pdfWidth, pdfHeight, 'F'); // Mengisi seluruh halaman dengan warna putih
-  
-    // Menambahkan gambar ke PDF
-    if (imgHeight < pdfHeight) {
-      // Jika gambar lebih kecil dari halaman, tambahkan margin di bawah
-      const margin = pdfHeight - imgHeight; // Margin bawah
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, imgHeight); // Menambahkan gambar di posisi atas
-      pdf.rect(0, imgHeight, pdfWidth, margin, 'F'); // Mengisi ruang kosong di bawah dengan warna putih
-    } else {
-      let position = 0;
-      while (position < imgHeight) {
-        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
-        position += pdfHeight;
-        if (position < imgHeight) pdf.addPage();
-      }
-    }
-  
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, imgHeight);
     pdf.save("Surat-Keterangan-Sakit.pdf");
+  };  
+
+  const postData = async () => {
+    const payload = {
+      tanggalAwal: tanggalAwal,
+      tanggalAkhir: tanggalAkhir,
+      kunjunganId: kunjungan?.id,
+      nomorSurat: nomorSurat,
+      createdAt: createdAt,
+    };
+    const [responseData, message, isSuccess] = await sendRequest(
+      "post",
+      `surat-izin/add`,
+      payload,
+      true
+    );
+
+    if (isSuccess) {
+      handleGeneratePDF();
+    }
   };
 
-    const postData = async () => {
-      const payload = {
-        tanggalAwal: tanggalAwal,
-        tanggalAkhir: tanggalAkhir,
-        kunjunganId: kunjungan?.id,
-        nomorSurat: nomorSurat,
-        createdAt: createdAt,
-      };
-      const [responseData, message, isSuccess] = await sendRequest(
-        "post",
-        `surat-izin/add`,
-        payload,
-        true
-      );
+  const fetchSuratIzin = async () => {
+    const [responseData, message, isSuccess] = await sendRequest(
+      "get",
+      `surat-izin/kunjungan/${kunjungan?.id}`
+    );
 
-      if (isSuccess) {
-        handleGeneratePDF();
-      }
-    };
+    if (isSuccess && responseData) {
+      setSuratIzin(responseData as SuratIzin);
+    } else {
+      setSuratIzin(null);
+    }
+  };
+
+  useEffect(() => {
+    fetchSuratIzin();
+  }, [kunjungan]);
 
   return (
     <div className="p-6">
@@ -183,7 +181,12 @@ const SuratIzinPDF: React.FC<SuratIzinPDFProps> = ({
               <Typography variant="p4" weight="bold">
                 SURAT KETERANGAN SAKIT
               </Typography>
-              <Typography variant="p4">{nomorSurat ? nomorSurat : "-"}</Typography>
+              {suratIzin === null && (<Typography variant="p4">
+                {nomorSurat ? nomorSurat : "-"}
+              </Typography>)}
+              {suratIzin !== null && (<Typography variant="p4">
+                {suratIzin.nomorSurat ? suratIzin.nomorSurat : "-"}
+              </Typography>)}
             </div>
           </div>
           <Divider weight="kurus" />
@@ -216,20 +219,24 @@ const SuratIzinPDF: React.FC<SuratIzinPDFProps> = ({
               digunakan seperlunya
             </Typography>
           </div>
-          <div className="grid grid-cols-2 place-items-center min-h-[100px]">
+          <div className="grid grid-cols-2 place-items-center min-h-[100px] my-2">
             <div className="flex flex-col items-center">
-              <Typography className="text-center">
-                disini hrsnya ada barcode
-              </Typography>
+              <QRCodeGenerator
+                link={`http://localhost:3000/kunjungan/surat-izin/${kunjungan?.id}`}
+                size={100}
+              />
               <Typography variant="p4" className="text-center">
                 Dokumen ini dibuat otomatis oleh komputer, scan QR code untuk
                 informasi lebih lanjut
               </Typography>
             </div>
             <div className="flex flex-col items-center">
-              <Typography variant="p4" className="text-center">
+              {suratIzin === null && (<Typography variant="p4" className="text-center">
                 KAB. GIANYAR, {formatDateWithoutDays(new Date())}
-              </Typography>
+              </Typography>)}
+              {suratIzin !== null && (<Typography variant="p4" className="text-center">
+                KAB. GIANYAR, {formatDateWithoutDays(suratIzin.createdAt)}
+              </Typography>)}
               <Typography className="text-center">ttd dokter</Typography>
               <Typography variant="p4" className="text-center">
                 {kunjungan?.dokter.name}
@@ -242,17 +249,23 @@ const SuratIzinPDF: React.FC<SuratIzinPDFProps> = ({
               <Typography variant="p4">Powered by SIPOLI</Typography>
               <Logo sizeCustom={20} />
             </div>
-            <Typography variant="p4">
+            {suratIzin === null && (<Typography variant="p4">
               Diterbitkan pada {createdAt ? formatDate(createdAt) : "-"}
-            </Typography>
+            </Typography>)}
+            {suratIzin !== null && (<Typography variant="p4">
+              Diterbitkan pada {suratIzin.createdAt ? formatDate(suratIzin.createdAt) : "-"}
+            </Typography>)}
           </div>
         </section>
       </div>
 
       <div className="mt-4 flex justify-end">
-      <Button onClick={postData} variant="primary">
+        {suratIzin === null && (<Button onClick={postData} variant="primary">
           Unduh Dokumen
-        </Button>
+        </Button>)}
+        {suratIzin !== null && (<Button onClick={handleGeneratePDF} variant="primary">
+          Unduh Dokumen
+        </Button>)}
       </div>
     </div>
   );
