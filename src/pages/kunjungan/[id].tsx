@@ -80,17 +80,17 @@ const KunjunganPage = () => {
 
   const handleTanggalAwal = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTanggalAwal(event.target.value);
-  }
+  };
 
   const handleTanggalAkhir = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTanggalAkhir(event.target.value);
-  }
+  };
 
   const handleCloseModal = () => {
     setShowModal(false);
     setShowPreview(false);
     fetchSuratIzin();
-  }
+  };
 
   return (
     <main className="flex flex-col gap-5">
@@ -134,7 +134,8 @@ const KunjunganPage = () => {
               )}
               {(user?.role === "PERAWAT" || user?.role === "DOKTER") &&
                 kunjungan.hasilPemeriksaan !== null &&
-                suratIzin === null && kunjungan.profile.relative === 0 && (
+                suratIzin === null &&
+                kunjungan.profile.relative === 0 && (
                   <div className="flex justify-end">
                     <Button
                       variant="outline"
@@ -151,11 +152,10 @@ const KunjunganPage = () => {
                     <Button
                       variant="outline"
                       leftIcon={FaRegFilePdf}
-                      onClick={(() => setShowPreview(true))}
+                      onClick={() => setShowPreview(true)}
                     >
                       Unduh Surat Izin
                     </Button>
-                    
                   </div>
                 )}
             </div>
@@ -203,13 +203,17 @@ const KunjunganPage = () => {
         <ModalLayout setShowModal={setShowModal}>
           <div className="bg-white rounded-xl p-5 w-full md:w-[80%]">
             <div className="flex justify-between">
-            <Typography variant="h6" className="text-primary-1">
-              Buat Surat Izin
-            </Typography>
-            <IconButton variant="outline" onClick={() => handleCloseModal()} icon={RxCross2} fullRounded></IconButton>
-            
+              <Typography variant="h6" className="text-primary-1">
+                Buat Surat Izin
+              </Typography>
+              <IconButton
+                variant="outline"
+                onClick={() => handleCloseModal()}
+                icon={RxCross2}
+                fullRounded
+              ></IconButton>
             </div>
-            <Divider/>
+            <Divider />
             <FormProvider {...methods}>
               <form>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
@@ -226,7 +230,7 @@ const KunjunganPage = () => {
                     onChange={handleTanggalAkhir}
                   />
                 </div>
-                <SuratIzinPDF 
+                <SuratIzinPDF
                   tanggalAwal={tanggalAwal}
                   tanggalAkhir={tanggalAkhir}
                   kunjungan={kunjungan}
@@ -239,17 +243,24 @@ const KunjunganPage = () => {
       {showPreview && (
         <ModalLayout setShowModal={setShowPreview}>
           <div className="bg-white rounded-xl p-5 w-full md:w-[80%]">
-          <div className="flex justify-end">
-            <IconButton variant="outline" onClick={() => handleCloseModal()} icon={RxCross2} fullRounded></IconButton>
-            
+            <div className="flex justify-between">
+              <Typography variant="h6" className="text-primary-1">
+                Unduh Surat Izin
+              </Typography>
+              <IconButton
+                variant="outline"
+                onClick={() => handleCloseModal()}
+                icon={RxCross2}
+                fullRounded
+              ></IconButton>
             </div>
-          <SuratIzinPDF 
-                  tanggalAwal={suratIzin?.tanggalAwal}
-                  tanggalAkhir={suratIzin?.tanggalAkhir}
-                  kunjungan={kunjungan}
-                />
+            <Divider />
+            <SuratIzinPDF
+              tanggalAwal={suratIzin?.tanggalAwal}
+              tanggalAkhir={suratIzin?.tanggalAkhir}
+              kunjungan={kunjungan}
+            />
           </div>
-          
         </ModalLayout>
       )}
     </main>

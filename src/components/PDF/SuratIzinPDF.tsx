@@ -106,17 +106,17 @@ const SuratIzinPDF: React.FC<SuratIzinPDFProps> = ({
 
   const handleGeneratePDF = async () => {
     if (!pdfRef.current) return;
-  
+
     const canvas = await html2canvas(pdfRef.current, { scale: 3 });
     const imgData = canvas.toDataURL("image/png");
-  
+
     const pdf = new jsPDF("p", "mm", "a4");
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const imgHeight = (canvas.height * pdfWidth) / canvas.width;
-  
+
     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, imgHeight);
     pdf.save("Surat-Keterangan-Sakit.pdf");
-  };  
+  };
 
   const postData = async () => {
     const payload = {
@@ -181,12 +181,16 @@ const SuratIzinPDF: React.FC<SuratIzinPDFProps> = ({
               <Typography variant="p4" weight="bold">
                 SURAT KETERANGAN SAKIT
               </Typography>
-              {suratIzin === null && (<Typography variant="p4">
-                {nomorSurat ? nomorSurat : "-"}
-              </Typography>)}
-              {suratIzin !== null && (<Typography variant="p4">
-                {suratIzin.nomorSurat ? suratIzin.nomorSurat : "-"}
-              </Typography>)}
+              {suratIzin === null && (
+                <Typography variant="p4">
+                  {nomorSurat ? nomorSurat : "-"}
+                </Typography>
+              )}
+              {suratIzin !== null && (
+                <Typography variant="p4">
+                  {suratIzin.nomorSurat ? suratIzin.nomorSurat : "-"}
+                </Typography>
+              )}
             </div>
           </div>
           <Divider weight="kurus" />
@@ -222,7 +226,7 @@ const SuratIzinPDF: React.FC<SuratIzinPDFProps> = ({
           <div className="grid grid-cols-2 place-items-center min-h-[100px] my-2">
             <div className="flex flex-col items-center">
               <QRCodeGenerator
-                link={`http://localhost:3000/kunjungan/surat-izin/${kunjungan?.id}`}
+                link={`https://sipoli-bpk.vercel.app/kunjungan/surat-izin/${kunjungan?.id}`}
                 size={100}
               />
               <Typography variant="p4" className="text-center">
@@ -231,13 +235,21 @@ const SuratIzinPDF: React.FC<SuratIzinPDFProps> = ({
               </Typography>
             </div>
             <div className="flex flex-col items-center">
-              {suratIzin === null && (<Typography variant="p4" className="text-center">
-                KAB. GIANYAR, {formatDateWithoutDays(new Date())}
-              </Typography>)}
-              {suratIzin !== null && (<Typography variant="p4" className="text-center">
-                KAB. GIANYAR, {formatDateWithoutDays(suratIzin.createdAt)}
-              </Typography>)}
-              <Typography className="text-center">ttd dokter</Typography>
+              {suratIzin === null && (
+                <Typography variant="p4" className="text-center">
+                  KAB. GIANYAR, {formatDateWithoutDays(new Date())}
+                </Typography>
+              )}
+              {suratIzin !== null && (
+                <Typography variant="p4" className="text-center">
+                  KAB. GIANYAR, {formatDateWithoutDays(suratIzin.createdAt)}
+                </Typography>
+              )}
+              <Typography>
+                <br></br>
+                <br></br>
+                <br></br>
+              </Typography>
               <Typography variant="p4" className="text-center">
                 {kunjungan?.dokter.name}
               </Typography>
@@ -249,23 +261,32 @@ const SuratIzinPDF: React.FC<SuratIzinPDFProps> = ({
               <Typography variant="p4">Powered by SIPOLI</Typography>
               <Logo sizeCustom={20} />
             </div>
-            {suratIzin === null && (<Typography variant="p4">
-              Diterbitkan pada {createdAt ? formatDate(createdAt) : "-"}
-            </Typography>)}
-            {suratIzin !== null && (<Typography variant="p4">
-              Diterbitkan pada {suratIzin.createdAt ? formatDate(suratIzin.createdAt) : "-"}
-            </Typography>)}
+            {suratIzin === null && (
+              <Typography variant="p4">
+                Diterbitkan pada {createdAt ? formatDate(createdAt) : "-"}
+              </Typography>
+            )}
+            {suratIzin !== null && (
+              <Typography variant="p4">
+                Diterbitkan pada{" "}
+                {suratIzin.createdAt ? formatDate(suratIzin.createdAt) : "-"}
+              </Typography>
+            )}
           </div>
         </section>
       </div>
 
       <div className="mt-4 flex justify-end">
-        {suratIzin === null && (<Button onClick={postData} variant="primary">
-          Unduh Dokumen
-        </Button>)}
-        {suratIzin !== null && (<Button onClick={handleGeneratePDF} variant="primary">
-          Unduh Dokumen
-        </Button>)}
+        {suratIzin === null && (
+          <Button onClick={postData} variant="primary">
+            Unduh Dokumen
+          </Button>
+        )}
+        {suratIzin !== null && (
+          <Button onClick={handleGeneratePDF} variant="primary">
+            Unduh Dokumen
+          </Button>
+        )}
       </div>
     </div>
   );
