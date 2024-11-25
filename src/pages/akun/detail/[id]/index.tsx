@@ -99,7 +99,7 @@ const DetailPage = () => {
     ...profileTableColumns,
     {
       field: "action",
-      headerName: "Action",
+      headerName: "Aksi",
       headerAlign: "center",
       width: 150,
       align: "center",
@@ -244,6 +244,18 @@ const DetailPage = () => {
                     </Typography>
                     <Typography className="text-primary-1">
                       {selectedAccount.eselon}
+                    </Typography>
+                  </div>
+                  <div>
+                    <Typography
+                      variant="p2"
+                      weight="semibold"
+                      className="text-gray-400"
+                    >
+                      Alamat
+                    </Typography>
+                    <Typography className="text-primary-1">
+                      {selectedAccount.alamat || "-"}
                     </Typography>
                   </div>
                 </>

@@ -1,5 +1,5 @@
 import Button from "@/components/elements/Button";
-import { formatDateOnly, getJenisKelamin, getRelative } from "@/lib/formater";
+import { formatDateOnly, getJenisKelamin, getRelative, getKewarganegaraan } from "@/lib/formater";
 import {
   GridColDef,
   GridRowIdGetter,
@@ -66,6 +66,16 @@ export const profileTableColumns: GridColDef[] = [
     align: "center",
     valueGetter: (value, row, column, apiRef) => {
       return getRelative(row.relative);
+    },
+  },
+  {
+    field: "kewarganegaraan",
+    headerName: "Kewarganegaraan",
+    headerAlign: "center",
+    width: 150,
+    align: "center",
+    valueGetter: (value, row, column, apiRef) => {
+      return getKewarganegaraan(row.kewarganegaraan);
     },
   },
 ];

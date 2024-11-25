@@ -5,6 +5,7 @@ import SelectInput from "@/components/elements/forms/SelectInput";
 import Typography from "@/components/elements/Typography";
 import withAuth from "@/components/hoc/withAuth";
 import { jenisKelamin } from "@/content/gender";
+import { kewarganegaraan } from "@/content/kewarganegaraan";
 import { useDocumentTitle } from "@/context/Title";
 import sendRequest from "@/lib/getApi";
 import { RegisterForm } from "@/types/forms/authForm";
@@ -132,6 +133,23 @@ const RegisterPage = () => {
                 validation={{ required: "Tanggal lahir wajib diisi" }}
                 label="Tanggal Lahir"
               />
+              {isPasien && (
+                <Input
+                  id="alamat"
+                  placeholder="Alamat"
+                  validation={{ required: "Alamat wajib diisi" }}
+                  label="Alamat"
+                />
+              )}
+              {isPasien && (
+                <RadioButtonGroup
+                  name="kewarganegaraan"
+                  options={kewarganegaraan}
+                  label="Kewarganegaraan"
+                  direction="horizontal"
+                  validation={{ required: "Kewarganegaraan wajib diisi" }}
+                />
+              )}
               <RadioButtonGroup
                 name="jenisKelamin"
                 options={jenisKelamin}

@@ -22,7 +22,7 @@ const UpdatePage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    setTitle("Update Akun");
+    setTitle("Ubah Akun");
   }, [setTitle]);
 
   useEffect(() => {
@@ -78,6 +78,7 @@ const UpdatePage = () => {
       methods.setValue("name", profile.name);
       methods.setValue("noHp", profile.noHp);
       methods.setValue("tanggalLahir", profile.tanggalLahir);
+      methods.setValue("alamat", selectedAccount.alamat);
       //@ts-ignore
       methods.setValue("jenisKelamin", profile.jenisKelamin ? "true" : "false");
     }
@@ -115,6 +116,12 @@ const UpdatePage = () => {
                       placeholder="Eselon"
                       validation={{ required: "Eselon wajib diisi" }}
                       label="Eselon"
+                    />
+                    <Input
+                      id="alamat"
+                      placeholder="Alamat"
+                      validation={{ required: "Alamat wajib diisi" }}
+                      label="Alamat"
                     />
                   </>
                 ) : (

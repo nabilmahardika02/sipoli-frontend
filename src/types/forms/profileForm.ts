@@ -6,6 +6,7 @@ export type AddProfileForm = {
   tanggalLahir: string;
   jenisKelamin: boolean;
   relative: number;
+  kewarganegaraan: boolean;
 };
 
 export type UpdateProfileForm = {
