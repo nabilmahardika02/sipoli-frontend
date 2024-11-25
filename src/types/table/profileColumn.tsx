@@ -58,25 +58,6 @@ export const profileTableColumns: GridColDef[] = [
       return getRelative(row.relative);
     },
   },
-  {
-    field: "action",
-    headerName: "Ubah",
-    headerAlign: "center",
-    width: 150,
-    align: "center",
-    sortable: false,
-    renderCell: (value) => {
-      return (
-        <div className="w-full flex items-center justify-center h-full">
-          <Link href={`/akun/profile/update/${value.row.id}`}>
-            <Button variant="outline" size="sm" fullRounded className="mx-auto">
-              Ubah
-            </Button>
-          </Link>
-        </div>
-      );
-    },
-  },
 ];
 
 export const getRowIdProfile: GridRowIdGetter<GridValidRowModel> = (row) =>

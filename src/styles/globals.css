@@ -218,3 +218,10 @@ body {
 .css-1evyvmv-MuiChartsSurface-root {
   @apply flex flex-col;
 }
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: "";
+}
