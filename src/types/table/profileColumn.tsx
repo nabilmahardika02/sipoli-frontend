@@ -19,6 +19,16 @@ export const profileTableColumns: GridColDef[] = [
     },
   },
   {
+    field: "nik",
+    headerName: "NIK",
+    headerAlign: "center",
+    width: 200,
+    align: "center",
+    valueGetter: (value, row, column, apiRef) => {
+      return row.nik || "-";
+    },
+  },
+  {
     field: "jenisKelamin",
     headerName: "Jenis Kelamin",
     headerAlign: "center",
@@ -32,7 +42,7 @@ export const profileTableColumns: GridColDef[] = [
     field: "tanggalLahir",
     headerName: "Tanggal Lahir",
     headerAlign: "center",
-    width: 150,
+    width: 200,
     align: "center",
     valueGetter: (value, row, column, apiRef) => {
       return row.tanggalLahir ? formatDateOnly(row.tanggalLahir) : "-";

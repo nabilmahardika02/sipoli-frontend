@@ -99,7 +99,7 @@ const DetailPage = () => {
     ...profileTableColumns,
     {
       field: "action",
-      headerName: "Ubah",
+      headerName: "Action",
       headerAlign: "center",
       width: 150,
       align: "center",
@@ -347,7 +347,6 @@ const DetailPage = () => {
                   columns={profileColumns}
                   getRowId={getRowIdProfile}
                   rows={selectedAccount.listProfile}
-                  flexColumnIndexes={[0, 2]}
                 />
               </>
             )}
