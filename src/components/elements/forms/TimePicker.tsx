@@ -46,7 +46,7 @@ const MyTimePicker = ({
   const error = get(errors, id);
 
   return (
-    <div className={clsxm("w-full space-y-1.5 rounded-md", className)}>
+    <div className={clsxm("custom-mui-input w-full space-y-1.5 rounded-md", className)}>
       {label && (
         <label className="flex items-center space-x-1">
           <Typography

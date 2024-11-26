@@ -15,11 +15,14 @@ import { GridColDef } from "@mui/x-data-grid";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { FaCircleInfo } from "react-icons/fa6";
 import { GoPlus } from "react-icons/go";
+import InformationModal from "./InformationModal";
 
 const HomeNonPasienView = () => {
   const [kunjungans, setKunjungans] = useState<Kunjungan[]>();
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState(false);
   const [cancelId, setCancelId] = useState<string>();
   const router = useRouter();
 
@@ -34,7 +37,7 @@ const HomeNonPasienView = () => {
       field: "action",
       headerName: "Aksi",
       headerAlign: "center",
-      width: 200,
+      width: 250,
       align: "center",
       sortable: false,
       renderCell: (value) => (
@@ -44,17 +47,29 @@ const HomeNonPasienView = () => {
               Detail
             </Button>
           </Link>
-          {value.row.status === 0 && (<Link href={"/home"}>
+          {value.row.status < 2 && (
             <Button
-              fullRounded
+              variant="secondary"
               size="sm"
-              variant="danger"
-              className="border border-danger-2"
-              onClick={() => handleOpenModal(value.row.id)}
+              fullRounded
+              className="border border-secondary-2"
             >
-              Cancel
+              Update Status
             </Button>
-          </Link>)}
+          )}
+          {value.row.status === 0 && (
+            <Link href={"/home"}>
+              <Button
+                fullRounded
+                size="sm"
+                variant="danger"
+                className="border border-danger-2"
+                onClick={() => handleOpenModal(value.row.id)}
+              >
+                Cancel
+              </Button>
+            </Link>
+          )}
         </div>
       ),
     },
@@ -91,9 +106,17 @@ const HomeNonPasienView = () => {
   return (
     <section className="w-full">
       <div className="flex items-center justify-between mb-5">
-        <Typography variant="h6" className="text-primary-1">
-          Daftar Antrian
-        </Typography>
+        <div className="flex items-center gap-2">
+          <Typography variant="h6" className="text-primary-1">
+            Daftar Antrian
+          </Typography>
+          <button
+            className="text-gray-400 hover:text-primary-1 text-xl"
+            onClick={() => setShowInfoModal(true)}
+          >
+            <FaCircleInfo />
+          </button>
+        </div>
         <div className="flex justify-end">
           <Link href={"/kunjungan/add"}>
             <Button leftIcon={GoPlus} leftIconClassName="max-md:mr-0">
@@ -154,7 +177,11 @@ const HomeNonPasienView = () => {
               </ul>
             </Typography>
             <div className="flex items-center gap-2 mt-4 self-end">
-              <Button variant="danger" size="sm" onClick={() => cancelKunjungan()}>
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={() => cancelKunjungan()}
+              >
                 Batalkan Kunjungan
               </Button>
               <Button
@@ -168,6 +195,8 @@ const HomeNonPasienView = () => {
           </div>
         </ModalLayout>
       )}
+
+      {showInfoModal && <InformationModal setShowModal={setShowInfoModal} />}
     </section>
   );
 };

@@ -187,11 +187,11 @@ body {
   @apply p-5 md:p-8 rounded-xl bg-white border border-gray-200 shadow-md;
 }
 
-.MuiInputBase-root input {
+.custom-mui-input .MuiInputBase-root input {
   @apply h-full w-full rounded-md px-3 py-3 bg-transparent text-sm;
 }
 
-.MuiFormControl-root {
+.custom-mui-input .MuiFormControl-root {
   @apply !w-full;
 }
 

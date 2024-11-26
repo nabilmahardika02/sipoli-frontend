@@ -2,51 +2,36 @@ import Button from "@/components/elements/Button";
 import Divider from "@/components/elements/Divider";
 import Input from "@/components/elements/forms/Input";
 import RadioButtonGroup from "@/components/elements/forms/RadioButtonGroup";
-import SelectInput from "@/components/elements/forms/SelectInput";
 import TextArea from "@/components/elements/forms/TextArea";
+import MyTimePicker from "@/components/elements/forms/TimePicker";
 import Typography from "@/components/elements/Typography";
 import withAuth from "@/components/hoc/withAuth";
+import { sesi } from "@/content/kunjungan";
 import { useDocumentTitle } from "@/context/Title";
-import { formatDateOnly } from "@/lib/formater";
+import {
+  formatDateOnly,
+  formatTimeDayjs,
+  formatToDateInputValue,
+} from "@/lib/formater";
 import sendRequest from "@/lib/getApi";
-import useAuthStore from "@/store/useAuthStore";
 import { Kunjungan } from "@/types/entities/kunjungan";
-import { KunjunganForm } from "@/types/forms/kunjunganForm";
+import { UpdateKunjunganForm } from "@/types/forms/kunjunganForm";
+import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-
-const sesi = [
-  {
-    value: "1",
-    text: "Sesi 1 (08:00 - 10:00 WITA)",
-  },
-  {
-    value: "2",
-    text: "Sesi 2 (10:00 - 12:00 WITA)",
-  },
-  {
-    value: "3",
-    text: "Sesi 3 (13:00 - 15:00 WITA)",
-  },
-  {
-    value: "4",
-    text: "Sesi 4 (15:00 - 16:30 WITA)",
-  },
-];
+import { FaInfoCircle } from "react-icons/fa";
 
 const KunjunganUpdatePage = () => {
-  const user = useAuthStore.useUser();
+  const [kunjungan, setKunjungan] = useState<Kunjungan>();
   const { setTitle } = useDocumentTitle();
   const router = useRouter();
-  const { setValue } = useForm();
-  const [kunjungan, setKunjungan] = useState<Kunjungan>();
+
   const [showInformationSunday, setShowInformationSunday] = useState(false);
   const [showInformationSaturday, setShowInformationSaturday] = useState(false);
   const [showAntrianInfo, setShowAntrianInfo] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
-  const [selectedTime, setSelectedTime] = useState("");
   const [selectedSesi, setSelectedSesi] = useState("");
   const [antrianInfo, setAntrianInfo] = useState(0);
   const [showSesi, setShowSesi] = useState(false);
@@ -64,6 +49,7 @@ const KunjunganUpdatePage = () => {
 
       if (isSuccess) {
         setKunjungan(responseData as Kunjungan);
+        console.log(responseData);
       }
     };
 
@@ -72,20 +58,40 @@ const KunjunganUpdatePage = () => {
     }
   }, [router.query.id]);
 
-  const methods = useForm<KunjunganForm>({
-    defaultValues: kunjungan || {},
+  const methods = useForm<UpdateKunjunganForm>({
     mode: "onTouched",
   });
 
-  const { handleSubmit } = methods;
+  useEffect(() => {
+    if (kunjungan) {
+      methods.setValue("sesi", kunjungan.antrian.sesi.toString());
+      methods.setValue(
+        "tanggalKunjungan",
+        formatToDateInputValue(kunjungan.tanggal)
+      );
+      methods.setValue("keluhan", kunjungan.keluhan);
 
-  const onSubmit: SubmitHandler<KunjunganForm> = (data) => {
+      setSelectedDate(formatToDateInputValue(kunjungan.tanggal));
+      setSelectedSesi(kunjungan.antrian.sesi.toString());
+
+      const date = new Date(formatToDateInputValue(kunjungan.tanggal));
+      if (date.getDay() !== 0 && date.getDay() !== 6) {
+        setShowAntrianInfo(true);
+      }
+    }
+  }, [kunjungan, methods]);
+
+  const { handleSubmit, control } = methods;
+
+  const onSubmit: SubmitHandler<UpdateKunjunganForm> = (data) => {
     const postData = async () => {
-      // Send the PUT request with the correct endpoint and data
       const [responseData, message, isSuccess] = await sendRequest(
         "put",
         `kunjungan/update`,
-        data,
+
+        showInformationSunday
+          ? { ...data, jamMasuk: formatTimeDayjs(data.jamMasuk) }
+          : { ...data, id: router.query.id },
         true
       );
 
@@ -126,12 +132,11 @@ const KunjunganUpdatePage = () => {
       setShowInformationSunday(false);
       setShowInformationSaturday(false);
       setShowSesi(true);
-      setShowAntrianInfo(false);
+      setShowAntrianInfo(true);
     }
   };
 
   useEffect(() => {
-    // Fungsi untuk mengambil data profil dari API
     const fetchAntrian = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "get",
@@ -143,161 +148,101 @@ const KunjunganUpdatePage = () => {
       }
     };
 
-    if (selectedSesi) {
+    if (selectedSesi && selectedDate) {
       fetchAntrian();
     }
-  }, [selectedSesi]);
+  }, [selectedSesi, selectedDate]);
 
   const handleSesiChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedSesi(event.target.value);
     setShowAntrianInfo(true);
   };
 
-  useEffect(() => {
-    if (kunjungan?.tanggalMasuk) {
-      const dateObj = new Date(kunjungan.tanggalMasuk);
-      const hours = dateObj.getHours().toString().padStart(2, "0");
-      const minutes = dateObj.getMinutes().toString().padStart(2, "0");
-      const timeOnly = `${hours}:${minutes}`;
-
-      setValue("jamMasuk", timeOnly);
-    }
-  }, [kunjungan, setValue]);
-
   return (
     <main>
+      <Head>
+        <title>Update Kunjungan</title>
+      </Head>
       <section>
         <div className="flex justify-center md:hidden">
           <Typography variant="h4" className="text-primary-1">
-            Memperbarui Kunjungan
+            Ubah Data Kunjungan
           </Typography>
         </div>
         <Divider className="md:hidden" />
         {kunjungan && (
           <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
-              <div className="justify-between gap-5 my-5 md:grid-cols-2">
-                <Input
-                  id="tanggalKunjungan"
-                  label="Tanggal Kunjungan"
-                  type="date"
-                  onChange={handleDateChange}
-                  defaultValue={kunjungan?.tanggal.toString().split("T")[0]}
-                />
-                {showInformationSunday && (
-                  <>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                  <Input
+                    id="tanggalKunjungan"
+                    label="Tanggal Kunjungan"
+                    type="date"
+                    onChange={handleDateChange}
+                  />
+                  {showInformationSaturday && (
                     <Typography
                       variant="p2"
-                      weight="medium"
-                      font="inter"
-                      className="mt-5"
-                    >
-                      Jam Kunjungan
-                    </Typography>
-                    <input
-                      id="jamMasuk"
-                      type="time"
-                      step="3600"
-                      className="required w-full p-2 border-2 border-gray-300 rounded focus:border-blue-400 focus:outline-none"
-                      value={selectedTime}
-                      {...methods.register("jamMasuk", {
-                        required: "Jam kunjungan wajib diisi",
-                      })}
-                      onChange={(e) => setSelectedTime(e.target.value)}
-                    />
-                    <Typography
-                      variant="p2"
-                      className="my-2 text-gray-600"
+                      className="my-2 text-danger-core"
                       size="sm"
                     >
-                      Silahkan pilih waktu dalam WITA untuk berkunjung di hari
-                      Minggu
+                      Poliklinik tidak dapat melayani di hari Sabtu
                     </Typography>
-                  </>
+                  )}
+                </div>
+
+                {showInformationSunday && (
+                  <MyTimePicker
+                    id="jamMasuk"
+                    label="Jam Kunjungan"
+                    control={control}
+                    validation={{
+                      required: "Jam Kunjungan wajib diisi",
+                    }}
+                    minuteStep={15}
+                    className="lg:w-full"
+                    helperText="Silakan pilih waktu dalam WITA untuk berkunjung di hari Minggu"
+                  />
                 )}
-                {showInformationSaturday && (
-                  <Typography
-                    variant="p2"
-                    className="my-2 text-danger-core"
-                    size="sm"
-                  >
-                    Poliklinik tidak dapat melayani di hari Sabtu
-                  </Typography>
-                )}
+
                 {showSesi && (
                   <RadioButtonGroup
                     name="sesi"
                     options={sesi}
                     label="Sesi"
-                    direction="horizontal"
+                    directionClassName="flex flex-col md:grid md:grid-cols-2 gap-y-2"
+                    defaultValue={kunjungan?.antrian.sesi.toString()}
                     onChange={handleSesiChange}
-                    defaultValue={kunjungan?.antrian.sesi.toString()} // Preselect the sesi value
                   />
                 )}
-                {showAntrianInfo && antrianInfo === 0 && (
-                  <Typography
-                    variant="p2"
-                    className="my-2 text-gray-600"
-                    size="sm"
-                  >
-                    Belum ada antrian di sesi {selectedSesi} pada{" "}
-                    {formatDateOnly(selectedDate)}
-                  </Typography>
-                )}
-                {showAntrianInfo && antrianInfo > 0 && (
-                  <Typography
-                    variant="p2"
-                    className="my-2 text-gray-600"
-                    size="sm"
-                  >
-                    Sudah ada {antrianInfo} antrian di sesi {selectedSesi} pada{" "}
-                    {formatDateOnly(selectedDate)}
-                  </Typography>
-                )}
-                <div className="justify-between gap-5 my-5">
-                  <Input
-                    id="id"
-                    defaultValue={kunjungan.id}
-                    className="hidden"
-                  ></Input>
 
-                  <SelectInput id="profileId" className="hidden">
-                    <option value={kunjungan.profile.id}></option>
-                  </SelectInput>
-                </div>
-                {user?.role !== "PASIEN" && (
-                  <SelectInput
-                    id="status"
-                    label="Status"
-                    placeholder="Pilih status"
-                    validation={{ required: "Status wajib diisi" }}
-                    defaultValue={kunjungan.status}
+                {showAntrianInfo && antrianInfo != null && (
+                  <Typography
+                    variant="p2"
+                    className="py-3 px-5 rounded-lg chips-success md:col-span-2 w-full md:w-[50%]"
+                    size="sm"
                   >
-                    <option value="0">Belum Dilayani</option>
-                    <option value="1">Sedang Dilayani</option>
-                    <option value="2">Selesai</option>
-                    <option value="3">Dibatalkan</option>
-                  </SelectInput>
+                    <FaInfoCircle className="text-xl" />
+                    {antrianInfo === 0
+                      ? `Belum ada antrian di sesi ${selectedSesi} pada ${formatDateOnly(
+                          selectedDate
+                        )}`
+                      : `Sudah ada ${antrianInfo} antrian di sesi ${selectedSesi} pada ${formatDateOnly(
+                          selectedDate
+                        )}`}
+                  </Typography>
                 )}
-                {user?.role === "PASIEN" && (
-                  <SelectInput
-                    id="status"
-                    defaultValue={kunjungan.status}
-                    className="hidden"
-                  >
-                    <option value="0">Belum Dilayani</option>
-                  </SelectInput>
-                )}
+
                 <TextArea
                   id="keluhan"
                   label="Keluhan"
                   placeholder="Keluhan yang dirasakan"
                   maxLength={255}
                   validation={{ required: "Mohon beri tahu keluhan Anda" }}
-                  defaultValue={kunjungan?.keluhan}
                 />
               </div>
-              <div className="mt-5 flex items-center justify-center gap-4">
+              <div className="mt-5 flex items-center gap-4">
                 <Button type="submit">Perbarui</Button>
                 <Link href={"/home"}>
                   <Button variant="danger">Batal</Button>
