@@ -13,7 +13,7 @@ export function formatDateOnly(dateString: string): string {
   return date.toLocaleDateString("id-ID", options);
 }
 
-export function formatDate(isoDate: string): string {
+export function formatDate(isoDate: string | Date): string {
   const date = new Date(isoDate);
 
   const dateOptions: Intl.DateTimeFormatOptions = {
@@ -33,6 +33,20 @@ export function formatDate(isoDate: string): string {
   const formattedTime = date.toLocaleTimeString("id-ID", timeOptions);
 
   return `${formattedDate} | ${formattedTime} WITA`;
+}
+
+export function formatDateWithoutDays(dateInput: string | Date): string {
+  const date = typeof dateInput === "string" ? new Date(dateInput) : dateInput;
+
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+
+  const formattedDate = date.toLocaleDateString("id-ID", dateOptions);
+
+  return formattedDate;
 }
 
 export function getSatuanObat(value: number): string {
@@ -68,6 +82,14 @@ export function getJenisKelamin(value: boolean) {
     return "Perempuan";
   } else {
     return "Laki-laki";
+  }
+}
+
+export function getKewarganegaraan(value: boolean) {
+  if (value === true) {
+    return "Warga Negara Indonesia";
+  } else {
+    return "Warga Negara Asing";
   }
 }
 

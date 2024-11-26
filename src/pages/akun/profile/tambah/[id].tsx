@@ -5,6 +5,7 @@ import SelectInput from "@/components/elements/forms/SelectInput";
 import Typography from "@/components/elements/Typography";
 import withAuth from "@/components/hoc/withAuth";
 import { jenisKelamin } from "@/content/gender";
+import { kewarganegaraan } from "@/content/kewarganegaraan";
 import { useDocumentTitle } from "@/context/Title";
 import sendRequest from "@/lib/getApi";
 import { AddProfileForm } from "@/types/forms/profileForm";
@@ -95,6 +96,13 @@ const TambahProfilePage = () => {
                 label="Jenis Kelamin"
                 direction="grid"
                 validation={{ required: "Jenis kelamin wajib diisi" }}
+              />
+              <RadioButtonGroup
+                name="kewarganegaraan"
+                options={kewarganegaraan}
+                label="Kewarganegaraan"
+                direction="grid"
+                validation={{ required: "Kewarganegaraan wajib diisi" }}
               />
             </div>
             <div className="mt-5 flex items-center gap-4">
