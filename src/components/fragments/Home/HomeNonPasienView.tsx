@@ -6,6 +6,7 @@ import Typography from "@/components/elements/Typography";
 import ModalLayout from "@/components/layouts/ModalLayout";
 import DataTable from "@/lib/datatable";
 import sendRequest from "@/lib/getApi";
+import useAuthStore from "@/store/useAuthStore";
 import { Kunjungan } from "@/types/entities/kunjungan";
 import {
   getRowIdKunjungans,
@@ -18,17 +19,27 @@ import { useEffect, useState } from "react";
 import { FaCircleInfo } from "react-icons/fa6";
 import { GoPlus } from "react-icons/go";
 import InformationModal from "./InformationModal";
+import UpdateStatusModal from "./UpdateStatusModal";
 
 const HomeNonPasienView = () => {
+  const user = useAuthStore.useUser();
   const [kunjungans, setKunjungans] = useState<Kunjungan[]>();
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
+  const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
   const [cancelId, setCancelId] = useState<string>();
+  const [selectedKunjungan, setSelectedKunjungan] = useState<Kunjungan>();
+  const [trigger, setTrigger] = useState(false);
   const router = useRouter();
 
   const handleOpenModal = (id: string) => {
     setShowCancelModal(true);
     setCancelId(id);
+  };
+
+  const handleOpenStatusModal = (kunjungan: Kunjungan) => {
+    setSelectedKunjungan(kunjungan);
+    setShowUpdateStatusModal(true);
   };
 
   const columns: GridColDef[] = [
@@ -47,16 +58,18 @@ const HomeNonPasienView = () => {
               Detail
             </Button>
           </Link>
-          {value.row.status < 2 && (
-            <Button
-              variant="secondary"
-              size="sm"
-              fullRounded
-              className="border border-secondary-2"
-            >
-              Update Status
-            </Button>
-          )}
+          {(user?.role == "PERAWAT" || user?.role == "DOKTER") &&
+            value.row.status < 2 && (
+              <Button
+                variant="secondary"
+                size="sm"
+                fullRounded
+                className="border border-secondary-2"
+                onClick={() => handleOpenStatusModal(value.row)}
+              >
+                Update Status
+              </Button>
+            )}
           {value.row.status === 0 && (
             <Link href={"/home"}>
               <Button
@@ -88,7 +101,7 @@ const HomeNonPasienView = () => {
     };
 
     fetchKunjungans();
-  }, []);
+  }, [trigger]);
 
   const cancelKunjungan = async () => {
     const [responseData, message, isSuccess] = await sendRequest(
@@ -197,6 +210,14 @@ const HomeNonPasienView = () => {
       )}
 
       {showInfoModal && <InformationModal setShowModal={setShowInfoModal} />}
+      {showUpdateStatusModal && selectedKunjungan && (
+        <UpdateStatusModal
+          kunjungan={selectedKunjungan}
+          setShowModal={setShowUpdateStatusModal}
+          setTrigger={setTrigger}
+          trigger={trigger}
+        />
+      )}
     </section>
   );
 };

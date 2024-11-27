@@ -16,7 +16,7 @@ const InformationModal = ({
         </Typography>
         <div className="mt-4 rounded-xl p-5 border border-gray-300 flex flex-col md:flex-row items-center justify-between gap-1">
           <Typography
-            className="max-md:w-full bg-red-400 text-center text-white py-2 px-4 rounded-lg min-w-36"
+            className="max-md:w-full bg-red-500 text-center text-white py-2 px-4 rounded-lg min-w-36"
             weight="medium"
             variant="p2"
           >
@@ -25,7 +25,7 @@ const InformationModal = ({
           <FaAngleDown className="text-2xl opacity-60 md:hidden" />
           <FaAngleRight className="text-2xl opacity-60 max-md:hidden" />
           <Typography
-            className="max-md:w-full bg-blue-400 text-center text-white py-2 px-4 rounded-lg min-w-36"
+            className="max-md:w-full bg-blue-500 text-center text-white py-2 px-4 rounded-lg min-w-36"
             weight="medium"
             variant="p2"
           >
@@ -34,7 +34,7 @@ const InformationModal = ({
           <FaAngleDown className="text-2xl opacity-60 md:hidden" />
           <FaAngleRight className="text-2xl opacity-60 max-md:hidden" />
           <Typography
-            className="max-md:w-full bg-green-400 text-center text-white py-2 px-4 rounded-lg min-w-36"
+            className="max-md:w-full bg-green-500 text-center text-white py-2 px-4 rounded-lg min-w-36"
             weight="medium"
             variant="p2"
           >
