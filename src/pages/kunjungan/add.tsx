@@ -422,7 +422,9 @@ const KunjunganAddPage = () => {
                 )}
                 <TextArea
                   id="keluhan"
-                  parentClassName="lg:w-[50%]"
+                  parentClassName={`lg:${
+                    user.role !== "PASIEN" ? "w-[50%]" : "flex-grow"
+                  }`}
                   label="Keluhan"
                   placeholder="Keluhan yang dirasakan"
                   maxLength={255}

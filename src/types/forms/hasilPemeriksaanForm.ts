@@ -19,10 +19,8 @@ export type ResepObatRujukanForm = {
 
 
 export type HasilPemeriksaanForm = {
-  dokterPengirim: string;
   dokter: string;
-  tanggalMasuk: string;
-  tanggalKeluar: string;
+  tanggalPeriksa: string;
   keluhanUtama: string;
   riwayatPenyakitSekarang: string;
   kie: string;
@@ -56,13 +54,11 @@ export type HasilPemeriksaanForm = {
 };
 
 export type HasilKunjunganForm = {
-  dokterPengirim: string;
   dokter: string;
   keluhanUtama: string;
   riwayatPenyakitSekarang: string;
   kie: string;
-  tanggalMasuk: string; // baru
-  tanggalKeluar: string; // baru
+  tanggalPeriksa: string; // baru
 };
 
 export type HasilPemeriksaanFisikForm = {

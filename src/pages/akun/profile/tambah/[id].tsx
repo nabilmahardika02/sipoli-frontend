@@ -101,7 +101,7 @@ const TambahProfilePage = () => {
                 name="kewarganegaraan"
                 options={kewarganegaraan}
                 label="Kewarganegaraan"
-                direction="grid"
+                direction="horizontal"
                 validation={{ required: "Kewarganegaraan wajib diisi" }}
               />
             </div>

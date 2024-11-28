@@ -217,10 +217,18 @@ const KunjunganUpdatePage = () => {
                   />
                 )}
 
+                <TextArea
+                  id="keluhan"
+                  label="Keluhan"
+                  placeholder="Keluhan yang dirasakan"
+                  maxLength={255}
+                  validation={{ required: "Mohon beri tahu keluhan Anda" }}
+                />
+                
                 {showAntrianInfo && antrianInfo != null && (
                   <Typography
                     variant="p2"
-                    className="py-3 px-5 rounded-lg chips-success md:col-span-2 w-full md:w-[50%]"
+                    className="py-3 px-5 rounded-lg chips-success w-full md:w-full h-[50%] mt-2"
                     size="sm"
                   >
                     <FaInfoCircle className="text-xl" />
@@ -233,14 +241,6 @@ const KunjunganUpdatePage = () => {
                         )}`}
                   </Typography>
                 )}
-
-                <TextArea
-                  id="keluhan"
-                  label="Keluhan"
-                  placeholder="Keluhan yang dirasakan"
-                  maxLength={255}
-                  validation={{ required: "Mohon beri tahu keluhan Anda" }}
-                />
               </div>
               <div className="mt-5 flex items-center gap-4">
                 <Button type="submit">Perbarui</Button>
