@@ -67,7 +67,7 @@ const HomeNonPasienView = () => {
                 className="border border-secondary-2"
                 onClick={() => handleOpenStatusModal(value.row)}
               >
-                Update Status
+                Ubah Status
               </Button>
             )}
           {value.row.status === 0 && (
