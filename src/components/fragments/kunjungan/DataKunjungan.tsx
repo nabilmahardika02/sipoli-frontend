@@ -54,11 +54,11 @@ const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
         <>
           <div>
             <Typography variant="p2" weight="semibold" className="text-gray-400">
-              Tanggal Masuk
+              Tanggal Periksa
             </Typography>
             <Typography className="text-primary-1">
-              {kunjungan.tanggalMasuk
-                ? formatDate(kunjungan.tanggalMasuk)
+              {kunjungan.tanggalPeriksa
+                ? formatDate(kunjungan.tanggalPeriksa)
                 : "-"}
             </Typography>
           </div>
@@ -66,24 +66,6 @@ const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
       )}
       {kunjungan.hasilPemeriksaan && (
         <>
-          <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
-              Tanggal Keluar
-            </Typography>
-            <Typography className="text-primary-1">
-              {kunjungan.tanggalKeluar
-                ? formatDate(kunjungan.tanggalKeluar)
-                : "-"}
-            </Typography>
-          </div>
-          <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
-              Dokter Pengirim
-            </Typography>
-            <Typography className="text-primary-1">
-              {kunjungan.dokterPengirim}
-            </Typography>
-          </div>
           <div>
             <Typography variant="p2" weight="semibold" className="text-gray-400">
               Dokter

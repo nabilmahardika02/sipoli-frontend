@@ -24,6 +24,8 @@ import { SuratIzin } from "@/types/entities/suratIzin";
 import SuratIzinPDF from "@/components/PDF/SuratIzinPDF";
 import { RxCross2 } from "react-icons/rx";
 import IconButton from "@/components/elements/IconButton";
+import { formatDate, formatDateOnly } from "@/lib/formater";
+import { isEqual, parseISO } from "date-fns";
 
 const KunjunganPage = () => {
   const { setTitle } = useDocumentTitle();
@@ -106,58 +108,72 @@ const KunjunganPage = () => {
             >
               Detail Kunjungan
             </Typography>
-            <div className="flex justify-center md:justify-end gap-2 my-2">
-              {(user?.role === "DOKTER" || user?.role === "PERAWAT") && (
-                <div className="flex justify-end">
-                  <Link href={`/pasien/detail/${kunjungan.profile.id}`}>
-                    <Button variant="primary">Detail Pasien</Button>
-                  </Link>
-                </div>
-              )}
-              {user?.role === "PASIEN" && kunjungan.status === 0 && (
-                <div className="flex justify-end">
-                  <Link href={`/kunjungan/update/${kunjungan.id}`}>
-                    <Button variant="secondary" leftIcon={LuPencil}>
-                      Ubah Data Kunjungan
-                    </Button>
-                  </Link>
-                </div>
-              )}
-              {user?.role !== "PASIEN" && kunjungan.status < 2 && (
-                <div className="flex justify-end">
-                  <Link href={`/kunjungan/update/${kunjungan.id}`}>
-                    <Button variant="secondary" leftIcon={LuPencil}>
-                      Ubah Data Kunjungan
-                    </Button>
-                  </Link>
-                </div>
-              )}
-              {(user?.role === "PERAWAT" || user?.role === "DOKTER") &&
-                kunjungan.hasilPemeriksaan !== null &&
-                suratIzin === null &&
-                kunjungan.profile.relative === 0 && (
+            <div className="grid grid-cols-1 lg:flex justify-between">
+              {kunjungan.createdAt &&
+                kunjungan.updatedAt &&
+                new Date(kunjungan.createdAt).toISOString().slice(0, 19) !==
+                  new Date(kunjungan.updatedAt).toISOString().slice(0, 19) && (
+                    <div className="my-2">
+<Typography variant="p2" className="italic text-gray-600">
+                    Terakhir diubah pada {formatDate(kunjungan.updatedAt)}
+                  </Typography>
+                    </div>
+                  
+                )}
+
+              <div className="flex justify-center md:justify-end gap-2 my-2">
+                {(user?.role === "DOKTER" || user?.role === "PERAWAT") && (
                   <div className="flex justify-end">
-                    <Button
-                      variant="outline"
-                      leftIcon={FaRegFilePdf}
-                      onClick={() => setShowModal(true)}
-                    >
-                      Buat Surat Izin
-                    </Button>
+                    <Link href={`/pasien/detail/${kunjungan.profile.id}`}>
+                      <Button variant="primary">Detail Pasien</Button>
+                    </Link>
                   </div>
                 )}
-              {(user?.role === "PERAWAT" || user?.role === "DOKTER") &&
-                suratIzin !== null && (
+                {user?.role === "PASIEN" && kunjungan.status === 0 && (
                   <div className="flex justify-end">
-                    <Button
-                      variant="outline"
-                      leftIcon={FaRegFilePdf}
-                      onClick={() => setShowPreview(true)}
-                    >
-                      Unduh Surat Izin
-                    </Button>
+                    <Link href={`/kunjungan/update/${kunjungan.id}`}>
+                      <Button variant="secondary" leftIcon={LuPencil}>
+                        Ubah Data Kunjungan
+                      </Button>
+                    </Link>
                   </div>
                 )}
+                {user?.role !== "PASIEN" && kunjungan.status < 2 && (
+                  <div className="flex justify-end">
+                    <Link href={`/kunjungan/update/${kunjungan.id}`}>
+                      <Button variant="secondary" leftIcon={LuPencil}>
+                        Ubah Data Kunjungan
+                      </Button>
+                    </Link>
+                  </div>
+                )}
+                {(user?.role === "PERAWAT" || user?.role === "DOKTER") &&
+                  kunjungan.hasilPemeriksaan !== null &&
+                  suratIzin === null &&
+                  kunjungan.profile.relative === 0 && (
+                    <div className="flex justify-end">
+                      <Button
+                        variant="outline"
+                        leftIcon={FaRegFilePdf}
+                        onClick={() => setShowModal(true)}
+                      >
+                        Buat Surat Izin
+                      </Button>
+                    </div>
+                  )}
+                {(user?.role === "PERAWAT" || user?.role === "DOKTER") &&
+                  suratIzin !== null && (
+                    <div className="flex justify-end">
+                      <Button
+                        variant="outline"
+                        leftIcon={FaRegFilePdf}
+                        onClick={() => setShowPreview(true)}
+                      >
+                        Unduh Surat Izin
+                      </Button>
+                    </div>
+                  )}
+              </div>
             </div>
             <Divider className="md:hidden my-2" />
             <DataKunjungan kunjungan={kunjungan} />

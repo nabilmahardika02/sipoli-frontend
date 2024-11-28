@@ -420,7 +420,9 @@ const KunjunganAddPage = () => {
                 )}
                 <TextArea
                   id="keluhan"
-                  parentClassName="lg:w-[50%]"
+                  parentClassName={`lg:${
+                    user.role !== "PASIEN" ? "w-[50%]" : "flex-grow"
+                  }`}
                   label="Keluhan"
                   placeholder="Keluhan yang dirasakan"
                   maxLength={255}
@@ -429,7 +431,9 @@ const KunjunganAddPage = () => {
               </div>
               <div className="mt-5 flex items-center justify-center gap-4">
                 <Button type="submit">Simpan</Button>
-                <Button variant="danger" onClick={handleBack}>Batal</Button>
+                <Button variant="danger" onClick={handleBack}>
+                  Batal
+                </Button>
               </div>
             </form>
           </FormProvider>
