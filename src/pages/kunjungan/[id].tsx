@@ -108,18 +108,21 @@ const KunjunganPage = () => {
               Detail Kunjungan
             </Typography>
             <div className="grid grid-cols-1 lg:flex justify-between">
-              {kunjungan.createdAt &&
-                kunjungan.updatedAt &&
-                new Date(kunjungan.createdAt).toISOString().slice(0, 19) !==
-                  new Date(kunjungan.updatedAt).toISOString().slice(0, 19) && (
-                    <div className="my-2">
-<Typography variant="p2" className="italic text-gray-600">
-                    Terakhir diubah pada {formatDate(kunjungan.updatedAt)}
-                  </Typography>
-                    </div>
-                  
-                )}
-
+              <div className="flex justify-center md:justify-end gap-2 my-2">
+                {kunjungan.createdAt &&
+                  kunjungan.updatedAt &&
+                  new Date(kunjungan.createdAt).toISOString().slice(0, 19) !==
+                    new Date(kunjungan.updatedAt)
+                      .toISOString()
+                      .slice(0, 19) && (
+                    <Typography
+                      variant="p2"
+                      className="italic text-gray-600"
+                    >
+                      Terakhir diubah pada {formatDate(kunjungan.updatedAt)}
+                    </Typography>
+                  )}
+              </div>
               <div className="flex justify-center md:justify-end gap-2 my-2">
                 {(user?.role === "DOKTER" || user?.role === "PERAWAT") && (
                   <div className="flex justify-end">
