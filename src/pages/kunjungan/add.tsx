@@ -15,6 +15,7 @@ import useAuthStore from "@/store/useAuthStore";
 import { Account } from "@/types/entities/account";
 import { Profile } from "@/types/entities/profile";
 import { KunjunganForm } from "@/types/forms/kunjunganForm";
+import Head from "next/head";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
@@ -200,7 +201,6 @@ const KunjunganAddPage = () => {
 
       if (isSuccess) {
         setAntrianInfo(responseData as number);
-        console.log(responseData);
       }
     };
 
@@ -220,6 +220,9 @@ const KunjunganAddPage = () => {
 
   return (
     <main>
+      <Head>
+        <title>Tambah Kunjungan</title>
+      </Head>
       <section>
         <div className="flex justify-center md:hidden">
           {user?.role === "PASIEN" && (
@@ -274,9 +277,9 @@ const KunjunganAddPage = () => {
                     validation={{
                       required: "Jam Kunjungan wajib diisi",
                     }}
+                    minuteStep={15}
                     className="lg:w-full"
-                    helperText="Silakan pilih waktu dalam WITA untuk berkunjung di hari
-                      Minggu"
+                    helperText="Silakan pilih waktu dalam WITA untuk berkunjung di hari Minggu"
                   />
                 )}
                 {showSesi && validationMessage === null && (
@@ -426,7 +429,9 @@ const KunjunganAddPage = () => {
                 )}
                 <TextArea
                   id="keluhan"
-                  parentClassName="lg:w-[50%]"
+                  parentClassName={`lg:${
+                    user.role !== "PASIEN" ? "w-[50%]" : "flex-grow"
+                  }`}
                   label="Keluhan"
                   placeholder="Keluhan yang dirasakan"
                   maxLength={255}

@@ -28,8 +28,6 @@ const DesktopTopNav = ({ title = "Beranda" }: { title?: string }) => {
           KUNJUNGAN_TOAST
         );
       });
-
-      console.log(data.newNotifications);
     }
   }, []);
 
@@ -38,7 +36,7 @@ const DesktopTopNav = ({ title = "Beranda" }: { title?: string }) => {
       fetchData();
       const interval = setInterval(() => {
         fetchData();
-      }, 60000);
+      }, 10000);
 
       return () => clearInterval(interval);
     }

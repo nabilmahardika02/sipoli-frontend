@@ -5,15 +5,15 @@ import { Obat } from "./obat";
 export interface Kunjungan {
   id: string;
   tanggal: string;
-  dokterPengirim: string;
   dokter: Dokter;
-  tanggalMasuk: string;
-  tanggalKeluar: string;
+  tanggalPeriksa: string;
   keluhan: string;
   status: number;
   antrian: Antrian;
   hasilPemeriksaan: HasilPemeriksaan;
   profile: Profile;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ResepObatRujukan {

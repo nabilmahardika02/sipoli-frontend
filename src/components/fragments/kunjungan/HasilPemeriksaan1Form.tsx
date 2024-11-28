@@ -44,7 +44,6 @@ const HasilPemeriksaan1Form = ({
 
   useEffect(() => {
     if (hasilPemeriksaan) {
-      methods.setValue("dokterPengirim", hasilPemeriksaan.dokterPengirim);
       methods.setValue("dokter", hasilPemeriksaan.dokter);
       methods.setValue("keluhanUtama", hasilPemeriksaan.keluhanUtama);
       methods.setValue(
@@ -52,8 +51,7 @@ const HasilPemeriksaan1Form = ({
         hasilPemeriksaan.riwayatPenyakitSekarang
       );
       methods.setValue("kie", hasilPemeriksaan.kie);
-      methods.setValue("tanggalMasuk", hasilPemeriksaan.tanggalMasuk);
-      methods.setValue("tanggalKeluar", hasilPemeriksaan.tanggalKeluar);
+      methods.setValue("tanggalPeriksa", hasilPemeriksaan.tanggalPeriksa);
     }
   }, [hasilPemeriksaan, methods]);
 
@@ -75,13 +73,11 @@ const HasilPemeriksaan1Form = ({
   const onSubmit: SubmitHandler<HasilKunjunganForm> = (data) => {
     setHasilPemeriksaan((prevState) => ({
       ...prevState,
-      dokterPengirim: data.dokterPengirim,
       dokter: data.dokter,
       keluhanUtama: data.keluhanUtama,
       riwayatPenyakitSekarang: data.riwayatPenyakitSekarang,
       kie: data.kie,
-      tanggalMasuk: data.tanggalMasuk,
-      tanggalKeluar: data.tanggalKeluar,
+      tanggalPeriksa: data.tanggalPeriksa,
     }));
 
     setSection(2);
@@ -100,12 +96,6 @@ const HasilPemeriksaan1Form = ({
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className="mt-5 items-end">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
-              <Input
-                id="dokterPengirim"
-                placeholder="Dokter Pengirim"
-                label="Dokter Pengirim"
-                {...methods.register("dokterPengirim")}
-              />
               <SelectInput
                 id="dokter"
                 placeholder="Pilih Dokter"
@@ -123,21 +113,14 @@ const HasilPemeriksaan1Form = ({
                 ))}
               </SelectInput>
               <Input
-                id="tanggalMasuk"
+                id="tanggalPeriksa"
                 type="datetime-local"
                 placeholder="Tanggal Masuk"
                 label="Tanggal Masuk"
-                defaultValue={new Date(kunjungan.tanggalMasuk)
+                defaultValue={new Date(kunjungan.tanggalPeriksa)
                   .toISOString()
                   .slice(0, 16)}
-                {...methods.register("tanggalMasuk")}
-              />
-              <Input
-                id="tanggalKeluar"
-                type="datetime-local"
-                placeholder="Tanggal Keluar"
-                label="Tanggal Keluar"
-                {...methods.register("tanggalKeluar")}
+                {...methods.register("tanggalPeriksa")}
               />
               <Input
                 id="keluhanUtama"

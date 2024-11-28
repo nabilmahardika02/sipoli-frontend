@@ -11,45 +11,45 @@ export function formatDateOnly(dateString: string): string {
   };
 
   return date.toLocaleDateString("id-ID", options);
-  }
-  
-  export function formatDate(isoDate: string | Date): string {
-    const date = new Date(isoDate);
-  
-    const dateOptions: Intl.DateTimeFormatOptions = {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-    const timeOptions: Intl.DateTimeFormatOptions = {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-      timeZone: "Asia/Makassar", // Pastikan menggunakan zona waktu lokal Anda
-    };
-  
-    const formattedDate = date.toLocaleDateString("id-ID", dateOptions);
-    const formattedTime = date.toLocaleTimeString("id-ID", timeOptions);
-  
-    return `${formattedDate} | ${formattedTime} WITA`;
-  }
-  
-  export function formatDateWithoutDays(dateInput: string | Date): string {
-    const date = typeof dateInput === "string" ? new Date(dateInput) : dateInput;
-  
-    const dateOptions: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-  
-    const formattedDate = date.toLocaleDateString("id-ID", dateOptions);
-  
-    return formattedDate;
-  }  
-  
-  export function getSatuanObat(value: number): string {
+}
+
+export function formatDate(isoDate: string | Date): string {
+  const date = new Date(isoDate);
+
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: "Asia/Makassar", // Pastikan menggunakan zona waktu lokal Anda
+  };
+
+  const formattedDate = date.toLocaleDateString("id-ID", dateOptions);
+  const formattedTime = date.toLocaleTimeString("id-ID", timeOptions);
+
+  return `${formattedDate} | ${formattedTime} WITA`;
+}
+
+export function formatDateWithoutDays(dateInput: string | Date): string {
+  const date = typeof dateInput === "string" ? new Date(dateInput) : dateInput;
+
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+
+  const formattedDate = date.toLocaleDateString("id-ID", dateOptions);
+
+  return formattedDate;
+}
+
+export function getSatuanObat(value: number): string {
   if (value === 0) {
     return "Botol";
   } else if (value === 1) {
@@ -133,4 +133,9 @@ export function formatDateDayjs(date: Dayjs): string {
 
 export function formatTimeDayjs(date: Dayjs): string {
   return date.format("HH:mm");
+}
+
+export function formatToDateInputValue(dateString: string): string {
+  const date = new Date(dateString);
+  return date.toISOString().split("T")[0];
 }

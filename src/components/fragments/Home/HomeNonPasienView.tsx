@@ -6,6 +6,7 @@ import Typography from "@/components/elements/Typography";
 import ModalLayout from "@/components/layouts/ModalLayout";
 import DataTable from "@/lib/datatable";
 import sendRequest from "@/lib/getApi";
+import useAuthStore from "@/store/useAuthStore";
 import { Kunjungan } from "@/types/entities/kunjungan";
 import {
   getRowIdKunjungans,
@@ -15,17 +16,30 @@ import { GridColDef } from "@mui/x-data-grid";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { FaCircleInfo } from "react-icons/fa6";
 import { GoPlus } from "react-icons/go";
+import InformationModal from "./InformationModal";
+import UpdateStatusModal from "./UpdateStatusModal";
 
 const HomeNonPasienView = () => {
+  const user = useAuthStore.useUser();
   const [kunjungans, setKunjungans] = useState<Kunjungan[]>();
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState(false);
+  const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
   const [cancelId, setCancelId] = useState<string>();
+  const [selectedKunjungan, setSelectedKunjungan] = useState<Kunjungan>();
+  const [trigger, setTrigger] = useState(false);
   const router = useRouter();
 
   const handleOpenModal = (id: string) => {
     setShowCancelModal(true);
     setCancelId(id);
+  };
+
+  const handleOpenStatusModal = (kunjungan: Kunjungan) => {
+    setSelectedKunjungan(kunjungan);
+    setShowUpdateStatusModal(true);
   };
 
   const columns: GridColDef[] = [
@@ -34,7 +48,7 @@ const HomeNonPasienView = () => {
       field: "action",
       headerName: "Aksi",
       headerAlign: "center",
-      width: 200,
+      width: 250,
       align: "center",
       sortable: false,
       renderCell: (value) => (
@@ -44,17 +58,31 @@ const HomeNonPasienView = () => {
               Detail
             </Button>
           </Link>
-          {value.row.status === 0 && (<Link href={"/home"}>
-            <Button
-              fullRounded
-              size="sm"
-              variant="danger"
-              className="border border-danger-2"
-              onClick={() => handleOpenModal(value.row.id)}
-            >
-              Cancel
-            </Button>
-          </Link>)}
+          {(user?.role == "PERAWAT" || user?.role == "DOKTER") &&
+            value.row.status < 2 && (
+              <Button
+                variant="secondary"
+                size="sm"
+                fullRounded
+                className="border border-secondary-2"
+                onClick={() => handleOpenStatusModal(value.row)}
+              >
+                Ubah Status
+              </Button>
+            )}
+          {value.row.status === 0 && (
+            <Link href={"/home"}>
+              <Button
+                fullRounded
+                size="sm"
+                variant="danger"
+                className="border border-danger-2"
+                onClick={() => handleOpenModal(value.row.id)}
+              >
+                Cancel
+              </Button>
+            </Link>
+          )}
         </div>
       ),
     },
@@ -73,7 +101,7 @@ const HomeNonPasienView = () => {
     };
 
     fetchKunjungans();
-  }, []);
+  }, [trigger]);
 
   const cancelKunjungan = async () => {
     const [responseData, message, isSuccess] = await sendRequest(
@@ -91,9 +119,17 @@ const HomeNonPasienView = () => {
   return (
     <section className="w-full">
       <div className="flex items-center justify-between mb-5">
-        <Typography variant="h6" className="text-primary-1">
-          Daftar Antrian
-        </Typography>
+        <div className="flex items-center gap-2">
+          <Typography variant="h6" className="text-primary-1">
+            Daftar Antrian
+          </Typography>
+          <button
+            className="text-gray-400 hover:text-primary-1 text-xl"
+            onClick={() => setShowInfoModal(true)}
+          >
+            <FaCircleInfo />
+          </button>
+        </div>
         <div className="flex justify-end">
           <Link href={"/kunjungan/add"}>
             <Button leftIcon={GoPlus} leftIconClassName="max-md:mr-0">
@@ -154,7 +190,11 @@ const HomeNonPasienView = () => {
               </ul>
             </Typography>
             <div className="flex items-center gap-2 mt-4 self-end">
-              <Button variant="danger" size="sm" onClick={() => cancelKunjungan()}>
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={() => cancelKunjungan()}
+              >
                 Batalkan Kunjungan
               </Button>
               <Button
@@ -167,6 +207,16 @@ const HomeNonPasienView = () => {
             </div>
           </div>
         </ModalLayout>
+      )}
+
+      {showInfoModal && <InformationModal setShowModal={setShowInfoModal} />}
+      {showUpdateStatusModal && selectedKunjungan && (
+        <UpdateStatusModal
+          kunjungan={selectedKunjungan}
+          setShowModal={setShowUpdateStatusModal}
+          setTrigger={setTrigger}
+          trigger={trigger}
+        />
       )}
     </section>
   );

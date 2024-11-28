@@ -20,10 +20,8 @@ const AddHasilPemeriksaanPage = () => {
   const [section, setSection] = useState(1);
   const [kunjungan, setKunjungan] = useState<Kunjungan>();
   const [hasilPemeriksaanFields, setHasilPemeriksaanFields] = useState<HasilPemeriksaanForm>({
-    dokterPengirim: "",
     dokter: "",
-    tanggalMasuk: "",
-    tanggalKeluar: "",
+    tanggalPeriksa: "",
     keluhanUtama: "",
     riwayatPenyakitSekarang: "",
     kie: "",
