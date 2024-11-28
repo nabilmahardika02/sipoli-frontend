@@ -45,12 +45,11 @@ const NotifikasiPage = () => {
     const [responseData, message, isSuccess] = await sendRequest(
       "put",
       "notifikasi/mark-read",
-      notificationIds, // Payload ke API
+      notificationIds, 
       true
     );
 
     if (isSuccess) {
-      console.log("mark sukses");
       const fetchData = async () => {
         const [responseData, message, isSuccess] = await sendRequest(
           "get",

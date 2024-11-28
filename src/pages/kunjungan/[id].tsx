@@ -1,29 +1,29 @@
 import Button from "@/components/elements/Button";
 import Divider from "@/components/elements/Divider";
+import Input from "@/components/elements/forms/Input";
+import IconButton from "@/components/elements/IconButton";
 import { LoadingDiv } from "@/components/elements/Loading";
 import Typography from "@/components/elements/Typography";
 import DataHasilPemeriksaan from "@/components/fragments/kunjungan/DataHasilPemeriksaan";
 import DataKunjungan from "@/components/fragments/kunjungan/DataKunjungan";
 import withAuth from "@/components/hoc/withAuth";
+import ModalLayout from "@/components/layouts/ModalLayout";
+import SuratIzinPDF from "@/components/PDF/SuratIzinPDF";
 import { useDocumentTitle } from "@/context/Title";
 import sendRequest from "@/lib/getApi";
 import useAuthStore from "@/store/useAuthStore";
 import { Kunjungan } from "@/types/entities/kunjungan";
+import { SuratIzin } from "@/types/entities/suratIzin";
+import { SuratIzinForm } from "@/types/forms/suratIzinForm";
 import Head from "next/head";
 import Link from "next/link";
 import router from "next/router";
 import { useEffect, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { FaRegFilePdf } from "react-icons/fa";
 import { FaCirclePlus } from "react-icons/fa6";
 import { LuPencil } from "react-icons/lu";
-import { FaRegFilePdf } from "react-icons/fa";
-import ModalLayout from "@/components/layouts/ModalLayout";
-import { FormProvider, useForm } from "react-hook-form";
-import { SuratIzinForm } from "@/types/forms/suratIzinForm";
-import Input from "@/components/elements/forms/Input";
-import { SuratIzin } from "@/types/entities/suratIzin";
-import SuratIzinPDF from "@/components/PDF/SuratIzinPDF";
 import { RxCross2 } from "react-icons/rx";
-import IconButton from "@/components/elements/IconButton";
 
 const KunjunganPage = () => {
   const { setTitle } = useDocumentTitle();
@@ -172,20 +172,33 @@ const KunjunganPage = () => {
               {(user?.role === "DOKTER" || user?.role === "PERAWAT") &&
               kunjungan.hasilPemeriksaan == null &&
               kunjungan.status < 3 ? (
-                <div className="w-full flex justify-center rounded-lg border border-gray-300 py-8 mt-3">
-                  <Link
-                    href={"/kunjungan/hasil-pemeriksaan/tambah/" + kunjungan.id}
-                    className="flex flex-col items-center group"
-                  >
-                    <FaCirclePlus className="text-gray-400 text-3xl group-hover:text-gray-500" />
+                kunjungan.status > 1 ? (
+                  <div className="w-full flex justify-center rounded-lg border border-gray-300 py-8 mt-3">
+                    <Link
+                      href={
+                        "/kunjungan/hasil-pemeriksaan/tambah/" + kunjungan.id
+                      }
+                      className="flex flex-col items-center group"
+                    >
+                      <FaCirclePlus className="text-gray-400 text-3xl group-hover:text-gray-500" />
+                      <Typography
+                        variant="h7"
+                        className="text-gray-400 mt-4 group-hover:text-gray-500"
+                      >
+                        Tambah Hasil Pemeriksaan
+                      </Typography>
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="w-full flex justify-center rounded-lg border border-gray-300 py-8 mt-3">
                     <Typography
                       variant="h7"
                       className="text-gray-400 mt-4 group-hover:text-gray-500"
                     >
-                      Tambah Hasil Pemeriksaan
+                      Pasien belum diperiksa
                     </Typography>
-                  </Link>
-                </div>
+                  </div>
+                )
               ) : (
                 <DataHasilPemeriksaan
                   data={kunjungan.hasilPemeriksaan}
