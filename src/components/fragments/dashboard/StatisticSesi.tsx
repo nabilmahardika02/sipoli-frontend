@@ -39,7 +39,6 @@ const StatisticSesi = ({ className = "" }: { className?: string }) => {
         setLabels(data.map((item) => item.label));
         setValues(data.map((item) => item.amount));
         setNoData(data.every((item) => item.amount === 0));
-        console.log(responseData);
       }
     };
 

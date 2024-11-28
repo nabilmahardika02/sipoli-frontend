@@ -39,7 +39,7 @@ const MyDatePicker = ({
   const error = get(errors, id);
 
   return (
-    <div className="w-full space-y-1.5 rounded-md">
+    <div className="custom-mui-input w-full space-y-1.5 rounded-md">
       {label && (
         <label className="flex items-center space-x-1">
           <Typography

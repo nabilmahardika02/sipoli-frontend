@@ -28,8 +28,6 @@ const DesktopTopNav = ({ title = "Beranda" }: { title?: string }) => {
           KUNJUNGAN_TOAST
         );
       });
-
-      console.log(data.newNotifications);
     }
   }, []);
 
@@ -71,7 +69,7 @@ const DesktopTopNav = ({ title = "Beranda" }: { title?: string }) => {
                     )}
                   >
                     <FaBell />
-                    {isNewNotif && (
+                    {isNewNotif === true && (
                       <div className="w-2.5 h-2.5 rounded-full bg-red-400 absolute top-0 left-0"></div>
                     )}
                   </button>
