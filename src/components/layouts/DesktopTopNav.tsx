@@ -36,7 +36,7 @@ const DesktopTopNav = ({ title = "Beranda" }: { title?: string }) => {
       fetchData();
       const interval = setInterval(() => {
         fetchData();
-      }, 60000);
+      }, 10000);
 
       return () => clearInterval(interval);
     }
@@ -69,7 +69,7 @@ const DesktopTopNav = ({ title = "Beranda" }: { title?: string }) => {
                     )}
                   >
                     <FaBell />
-                    {isNewNotif === true && (
+                    {isNewNotif && (
                       <div className="w-2.5 h-2.5 rounded-full bg-red-400 absolute top-0 left-0"></div>
                     )}
                   </button>

@@ -143,12 +143,19 @@ const KunjunganAddPage = () => {
     const date = new Date(selectedDate);
     setSelectedDate(selectedDate);
 
-    // Hitung tanggal maksimum (7 hari setelah hari ini)
+    // Hitung tanggal "hari ini" tanpa jam
     const today = new Date();
-    const maxDate = new Date(today);
-    maxDate.setDate(today.getDate() + 7);
+    const todayWithoutTime = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    );
 
-    if (date > maxDate) {
+    // Hitung tanggal maksimum (7 hari setelah "hari ini")
+    const maxDate = new Date(todayWithoutTime);
+    maxDate.setDate(todayWithoutTime.getDate() + 7); // Tambahkan 7 hari ke tanggal
+
+    if (today > maxDate) {
       setShowInformationSunday(false);
       setShowInformationSaturday(false);
       setShowSesi(false);
