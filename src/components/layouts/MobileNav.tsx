@@ -100,12 +100,14 @@ const MobileNav = ({ className }: { className?: string }) => {
         <Logo size="sm" />
         <div className="flex items-center gap-2">
           {(user?.role === "DOKTER" || user?.role === "PERAWAT") && (
-            <button className={clsxm("text-xl relative text-white")}>
-              <FaBell />
-              {isNewNotif && (
-                <div className="w-2.5 h-2.5 rounded-full bg-red-400 absolute top-0 left-0"></div>
-              )}
-            </button>
+            <Link href={"/notifikasi"}>
+              <button className={clsxm("text-xl relative text-white")}>
+                <FaBell />
+                {isNewNotif && (
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-400 absolute top-0 left-0"></div>
+                )}
+              </button>
+            </Link>
           )}
           <button
             className="text-white text-2xl active:rotate-90 active:transition-all active:duration-300"
