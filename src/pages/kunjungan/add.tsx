@@ -15,6 +15,7 @@ import useAuthStore from "@/store/useAuthStore";
 import { Account } from "@/types/entities/account";
 import { Profile } from "@/types/entities/profile";
 import { KunjunganForm } from "@/types/forms/kunjunganForm";
+import { Dayjs } from "dayjs";
 import Head from "next/head";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
@@ -91,7 +92,7 @@ const KunjunganAddPage = () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "post",
         "kunjungan/add",
-        showInformationSunday
+        showInformationSunday && data.jamMasuk
           ? { ...data, jamMasuk: formatTimeDayjs(data.jamMasuk) }
           : data,
         true
@@ -155,7 +156,13 @@ const KunjunganAddPage = () => {
     const maxDate = new Date(todayWithoutTime);
     maxDate.setDate(todayWithoutTime.getDate() + 7); // Tambahkan 7 hari ke tanggal
 
-    if (today > maxDate) {
+    const dateWithoutTime = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    );
+
+    if (dateWithoutTime > maxDate) {
       setShowInformationSunday(false);
       setShowInformationSaturday(false);
       setShowSesi(false);
