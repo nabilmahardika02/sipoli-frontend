@@ -172,7 +172,7 @@ const KunjunganPage = () => {
               {(user?.role === "DOKTER" || user?.role === "PERAWAT") &&
               kunjungan.hasilPemeriksaan == null &&
               kunjungan.status < 3 ? (
-                kunjungan.status > 1 ? (
+                kunjungan.status >= 1 ? (
                   <div className="w-full flex justify-center rounded-lg border border-gray-300 py-8 mt-3">
                     <Link
                       href={
