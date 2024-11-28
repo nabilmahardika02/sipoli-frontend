@@ -73,7 +73,6 @@ const MobileNav = ({ className }: { className?: string }) => {
       "notifikasi/is-exist"
     );
 
-    console.log(responseData);
     if (isSuccess) {
       setIsNotif(responseData as boolean);
     }

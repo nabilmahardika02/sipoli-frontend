@@ -28,8 +28,6 @@ const DesktopTopNav = ({ title = "Beranda" }: { title?: string }) => {
           KUNJUNGAN_TOAST
         );
       });
-
-      console.log(data.newNotifications);
     }
   }, []);
 
