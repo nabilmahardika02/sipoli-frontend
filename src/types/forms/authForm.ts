@@ -40,3 +40,8 @@ export type MyPasswordForm = {
   oldPassword: string;
   newPassword: string;
 };
+
+export type UsernameForm = {
+  accountId: string;
+  username: string;
+}

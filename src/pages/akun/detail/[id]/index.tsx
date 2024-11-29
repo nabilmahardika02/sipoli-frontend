@@ -163,7 +163,7 @@ const DetailPage = () => {
                 </Link>
                 <Link href={`/akun/detail/${router.query.id}/update`}>
                   <Button
-                    variant="success"
+                    variant="primary"
                     leftIcon={LuPencil}
                     leftIconClassName="max-md:mr-0"
                   >
