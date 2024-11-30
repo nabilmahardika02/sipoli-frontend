@@ -78,7 +78,7 @@ const HasilPemeriksaan3Form = ({
       <Typography variant="h7" className="text-primary-1">
         Formulir 3
       </Typography>
-      <Divider></Divider>
+      <Divider weight="thin" className="my-5" />
       <Typography variant="h7" className="mt-5 text-primary-1">
         Status Present - {kunjungan.profile.name}
       </Typography>

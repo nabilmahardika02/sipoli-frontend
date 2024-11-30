@@ -84,7 +84,7 @@ const HasilPemeriksaan2Form = ({
       <Typography variant="h7" className="text-primary-1">
         Formulir 2
       </Typography>
-      <Divider></Divider>
+      <Divider weight="thin" className="my-5" />
       <Typography variant="h7" className="mt-5 text-primary-1">
         Pemeriksaan Fisik - {kunjungan.profile.name}
       </Typography>

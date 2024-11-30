@@ -63,7 +63,7 @@ const HasilPemeriksaan4Form = ({
       <Typography variant="h7" className="text-primary-1">
         Formulir 4
       </Typography>
-      <Divider></Divider>
+      <Divider weight="thin" className="my-5" />
       <Typography variant="h7" className="mt-5 text-primary-1">
         Diagnosa Akhir - {kunjungan.profile.name}
       </Typography>

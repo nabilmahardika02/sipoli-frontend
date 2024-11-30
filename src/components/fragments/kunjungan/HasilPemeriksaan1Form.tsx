@@ -2,7 +2,6 @@ import Button from "@/components/elements/Button";
 import Divider from "@/components/elements/Divider";
 import Input from "@/components/elements/forms/Input";
 import SelectInput from "@/components/elements/forms/SelectInput";
-import TextArea from "@/components/elements/forms/TextArea";
 import { LoadingDiv } from "@/components/elements/Loading";
 import Typography from "@/components/elements/Typography";
 import { checkRole } from "@/lib/checkRole";
@@ -50,7 +49,6 @@ const HasilPemeriksaan1Form = ({
         "riwayatPenyakitSekarang",
         hasilPemeriksaan.riwayatPenyakitSekarang
       );
-      methods.setValue("kie", hasilPemeriksaan.kie);
       methods.setValue("tanggalPeriksa", hasilPemeriksaan.tanggalPeriksa);
     }
   }, [hasilPemeriksaan, methods]);
@@ -76,7 +74,6 @@ const HasilPemeriksaan1Form = ({
       dokter: data.dokter,
       keluhanUtama: data.keluhanUtama,
       riwayatPenyakitSekarang: data.riwayatPenyakitSekarang,
-      kie: data.kie,
       tanggalPeriksa: data.tanggalPeriksa,
     }));
 
@@ -88,7 +85,7 @@ const HasilPemeriksaan1Form = ({
       <Typography variant="h7" className="text-primary-1">
         Formulir 1
       </Typography>
-      <Divider></Divider>
+      <Divider weight="thin" className="my-5" />
       <Typography variant="h7" className="mt-5 text-primary-1">
         Data Kunjungan - {kunjungan.profile.name}
       </Typography>
@@ -133,12 +130,6 @@ const HasilPemeriksaan1Form = ({
                 placeholder="Riwayat Penyakit dari Keluhan Utama"
                 label="Riwayat Penyakit dari Keluhan Utama"
                 {...methods.register("riwayatPenyakitSekarang")}
-              />
-              <TextArea
-                id="kie"
-                placeholder="Komunikasi Informasi dan Edukasi"
-                label="Komunikasi Informasi dan Edukasi"
-                {...methods.register("kie")}
               />
             </div>
             <div className="flex items-center gap-3">

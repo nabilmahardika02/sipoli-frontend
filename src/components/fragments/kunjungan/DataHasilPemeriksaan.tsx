@@ -47,6 +47,7 @@ const DataHasilPemeriksaan = ({
             setTrigger={setTrigger}
           />
           <DataResepObat
+            data={data} // untuk KIE
             listKuantitasObat={
               data.listKuantitasObat as unknown as KuantitasObat[]
             }

@@ -4,7 +4,7 @@ import IconButton from "@/components/elements/IconButton";
 import Typography from "@/components/elements/Typography";
 import ModalLayout from "@/components/layouts/ModalLayout";
 import sendRequest from "@/lib/getApi";
-import useAuthStore from "@/store/useAuthStore"; // supaya pasien & admin gak bisa edit
+import useAuthStore from "@/store/useAuthStore";
 import { HasilPemeriksaan } from "@/types/entities/kunjungan";
 import { UpdateHasilKunjunganForm } from "@/types/forms/hasilPemeriksaanForm";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
@@ -22,7 +22,7 @@ const DataUtama = ({
   trigger: boolean;
   setTrigger: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const user = useAuthStore.useUser(); // supaya pasien & admin gak bisa edit
+  const user = useAuthStore.useUser();
   const [showModal, setShowModal] = useState(false);
 
   const methods = useForm<UpdateHasilKunjunganForm>({
@@ -53,7 +53,6 @@ const DataUtama = ({
     if (data) {
       methods.setValue("keluhanUtama", data.keluhanUtama);
       methods.setValue("riwayatPenyakitSekarang", data.riwayatPenyakitSekarang);
-      methods.setValue("kie", data.kie);
     }
   }, [data, methods]);
 
@@ -89,12 +88,6 @@ const DataUtama = ({
             {data.riwayatPenyakitSekarang || "-"}
           </Typography>
         </div>
-        <div>
-          <Typography variant="p2" weight="semibold" className="text-gray-400">
-            Komunikasi Informasi dan Edukasi
-          </Typography>
-          <Typography className="text-primary-1">{data.kie || "-"}</Typography>
-        </div>
       </div>
       {showModal && (
         <ModalLayout setShowModal={setShowModal}>
@@ -117,11 +110,6 @@ const DataUtama = ({
                     id="riwayatPenyakitSekarang"
                     placeholder="Riwayat Keluhan / Penyakit Saat Ini"
                     label="Riwayat Keluhan / Penyakit Saat Ini"
-                  />
-                  <Input
-                    id="kie"
-                    placeholder="Komunikasi Informasi dan Edukasi"
-                    label="Komunikasi Informasi dan Edukasi"
                   />
                 </div>
                 <Button type="submit" className="max-md:w-full">

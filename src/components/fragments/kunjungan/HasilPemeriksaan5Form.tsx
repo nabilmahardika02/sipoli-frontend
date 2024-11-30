@@ -5,7 +5,7 @@ import SelectInput from "@/components/elements/forms/SelectInput";
 import TextArea from "@/components/elements/forms/TextArea";
 import Typography from "@/components/elements/Typography";
 import DataTable from "@/lib/datatable";
-import { formatDateOnly } from "@/lib/formater";
+import { formatDateOnly, getSatuanObat } from "@/lib/formater";
 import sendRequest from "@/lib/getApi";
 import { Kunjungan } from "@/types/entities/kunjungan";
 import { Obat } from "@/types/entities/obat";
@@ -34,9 +34,17 @@ const HasilPemeriksaan5Form = ({
     mode: "onTouched",
     defaultValues: {
       listKuantitasObat: hasilPemeriksaan.listKuantitasObat || [
-        { obatId: "", namaObat: "", kuantitas: 0, petunjukPemakaian: "", tanggalKadaluarsa: "" },
+        {
+          obatId: "",
+          namaObat: "",
+          kuantitas: 0,
+          petunjukPemakaian: "",
+          tanggalKadaluarsa: "",
+          jenisSatuan: "",
+        },
       ],
       resepObatRujukan: hasilPemeriksaan.resepObatRujukan || { deskripsi: "" },
+      kie: hasilPemeriksaan.kie || "",
     },
   });
 
@@ -69,6 +77,7 @@ const HasilPemeriksaan5Form = ({
         "resepObatRujukan",
         hasilPemeriksaan.resepObatRujukan || { deskripsi: "" }
       );
+      methods.setValue("kie", hasilPemeriksaan.kie || "");
     }
   }, [hasilPemeriksaan, methods]);
 
@@ -77,6 +86,7 @@ const HasilPemeriksaan5Form = ({
       ...prev,
       listKuantitasObat: data.listKuantitasObat,
       resepObatRujukan: data.resepObatRujukan,
+      kie: data.kie,
     }));
 
     setSection(6); // Pindah ke section berikutnya
@@ -88,6 +98,7 @@ const HasilPemeriksaan5Form = ({
       ...prev,
       listKuantitasObat: currentValues.listKuantitasObat,
       resepObatRujukan: currentValues.resepObatRujukan,
+      kie: currentValues.kie,
     }));
 
     setSection(4); // Kembali ke section sebelumnya
@@ -97,27 +108,30 @@ const HasilPemeriksaan5Form = ({
     const selectedObat = obatList.find((obat) => obat.id === obatId);
     if (selectedObat) {
       const closestExpiryDate =
-      selectedObat.listRestockObat && selectedObat.listRestockObat.length > 0
-        ? selectedObat.listRestockObat
-            .map((restock) => restock.tanggalKadaluarsa)
-            .sort((a, b) => new Date(a).getTime() - new Date(b).getTime())[0]
-        : "Tidak tersedia";    
+        selectedObat.listRestockObat && selectedObat.listRestockObat.length > 0
+          ? selectedObat.listRestockObat
+              .map((restock) => restock.tanggalKadaluarsa)
+              .sort((a, b) => new Date(a).getTime() - new Date(b).getTime())[0]
+          : "Tidak tersedia";
+
+      const jenisSatuan = getSatuanObat(selectedObat.jenisSatuan);
+
       setValue(`listKuantitasObat.${index}.namaObat`, selectedObat.namaObat);
       setValue(
         `listKuantitasObat.${index}.tanggalKadaluarsa`,
         formatDateOnly(closestExpiryDate)
       );
-      
+      setValue(`listKuantitasObat.${index}.jenisSatuan`, jenisSatuan);
     }
   };
-  
+
   return (
     <section className="space-y-8">
       <div>
         <Typography variant="h7" className="text-primary-1">
           Formulir 5
         </Typography>
-        <Divider />
+        <Divider weight="thin" className="my-5" />
         <Typography variant="h7" className="mt-5 text-primary-1">
           Resep Obat - {kunjungan?.profile?.name || "Tidak Ada Nama"}
         </Typography>
@@ -148,16 +162,28 @@ const HasilPemeriksaan5Form = ({
                     ))}
                   </SelectInput>
 
+                  {/* Tanggal Kadaluarsa dan Jenis Satuan sejajar */}
+                  <div className="grid grid-cols-2 gap-5">
+                    <Input
+                      id={`listKuantitasObat.${index}.tanggalKadaluarsa`}
+                      placeholder="Tanggal Kadaluarsa"
+                      label="Tanggal Kadaluarsa"
+                      value={methods.getValues(
+                        `listKuantitasObat.${index}.tanggalKadaluarsa`
+                      )}
+                      readOnly
+                    />
+                    <Input
+                      id={`listKuantitasObat.${index}.jenisSatuan`}
+                      placeholder="Jenis Satuan"
+                      label="Jenis Satuan"
+                      value={methods.getValues(
+                        `listKuantitasObat.${index}.jenisSatuan`
+                      )}
+                      readOnly
+                    />
+                  </div>
 
-                  <Input
-                    id={`listKuantitasObat.${index}.tanggalKadaluarsa`}
-                    placeholder="Tanggal Kadaluarsa"
-                    label="Tanggal Kadaluarsa"
-                    value={methods.getValues(`listKuantitasObat.${index}.tanggalKadaluarsa`)} // ambil nilai tgl kadaluarsanya
-                    readOnly
-                  />
-
-                  
                   <Input
                     id={`listKuantitasObat.${index}.kuantitas`}
                     type="number"
@@ -190,9 +216,10 @@ const HasilPemeriksaan5Form = ({
                   kuantitas: 0,
                   petunjukPemakaian: "",
                   tanggalKadaluarsa: "",
+                  jenisSatuan: "",
                 })
               }
-              className="mb-4"
+              className="mb-6"
             >
               Tambah Obat
             </Button>
@@ -201,6 +228,13 @@ const HasilPemeriksaan5Form = ({
               placeholder="Resep Obat di Luar Klinik"
               label="Resep Obat di Luar Klinik"
               {...methods.register("resepObatRujukan.deskripsi" as const)}
+              className="mb-4"
+            />
+            <TextArea
+              id="kie"
+              placeholder="Komunikasi Informasi dan Edukasi"
+              label="Komunikasi Informasi dan Edukasi"
+              {...methods.register("kie" as const)}
             />
             <div className="flex items-center gap-3 mt-4">
               <Button
@@ -217,7 +251,7 @@ const HasilPemeriksaan5Form = ({
           </form>
         </FormProvider>
       </div>
-      <Divider />
+      <Divider weight="thin" className="my-5" />
 
       {/* Kotak kedua untuk tampilan read-only daftar obat */}
       <div>
