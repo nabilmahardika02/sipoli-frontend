@@ -115,8 +115,8 @@ const HasilPemeriksaan1Form = ({
               <Input
                 id="tanggalPeriksa"
                 type="datetime-local"
-                placeholder="Tanggal Masuk"
-                label="Tanggal Masuk"
+                placeholder="Tanggal Periksa"
+                label="Tanggal Periksa"
                 defaultValue={new Date(kunjungan.tanggalPeriksa)
                   .toISOString()
                   .slice(0, 16)}

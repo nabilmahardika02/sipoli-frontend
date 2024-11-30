@@ -10,6 +10,7 @@ export type KuantitasObatRequest = {
   namaObat: string; // Tambahkan namaObat di sini
   kuantitas: number;
   petunjukPemakaian: string;
+  tanggalKadaluarsa: string;
 };
 // baru
 

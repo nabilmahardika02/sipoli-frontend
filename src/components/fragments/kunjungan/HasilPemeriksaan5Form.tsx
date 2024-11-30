@@ -5,6 +5,7 @@ import SelectInput from "@/components/elements/forms/SelectInput";
 import TextArea from "@/components/elements/forms/TextArea";
 import Typography from "@/components/elements/Typography";
 import DataTable from "@/lib/datatable";
+import { formatDateOnly } from "@/lib/formater";
 import sendRequest from "@/lib/getApi";
 import { Kunjungan } from "@/types/entities/kunjungan";
 import { Obat } from "@/types/entities/obat";
@@ -33,7 +34,7 @@ const HasilPemeriksaan5Form = ({
     mode: "onTouched",
     defaultValues: {
       listKuantitasObat: hasilPemeriksaan.listKuantitasObat || [
-        { obatId: "", namaObat: "", kuantitas: 0, petunjukPemakaian: "" },
+        { obatId: "", namaObat: "", kuantitas: 0, petunjukPemakaian: "", tanggalKadaluarsa: "" },
       ],
       resepObatRujukan: hasilPemeriksaan.resepObatRujukan || { deskripsi: "" },
     },
@@ -95,19 +96,30 @@ const HasilPemeriksaan5Form = ({
   const handleObatChange = (index: number, obatId: string) => {
     const selectedObat = obatList.find((obat) => obat.id === obatId);
     if (selectedObat) {
+      const closestExpiryDate =
+      selectedObat.listRestockObat && selectedObat.listRestockObat.length > 0
+        ? selectedObat.listRestockObat
+            .map((restock) => restock.tanggalKadaluarsa)
+            .sort((a, b) => new Date(a).getTime() - new Date(b).getTime())[0]
+        : "Tidak tersedia";    
       setValue(`listKuantitasObat.${index}.namaObat`, selectedObat.namaObat);
+      setValue(
+        `listKuantitasObat.${index}.tanggalKadaluarsa`,
+        formatDateOnly(closestExpiryDate)
+      );
+      
     }
   };
-
+  
   return (
     <section className="space-y-8">
       <div>
         <Typography variant="h7" className="text-primary-1">
           Formulir 5
         </Typography>
-        <Divider></Divider>
+        <Divider />
         <Typography variant="h7" className="mt-5 text-primary-1">
-          Resep Obat - {kunjungan.profile.name}
+          Resep Obat - {kunjungan?.profile?.name || "Tidak Ada Nama"}
         </Typography>
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className="mt-2 items-end">
@@ -135,6 +147,17 @@ const HasilPemeriksaan5Form = ({
                       </option>
                     ))}
                   </SelectInput>
+
+
+                  <Input
+                    id={`listKuantitasObat.${index}.tanggalKadaluarsa`}
+                    placeholder="Tanggal Kadaluarsa"
+                    label="Tanggal Kadaluarsa"
+                    value={methods.getValues(`listKuantitasObat.${index}.tanggalKadaluarsa`)} // ambil nilai tgl kadaluarsanya
+                    readOnly
+                  />
+
+                  
                   <Input
                     id={`listKuantitasObat.${index}.kuantitas`}
                     type="number"
@@ -166,6 +189,7 @@ const HasilPemeriksaan5Form = ({
                   namaObat: "",
                   kuantitas: 0,
                   petunjukPemakaian: "",
+                  tanggalKadaluarsa: "",
                 })
               }
               className="mb-4"
