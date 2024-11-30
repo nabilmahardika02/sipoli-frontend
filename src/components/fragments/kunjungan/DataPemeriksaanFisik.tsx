@@ -177,36 +177,36 @@ const DataPemeriksaanFisik = ({
                     id="suhu"
                     type="number"
                     placeholder="Temperature"
-                    label="Temperature"
+                    label="Temperature (°C)"
                   />
                   <Input
                     id="tensi"
                     placeholder="Blood Pressure"
-                    label="Blood Pressure"
+                    label="Blood Pressure (mmHg)"
                   />
                   <Input
                     id="meanArteri"
                     type="number"
                     placeholder="Mean Arterial Pressure"
-                    label="Mean Arterial Pressure"
+                    label="Mean Arterial Pressure (mmHg)"
                   />
                   <Input
                     id="respiratoryRate"
                     type="number"
                     placeholder="Respiratory Rate"
-                    label="Respiratory Rate"
+                    label="Respiratory Rate (per minute)"
                   />
                   <Input
                     id="heartRate"
                     type="number"
                     placeholder="Heart Rate"
-                    label="Heart Rate"
+                    label="Heart Rate (bpm)"
                   />
                   <Input
                     id="oxygenSaturation"
                     type="number"
                     placeholder="Oxygen Saturation"
-                    label="Oxygen Saturation"
+                    label="Oxygen Saturation (%)"
                   />
                   <Input
                     id="kesadaran"
@@ -227,9 +227,15 @@ const DataPemeriksaanFisik = ({
                     label="Motorik"
                   />
                 </div>
-                <Button type="submit" className="max-md:w-full">
-                  Simpan
-                </Button>
+                <div className="flex justify-center gap-2">
+                  <Button
+                    variant="danger"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Batal
+                  </Button>
+                  <Button type="submit">Simpan</Button>
+                </div>
               </form>
             </FormProvider>
           </div>

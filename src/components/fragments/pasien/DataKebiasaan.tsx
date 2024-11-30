@@ -149,28 +149,34 @@ const DataKebiasaan = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
                   <Input
                     id="olahraga"
-                    placeholder="Kebiasaan Olahraga"
-                    label="Kebiasaan Olahraga"
+                    placeholder="Olahraga"
+                    label="Olahraga"
                   />
                   <Input
                     id="merokok"
-                    placeholder="Kebiasaan Merokok"
-                    label="Kebiasaan Merokok"
+                    placeholder="Merokok"
+                    label="Merokok"
                   />
                   <Input
                     id="alkohol"
-                    placeholder="Kebiasaan Alkohol"
-                    label="Kebiasaan Alkohol"
+                    placeholder="Alkohol"
+                    label="Alkohol"
                   />
                   <Input
                     id="obatObatan"
-                    placeholder="Kebiasaan Obat-Obatan"
-                    label="Kebiasaan Obat-Obatan"
+                    placeholder="Obat-Obatan"
+                    label="Obat-Obatan"
                   />
                 </div>
-                <Button type="submit" className="max-md:w-full">
-                  Save
-                </Button>
+                <div className="flex justify-center gap-2">
+                  <Button
+                    variant="danger"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Batal
+                  </Button>
+                  <Button type="submit">Simpan</Button>
+                </div>
               </form>
             </FormProvider>
           </div>

@@ -16,6 +16,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import Breadcrumb from "@/components/elements/Breadcrumb";
 
 const HasilPemeriksaan1Form = ({
   hasilPemeriksaan,
@@ -82,9 +83,10 @@ const HasilPemeriksaan1Form = ({
 
   return (
     <section>
-      <Typography variant="h7" className="text-primary-1">
+      <Breadcrumb currentStep={1} totalSteps={6} />
+      {/* <Typography variant="h7" className="text-primary-1">
         Formulir 1
-      </Typography>
+      </Typography> */}
       <Divider weight="thin" className="my-5" />
       <Typography variant="h7" className="mt-5 text-primary-1">
         Data Kunjungan - {kunjungan.profile.name}

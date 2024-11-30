@@ -172,9 +172,15 @@ const DataStatusPresent = ({
                     label="Ekstremitas"
                   />
                 </div>
-                <Button type="submit" className="max-md:w-full">
-                  Simpan
-                </Button>
+                <div className="flex justify-center gap-2">
+                  <Button
+                    variant="danger"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Batal
+                  </Button>
+                  <Button type="submit">Simpan</Button>
+                </div>
               </form>
             </FormProvider>
           </div>

@@ -1,3 +1,4 @@
+import Breadcrumb from "@/components/elements/Breadcrumb";
 import Button from "@/components/elements/Button";
 import Divider from "@/components/elements/Divider";
 import Input from "@/components/elements/forms/Input";
@@ -60,9 +61,10 @@ const HasilPemeriksaan4Form = ({
 
   return (
     <section>
-      <Typography variant="h7" className="text-primary-1">
+      <Breadcrumb currentStep={4} totalSteps={6} />
+      {/* <Typography variant="h7" className="text-primary-1">
         Formulir 4
-      </Typography>
+      </Typography> */}
       <Divider weight="thin" className="my-5" />
       <Typography variant="h7" className="mt-5 text-primary-1">
         Diagnosa Akhir - {kunjungan.profile.name}

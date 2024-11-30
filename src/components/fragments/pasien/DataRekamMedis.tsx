@@ -74,7 +74,7 @@ const DataRekamMedis = ({
     onClick={() => setShowModal(true)}
     variant="primary"
   >
-    Ubah
+    Ubah Nomor Rekam Medis
   </Button>
 )}
         </div>
@@ -147,17 +147,25 @@ const DataRekamMedis = ({
             <FormProvider {...methods}>
               <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="mt-5 flex flex-col gap-2 items-end"
+                className="mt-5 items-end"
               >
+                <div className="grid grid-cols-1 gap-5 mb-4">
                 <Input
                   id="noRekamMedis"
                   placeholder="Nomor Rekam Medis"
-                  validation={{ required: "Wajib diisi" }}
+                  // validation={{ required: "Wajib diisi" }}
                   label="Nomor Rekam Medis"
                 />
-                <Button type="submit" className="max-md:w-full">
-                  Save
-                </Button>
+                </div>
+                <div className="flex justify-center gap-2">
+                  <Button
+                    variant="danger"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Batal
+                  </Button>
+                  <Button type="submit">Simpan</Button>
+                </div>
               </form>
             </FormProvider>
           </div>

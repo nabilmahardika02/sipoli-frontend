@@ -53,8 +53,8 @@ const DataRujukan = ({
 
   useEffect(() => {
     if (data) {
-      methods.setValue("dokterRujukan", data.tujuan);
-      methods.setValue("tujuanRujukan", data.dokter);
+      methods.setValue("dokterRujukan", data.dokter);
+      methods.setValue("tujuanRujukan", data.tujuan);
       methods.setValue("catatanRujukan", data.catatan);
     }
   }, [data, methods]);
@@ -146,15 +146,15 @@ const DataRujukan = ({
                 className="mt-5 items-end"
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
+                <Input
+                    id="tujuanRujukan"
+                    placeholder="Tujuan Rujukan"
+                    label="Tujuan Rujukan"
+                  />
                   <Input
                     id="dokterRujukan"
                     placeholder="Dokter Rujukan"
                     label="Dokter Rujukan"
-                  />
-                  <Input
-                    id="tujuanRujukan"
-                    placeholder="Tujuan Rujukan"
-                    label="Tujuan Rujukan"
                   />
                   <Input
                     id="catatanRujukan"
@@ -162,9 +162,9 @@ const DataRujukan = ({
                     label="Catatan"
                   />
                 </div>
-                <div className="flex justify-end gap-2">
+                <div className="flex justify-center gap-2">
                   <Button
-                    variant="secondary"
+                    variant="danger"
                     onClick={() => setShowModal(false)}
                   >
                     Batal
