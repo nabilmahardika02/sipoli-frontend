@@ -8,7 +8,7 @@ import sendRequest from "@/lib/getApi";
 import useAuthStore from "@/store/useAuthStore"; // supaya pasien & admin gak bisa edit
 import { StatusPresent } from "@/types/entities/kunjungan";
 import { UpdateStatusPresentForm } from "@/types/forms/hasilPemeriksaanForm";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { LuPencil } from "react-icons/lu";
 
@@ -29,20 +29,19 @@ const DataStatusPresent = ({
   const methods = useForm<UpdateStatusPresentForm>({
     mode: "onTouched",
   });
-  const { handleSubmit } = methods;
+  const { handleSubmit, reset } = methods;
 
-  const onSubmit: SubmitHandler<UpdateStatusPresentForm> = (data) => {
+  const onSubmit: SubmitHandler<UpdateStatusPresentForm> = (formData) => {
     const postData = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "put",
         `hasil-pemeriksaan/${idPemeriksaan}/status-present`,
-        data,
+        formData,
         true
       );
 
       if (isSuccess) {
         setShowModal(false);
-        methods.reset();
         setTrigger(!trigger);
       }
     };
@@ -50,19 +49,21 @@ const DataStatusPresent = ({
     postData();
   };
 
-  useEffect(() => {
-    if (data) {
-      methods.setValue("abd", data.abd);
-      methods.setValue("mata", data.mata);
-      methods.setValue("telinga", data.telinga);
-      methods.setValue("hidung", data.hidung);
-      methods.setValue("tonsil", data.tonsil);
-      methods.setValue("faring", data.faring);
-      methods.setValue("cor", data.cor);
-      methods.setValue("pulmo", data.pulmo);
-      methods.setValue("ext", data.ext);
-    }
-  }, [data, methods]);
+  const handleOpenModal = () => {
+    // Reset form values to the original data
+    reset({
+      mata: data.mata || "",
+      telinga: data.telinga || "",
+      hidung: data.hidung || "",
+      tonsil: data.tonsil || "",
+      faring: data.faring || "",
+      cor: data.cor || "",
+      pulmo: data.pulmo || "",
+      abd: data.abd || "",
+      ext: data.ext || "",
+    });
+    setShowModal(true);
+  };
 
   return (
     <div>
@@ -76,7 +77,7 @@ const DataStatusPresent = ({
           <IconButton
             icon={LuPencil}
             variant="primary"
-            onClick={() => setShowModal(true)}
+            onClick={handleOpenModal} // Use the handleOpenModal function
           />
         )}
       </div>

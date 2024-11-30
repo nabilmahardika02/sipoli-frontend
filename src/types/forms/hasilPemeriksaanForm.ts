@@ -5,14 +5,14 @@ export type RujukanForm = {
 };
 
 // baru
-export type KuantitasObatRequest = {
+export interface KuantitasObatRequest {
   obatId: string;
-  namaObat: string; // Tambahkan namaObat di sini
+  namaObat: string;
   kuantitas: number;
   petunjukPemakaian: string;
   tanggalKadaluarsa: string;
-};
-// baru
+  jenisSatuan: string; // Tambahkan properti ini
+}
 
 export type ResepObatRujukanForm = {
   deskripsi: string;

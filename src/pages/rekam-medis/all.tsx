@@ -69,13 +69,17 @@ const RekamMedisPage = () => {
 
   return (
     <main>
-      <section className="mt-5">
+      <section className="w-full">
+      <div className="flex items-center justify-between mb-4">
+        <Typography variant="h6" className=" text-primary-1">
+          Daftar Rekam Medis Pasien 
+        </Typography>
+        </div>
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className="my-5">
             <div className="flex justify-center items-center max-md:flex-wrap gap-y-1 gap-x-2">
               <SelectInput
                 id="profileId"
-                label="Pilih Profil Pasien"
                 {...methods.register("profileId", {
                   required: "Profil harus dipilih",
                 })}
@@ -94,7 +98,6 @@ const RekamMedisPage = () => {
                 icon={FaSearch}
                 type="submit"
                 size="lg"
-                className="md:place-self-end max-md:mt-4"
               />
             </div>
           </form>

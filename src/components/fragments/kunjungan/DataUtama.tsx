@@ -28,20 +28,19 @@ const DataUtama = ({
   const methods = useForm<UpdateHasilKunjunganForm>({
     mode: "onTouched",
   });
-  const { handleSubmit } = methods;
+  const { handleSubmit, reset } = methods;
 
-  const onSubmit: SubmitHandler<UpdateHasilKunjunganForm> = (data) => {
+  const onSubmit: SubmitHandler<UpdateHasilKunjunganForm> = (formData) => {
     const postData = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "put",
         `hasil-pemeriksaan/${idPemeriksaan}/basic-info`,
-        data,
+        formData,
         true
       );
 
       if (isSuccess) {
         setShowModal(false);
-        methods.reset();
         setTrigger(!trigger);
       }
     };
@@ -49,12 +48,14 @@ const DataUtama = ({
     postData();
   };
 
-  useEffect(() => {
-    if (data) {
-      methods.setValue("keluhanUtama", data.keluhanUtama);
-      methods.setValue("riwayatPenyakitSekarang", data.riwayatPenyakitSekarang);
-    }
-  }, [data, methods]);
+  // Reset form values when modal is opened
+  const handleOpenModal = () => {
+    reset({
+      keluhanUtama: data.keluhanUtama || "",
+      riwayatPenyakitSekarang: data.riwayatPenyakitSekarang || "",
+    });
+    setShowModal(true);
+  };
 
   return (
     <div>
@@ -67,7 +68,7 @@ const DataUtama = ({
           <IconButton
             icon={LuPencil}
             variant="primary"
-            onClick={() => setShowModal(true)}
+            onClick={handleOpenModal} // Use the new handleOpenModal function
           />
         )}
       </div>
