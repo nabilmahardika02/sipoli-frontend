@@ -16,6 +16,7 @@ import {
 import sendRequest from "@/lib/getApi";
 import { Kunjungan } from "@/types/entities/kunjungan";
 import { UpdateKunjunganForm } from "@/types/forms/kunjunganForm";
+import dayjs from "dayjs";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -49,7 +50,6 @@ const KunjunganUpdatePage = () => {
 
       if (isSuccess) {
         setKunjungan(responseData as Kunjungan);
-        console.log(responseData);
       }
     };
 
@@ -75,6 +75,9 @@ const KunjunganUpdatePage = () => {
       setSelectedSesi(kunjungan.antrian.sesi.toString());
 
       const date = new Date(formatToDateInputValue(kunjungan.tanggal));
+      if (date.getDay() === 0) {
+        methods.setValue("jamMasuk", dayjs(kunjungan.tanggalPeriksa));
+      }
       if (date.getDay() !== 0 && date.getDay() !== 6) {
         setShowAntrianInfo(true);
       }
@@ -88,18 +91,30 @@ const KunjunganUpdatePage = () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "put",
         `kunjungan/update`,
-
         showInformationSunday
-          ? { ...data, jamMasuk: formatTimeDayjs(data.jamMasuk) }
-          : { ...data, id: router.query.id },
+          ? {
+              ...data,
+              jamMasuk: formatTimeDayjs(data.jamMasuk),
+              id: router.query.id,
+            }
+          : { ...data, id: router.query.id, jamMasuk: null },
         true
       );
 
       if (isSuccess) {
-        router.push("/home");
+        router.push("/kunjungan/" + router.query.id);
       }
     };
 
+    console.log(
+      showInformationSunday
+        ? {
+            ...data,
+            jamMasuk: formatTimeDayjs(data.jamMasuk),
+            id: router.query.id,
+          }
+        : { ...data, id: router.query.id }
+    );
     postData();
   };
 
@@ -224,7 +239,7 @@ const KunjunganUpdatePage = () => {
                   maxLength={255}
                   validation={{ required: "Mohon beri tahu keluhan Anda" }}
                 />
-                
+
                 {showAntrianInfo && antrianInfo != null && (
                   <Typography
                     variant="p2"
@@ -244,7 +259,7 @@ const KunjunganUpdatePage = () => {
               </div>
               <div className="mt-5 flex items-center gap-4">
                 <Button type="submit">Perbarui</Button>
-                <Link href={"/home"}>
+                <Link href={"/kunjungan/" + router.query.id}>
                   <Button variant="danger">Batal</Button>
                 </Link>
               </div>

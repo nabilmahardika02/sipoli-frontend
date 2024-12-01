@@ -32,8 +32,6 @@ const UpdateStatusModal = ({
       updatedStatus = kunjungan.status;
     }
 
-    console.log(updatedStatus);
-
     const fetchKunjungans = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "put",

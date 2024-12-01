@@ -2,6 +2,7 @@ import Button from "@/components/elements/Button";
 import Input from "@/components/elements/forms/Input";
 import RadioButtonGroup from "@/components/elements/forms/RadioButtonGroup";
 import SelectInput from "@/components/elements/forms/SelectInput";
+import TextArea from "@/components/elements/forms/TextArea";
 import Typography from "@/components/elements/Typography";
 import withAuth from "@/components/hoc/withAuth";
 import { jenisKelamin } from "@/content/gender";
@@ -134,7 +135,7 @@ const RegisterPage = () => {
                 label="Tanggal Lahir"
               />
               {isPasien && (
-                <Input
+                <TextArea
                   id="alamat"
                   placeholder="Alamat"
                   validation={{ required: "Alamat wajib diisi" }}
