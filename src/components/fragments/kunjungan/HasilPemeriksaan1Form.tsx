@@ -42,6 +42,25 @@ const HasilPemeriksaan1Form = ({
 
   const { handleSubmit } = methods;
 
+  // Function to combine date from kunjungan with current time
+  const getDefaultTanggalPeriksa = () => {
+    const currentDate = new Date(); // Current date and time
+    const kunjunganDate = new Date(kunjungan.tanggal); // Tanggal kunjungan
+
+    // Combine kunjungan date with current time
+    kunjunganDate.setHours(currentDate.getHours());
+    kunjunganDate.setMinutes(currentDate.getMinutes());
+
+    // Format to `yyyy-MM-ddTHH:mm` (datetime-local format)
+    const year = kunjunganDate.getFullYear();
+    const month = String(kunjunganDate.getMonth() + 1).padStart(2, "0"); // Bulan 0-based, tambahkan leading zero
+    const day = String(kunjunganDate.getDate()).padStart(2, "0");
+    const hours = String(kunjunganDate.getHours()).padStart(2, "0");
+    const minutes = String(kunjunganDate.getMinutes()).padStart(2, "0");
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+
   useEffect(() => {
     if (hasilPemeriksaan) {
       methods.setValue("dokter", hasilPemeriksaan.dokter);
@@ -50,9 +69,12 @@ const HasilPemeriksaan1Form = ({
         "riwayatPenyakitSekarang",
         hasilPemeriksaan.riwayatPenyakitSekarang
       );
-      methods.setValue("tanggalPeriksa", hasilPemeriksaan.tanggalPeriksa);
+      methods.setValue(
+        "tanggalPeriksa",
+        hasilPemeriksaan.tanggalPeriksa || getDefaultTanggalPeriksa()
+      );
     }
-  }, [hasilPemeriksaan, methods]);
+  }, [hasilPemeriksaan, methods, kunjungan.tanggal]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,9 +106,6 @@ const HasilPemeriksaan1Form = ({
   return (
     <section>
       <Breadcrumb currentStep={1} totalSteps={6} />
-      {/* <Typography variant="h7" className="text-primary-1">
-        Formulir 1
-      </Typography> */}
       <Divider weight="thin" className="my-5" />
       <Typography variant="h7" className="mt-5 text-primary-1">
         Data Kunjungan - {kunjungan.profile.name}
@@ -116,9 +135,7 @@ const HasilPemeriksaan1Form = ({
                 type="datetime-local"
                 placeholder="Tanggal Periksa"
                 label="Tanggal Periksa"
-                defaultValue={new Date(kunjungan.tanggalPeriksa)
-                  .toISOString()
-                  .slice(0, 16)}
+                defaultValue={getDefaultTanggalPeriksa()} // Default to kunjungan date + current time
                 {...methods.register("tanggalPeriksa")}
               />
               <Input

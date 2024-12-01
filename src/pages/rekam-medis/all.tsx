@@ -57,15 +57,18 @@ const RekamMedisPage = () => {
         "get",
         `kunjungan/all?profileId=${data.profileId}&hasRekamMedis=true`
       );
-
+  
       if (isSuccess) {
+        const filteredKunjungans = (responseData as Kunjungan[]).filter(
+          (kunjungan) => kunjungan.status === 2
+        );
         setSelectedProfile(data.profileId);
-        setKunjungans(responseData as Kunjungan[]);
+        setKunjungans(filteredKunjungans);
       }
     };
-
+  
     fetchData();
-  };
+  };  
 
   return (
     <main>
