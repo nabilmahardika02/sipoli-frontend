@@ -9,7 +9,14 @@ type AppShellProps = {
   children: React.ReactNode;
 };
 
-const disableNav = ["/404", "/403", "/500", "/login", "/notifikasi", "/kunjungan/surat-izin/[id]"];
+const disableNav = [
+  "/404",
+  "/403",
+  "/500",
+  "/login",
+  "/notifikasi",
+  "/kunjungan/surat-izin/[id]",
+];
 
 const AppShell = (props: AppShellProps) => {
   const { title } = useDocumentTitle();
@@ -33,7 +40,7 @@ const AppShell = (props: AppShellProps) => {
       <div className="md:flex md:flex-row-reverse">
         {!disable && (
           <>
-            <DesktopSideNavbar className="hidden md:block" />
+            <DesktopSideNavbar className="max-md:hidden" />
             <MobileNav className="flex md:hidden" />
           </>
         )}
