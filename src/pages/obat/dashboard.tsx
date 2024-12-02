@@ -1,5 +1,7 @@
 import StatisticPemakaianByObat from "@/components/fragments/dashboard/StatisticPemakaianByObat";
 import StatisticPemakaianObatByMonth from "@/components/fragments/dashboard/StatisticPemakaianObat";
+import StatisticRestockPrice from "@/components/fragments/dashboard/StatisticRestockPrice";
+import StatisticTopRestock from "@/components/fragments/dashboard/StatisticTopRestock";
 import withAuth from "@/components/hoc/withAuth";
 import { useDocumentTitle } from "@/context/Title";
 import { checkRole } from "@/lib/checkRole";
@@ -44,6 +46,8 @@ const DashboardObatPage = () => {
       </Head>
       <StatisticPemakaianObatByMonth className="md:col-span-2" />
       <StatisticPemakaianByObat className="md:col-span-2" obatList={obatList} />
+      <StatisticTopRestock />
+      <StatisticRestockPrice obatList={obatList}/>
     </main>
   );
 };

@@ -1,8 +1,8 @@
 import SelectInput from "@/components/elements/forms/SelectInput";
 import { LoadingDiv } from "@/components/elements/Loading";
 import Typography from "@/components/elements/Typography";
-import { months } from "@/content/date";
 import clsxm from "@/lib/clsxm";
+import { formatDateWithoutDays, getCurrency } from "@/lib/formater";
 import sendRequest from "@/lib/getApi";
 import { Obat } from "@/types/entities/obat";
 import { GeneralStatistic } from "@/types/entities/statistic";
@@ -12,15 +12,13 @@ import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import NoDataState from "./NoDataState";
 
-const StatisticPemakaianByObat = ({
+const StatisticRestockPrice = ({
   className = "",
   obatList,
 }: {
   className?: string;
   obatList: Obat[] | undefined;
 }) => {
-  const [year, setYear] = useState(2024);
-  const [month, setMonth] = useState(12);
   const [selectedObat, setSelectedObat] = useState<string>();
 
   const [labels, setLabels] = useState<string[]>();
@@ -35,36 +33,30 @@ const StatisticPemakaianByObat = ({
     const fetchData = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "get",
-        `statistic/obat/pemakaian-by-obat?year=${year}&month=${month}&idObat=${selectedObat}`
+        `statistic/obat/restock-history?idObat=${selectedObat}`
       );
 
       if (isSuccess) {
         const data = responseData as GeneralStatistic[];
         setLabels(data.map((item) => item.label));
         setValues(data.map((item) => item.amount));
-        setNoData(data.every((item) => item.amount === 0));
+        setNoData(data.length == 0);
       }
     };
 
     if (selectedObat) {
       fetchData();
     }
-  }, [year, month, selectedObat]);
+  }, [selectedObat]);
 
   const setSelectedObatChange = (event: { target: { value: string } }) => {
     setSelectedObat(event.target.value);
-  };
-  const setSelectedYear = (event: { target: { value: number } }) => {
-    setYear(event.target.value);
-  };
-  const setSelectedMonth = (event: { target: { value: number } }) => {
-    setMonth(event.target.value);
   };
 
   return (
     <section className={clsxm("data-section", className)}>
       <Typography variant="h6" className="text-primary-1">
-        Jumlah Pemakaian Obat Berdasarkan Jenis Obat
+        Riwayat Harga Beli Satuan Obat
       </Typography>
       {obatList ? (
         <>
@@ -75,49 +67,11 @@ const StatisticPemakaianByObat = ({
                 label="Obat"
                 placeholder="Pilih Obat"
                 className="md:rounded-full text-center"
-                parentClassName="md:w-[25%]"
                 onChange={setSelectedObatChange}
               >
                 {obatList.map((obat) => (
                   <option key={obat.id} value={obat.id} className="text-center">
                     {obat.namaObat}
-                  </option>
-                ))}
-              </SelectInput>
-              <SelectInput
-                id="year"
-                label="Tahun"
-                className="md:rounded-full"
-                parentClassName="md:w-[25%]"
-                //@ts-ignore
-                onChange={setSelectedYear}
-              >
-                <option value="2024" className="text-center">
-                  2024
-                </option>
-                <option value="2023" className="text-center">
-                  2023
-                </option>
-                <option value="2022" className="text-center">
-                  2022
-                </option>
-              </SelectInput>
-              <SelectInput
-                id="bulan"
-                label="Bulan"
-                className="md:rounded-full"
-                parentClassName="md:w-[25%]"
-                //@ts-ignore
-                onChange={setSelectedMonth}
-                defaultValue={12}
-              >
-                {months.map((month) => (
-                  <option
-                    key={month.index}
-                    value={month.index}
-                    className="text-center"
-                  >
-                    {month.month}
                   </option>
                 ))}
               </SelectInput>
@@ -127,32 +81,31 @@ const StatisticPemakaianByObat = ({
             !noData ? (
               <div className="flex flex-col justify-center overflow-x-auto">
                 <LineChart
-                  margin={{ left: 60 }}
-                  width={1050}
+                  margin={{ left: 80 }}
+                  width={550}
                   height={400}
                   series={[
                     {
                       curve: "linear",
                       data: values,
-                      label: "Jumlah Obat Dipakai",
-                      showMark: false,
+                      label: "Harga Beli Satuan",
+                      showMark: true,
                       color: "#296a91",
+                      //@ts-ignore
+                      valueFormatter: (v) => getCurrency(v),
                     },
                   ]}
                   yAxis={[
                     {
-                      label: "Jumlah Obat Dipakai",
+                      label: "Harga Beli Satuan",
                     },
                   ]}
                   xAxis={[
                     {
                       scaleType: "point",
                       data: labels,
-                      label: "Rentang tanggal pada bulan terpilih",
-                      valueFormatter: (v) => {
-                        const tempLabel = v.split(" ");
-                        return `${tempLabel[1]}` || v;
-                      },
+                      label: "Tanggal Pembelian",
+                      valueFormatter: (v) => formatDateWithoutDays(v),
                     },
                   ]}
                   sx={{
@@ -160,14 +113,17 @@ const StatisticPemakaianByObat = ({
                       display: "ruby-base",
                     },
                     [`.${axisClasses.left} .${axisClasses.label}`]: {
-                      transform: "translate(-10px, 0)",
+                      transform: "translate(-30px, 0)",
                     },
                   }}
                   grid={{ vertical: true, horizontal: true }}
                 />
               </div>
             ) : (
-              <NoDataState />
+              <NoDataState
+                msg="Belum ada riwayat pembelian"
+                className="h-full"
+              />
             )
           ) : (
             <div className="w-full flex justify-center items-center">
@@ -185,4 +141,4 @@ const StatisticPemakaianByObat = ({
   );
 };
 
-export default StatisticPemakaianByObat;
+export default StatisticRestockPrice;
