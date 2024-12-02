@@ -12,7 +12,7 @@ import { FormProvider, useForm } from "react-hook-form";
 const StatisticRujukan = ({ className = "" }: { className?: string }) => {
   const [data, setData] = useState<RujukanStatistic[]>();
   const [periode, setPeriode] = useState("bulanan");
-  const [month, setMonth] = useState(1);
+  const [month, setMonth] = useState(12);
 
   const methods = useForm<{}>({
     mode: "onTouched",
@@ -78,6 +78,7 @@ const StatisticRujukan = ({ className = "" }: { className?: string }) => {
               parentClassName="md:w-[50%]"
               //@ts-ignore
               onChange={setSelectedMonth}
+              defaultValue={12}
             >
               <option value="1" className="text-center">
                 Januari

@@ -18,8 +18,13 @@ const chartSetting = {
   },
 };
 
-const StatisticSesi = ({ className = "" }: { className?: string }) => {
+const StatisticPemakaianObatByMonth = ({
+  className = "",
+}: {
+  className?: string;
+}) => {
   const [month, setMonth] = useState(12);
+  const [year, setYear] = useState(2024);
 
   const [data, setData] = useState<GeneralStatistic[]>();
   const [labels, setLabels] = useState<string[]>();
@@ -30,7 +35,7 @@ const StatisticSesi = ({ className = "" }: { className?: string }) => {
     const fetchData = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "get",
-        `statistic/kunjungan/by-sesi?month=${month}`
+        `statistic/obat/per-month?year=${year}&month=${month}`
       );
 
       if (isSuccess) {
@@ -43,12 +48,15 @@ const StatisticSesi = ({ className = "" }: { className?: string }) => {
     };
 
     fetchData();
-  }, [month]);
+  }, [month, year]);
 
   const methods = useForm<{}>({
     mode: "onTouched",
   });
 
+  const setSelectedYear = (event: { target: { value: number } }) => {
+    setYear(event.target.value);
+  };
   const setSelectedMonth = (event: { target: { value: number } }) => {
     setMonth(event.target.value);
   };
@@ -56,16 +64,33 @@ const StatisticSesi = ({ className = "" }: { className?: string }) => {
   return (
     <section className={clsxm("data-section", className)}>
       <Typography variant="h6" className="text-primary-1">
-        Jumlah Kunjungan Berdasarkan Sesi
-      </Typography>
-      <Typography variant="p2" className="text-gray-400 font-medium mt-2">
-        Data kunjungan pada tahun ini
+        Jumlah Pemakaian Obat per Bulan
       </Typography>
       <FormProvider {...methods}>
         <form className="w-full flex flex-col md:flex-row items-center justify-start gap-5 my-4">
+        <SelectInput
+            id="year"
+            label="Tahun"
+            className="md:rounded-full"
+            parentClassName="md:w-[25%]"
+            //@ts-ignore
+            onChange={setSelectedYear}
+          >
+            <option value="2024" className="text-center">
+              2024
+            </option>
+            <option value="2023" className="text-center">
+              2023
+            </option>
+            <option value="2022" className="text-center">
+              2022
+            </option>
+          </SelectInput>
           <SelectInput
             id="bulan"
+            label="Bulan"
             className="md:rounded-full"
+             parentClassName="md:w-[25%]"
             //@ts-ignore
             onChange={setSelectedMonth}
             defaultValue={12}
@@ -115,19 +140,23 @@ const StatisticSesi = ({ className = "" }: { className?: string }) => {
             <BarChart
               yAxis={[
                 {
-                  label: "Jumlah Kunjungan",
+                  label: "Total Obat Dipakai",
                 },
               ]}
               xAxis={[
                 {
                   scaleType: "band",
                   data: labels,
+                  tickLabelStyle: {
+                    angle: -20,
+                    textAnchor: "end",
+                  },
                 },
               ]}
               series={[{ data: values }]}
-              width={500}
+              width={1000}
               height={350}
-              colors={["#0f75bc"]}
+              colors={["#475FB8"]}
               grid={{ vertical: true, horizontal: true }}
               {...chartSetting}
             />
@@ -142,4 +171,4 @@ const StatisticSesi = ({ className = "" }: { className?: string }) => {
   );
 };
 
-export default StatisticSesi;
+export default StatisticPemakaianObatByMonth;
