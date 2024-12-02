@@ -4,7 +4,7 @@ import IconButton from "@/components/elements/IconButton";
 import Typography from "@/components/elements/Typography";
 import ModalLayout from "@/components/layouts/ModalLayout";
 import sendRequest from "@/lib/getApi";
-import useAuthStore from "@/store/useAuthStore"; // supaya pasien & admin gak bisa edit
+import useAuthStore from "@/store/useAuthStore";
 import { HasilPemeriksaan } from "@/types/entities/kunjungan";
 import { UpdateHasilKunjunganForm } from "@/types/forms/hasilPemeriksaanForm";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
@@ -22,26 +22,25 @@ const DataUtama = ({
   trigger: boolean;
   setTrigger: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const user = useAuthStore.useUser(); // supaya pasien & admin gak bisa edit
+  const user = useAuthStore.useUser();
   const [showModal, setShowModal] = useState(false);
 
   const methods = useForm<UpdateHasilKunjunganForm>({
     mode: "onTouched",
   });
-  const { handleSubmit } = methods;
+  const { handleSubmit, reset } = methods;
 
-  const onSubmit: SubmitHandler<UpdateHasilKunjunganForm> = (data) => {
+  const onSubmit: SubmitHandler<UpdateHasilKunjunganForm> = (formData) => {
     const postData = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "put",
         `hasil-pemeriksaan/${idPemeriksaan}/basic-info`,
-        data,
+        formData,
         true
       );
 
       if (isSuccess) {
         setShowModal(false);
-        methods.reset();
         setTrigger(!trigger);
       }
     };
@@ -49,13 +48,14 @@ const DataUtama = ({
     postData();
   };
 
-  useEffect(() => {
-    if (data) {
-      methods.setValue("keluhanUtama", data.keluhanUtama);
-      methods.setValue("riwayatPenyakitSekarang", data.riwayatPenyakitSekarang);
-      methods.setValue("kie", data.kie);
-    }
-  }, [data, methods]);
+  // Reset form values when modal is opened
+  const handleOpenModal = () => {
+    reset({
+      keluhanUtama: data.keluhanUtama || "",
+      riwayatPenyakitSekarang: data.riwayatPenyakitSekarang || "",
+    });
+    setShowModal(true);
+  };
 
   return (
     <div>
@@ -68,7 +68,7 @@ const DataUtama = ({
           <IconButton
             icon={LuPencil}
             variant="primary"
-            onClick={() => setShowModal(true)}
+            onClick={handleOpenModal} // Use the new handleOpenModal function
           />
         )}
       </div>
@@ -88,12 +88,6 @@ const DataUtama = ({
           <Typography className="text-primary-1">
             {data.riwayatPenyakitSekarang || "-"}
           </Typography>
-        </div>
-        <div>
-          <Typography variant="p2" weight="semibold" className="text-gray-400">
-            Komunikasi Informasi dan Edukasi
-          </Typography>
-          <Typography className="text-primary-1">{data.kie || "-"}</Typography>
         </div>
       </div>
       {showModal && (
@@ -118,15 +112,16 @@ const DataUtama = ({
                     placeholder="Riwayat Keluhan / Penyakit Saat Ini"
                     label="Riwayat Keluhan / Penyakit Saat Ini"
                   />
-                  <Input
-                    id="kie"
-                    placeholder="Komunikasi Informasi dan Edukasi"
-                    label="Komunikasi Informasi dan Edukasi"
-                  />
                 </div>
-                <Button type="submit" className="max-md:w-full">
-                  Simpan
-                </Button>
+                <div className="flex justify-center gap-2">
+                  <Button
+                    variant="danger"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Batal
+                  </Button>
+                  <Button type="submit">Simpan</Button>
+                </div>
               </form>
             </FormProvider>
           </div>

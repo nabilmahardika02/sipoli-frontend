@@ -1,3 +1,4 @@
+import Breadcrumb from "@/components/elements/Breadcrumb";
 import Button from "@/components/elements/Button";
 import Divider from "@/components/elements/Divider";
 import Input from "@/components/elements/forms/Input";
@@ -75,10 +76,8 @@ const HasilPemeriksaan3Form = ({
 
   return (
     <section>
-      <Typography variant="h7" className="text-primary-1">
-        Formulir 3
-      </Typography>
-      <Divider></Divider>
+      <Breadcrumb currentStep={3} totalSteps={6} />
+      <Divider weight="thin" className="my-5" />
       <Typography variant="h7" className="mt-5 text-primary-1">
         Status Present - {kunjungan.profile.name}
       </Typography>

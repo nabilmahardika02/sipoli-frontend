@@ -73,18 +73,14 @@ const KunjunganPage = () => {
               {(user?.role === "DOKTER" || user?.role === "PERAWAT") &&
               !kunjungan.hasilPemeriksaan &&
               kunjungan.status < 3 ? (
-                <Link
-                  href={`/kunjungan/hasil-pemeriksaan/tambah/${kunjungan.id}`}
-                  className="w-full flex flex-col items-center py-8 mt-3 group"
+                <div className="w-full flex justify-center rounded-lg border border-gray-300 py-8 mt-3">
+                <Typography
+                  variant="h7"
+                  className="text-gray-400 mt-2 mb-2 group-hover:text-gray-500"
                 >
-                  <FaCirclePlus className="text-gray-400 text-3xl group-hover:text-gray-500" />
-                  <Typography
-                    variant="h7"
-                    className="text-gray-400 mt-4 group-hover:text-gray-500"
-                  >
-                    Tambah Hasil Pemeriksaan
-                  </Typography>
-                </Link>
+                  Belum Ada Hasil Pemeriksaan
+                </Typography>
+              </div>
               ) : (
                 <DataHasilPemeriksaan
                   data={kunjungan.hasilPemeriksaan}
