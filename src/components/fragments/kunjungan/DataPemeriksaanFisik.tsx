@@ -29,20 +29,19 @@ const DataPemeriksaanFisik = ({
   const methods = useForm<UpdatePemeriksaanFisikForm>({
     mode: "onTouched",
   });
-  const { handleSubmit } = methods;
+  const { handleSubmit, reset } = methods;
 
-  const onSubmit: SubmitHandler<UpdatePemeriksaanFisikForm> = (data) => {
+  const onSubmit: SubmitHandler<UpdatePemeriksaanFisikForm> = (formData) => {
     const postData = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "put",
         `hasil-pemeriksaan/${idPemeriksaan}/pemeriksaan-fisik`,
-        data,
+        formData,
         true
       );
 
       if (isSuccess) {
         setShowModal(false);
-        methods.reset();
         setTrigger(!trigger);
       }
     };
@@ -50,24 +49,25 @@ const DataPemeriksaanFisik = ({
     postData();
   };
 
-  useEffect(() => {
-    if (data) {
-      methods.setValue("tensi", data.tensi);
-      methods.setValue("suhu", data.suhu);
-      methods.setValue("meanArteri", data.meanArteri);
-      methods.setValue("respiratoryRate", data.respiratoryRate);
-      methods.setValue("heartRate", data.heartRate);
-      methods.setValue("oxygenSaturation", data.oxygenSaturation);
-      methods.setValue("kesadaran", data.kesadaran);
-      methods.setValue("eye", data.eye);
-      methods.setValue("verbal", data.verbal);
-      methods.setValue("motorik", data.motorik);
-    }
-  }, [data, methods]);
+  const handleOpenModal = () => {
+    reset({
+      tensi: data.tensi || "", // tetap string karena format tensi bukan angka
+      suhu: data.suhu ?? undefined, // gunakan undefined untuk field number jika tidak ada nilai
+      meanArteri: data.meanArteri ?? undefined,
+      respiratoryRate: data.respiratoryRate ?? undefined,
+      heartRate: data.heartRate ?? undefined,
+      oxygenSaturation: data.oxygenSaturation ?? undefined,
+      kesadaran: data.kesadaran || "",
+      eye: data.eye ?? undefined,
+      verbal: data.verbal ?? undefined,
+      motorik: data.motorik ?? undefined,
+    });
+    setShowModal(true);
+  };  
 
   return (
     <div>
-    <Divider weight="thin" className="my-5" />  
+      <Divider weight="thin" className="my-5" />
       <div className="mt-5 flex items-center gap-2">
         <div className="w-1 h-5 bg-primary-1"></div>
         <Typography className="text-primary-1 font-semibold">
@@ -77,7 +77,7 @@ const DataPemeriksaanFisik = ({
           <IconButton
             icon={LuPencil}
             variant="primary"
-            onClick={() => setShowModal(true)}
+            onClick={handleOpenModal} // Use the new handleOpenModal function
           />
         )}
       </div>
@@ -87,7 +87,7 @@ const DataPemeriksaanFisik = ({
             Temperature
           </Typography>
           <Typography className="text-primary-1">
-            {data.suhu + "°C" || "-"}
+            {data.suhu ? `${data.suhu}°C` : "-"}
           </Typography>
         </div>
         <div>
@@ -103,7 +103,7 @@ const DataPemeriksaanFisik = ({
             Mean Arterial Pressure
           </Typography>
           <Typography className="text-primary-1">
-            {data.meanArteri + "mmHg" || "-"}
+            {data.meanArteri ? `${data.meanArteri} mmHg` : "-"}
           </Typography>
         </div>
         <div>
@@ -111,7 +111,7 @@ const DataPemeriksaanFisik = ({
             Respiratory Rate
           </Typography>
           <Typography className="text-primary-1">
-            {data.respiratoryRate + "/menit" || "-"}
+            {data.respiratoryRate ? `${data.respiratoryRate}/menit` : "-"}
           </Typography>
         </div>
         <div>
@@ -119,7 +119,7 @@ const DataPemeriksaanFisik = ({
             Heart Rate
           </Typography>
           <Typography className="text-primary-1">
-            {data.heartRate + "bpm" || "-"}
+            {data.heartRate ? `${data.heartRate} bpm` : "-"}
           </Typography>
         </div>
         <div>
@@ -127,7 +127,7 @@ const DataPemeriksaanFisik = ({
             Oxygen Saturation
           </Typography>
           <Typography className="text-primary-1">
-            {data.oxygenSaturation + "%" || "-"}
+            {data.oxygenSaturation ? `${data.oxygenSaturation}%` : "-"}
           </Typography>
         </div>
         <div>
@@ -177,36 +177,36 @@ const DataPemeriksaanFisik = ({
                     id="suhu"
                     type="number"
                     placeholder="Temperature"
-                    label="Temperature"
+                    label="Temperature (°C)"
                   />
                   <Input
                     id="tensi"
                     placeholder="Blood Pressure"
-                    label="Blood Pressure"
+                    label="Blood Pressure (mmHg)"
                   />
                   <Input
                     id="meanArteri"
                     type="number"
                     placeholder="Mean Arterial Pressure"
-                    label="Mean Arterial Pressure"
+                    label="Mean Arterial Pressure (mmHg)"
                   />
                   <Input
                     id="respiratoryRate"
                     type="number"
                     placeholder="Respiratory Rate"
-                    label="Respiratory Rate"
+                    label="Respiratory Rate (per minute)"
                   />
                   <Input
                     id="heartRate"
                     type="number"
                     placeholder="Heart Rate"
-                    label="Heart Rate"
+                    label="Heart Rate (bpm)"
                   />
                   <Input
                     id="oxygenSaturation"
                     type="number"
                     placeholder="Oxygen Saturation"
-                    label="Oxygen Saturation"
+                    label="Oxygen Saturation (%)"
                   />
                   <Input
                     id="kesadaran"
@@ -227,9 +227,15 @@ const DataPemeriksaanFisik = ({
                     label="Motorik"
                   />
                 </div>
-                <Button type="submit" className="max-md:w-full">
-                  Simpan
-                </Button>
+                <div className="flex justify-center gap-2">
+                  <Button
+                    variant="danger"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Batal
+                  </Button>
+                  <Button type="submit">Simpan</Button>
+                </div>
               </form>
             </FormProvider>
           </div>

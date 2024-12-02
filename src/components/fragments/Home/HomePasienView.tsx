@@ -33,6 +33,7 @@ const HomePasienView = () => {
       if (isSuccess) {
         const data = responseData as Profile[];
         setProfiles(data);
+        setProfile(data[0]);
       }
     };
 
@@ -114,7 +115,6 @@ const HomePasienView = () => {
           <SelectInput
             id="profileId"
             onChange={handleProfile}
-            placeholder="Pilih Profil"
           >
             {profiles.map((profile) => (
               <option key={profile.id} value={profile.id}>

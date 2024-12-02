@@ -47,13 +47,17 @@ const sendRequest = async <T>(
     dismissLoadingToast();
 
     if (error instanceof AxiosError) {
-      showToast(
-        error.response?.data.message || "Service unavailable",
-        DANGER_TOAST
-      );
+      if (url !== "notifikasi/is-exist") {
+        showToast(
+          error.response?.data.message || "Service unavailable",
+          DANGER_TOAST
+        );
+      }
       return ["", error.response?.data.message, false];
     } else {
-      showToast("Terjadi kesalahan", DANGER_TOAST);
+      if (url !== "notifikasi/is-exist") {
+        showToast("Terjadi kesalahan", DANGER_TOAST);
+      }
       return ["", "Terjadi kesalahan", false];
     }
   }

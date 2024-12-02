@@ -8,7 +8,7 @@ import sendRequest from "@/lib/getApi";
 import useAuthStore from "@/store/useAuthStore"; // supaya pasien & admin gak bisa edit
 import { Rujukan } from "@/types/entities/kunjungan";
 import { UpdateRujukanForm } from "@/types/forms/hasilPemeriksaanForm";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { LuPencil } from "react-icons/lu";
 
@@ -30,20 +30,19 @@ const DataRujukan = ({
     mode: "onTouched",
   });
 
-  const { handleSubmit } = methods;
+  const { handleSubmit, reset } = methods;
 
-  const onSubmit: SubmitHandler<UpdateRujukanForm> = (data) => {
+  const onSubmit: SubmitHandler<UpdateRujukanForm> = (formData) => {
     const postData = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "put",
         `hasil-pemeriksaan/${idPemeriksaan}/rujukan`,
-        data,
+        formData,
         true
       );
 
       if (isSuccess) {
         setShowModal(false);
-        methods.reset();
         setTrigger(!trigger);
       }
     };
@@ -51,79 +50,45 @@ const DataRujukan = ({
     postData();
   };
 
-  useEffect(() => {
-    if (data) {
-      methods.setValue("dokterRujukan", data.tujuan);
-      methods.setValue("tujuanRujukan", data.dokter);
-      methods.setValue("catatanRujukan", data.catatan);
-    }
-  }, [data, methods]);
+  const handleOpenModal = () => {
+    reset({
+      dokterRujukan: data.dokter || "",
+      tujuanRujukan: data.tujuan || "",
+      catatanRujukan: data.catatan || "",
+    });
+    setShowModal(true);
+  };
 
   return (
     <div>
-    <Divider weight="thin" className="my-5" />
+      <Divider weight="thin" className="my-5" />
       <div className="mt-5 flex items-center gap-2">
         <div className="w-1 h-5 bg-primary-1"></div>
-        <Typography className="text-primary-1 font-semibold">
-          Rujukan
-        </Typography>
+        <Typography className="text-primary-1 font-semibold">Rujukan</Typography>
         {["DOKTER", "PERAWAT"].includes(user?.role ?? "") && (
-          <IconButton
-            icon={LuPencil}
-            variant="primary"
-            onClick={() => setShowModal(true)}
-          />
+          <IconButton icon={LuPencil} variant="primary" onClick={handleOpenModal} />
         )}
       </div>
-      {data?.dokter ||
-      data?.catatan ||
-      data?.maksimalBerlaku ||
-      data?.tujuan ? (
+      {data?.dokter || data?.catatan || data?.maksimalBerlaku || data?.tujuan ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
           <div>
-            <Typography
-              variant="p2"
-              weight="semibold"
-              className="text-gray-400"
-            >
+            <Typography variant="p2" weight="semibold" className="text-gray-400">
               Tujuan Rujukan
             </Typography>
-            <Typography className="text-primary-1">
-              {data.tujuan || "-"}
-            </Typography>
+            <Typography className="text-primary-1">{data.tujuan || "-"}</Typography>
           </div>
           <div>
-            <Typography
-              variant="p2"
-              weight="semibold"
-              className="text-gray-400"
-            >
+            <Typography variant="p2" weight="semibold" className="text-gray-400">
               Dokter Tujuan
             </Typography>
-            <Typography className="text-primary-1">
-              {data.dokter || "-"}
-            </Typography>
+            <Typography className="text-primary-1">{data.dokter || "-"}</Typography>
           </div>
           <div>
-            <Typography
-              variant="p2"
-              weight="semibold"
-              className="text-gray-400"
-            >
+            <Typography variant="p2" weight="semibold" className="text-gray-400">
               Catatan
             </Typography>
-            <Typography className="text-primary-1">
-              {data.catatan || "-"}
-            </Typography>
+            <Typography className="text-primary-1">{data.catatan || "-"}</Typography>
           </div>
-          {/* <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
-              Maksimal Berlaku
-            </Typography>
-            <Typography className="text-primary-1">
-              {formatDateOnly(data.maksimalBerlaku) || "-"}
-            </Typography>
-          </div> */}
         </div>
       ) : (
         <div className="w-full flex justify-center rounded-lg border border-gray-300 py-8 mt-3">
@@ -141,32 +106,14 @@ const DataRujukan = ({
               Ubah Data Rujukan
             </Typography>
             <FormProvider {...methods}>
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="mt-5 items-end"
-              >
+              <form onSubmit={handleSubmit(onSubmit)} className="mt-5 items-end">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
-                  <Input
-                    id="dokterRujukan"
-                    placeholder="Dokter Rujukan"
-                    label="Dokter Rujukan"
-                  />
-                  <Input
-                    id="tujuanRujukan"
-                    placeholder="Tujuan Rujukan"
-                    label="Tujuan Rujukan"
-                  />
-                  <Input
-                    id="catatanRujukan"
-                    placeholder="Catatan"
-                    label="Catatan"
-                  />
+                  <Input id="tujuanRujukan" placeholder="Tujuan Rujukan" label="Tujuan Rujukan" />
+                  <Input id="dokterRujukan" placeholder="Dokter Rujukan" label="Dokter Rujukan" />
+                  <Input id="catatanRujukan" placeholder="Catatan" label="Catatan" />
                 </div>
-                <div className="flex justify-end gap-2">
-                  <Button
-                    variant="secondary"
-                    onClick={() => setShowModal(false)}
-                  >
+                <div className="flex justify-center gap-2">
+                  <Button variant="danger" onClick={() => setShowModal(false)}>
                     Batal
                   </Button>
                   <Button type="submit">Simpan</Button>

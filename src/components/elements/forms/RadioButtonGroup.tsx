@@ -84,7 +84,7 @@ export default function RadioButtonGroup({
       <div
         className={clsxm(
           direction === "vertical" && "flex flex-col gap-3",
-          direction === "horizontal" && "flex flex-wrap gap-10",
+          direction === "horizontal" && "flex flex-wrap gap-y-3 gap-x-10",
           direction === "grid" && "grid grid-cols-3 md:grid-cols-4",
           directionClassName
         )}

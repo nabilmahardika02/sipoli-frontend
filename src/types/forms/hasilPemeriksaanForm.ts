@@ -4,19 +4,18 @@ export type RujukanForm = {
   catatanRujukan: string;
 };
 
-// baru
-export type KuantitasObatRequest = {
+export interface KuantitasObatRequest {
   obatId: string;
-  namaObat: string; // Tambahkan namaObat di sini
+  namaObat: string;
   kuantitas: number;
   petunjukPemakaian: string;
-};
-// baru
+  tanggalKadaluarsa: string;
+  jenisSatuan: string;
+}
 
 export type ResepObatRujukanForm = {
   deskripsi: string;
 };
-
 
 export type HasilPemeriksaanForm = {
   dokter: string;
@@ -49,8 +48,8 @@ export type HasilPemeriksaanForm = {
   tindakan: string;
   deskripsi: string;
   rujukanRequestDTO: RujukanForm;
-  listKuantitasObat: KuantitasObatRequest[]; // baru
-  resepObatRujukan: ResepObatRujukanForm; // Sesuaikan jadi objek
+  listKuantitasObatDTO: KuantitasObatRequest[];
+  resepObatRujukan: ResepObatRujukanForm; 
 };
 
 export type HasilKunjunganForm = {
@@ -58,7 +57,7 @@ export type HasilKunjunganForm = {
   keluhanUtama: string;
   riwayatPenyakitSekarang: string;
   kie: string;
-  tanggalPeriksa: string; // baru
+  tanggalPeriksa: string;
 };
 
 export type HasilPemeriksaanFisikForm = {
@@ -72,7 +71,7 @@ export type HasilPemeriksaanFisikForm = {
   eye: number;
   verbal: number;
   motorik: number;
-}
+};
 
 export type UpdatePemeriksaanFisikForm = {
   tensi: string;
@@ -85,7 +84,7 @@ export type UpdatePemeriksaanFisikForm = {
   eye: number;
   verbal: number;
   motorik: number;
-}
+};
 
 export type UpdateStatusPresentForm = {
   mata: string;
@@ -97,29 +96,28 @@ export type UpdateStatusPresentForm = {
   pulmo: string;
   abd: string;
   ext: string;
-}
+};
 
 export type UpdateHasilKunjunganForm = {
   keluhanUtama: string;
   riwayatPenyakitSekarang: string;
   kie: string;
-}
+};
 
 export type UpdateDiagnosaAkhirForm = {
   icd10: string;
   diagnosaKerja: string;
   rencana: string;
   tindakan: string;
-}
+};
 
 export type UpdateResepObatRujukanForm = {
   id: string;
   deskripsi: string;
 };
 
-
 export type UpdateRujukanForm = {
   tujuanRujukan: string;
   dokterRujukan: string;
   catatanRujukan: string;
-}
+};
