@@ -54,8 +54,8 @@ const AddHasilPemeriksaanPage = () => {
       dokterRujukan: "",
       catatanRujukan: "",
     },
-    listKuantitasObat: [],
-    resepObatRujukan: { deskripsi: "" }, // Ubah ini menjadi objek dengan properti `deskripsi`
+    listKuantitasObatDTO: [],
+    resepObatRujukan: { deskripsi: "" },
   });
 
   useEffect(() => {

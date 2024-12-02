@@ -184,7 +184,7 @@ body {
 }
 
 .data-section {
-  @apply p-5 md:p-8 rounded-xl bg-white border border-gray-200 shadow-md;
+  @apply p-5 md:p-8 rounded-xl bg-white border border-gray-200 shadow-md transition-transform duration-500;
 }
 
 .custom-mui-input .MuiInputBase-root input {
