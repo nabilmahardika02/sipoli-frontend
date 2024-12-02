@@ -1,4 +1,5 @@
 import { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 
 export function formatDateOnly(dateString: string): string {
   const date = new Date(dateString);
@@ -26,7 +27,6 @@ export function formatDate(isoDate: string | Date): string {
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,
-    timeZone: "Asia/Makassar", // Pastikan menggunakan zona waktu lokal Anda
   };
 
   const formattedDate = date.toLocaleDateString("id-ID", dateOptions);

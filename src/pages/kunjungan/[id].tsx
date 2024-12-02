@@ -10,6 +10,7 @@ import withAuth from "@/components/hoc/withAuth";
 import ModalLayout from "@/components/layouts/ModalLayout";
 import SuratIzinPDF from "@/components/PDF/SuratIzinPDF";
 import { useDocumentTitle } from "@/context/Title";
+import { formatDate } from "@/lib/formater";
 import sendRequest from "@/lib/getApi";
 import useAuthStore from "@/store/useAuthStore";
 import { Kunjungan } from "@/types/entities/kunjungan";
@@ -24,7 +25,6 @@ import { FaRegFilePdf } from "react-icons/fa";
 import { FaCirclePlus } from "react-icons/fa6";
 import { LuPencil } from "react-icons/lu";
 import { RxCross2 } from "react-icons/rx";
-import { formatDate } from "@/lib/formater";
 
 const KunjunganPage = () => {
   const { setTitle } = useDocumentTitle();
@@ -76,8 +76,10 @@ const KunjunganPage = () => {
   };
 
   useEffect(() => {
-    fetchSuratIzin();
-  }, [router.query.id]);
+    if (router.query.id) {
+      fetchSuratIzin();
+    }
+  }, []);
 
   const handleTanggalAwal = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTanggalAwal(event.target.value);
@@ -115,10 +117,7 @@ const KunjunganPage = () => {
                     new Date(kunjungan.updatedAt)
                       .toISOString()
                       .slice(0, 19) && (
-                    <Typography
-                      variant="p2"
-                      className="italic text-gray-600"
-                    >
+                    <Typography variant="p2" className="italic text-gray-600">
                       Terakhir diubah pada {formatDate(kunjungan.updatedAt)}
                     </Typography>
                   )}
@@ -131,16 +130,7 @@ const KunjunganPage = () => {
                     </Link>
                   </div>
                 )}
-                {user?.role === "PASIEN" && kunjungan.status === 0 && (
-                  <div className="flex justify-end">
-                    <Link href={`/kunjungan/update/${kunjungan.id}`}>
-                      <Button variant="secondary" leftIcon={LuPencil}>
-                        Ubah Data Kunjungan
-                      </Button>
-                    </Link>
-                  </div>
-                )}
-                {user?.role !== "PASIEN" && kunjungan.status < 2 && (
+                {kunjungan.status === 0 && (
                   <div className="flex justify-end">
                     <Link href={`/kunjungan/update/${kunjungan.id}`}>
                       <Button variant="secondary" leftIcon={LuPencil}>

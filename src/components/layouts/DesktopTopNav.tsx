@@ -36,7 +36,7 @@ const DesktopTopNav = ({ title = "Beranda" }: { title?: string }) => {
       fetchData();
       const interval = setInterval(() => {
         fetchData();
-      }, 10000);
+      }, 60000);
 
       return () => clearInterval(interval);
     }
