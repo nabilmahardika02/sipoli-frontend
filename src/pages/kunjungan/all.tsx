@@ -7,6 +7,12 @@ import InformationModal from "@/components/fragments/Home/InformationModal";
 import withAuth from "@/components/hoc/withAuth";
 import { useDocumentTitle } from "@/context/Title";
 import { checkRole } from "@/lib/checkRole";
+import {
+  getEndDateCookies,
+  getStartDateCookies,
+  setEndDateCookies,
+  setStartDateCookies,
+} from "@/lib/cookies";
 import DataTable from "@/lib/datatable";
 import sendRequest from "@/lib/getApi";
 import { Kunjungan } from "@/types/entities/kunjungan";
@@ -56,11 +62,29 @@ const KunjunganAllPage = () => {
         setStartDate(data.startDate as string);
         setEndDate(data.endDate as string);
         setKunjungans(responseData as Kunjungan[]);
+
+        setStartDateCookies(data.startDate);
+        setEndDateCookies(data.endDate);
       }
     };
 
     postData();
   };
+
+  useEffect(() => {
+    const startDateCookies = getStartDateCookies();
+    const endDateCookies = getEndDateCookies();
+
+    if (startDateCookies) {
+      methods.setValue("startDate", startDateCookies);
+    }
+    if (endDateCookies) {
+      methods.setValue("endDate", endDateCookies);
+    }
+    if (startDateCookies && endDateCookies) {
+      onSubmit({ startDate: startDateCookies, endDate: endDateCookies });
+    }
+  }, [methods]);
 
   return (
     <main>

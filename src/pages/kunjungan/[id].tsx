@@ -56,7 +56,7 @@ const KunjunganPage = () => {
     if (router.query.id) {
       fetchKunjungan();
     }
-  }, [trigger]);
+  }, [trigger, router.query.id]);
 
   const methods = useForm<SuratIzinForm>({
     mode: "onTouched",
@@ -76,8 +76,10 @@ const KunjunganPage = () => {
   };
 
   useEffect(() => {
-    fetchSuratIzin();
-  }, [router.query.id]);
+    if (router.query.id) {
+      fetchSuratIzin();
+    }
+  }, []);
 
   const handleTanggalAwal = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTanggalAwal(event.target.value);

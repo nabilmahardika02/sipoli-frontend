@@ -17,3 +17,23 @@ export const removeToken = () => {
     path: "/",
   });
 };
+
+export const setStartDateCookies = (startDate: string) => {
+  cookies.set("@sipoli/startdate", startDate, {
+    path: "/",
+  });
+};
+
+export const getStartDateCookies = (): string => {
+  return cookies.get("@sipoli/startdate");
+};
+
+export const setEndDateCookies = (endDate: string) => {
+  cookies.set("@sipoli/enddate", endDate, {
+    path: "/",
+  });
+};
+
+export const getEndDateCookies = (): string => {
+  return cookies.get("@sipoli/enddate");
+};
