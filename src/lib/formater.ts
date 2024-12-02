@@ -22,7 +22,6 @@ export function formatDate(isoDate: string | Date): string {
     year: "numeric",
     month: "long",
     day: "numeric",
-    timeZone: "Asia/Makassar",
   };
   const timeOptions: Intl.DateTimeFormatOptions = {
     hour: "2-digit",
