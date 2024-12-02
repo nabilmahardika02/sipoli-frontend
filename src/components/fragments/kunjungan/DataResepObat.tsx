@@ -118,26 +118,26 @@ const DataResepObat = ({
 
             return (
               <div key={index} className="border p-3 rounded-lg mb-2">
-                <Typography variant="p2" weight="semibold" className="text-gray-400">
+                <Typography variant="p2" weight="semibold" className="text-gray-700">
                   Obat
                 </Typography>
                 <Typography className="text-primary-1">{obat.obat.namaObat || "-"}</Typography>
 
-                <Typography variant="p2" weight="semibold" className="text-gray-400 mt-2">
+                <Typography variant="p2" weight="semibold" className="text-gray-700 mt-2">
                   Kuantitas
                 </Typography>
                 <Typography className="text-primary-1">
                   {obat.kuantitas} {jenisSatuan}
                 </Typography>
 
-                <Typography variant="p2" weight="semibold" className="text-gray-400 mt-2">
+                <Typography variant="p2" weight="semibold" className="text-gray-700 mt-2">
                   Tanggal Kadaluarsa
                 </Typography>
                 <Typography className="text-primary-1">
                   {closestExpiryDate ? formatDateOnly(closestExpiryDate) : "Tidak tersedia"}
                 </Typography>
 
-                <Typography variant="p2" weight="semibold" className="text-gray-400 mt-2">
+                <Typography variant="p2" weight="semibold" className="text-gray-700 mt-2">
                   Petunjuk Pemakaian
                 </Typography>
                 <Typography className="text-primary-1">{obat.petunjukPemakaian || "-"}</Typography>
@@ -147,21 +147,21 @@ const DataResepObat = ({
         </div>
       ) : (
         <div className="w-full flex justify-center rounded-lg border border-gray-300 py-8 mt-3">
-          <Typography className="text-gray-400 font-medium">
+          <Typography className="text-gray-700 font-medium">
             Pasien tidak diberikan obat dari klinik
           </Typography>
         </div>
       )}
 
       <div className="mt-3">
-        <Typography variant="p2" weight="semibold" className="text-gray-400">
+        <Typography variant="p2" weight="semibold" className="text-gray-700">
           Resep Obat di Luar Klinik
         </Typography>
         <Typography className="text-primary-1">{resepObatRujukan?.deskripsi || "-"}</Typography>
       </div>
 
       <div className="mt-3">
-        <Typography variant="p2" weight="semibold" className="text-gray-400">
+        <Typography variant="p2" weight="semibold" className="text-gray-700">
           Komunikasi Informasi dan Edukasi
         </Typography>
         <Typography className="text-primary-1">{data.kie || "-"}</Typography>

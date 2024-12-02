@@ -83,13 +83,13 @@ const DataStatusPresent = ({
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
         <div>
-          <Typography variant="p2" weight="semibold" className="text-gray-400">
+          <Typography variant="p2" weight="semibold" className="text-gray-700">
             Mata
           </Typography>
           <Typography className="text-primary-1">{data.mata || "-"}</Typography>
         </div>
         <div>
-          <Typography variant="p2" weight="semibold" className="text-gray-400">
+          <Typography variant="p2" weight="semibold" className="text-gray-700">
             Telinga
           </Typography>
           <Typography className="text-primary-1">
@@ -97,7 +97,7 @@ const DataStatusPresent = ({
           </Typography>
         </div>
         <div>
-          <Typography variant="p2" weight="semibold" className="text-gray-400">
+          <Typography variant="p2" weight="semibold" className="text-gray-700">
             Hidung
           </Typography>
           <Typography className="text-primary-1">
@@ -105,7 +105,7 @@ const DataStatusPresent = ({
           </Typography>
         </div>
         <div>
-          <Typography variant="p2" weight="semibold" className="text-gray-400">
+          <Typography variant="p2" weight="semibold" className="text-gray-700">
             Tonsil
           </Typography>
           <Typography className="text-primary-1">
@@ -113,7 +113,7 @@ const DataStatusPresent = ({
           </Typography>
         </div>
         <div>
-          <Typography variant="p2" weight="semibold" className="text-gray-400">
+          <Typography variant="p2" weight="semibold" className="text-gray-700">
             Faring
           </Typography>
           <Typography className="text-primary-1">
@@ -121,13 +121,13 @@ const DataStatusPresent = ({
           </Typography>
         </div>
         <div>
-          <Typography variant="p2" weight="semibold" className="text-gray-400">
+          <Typography variant="p2" weight="semibold" className="text-gray-700">
             Cor
           </Typography>
           <Typography className="text-primary-1">{data.cor || "-"}</Typography>
         </div>
         <div>
-          <Typography variant="p2" weight="semibold" className="text-gray-400">
+          <Typography variant="p2" weight="semibold" className="text-gray-700">
             Pulmo
           </Typography>
           <Typography className="text-primary-1">
@@ -135,13 +135,13 @@ const DataStatusPresent = ({
           </Typography>
         </div>
         <div>
-          <Typography variant="p2" weight="semibold" className="text-gray-400">
+          <Typography variant="p2" weight="semibold" className="text-gray-700">
             Abd
           </Typography>
           <Typography className="text-primary-1">{data.abd || "-"}</Typography>
         </div>
         <div>
-          <Typography variant="p2" weight="semibold" className="text-gray-400">
+          <Typography variant="p2" weight="semibold" className="text-gray-700">
             Ext
           </Typography>
           <Typography className="text-primary-1">{data.ext || "-"}</Typography>

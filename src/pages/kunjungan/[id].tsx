@@ -25,6 +25,7 @@ import { FaRegFilePdf } from "react-icons/fa";
 import { FaCirclePlus } from "react-icons/fa6";
 import { LuPencil } from "react-icons/lu";
 import { RxCross2 } from "react-icons/rx";
+import { BiSolidUserDetail } from "react-icons/bi";
 
 const KunjunganPage = () => {
   const { setTitle } = useDocumentTitle();
@@ -126,14 +127,14 @@ const KunjunganPage = () => {
                 {(user?.role === "DOKTER" || user?.role === "PERAWAT") && (
                   <div className="flex justify-end">
                     <Link href={`/pasien/detail/${kunjungan.profile.id}`}>
-                      <Button variant="primary">Detail Pasien</Button>
+                      <Button variant="primary" className="rounded-lg" size="lg" leftIcon={BiSolidUserDetail}>Detail Pasien</Button>
                     </Link>
                   </div>
                 )}
                 {kunjungan.status === 0 && (
                   <div className="flex justify-end">
                     <Link href={`/kunjungan/update/${kunjungan.id}`}>
-                      <Button variant="secondary" leftIcon={LuPencil}>
+                      <Button variant="secondary" size="lg" leftIcon={LuPencil}>
                         Ubah Data Kunjungan
                       </Button>
                     </Link>
@@ -222,7 +223,7 @@ const KunjunganPage = () => {
       )}
       {showModal && (
         <ModalLayout setShowModal={setShowModal}>
-          <div className="bg-white rounded-xl p-5 w-full md:w-[80%]">
+          <div className="bg-white rounded-xl p-5 w-full md:w-[80%] max-w-[90vw] max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between">
               <Typography variant="h6" className="text-primary-1">
                 Buat Surat Izin
@@ -263,7 +264,7 @@ const KunjunganPage = () => {
       )}
       {showPreview && (
         <ModalLayout setShowModal={setShowPreview}>
-          <div className="bg-white rounded-xl p-5 w-full md:w-[80%]">
+          <div className="bg-white rounded-xl p-5 w-full md:w-[80%] max-w-[90vw] max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between">
               <Typography variant="h6" className="text-primary-1">
                 Unduh Surat Izin

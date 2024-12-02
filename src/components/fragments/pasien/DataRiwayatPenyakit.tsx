@@ -91,7 +91,7 @@ const DataRiwayatPenyakit = ({
         <Divider />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
           <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
+            <Typography variant="p2" weight="semibold" className="text-gray-700">
               Tindakan Bedah
             </Typography>
             <Typography className="text-primary-1">
@@ -99,7 +99,7 @@ const DataRiwayatPenyakit = ({
             </Typography>
           </div>
           <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
+            <Typography variant="p2" weight="semibold" className="text-gray-700">
               Kelainan Jantung
             </Typography>
             <Typography className="text-primary-1">
@@ -107,7 +107,7 @@ const DataRiwayatPenyakit = ({
             </Typography>
           </div>
           <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
+            <Typography variant="p2" weight="semibold" className="text-gray-700">
               Kencing Manis
             </Typography>
             <Typography className="text-primary-1">
@@ -115,7 +115,7 @@ const DataRiwayatPenyakit = ({
             </Typography>
           </div>
           <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
+            <Typography variant="p2" weight="semibold" className="text-gray-700">
               Kelainan Saluran Pencernaan
             </Typography>
             <Typography className="text-primary-1">
@@ -123,7 +123,7 @@ const DataRiwayatPenyakit = ({
             </Typography>
           </div>
           <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
+            <Typography variant="p2" weight="semibold" className="text-gray-700">
               Rawat Inap
             </Typography>
             <Typography className="text-primary-1">
@@ -131,7 +131,7 @@ const DataRiwayatPenyakit = ({
             </Typography>
           </div>
           <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
+            <Typography variant="p2" weight="semibold" className="text-gray-700">
               Hati
             </Typography>
             <Typography className="text-primary-1">
@@ -139,7 +139,7 @@ const DataRiwayatPenyakit = ({
             </Typography>
           </div>
           <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
+            <Typography variant="p2" weight="semibold" className="text-gray-700">
               Kecelakaan
             </Typography>
             <Typography className="text-primary-1">
@@ -147,7 +147,7 @@ const DataRiwayatPenyakit = ({
             </Typography>
           </div>
           <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
+            <Typography variant="p2" weight="semibold" className="text-gray-700">
               Lainnya
             </Typography>
             <Typography className="text-primary-1">

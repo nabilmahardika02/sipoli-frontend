@@ -95,7 +95,7 @@ const DetailPage = () => {
             </div>
             <div className="grid grid-cols-3 justify-center gap-10 my-5">
               <div className="w-full">
-                <Typography variant="p1" className="text-gray-600">
+                <Typography variant="p1" className="text-gray-700">
                   Username
                 </Typography>
                 <Typography variant="p1" className="text-primary-1 font-medium">
@@ -103,7 +103,7 @@ const DetailPage = () => {
                 </Typography>
               </div>
               <div className="w-full">
-                <Typography variant="p1" className="text-gray-600">
+                <Typography variant="p1" className="text-gray-700">
                   Role
                 </Typography>
                 <Typography variant="p1" className="text-primary-1 font-medium">
@@ -112,7 +112,7 @@ const DetailPage = () => {
               </div>
               {isPasien && (
                 <div className="w-full">
-                  <Typography variant="p1" className="text-gray-600">
+                  <Typography variant="p1" className="text-gray-700">
                     NIK
                   </Typography>
                   <Typography
@@ -125,7 +125,7 @@ const DetailPage = () => {
               )}
               {isPasien && (
                 <div className="w-full">
-                  <Typography variant="p1" className="text-gray-600">
+                  <Typography variant="p1" className="text-gray-700">
                     Jabatan
                   </Typography>
                   <Typography
@@ -138,7 +138,7 @@ const DetailPage = () => {
               )}
               {isPasien && (
                 <div className="w-full">
-                  <Typography variant="p1" className="text-gray-600">
+                  <Typography variant="p1" className="text-gray-700">
                     Unit Kerja
                   </Typography>
                   <Typography
@@ -151,7 +151,7 @@ const DetailPage = () => {
               )}
               {isPasien && (
                 <div className="w-full">
-                  <Typography variant="p1" className="text-gray-600">
+                  <Typography variant="p1" className="text-gray-700">
                     Eselon
                   </Typography>
                   <Typography
@@ -162,8 +162,21 @@ const DetailPage = () => {
                   </Typography>
                 </div>
               )}
+              {isPasien && (
+                <div className="w-full">
+                  <Typography variant="p1" className="text-gray-700">
+                    Alamat
+                  </Typography>
+                  <Typography
+                    variant="p1"
+                    className="text-primary-1 font-medium"
+                  >
+                    {selectedAccount?.alamat ?? "-"}
+                  </Typography>
+                </div>
+              )}
               <div className="w-full">
-                <Typography variant="p1" className="text-gray-600">
+                <Typography variant="p1" className="text-gray-700">
                   Created At
                 </Typography>
                 <Typography variant="p1" className="text-primary-1 font-medium">
@@ -173,7 +186,7 @@ const DetailPage = () => {
                 </Typography>
               </div>
               <div className="w-full">
-                <Typography variant="p1" className="text-gray-600">
+                <Typography variant="p1" className="text-gray-700">
                   Updated At
                 </Typography>
                 <Typography variant="p1" className="text-primary-1 font-medium">

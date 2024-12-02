@@ -96,7 +96,7 @@ const SuratIzinPage = () => {
         <Divider />
         <div className="flex flex-col gap-4">
           <div className="bg-gray-60 shadow-md rounded-lg p-4 border flex-1">
-            <Typography weight="semibold" className="text-gray-400">
+            <Typography weight="semibold" className="text-gray-700">
               Diberikan istirahat sakit selama{" "}
               <span className="text-primary-1 font-bold">
                 {jumlahHari} hari
@@ -116,7 +116,7 @@ const SuratIzinPage = () => {
             </Typography>
           </div>
           <div className="bg-gray-60 shadow-md rounded-lg p-4 border flex-1">
-            <Typography weight="semibold" className="text-gray-400">
+            <Typography weight="semibold" className="text-gray-700">
               Diagnosis Akhir:
             </Typography>
             <Typography weight="bold" className="text-primary-1">
@@ -128,7 +128,7 @@ const SuratIzinPage = () => {
           </div>
 
           <div className="bg-gray-60 shadow-md rounded-lg p-4 border flex-1">
-            <Typography weight="semibold" className="text-gray-400">
+            <Typography weight="semibold" className="text-gray-700">
               Diagnosa ICD10:
             </Typography>
             <Typography weight="bold" className="text-primary-1">
@@ -137,7 +137,7 @@ const SuratIzinPage = () => {
           </div>
 
           <div className="bg-gray-60 shadow-md rounded-lg p-4 border flex flex-col items-left gap-2">
-            <Typography weight="semibold" className="text-gray-400">
+            <Typography weight="semibold" className="text-gray-700">
               Masa aktif dokumen:
             </Typography>
             <div className="flex items-center gap-2">
@@ -170,7 +170,7 @@ const SuratIzinPage = () => {
         <Divider />
         <div className="flex flex-col gap-4">
           <div className="bg-gray-60 shadow-md rounded-lg p-4 border flex-1">
-            <Typography weight="semibold" className="text-gray-400">
+            <Typography weight="semibold" className="text-gray-700">
               Nama:
             </Typography>
             <Typography weight="bold" className="text-primary-1">
@@ -181,7 +181,7 @@ const SuratIzinPage = () => {
           </div>
 
           <div className="bg-gray-60 shadow-md rounded-lg p-4 border flex-1">
-            <Typography weight="semibold" className="text-gray-400">
+            <Typography weight="semibold" className="text-gray-700">
               Alamat:
             </Typography>
             <Typography weight="bold" className="text-primary-1">
@@ -190,7 +190,7 @@ const SuratIzinPage = () => {
           </div>
 
           <div className="bg-gray-60 shadow-md rounded-lg p-4 border flex flex-col items-left gap-2">
-            <Typography weight="semibold" className="text-gray-400">
+            <Typography weight="semibold" className="text-gray-700">
               Kewarganegaraan:
             </Typography>
             <Typography weight="bold" className="text-primary-1">
@@ -219,7 +219,7 @@ const SuratIzinPage = () => {
           </div>
 
           <div className="bg-gray-60 shadow-md rounded-lg p-4 border flex-1">
-            <Typography weight="semibold" className="text-gray-400">
+            <Typography weight="semibold" className="text-gray-700">
               Alamat:
             </Typography>
             <Typography weight="bold" className="text-primary-1">
@@ -229,7 +229,7 @@ const SuratIzinPage = () => {
           </div>
 
           <div className="bg-gray-60 shadow-md rounded-lg p-4 border flex flex-col items-left gap-2">
-            <Typography weight="semibold" className="text-gray-400">
+            <Typography weight="semibold" className="text-gray-700">
               Nomor Telepon:
             </Typography>
             <Typography weight="bold" className="text-primary-1">

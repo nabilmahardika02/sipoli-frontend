@@ -87,7 +87,7 @@ const DataRekamMedis = ({
             <Typography
               variant="p2"
               weight="semibold"
-              className="text-gray-400"
+              className="text-gray-700"
             >
               Nama
             </Typography>
@@ -97,7 +97,7 @@ const DataRekamMedis = ({
             <Typography
               variant="p2"
               weight="semibold"
-              className="text-gray-400"
+              className="text-gray-700"
             >
               NIK
             </Typography>
@@ -107,7 +107,7 @@ const DataRekamMedis = ({
             <Typography
               variant="p2"
               weight="semibold"
-              className="text-gray-400"
+              className="text-gray-700"
             >
               Usia
             </Typography>
@@ -119,7 +119,7 @@ const DataRekamMedis = ({
             <Typography
               variant="p2"
               weight="semibold"
-              className="text-gray-400"
+              className="text-gray-700"
             >
               Jenis Kelamin
             </Typography>
@@ -131,7 +131,7 @@ const DataRekamMedis = ({
             <Typography
               variant="p2"
               weight="semibold"
-              className="text-gray-400"
+              className="text-gray-700"
             >
               Terakhir Diubah
             </Typography>

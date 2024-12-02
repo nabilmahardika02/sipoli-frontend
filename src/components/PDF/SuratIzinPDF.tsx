@@ -63,7 +63,9 @@ const SuratIzinPDF: React.FC<SuratIzinPDFProps> = ({
   }, [kunjungan]);
 
   useEffect(() => {
-    setCreatedAt(new Date());
+    const now = new Date();
+    const isoString = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Makassar' })).toISOString();
+    setCreatedAt(isoString);
 
     const fetchData = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
@@ -157,6 +159,18 @@ const SuratIzinPDF: React.FC<SuratIzinPDFProps> = ({
 
   return (
     <div className="p-6">
+      <div className="mb-4 flex justify-end">
+        {suratIzin === null && (
+          <Button onClick={postData} variant="primary">
+            Unduh Dokumen
+          </Button>
+        )}
+        {suratIzin !== null && (
+          <Button onClick={handleGeneratePDF} variant="primary">
+            Unduh Dokumen
+          </Button>
+        )}
+      </div>
       {/* Template PDF */}
       <div
         ref={pdfRef}
@@ -274,19 +288,6 @@ const SuratIzinPDF: React.FC<SuratIzinPDFProps> = ({
             )}
           </div>
         </section>
-      </div>
-
-      <div className="mt-4 flex justify-end">
-        {suratIzin === null && (
-          <Button onClick={postData} variant="primary">
-            Unduh Dokumen
-          </Button>
-        )}
-        {suratIzin !== null && (
-          <Button onClick={handleGeneratePDF} variant="primary">
-            Unduh Dokumen
-          </Button>
-        )}
       </div>
     </div>
   );

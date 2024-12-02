@@ -77,7 +77,7 @@ const DataDiagnosaAkhir = ({
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
         <div>
-          <Typography variant="p2" weight="semibold" className="text-gray-400">
+          <Typography variant="p2" weight="semibold" className="text-gray-700">
             ICD10
           </Typography>
           <Typography className="text-primary-1">
@@ -85,7 +85,7 @@ const DataDiagnosaAkhir = ({
           </Typography>
         </div>
         <div>
-          <Typography variant="p2" weight="semibold" className="text-gray-400">
+          <Typography variant="p2" weight="semibold" className="text-gray-700">
             Diagnosa Kerja
           </Typography>
           <Typography className="text-primary-1">
@@ -93,7 +93,7 @@ const DataDiagnosaAkhir = ({
           </Typography>
         </div>
         <div>
-          <Typography variant="p2" weight="semibold" className="text-gray-400">
+          <Typography variant="p2" weight="semibold" className="text-gray-700">
             Rencana
           </Typography>
           <Typography className="text-primary-1">
@@ -101,7 +101,7 @@ const DataDiagnosaAkhir = ({
           </Typography>
         </div>
         <div>
-          <Typography variant="p2" weight="semibold" className="text-gray-400">
+          <Typography variant="p2" weight="semibold" className="text-gray-700">
             Tindakan
           </Typography>
           <Typography className="text-primary-1">

@@ -72,19 +72,19 @@ const DataRujukan = ({
       {data?.dokter || data?.catatan || data?.maksimalBerlaku || data?.tujuan ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
           <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
+            <Typography variant="p2" weight="semibold" className="text-gray-700">
               Tujuan Rujukan
             </Typography>
             <Typography className="text-primary-1">{data.tujuan || "-"}</Typography>
           </div>
           <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
+            <Typography variant="p2" weight="semibold" className="text-gray-700">
               Dokter Tujuan
             </Typography>
             <Typography className="text-primary-1">{data.dokter || "-"}</Typography>
           </div>
           <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
+            <Typography variant="p2" weight="semibold" className="text-gray-700">
               Catatan
             </Typography>
             <Typography className="text-primary-1">{data.catatan || "-"}</Typography>
@@ -92,7 +92,7 @@ const DataRujukan = ({
         </div>
       ) : (
         <div className="w-full flex justify-center rounded-lg border border-gray-300 py-8 mt-3">
-          <Typography className="text-gray-400 font-medium">
+          <Typography className="text-gray-700 font-medium">
             Pasien tidak membutuhkan rujukan
           </Typography>
         </div>
