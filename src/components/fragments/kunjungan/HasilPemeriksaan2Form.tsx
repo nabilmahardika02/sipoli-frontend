@@ -83,9 +83,6 @@ const HasilPemeriksaan2Form = ({
   return (
     <section>
       <Breadcrumb currentStep={2} totalSteps={6} />
-      {/* <Typography variant="h7" className="text-primary-1">
-        Formulir 2
-      </Typography> */}
       <Divider weight="thin" className="my-5" />
       <Typography variant="h7" className="mt-5 text-primary-1">
         Pemeriksaan Fisik - {kunjungan.profile.name}

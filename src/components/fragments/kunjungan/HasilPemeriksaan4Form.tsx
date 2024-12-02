@@ -62,9 +62,6 @@ const HasilPemeriksaan4Form = ({
   return (
     <section>
       <Breadcrumb currentStep={4} totalSteps={6} />
-      {/* <Typography variant="h7" className="text-primary-1">
-        Formulir 4
-      </Typography> */}
       <Divider weight="thin" className="my-5" />
       <Typography variant="h7" className="mt-5 text-primary-1">
         Diagnosa Akhir - {kunjungan.profile.name}

@@ -34,7 +34,7 @@ const HasilPemeriksaan5Form = ({
   const methods = useForm<HasilPemeriksaanForm>({
     mode: "onTouched",
     defaultValues: {
-      listKuantitasObat: hasilPemeriksaan.listKuantitasObat || [
+      listKuantitasObatDTO: hasilPemeriksaan.listKuantitasObatDTO || [
         {
           obatId: "",
           namaObat: "",
@@ -52,7 +52,7 @@ const HasilPemeriksaan5Form = ({
   const { handleSubmit, getValues, control, setValue } = methods;
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "listKuantitasObat",
+    name: "listKuantitasObatDTO",
   });
   const [obatList, setObatList] = useState<Obat[]>([]);
 
@@ -71,8 +71,8 @@ const HasilPemeriksaan5Form = ({
   useEffect(() => {
     if (hasilPemeriksaan) {
       methods.setValue(
-        "listKuantitasObat",
-        hasilPemeriksaan.listKuantitasObat || []
+        "listKuantitasObatDTO",
+        hasilPemeriksaan.listKuantitasObatDTO || []
       );
       methods.setValue(
         "resepObatRujukan",
@@ -85,24 +85,24 @@ const HasilPemeriksaan5Form = ({
   const onSubmit: SubmitHandler<HasilPemeriksaanForm> = (data) => {
     setHasilPemeriksaan((prev) => ({
       ...prev,
-      listKuantitasObat: data.listKuantitasObat,
+      listKuantitasObatDTO: data.listKuantitasObatDTO,
       resepObatRujukan: data.resepObatRujukan,
       kie: data.kie,
     }));
 
-    setSection(6); // Pindah ke section berikutnya
+    setSection(6); 
   };
 
   const handlePrev = () => {
     const currentValues = getValues();
     setHasilPemeriksaan((prev) => ({
       ...prev,
-      listKuantitasObat: currentValues.listKuantitasObat,
+      listKuantitasObatDTO: currentValues.listKuantitasObatDTO,
       resepObatRujukan: currentValues.resepObatRujukan,
       kie: currentValues.kie,
     }));
 
-    setSection(4); // Kembali ke section sebelumnya
+    setSection(4); 
   };
 
   const handleObatChange = (index: number, obatId: string) => {
@@ -117,22 +117,19 @@ const HasilPemeriksaan5Form = ({
 
       const jenisSatuan = getSatuanObat(selectedObat.jenisSatuan);
 
-      setValue(`listKuantitasObat.${index}.namaObat`, selectedObat.namaObat);
+      setValue(`listKuantitasObatDTO.${index}.namaObat`, selectedObat.namaObat);
       setValue(
-        `listKuantitasObat.${index}.tanggalKadaluarsa`,
+        `listKuantitasObatDTO.${index}.tanggalKadaluarsa`,
         formatDateOnly(closestExpiryDate)
       );
-      setValue(`listKuantitasObat.${index}.jenisSatuan`, jenisSatuan);
+      setValue(`listKuantitasObatDTO.${index}.jenisSatuan`, jenisSatuan);
     }
   };
 
   return (
     <section className="space-y-8">
       <div>
-      <Breadcrumb currentStep={5} totalSteps={6} />
-        {/* <Typography variant="h7" className="text-primary-1">
-          Formulir 5
-        </Typography> */}
+        <Breadcrumb currentStep={5} totalSteps={6} />
         <Divider weight="thin" className="my-5" />
         <Typography variant="h7" className="mt-5 text-primary-1">
           Resep Obat - {kunjungan?.profile?.name || "Tidak Ada Nama"}
@@ -146,11 +143,11 @@ const HasilPemeriksaan5Form = ({
                   className="border p-4 grid grid-cols-1 md:grid-cols-1 gap-5 mb-2 rounded-md"
                 >
                   <SelectInput
-                    id={`listKuantitasObat.${index}.obatId`}
+                    id={`listKuantitasObatDTO.${index}.obatId`}
                     placeholder="Pilih Obat"
                     label={`Obat ${index + 1}`}
                     {...methods.register(
-                      `listKuantitasObat.${index}.obatId` as const,
+                      `listKuantitasObatDTO.${index}.obatId` as const,
                       {
                         onChange: (e) =>
                           handleObatChange(index, e.target.value),
@@ -167,40 +164,40 @@ const HasilPemeriksaan5Form = ({
                   {/* Tanggal Kadaluarsa dan Jenis Satuan sejajar */}
                   <div className="grid grid-cols-2 gap-5">
                     <Input
-                      id={`listKuantitasObat.${index}.tanggalKadaluarsa`}
+                      id={`listKuantitasObatDTO.${index}.tanggalKadaluarsa`}
                       placeholder="Tanggal Kadaluarsa"
                       label="Tanggal Kadaluarsa"
                       value={methods.getValues(
-                        `listKuantitasObat.${index}.tanggalKadaluarsa`
+                        `listKuantitasObatDTO.${index}.tanggalKadaluarsa`
                       )}
                       readOnly
                     />
                     <Input
-                      id={`listKuantitasObat.${index}.jenisSatuan`}
+                      id={`listKuantitasObatDTO.${index}.jenisSatuan`}
                       placeholder="Jenis Satuan"
                       label="Jenis Satuan"
                       value={methods.getValues(
-                        `listKuantitasObat.${index}.jenisSatuan`
+                        `listKuantitasObatDTO.${index}.jenisSatuan`
                       )}
                       readOnly
                     />
                   </div>
 
                   <Input
-                    id={`listKuantitasObat.${index}.kuantitas`}
+                    id={`listKuantitasObatDTO.${index}.kuantitas`}
                     type="number"
                     placeholder="Kuantitas"
                     label="Kuantitas"
                     {...methods.register(
-                      `listKuantitasObat.${index}.kuantitas` as const
+                      `listKuantitasObatDTO.${index}.kuantitas` as const
                     )}
                   />
                   <Input
-                    id={`listKuantitasObat.${index}.petunjukPemakaian`}
+                    id={`listKuantitasObatDTO.${index}.petunjukPemakaian`}
                     placeholder="Petunjuk Pemakaian"
                     label="Petunjuk Pemakaian"
                     {...methods.register(
-                      `listKuantitasObat.${index}.petunjukPemakaian` as const
+                      `listKuantitasObatDTO.${index}.petunjukPemakaian` as const
                     )}
                   />
                   <Button variant="danger" onClick={() => remove(index)}>
@@ -255,7 +252,6 @@ const HasilPemeriksaan5Form = ({
       </div>
       <Divider weight="thin" className="my-5" />
 
-      {/* Kotak kedua untuk tampilan read-only daftar obat */}
       <div>
         <Typography variant="h7" className="text-primary-1 mb-4">
           Daftar Obat Tersedia
