@@ -1,6 +1,7 @@
 import SelectInput from "@/components/elements/forms/SelectInput";
 import { LoadingDiv } from "@/components/elements/Loading";
 import Typography from "@/components/elements/Typography";
+import { months } from "@/content/date";
 import clsxm from "@/lib/clsxm";
 import sendRequest from "@/lib/getApi";
 import { GeneralStatistic } from "@/types/entities/statistic";
@@ -70,42 +71,15 @@ const StatisticSesi = ({ className = "" }: { className?: string }) => {
             onChange={setSelectedMonth}
             defaultValue={12}
           >
-            <option value="1" className="text-center">
-              Januari
-            </option>
-            <option value="2" className="text-center">
-              Februari
-            </option>
-            <option value="3" className="text-center">
-              Maret
-            </option>
-            <option value="4" className="text-center">
-              April
-            </option>
-            <option value="5" className="text-center">
-              Mei
-            </option>
-            <option value="6" className="text-center">
-              Juni
-            </option>
-            <option value="7" className="text-center">
-              Juli
-            </option>
-            <option value="8" className="text-center">
-              Agustus
-            </option>
-            <option value="9" className="text-center">
-              September
-            </option>
-            <option value="10" className="text-center">
-              Oktober
-            </option>
-            <option value="11" className="text-center">
-              November
-            </option>
-            <option value="12" className="text-center">
-              Desember
-            </option>
+            {months.map((month) => (
+              <option
+                key={month.index}
+                value={month.index}
+                className="text-center"
+              >
+                {month.month}
+              </option>
+            ))}
           </SelectInput>
         </form>
       </FormProvider>
