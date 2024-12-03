@@ -12,6 +12,7 @@ import {
   formatDateOnly,
   formatTimeDayjs,
   formatToDateInputValue,
+  timeZone,
 } from "@/lib/formater";
 import sendRequest from "@/lib/getApi";
 import { Kunjungan } from "@/types/entities/kunjungan";
@@ -23,6 +24,12 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { FaInfoCircle } from "react-icons/fa";
+
+var utc = require("dayjs/plugin/utc");
+var timezone = require("dayjs/plugin/timezone");
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const KunjunganUpdatePage = () => {
   const [kunjungan, setKunjungan] = useState<Kunjungan>();
@@ -65,22 +72,28 @@ const KunjunganUpdatePage = () => {
   useEffect(() => {
     if (kunjungan) {
       methods.setValue("sesi", kunjungan.antrian.sesi.toString());
-      methods.setValue(
-        "tanggalKunjungan",
-        formatToDateInputValue(kunjungan.tanggal)
-      );
+
+      const tempFormattedDate = formatToDateInputValue(kunjungan.tanggal);
+
+      if (tempFormattedDate) {
+        methods.setValue("tanggalKunjungan", tempFormattedDate);
+        setSelectedDate(tempFormattedDate);
+        const date = new Date(tempFormattedDate);
+
+        if (date.getDay() === 0) {
+          methods.setValue(
+            "jamMasuk",
+            //@ts-ignore
+            dayjs(kunjungan.tanggalPeriksa).tz(timeZone)
+          );
+        }
+        if (date.getDay() !== 0 && date.getDay() !== 6) {
+          setShowAntrianInfo(true);
+        }
+      }
       methods.setValue("keluhan", kunjungan.keluhan);
 
-      setSelectedDate(formatToDateInputValue(kunjungan.tanggal));
       setSelectedSesi(kunjungan.antrian.sesi.toString());
-
-      const date = new Date(formatToDateInputValue(kunjungan.tanggal));
-      if (date.getDay() === 0) {
-        methods.setValue("jamMasuk", dayjs(kunjungan.tanggalPeriksa));
-      }
-      if (date.getDay() !== 0 && date.getDay() !== 6) {
-        setShowAntrianInfo(true);
-      }
     }
   }, [kunjungan, methods]);
 
@@ -105,26 +118,21 @@ const KunjunganUpdatePage = () => {
         router.push("/kunjungan/" + router.query.id);
       }
     };
-
-    console.log(
-      showInformationSunday
-        ? {
-            ...data,
-            jamMasuk: formatTimeDayjs(data.jamMasuk),
-            id: router.query.id,
-          }
-        : { ...data, id: router.query.id }
-    );
     postData();
   };
 
   useEffect(() => {
-    const date = new Date(kunjungan?.tanggal as string);
+    if (kunjungan) {
+      const tempFormattedDate = formatToDateInputValue(kunjungan.tanggal);
 
-    if (date.getDay() > 0 && date.getDay() < 6) {
-      setShowSesi(true);
-    } else if (date.getDay() === 0) {
-      setShowInformationSunday(true);
+      if (tempFormattedDate) {
+        const date = new Date(tempFormattedDate);
+        if (date.getDay() > 0 && date.getDay() < 6) {
+          setShowSesi(true);
+        } else if (date.getDay() === 0) {
+          setShowInformationSunday(true);
+        }
+      }
     }
   }, [kunjungan]);
 
