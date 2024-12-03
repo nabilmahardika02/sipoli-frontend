@@ -125,7 +125,7 @@ const RekamMedisPDF: React.FC<RekamMedisPDFProps> = ({ kunjungan }) => {
       const imgData = canvas.toDataURL("image/png");
       addPages(imgData);
 
-      pdf.save(`Rekam-Medis.pdf`);
+      pdf.save(`Rekam-Medis-${pasien?.noRekamMedis}.pdf`);
     } catch (error) {
       console.error("PDF Generation Error:", error);
       alert("Failed to generate PDF. Please try again.");
@@ -135,6 +135,12 @@ const RekamMedisPDF: React.FC<RekamMedisPDFProps> = ({ kunjungan }) => {
   return (
     <div className="p-6">
       {/* Template PDF */}
+      <div className="mt-4 flex justify-end">
+        <Button onClick={handleGeneratePDF} variant="primary">
+          Unduh Dokumen
+        </Button>
+      </div>
+      <br></br>
       <div
         ref={pdfRef}
         className="border p-4 bg-white rounded shadow-md max-w-lg mx-auto"
@@ -142,8 +148,7 @@ const RekamMedisPDF: React.FC<RekamMedisPDFProps> = ({ kunjungan }) => {
       >
         <section className="bg-white w-full h-full">
           <div>
-            <div className="flex justify-between items-center gap-2"
-            >
+            <div className="flex justify-between items-center gap-2">
               <div className="h-full items-center">
                 <Logo sizeCustom={60} />
               </div>
@@ -158,12 +163,12 @@ const RekamMedisPDF: React.FC<RekamMedisPDFProps> = ({ kunjungan }) => {
               </div>
               <div className="text-right">
                 <div className="flex flex-col">
-                <Typography variant="p4" weight="bold">
-                  REKAM MEDIS
-                </Typography>
-                <Typography variant="p4" weight="bold">
-                  {pasien?.noRekamMedis}
-                </Typography>
+                  <Typography variant="p4" weight="bold">
+                    REKAM MEDIS
+                  </Typography>
+                  <Typography variant="p4" weight="bold">
+                    {pasien?.noRekamMedis}
+                  </Typography>
                 </div>
               </div>
             </div>
@@ -232,15 +237,7 @@ const RekamMedisPDF: React.FC<RekamMedisPDFProps> = ({ kunjungan }) => {
               Informasi Pemeriksaan
             </Typography>
 
-            <div className="grid grid-cols-[100px_100px_100px_1fr] gap-y-1">
-              <div className="flex flex-col items-start">
-                <Typography variant="p4" className="font-light">
-                  Dokter Pengirim
-                </Typography>
-                <Typography variant="p4">
-                  {kunjungan?.dokterPengirim || "-"}
-                </Typography>
-              </div>
+            <div className="grid grid-cols-[150px_150px1fr] gap-y-1">
               <div className="flex flex-col items-start">
                 <Typography variant="p4" className="font-light">
                   Dokter
@@ -252,18 +249,8 @@ const RekamMedisPDF: React.FC<RekamMedisPDFProps> = ({ kunjungan }) => {
                   Tanggal Masuk
                 </Typography>
                 <Typography variant="p4">
-                  {kunjungan?.tanggalMasuk
-                    ? formatDate(kunjungan?.tanggalMasuk)
-                    : "-"}
-                </Typography>
-              </div>
-              <div className="flex flex-col items-start">
-                <Typography variant="p4" className="font-light">
-                  Tanggal Keluar
-                </Typography>
-                <Typography variant="p4">
-                  {kunjungan?.tanggalKeluar
-                    ? formatDate(kunjungan?.tanggalKeluar)
+                  {kunjungan?.tanggalPeriksa
+                    ? formatDate(kunjungan?.tanggalPeriksa)
                     : "-"}
                 </Typography>
               </div>
@@ -275,13 +262,17 @@ const RekamMedisPDF: React.FC<RekamMedisPDFProps> = ({ kunjungan }) => {
               Anamnesa (Keluhan dan Gejala Penyakit)
             </Typography>
             <div className="grid grid-cols-[100px_1fr] gap-y-1">
-              <Typography variant="p4" className="font-light">Keluhan Utama</Typography>
+              <Typography variant="p4" className="font-light">
+                Keluhan Utama
+              </Typography>
               <Typography variant="p4">
                 {kunjungan?.hasilPemeriksaan.keluhanUtama || "-"}
               </Typography>
             </div>
             <div className="grid grid-cols-[150px_1fr] gap-y-1">
-              <Typography variant="p4" className="font-light">Riwayat Penyakit Sekarang</Typography>
+              <Typography variant="p4" className="font-light">
+                Riwayat Penyakit Sekarang
+              </Typography>
               <Typography variant="p4">
                 {kunjungan?.hasilPemeriksaan.riwayatPenyakitSekarang || "-"}
               </Typography>
@@ -315,7 +306,7 @@ const RekamMedisPDF: React.FC<RekamMedisPDFProps> = ({ kunjungan }) => {
                   Kelainan Saluran Cerna
                 </Typography>
                 <Typography variant="p4">
-                  {kunjungan?.tanggalMasuk
+                  {pasien?.riwayatPenyakitDahulu.kelainanSaluranCerna
                     ? formatDate(
                         pasien?.riwayatPenyakitDahulu.kelainanSaluranCerna ||
                           "-"
@@ -328,7 +319,7 @@ const RekamMedisPDF: React.FC<RekamMedisPDFProps> = ({ kunjungan }) => {
                   Kencing Manis
                 </Typography>
                 <Typography variant="p4">
-                  {kunjungan?.tanggalMasuk
+                  {pasien?.riwayatPenyakitDahulu.kencingManis
                     ? formatDate(
                         pasien?.riwayatPenyakitDahulu.kencingManis || "-"
                       )
@@ -340,7 +331,7 @@ const RekamMedisPDF: React.FC<RekamMedisPDFProps> = ({ kunjungan }) => {
                   Rawat Inap
                 </Typography>
                 <Typography variant="p4">
-                  {kunjungan?.tanggalMasuk
+                  {pasien?.riwayatPenyakitDahulu.rawatInap
                     ? formatDate(pasien?.riwayatPenyakitDahulu.rawatInap || "-")
                     : "-"}
                 </Typography>
@@ -350,7 +341,7 @@ const RekamMedisPDF: React.FC<RekamMedisPDFProps> = ({ kunjungan }) => {
                   Kecelakaan
                 </Typography>
                 <Typography variant="p4">
-                  {kunjungan?.tanggalMasuk
+                  {pasien?.riwayatPenyakitDahulu.kecelakaan
                     ? formatDate(
                         pasien?.riwayatPenyakitDahulu.kecelakaan || "-"
                       )
@@ -364,7 +355,7 @@ const RekamMedisPDF: React.FC<RekamMedisPDFProps> = ({ kunjungan }) => {
                   Tindakan Bedah
                 </Typography>
                 <Typography variant="p4">
-                  {kunjungan?.tanggalMasuk
+                  {pasien?.riwayatPenyakitDahulu.tindakanBedah
                     ? formatDate(
                         pasien?.riwayatPenyakitDahulu.tindakanBedah || "-"
                       )
@@ -376,9 +367,10 @@ const RekamMedisPDF: React.FC<RekamMedisPDFProps> = ({ kunjungan }) => {
                   Obat-obatan dan Penyakit Lainnya
                 </Typography>
                 <Typography variant="p4">
-                  {kunjungan?.tanggalMasuk
+                  {pasien?.riwayatPenyakitDahulu.lainnya
                     ? formatDate(pasien?.riwayatPenyakitDahulu.lainnya || "-")
                     : "-"}
+                    
                 </Typography>
               </div>
             </div>
@@ -484,7 +476,9 @@ const RekamMedisPDF: React.FC<RekamMedisPDFProps> = ({ kunjungan }) => {
             </div>
             <div className="grid grid-cols-[1fr] gap-y-1">
               <div className="flex flex-col items-start">
-                <Typography variant="p4" className="font-light">Obat-obatan</Typography>
+                <Typography variant="p4" className="font-light">
+                  Obat-obatan
+                </Typography>
                 <Typography variant="p4">
                   {pasien?.kebiasaan.obatObatan || "-"}
                 </Typography>
@@ -592,56 +586,92 @@ const RekamMedisPDF: React.FC<RekamMedisPDFProps> = ({ kunjungan }) => {
             </Typography>
 
             <div className="grid grid-cols-[50px_10px_1fr] gap-y-1">
-              <Typography variant="p4" className="font-light">Mata</Typography>
-              <Typography variant="p4" className="font-light">:</Typography>
+              <Typography variant="p4" className="font-light">
+                Mata
+              </Typography>
+              <Typography variant="p4" className="font-light">
+                :
+              </Typography>
               <Typography variant="p4">
                 {kunjungan?.hasilPemeriksaan.statusPresent.mata || "-"}
               </Typography>
 
-              <Typography variant="p4" className="font-light">Telinga</Typography>
-              <Typography variant="p4" className="font-light">:</Typography>
+              <Typography variant="p4" className="font-light">
+                Telinga
+              </Typography>
+              <Typography variant="p4" className="font-light">
+                :
+              </Typography>
               <Typography variant="p4">
                 {kunjungan?.hasilPemeriksaan.statusPresent.telinga || "-"}
               </Typography>
 
-              <Typography variant="p4" className="font-light">Hidung</Typography>
-              <Typography variant="p4" className="font-light">:</Typography>
+              <Typography variant="p4" className="font-light">
+                Hidung
+              </Typography>
+              <Typography variant="p4" className="font-light">
+                :
+              </Typography>
               <Typography variant="p4">
                 {kunjungan?.hasilPemeriksaan.statusPresent.hidung || "-"}
               </Typography>
 
-              <Typography variant="p4" className="font-light">Tonsil</Typography>
-              <Typography variant="p4" className="font-light">:</Typography>
+              <Typography variant="p4" className="font-light">
+                Tonsil
+              </Typography>
+              <Typography variant="p4" className="font-light">
+                :
+              </Typography>
               <Typography variant="p4">
                 {kunjungan?.hasilPemeriksaan.statusPresent.tonsil || "-"}
               </Typography>
 
-              <Typography variant="p4" className="font-light">Faring</Typography>
-              <Typography variant="p4" className="font-light">:</Typography>
+              <Typography variant="p4" className="font-light">
+                Faring
+              </Typography>
+              <Typography variant="p4" className="font-light">
+                :
+              </Typography>
               <Typography variant="p4">
                 {kunjungan?.hasilPemeriksaan.statusPresent.faring || "-"}
               </Typography>
 
-              <Typography variant="p4" className="font-light">Cor</Typography>
-              <Typography variant="p4" className="font-light">:</Typography>
+              <Typography variant="p4" className="font-light">
+                Cor
+              </Typography>
+              <Typography variant="p4" className="font-light">
+                :
+              </Typography>
               <Typography variant="p4">
                 {kunjungan?.hasilPemeriksaan.statusPresent.cor || "-"}
               </Typography>
 
-              <Typography variant="p4" className="font-light">Pulmo</Typography>
-              <Typography variant="p4" className="font-light">:</Typography>
+              <Typography variant="p4" className="font-light">
+                Pulmo
+              </Typography>
+              <Typography variant="p4" className="font-light">
+                :
+              </Typography>
               <Typography variant="p4">
                 {kunjungan?.hasilPemeriksaan.statusPresent.pulmo || "-"}
               </Typography>
 
-              <Typography variant="p4" className="font-light">Abd</Typography>
-              <Typography variant="p4" className="font-light">:</Typography>
+              <Typography variant="p4" className="font-light">
+                Abd
+              </Typography>
+              <Typography variant="p4" className="font-light">
+                :
+              </Typography>
               <Typography variant="p4">
                 {kunjungan?.hasilPemeriksaan.statusPresent.abd || "-"}
               </Typography>
 
-              <Typography variant="p4" className="font-light">Ext</Typography>
-              <Typography variant="p4" className="font-light">:</Typography>
+              <Typography variant="p4" className="font-light">
+                Ext
+              </Typography>
+              <Typography variant="p4" className="font-light">
+                :
+              </Typography>
               <Typography variant="p4">
                 {kunjungan?.hasilPemeriksaan.statusPresent.ext || "-"}
               </Typography>
@@ -769,11 +799,6 @@ const RekamMedisPDF: React.FC<RekamMedisPDFProps> = ({ kunjungan }) => {
             </div>
           </div>
         </section>
-      </div>
-      <div className="mt-4 flex justify-end">
-        <Button onClick={handleGeneratePDF} variant="primary">
-          Unduh Dokumen
-        </Button>
       </div>
     </div>
   );

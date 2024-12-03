@@ -11,7 +11,6 @@ import { LoadingDiv } from "@/components/elements/Loading";
 import sendRequest from "@/lib/getApi";
 import useAuthStore from "@/store/useAuthStore";
 import { Account } from "@/types/entities/account";
-import { Profile } from "@/types/entities/profile";
 import {
   getRowIdProfile,
   profileTableColumns,
@@ -47,7 +46,7 @@ const DetailPage = () => {
       }
     };
     fetchAccount();
-  }, []);
+  }, [user?.accountId]);
 
   const logout = useAuthStore.useLogout();
 
@@ -98,7 +97,7 @@ const DetailPage = () => {
                 <Typography
                   variant="p2"
                   weight="semibold"
-                  className="text-gray-400"
+                  className="text-gray-700"
                 >
                   Username
                 </Typography>
@@ -106,14 +105,16 @@ const DetailPage = () => {
                   <Typography className="text-primary-1">
                     {selectedAccount?.username}
                   </Typography>
-                  <IconButton size="sm" icon={LuPencil} variant="primary" />
+                  <Link href={`/akun/me/username`}>
+                    <IconButton size="sm" icon={LuPencil} variant="primary" />
+                  </Link>
                 </div>
               </div>
               <div>
                 <Typography
                   variant="p2"
                   weight="semibold"
-                  className="text-gray-400"
+                  className="text-gray-700"
                 >
                   Role
                 </Typography>
@@ -127,7 +128,7 @@ const DetailPage = () => {
                     <Typography
                       variant="p2"
                       weight="semibold"
-                      className="text-gray-400"
+                      className="text-gray-700"
                     >
                       Jabatan
                     </Typography>
@@ -139,7 +140,7 @@ const DetailPage = () => {
                     <Typography
                       variant="p2"
                       weight="semibold"
-                      className="text-gray-400"
+                      className="text-gray-700"
                     >
                       Unit Kerja
                     </Typography>
@@ -151,7 +152,7 @@ const DetailPage = () => {
                     <Typography
                       variant="p2"
                       weight="semibold"
-                      className="text-gray-400"
+                      className="text-gray-700"
                     >
                       Eselon
                     </Typography>
@@ -163,7 +164,7 @@ const DetailPage = () => {
                     <Typography
                       variant="p2"
                       weight="semibold"
-                      className="text-gray-400"
+                      className="text-gray-700"
                     >
                       Alamat
                     </Typography>
@@ -178,7 +179,7 @@ const DetailPage = () => {
                     <Typography
                       variant="p2"
                       weight="semibold"
-                      className="text-gray-400"
+                      className="text-gray-700"
                     >
                       Nama
                     </Typography>
@@ -190,7 +191,7 @@ const DetailPage = () => {
                     <Typography
                       variant="p2"
                       weight="semibold"
-                      className="text-gray-400"
+                      className="text-gray-700"
                     >
                       Jenis Kelamin
                     </Typography>
@@ -204,7 +205,7 @@ const DetailPage = () => {
                     <Typography
                       variant="p2"
                       weight="semibold"
-                      className="text-gray-400"
+                      className="text-gray-700"
                     >
                       Nomor HP
                     </Typography>
@@ -216,7 +217,7 @@ const DetailPage = () => {
                     <Typography
                       variant="p2"
                       weight="semibold"
-                      className="text-gray-400"
+                      className="text-gray-700"
                     >
                       Tanggal Lahir
                     </Typography>
@@ -232,7 +233,7 @@ const DetailPage = () => {
                 <Typography
                   variant="p2"
                   weight="semibold"
-                  className="text-gray-400"
+                  className="text-gray-700"
                 >
                   Tanggal Registrasi
                 </Typography>
@@ -244,7 +245,7 @@ const DetailPage = () => {
                 <Typography
                   variant="p2"
                   weight="semibold"
-                  className="text-gray-400"
+                  className="text-gray-700"
                 >
                   Terakhir Diubah
                 </Typography>
