@@ -80,7 +80,7 @@ const KunjunganPage = () => {
     if (router.query.id) {
       fetchSuratIzin();
     }
-  }, []);
+  }, [router.query.id]);
 
   const handleTanggalAwal = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTanggalAwal(event.target.value);
