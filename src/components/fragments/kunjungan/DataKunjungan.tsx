@@ -33,7 +33,7 @@ const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
       <div>
-        <Typography variant="p2" weight="semibold" className="text-gray-400">
+        <Typography variant="p2" weight="semibold" className="text-gray-700">
           Pasien
         </Typography>
         <Typography className="text-primary-1">
@@ -41,7 +41,7 @@ const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
         </Typography>
       </div>
       <div>
-        <Typography variant="p2" weight="semibold" className="text-gray-400">
+        <Typography variant="p2" weight="semibold" className="text-gray-700">
           Status
         </Typography>
         <Typography
@@ -53,12 +53,12 @@ const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
       {(new Date(kunjungan.tanggal).getDay() === 0 || kunjungan.hasilPemeriksaan)&& (
         <>
           <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
-              Tanggal Masuk
+            <Typography variant="p2" weight="semibold" className="text-gray-700">
+              Tanggal Periksa
             </Typography>
             <Typography className="text-primary-1">
-              {kunjungan.tanggalMasuk
-                ? formatDate(kunjungan.tanggalMasuk)
+              {kunjungan.tanggalPeriksa
+                ? formatDate(kunjungan.tanggalPeriksa)
                 : "-"}
             </Typography>
           </div>
@@ -67,25 +67,7 @@ const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
       {kunjungan.hasilPemeriksaan && (
         <>
           <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
-              Tanggal Keluar
-            </Typography>
-            <Typography className="text-primary-1">
-              {kunjungan.tanggalKeluar
-                ? formatDate(kunjungan.tanggalKeluar)
-                : "-"}
-            </Typography>
-          </div>
-          <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
-              Dokter Pengirim
-            </Typography>
-            <Typography className="text-primary-1">
-              {kunjungan.dokterPengirim}
-            </Typography>
-          </div>
-          <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-400">
+            <Typography variant="p2" weight="semibold" className="text-gray-700">
               Dokter
             </Typography>
             <Typography className="text-primary-1">
@@ -95,7 +77,7 @@ const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
         </>
       )}
       {new Date(kunjungan.tanggal).getDay() !== 0 && !kunjungan.hasilPemeriksaan && (<div>
-        <Typography variant="p2" weight="semibold" className="text-gray-400">
+        <Typography variant="p2" weight="semibold" className="text-gray-700">
           Tanggal
         </Typography>
         <Typography className="text-primary-1">
@@ -103,7 +85,7 @@ const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
         </Typography>
       </div>)}
       <div>
-        <Typography variant="p2" weight="semibold" className="text-gray-400">
+        <Typography variant="p2" weight="semibold" className="text-gray-700">
           Keluhan
         </Typography>
         <Typography className="text-primary-1">
@@ -115,7 +97,7 @@ const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
           <Typography
             variant="p2"
             weight="semibold"
-            className="text-gray-400"
+            className="text-gray-700"
           >
             Sesi
           </Typography>
@@ -130,7 +112,7 @@ const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
             <Typography
               variant="p2"
               weight="semibold"
-              className="text-gray-400"
+              className="text-gray-700"
             >
               No Antrian
             </Typography>

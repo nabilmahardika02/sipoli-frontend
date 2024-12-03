@@ -18,10 +18,6 @@ const RiwayatPemakaian = () => {
         "get",
         `obat/${router.query.id}/list-pemakaian`
       );
-
-      if (isSuccess) {
-        console.log(responseData);
-      }
     };
     fetchData();
   }, [router.query.id]);

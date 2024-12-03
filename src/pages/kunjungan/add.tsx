@@ -15,7 +15,8 @@ import useAuthStore from "@/store/useAuthStore";
 import { Account } from "@/types/entities/account";
 import { Profile } from "@/types/entities/profile";
 import { KunjunganForm } from "@/types/forms/kunjunganForm";
-import Link from "next/link";
+import { Dayjs } from "dayjs";
+import Head from "next/head";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
@@ -91,7 +92,7 @@ const KunjunganAddPage = () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "post",
         "kunjungan/add",
-        showInformationSunday
+        showInformationSunday && data.jamMasuk
           ? { ...data, jamMasuk: formatTimeDayjs(data.jamMasuk) }
           : data,
         true
@@ -143,12 +144,25 @@ const KunjunganAddPage = () => {
     const date = new Date(selectedDate);
     setSelectedDate(selectedDate);
 
-    // Hitung tanggal maksimum (7 hari setelah hari ini)
+    // Hitung tanggal "hari ini" tanpa jam
     const today = new Date();
-    const maxDate = new Date(today);
-    maxDate.setDate(today.getDate() + 7);
+    const todayWithoutTime = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    );
 
-    if (date > maxDate) {
+    // Hitung tanggal maksimum (7 hari setelah "hari ini")
+    const maxDate = new Date(todayWithoutTime);
+    maxDate.setDate(todayWithoutTime.getDate() + 7); // Tambahkan 7 hari ke tanggal
+
+    const dateWithoutTime = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    );
+
+    if (dateWithoutTime > maxDate) {
       setShowInformationSunday(false);
       setShowInformationSaturday(false);
       setShowSesi(false);
@@ -194,7 +208,6 @@ const KunjunganAddPage = () => {
 
       if (isSuccess) {
         setAntrianInfo(responseData as number);
-        console.log(responseData);
       }
     };
 
@@ -214,6 +227,9 @@ const KunjunganAddPage = () => {
 
   return (
     <main>
+      <Head>
+        <title>Tambah Kunjungan</title>
+      </Head>
       <section>
         <div className="flex justify-center md:hidden">
           {user?.role === "PASIEN" && (
@@ -268,9 +284,9 @@ const KunjunganAddPage = () => {
                     validation={{
                       required: "Jam Kunjungan wajib diisi",
                     }}
+                    minuteStep={15}
                     className="lg:w-full"
-                    helperText="Silakan pilih waktu dalam WITA untuk berkunjung di hari
-                      Minggu"
+                    helperText="Silakan pilih waktu dalam WITA untuk berkunjung di hari Minggu"
                   />
                 )}
                 {showSesi && validationMessage === null && (
@@ -420,7 +436,9 @@ const KunjunganAddPage = () => {
                 )}
                 <TextArea
                   id="keluhan"
-                  parentClassName="lg:w-[50%]"
+                  parentClassName={`lg:${
+                    user.role !== "PASIEN" ? "w-[50%]" : "flex-grow"
+                  }`}
                   label="Keluhan"
                   placeholder="Keluhan yang dirasakan"
                   maxLength={255}
@@ -429,7 +447,9 @@ const KunjunganAddPage = () => {
               </div>
               <div className="mt-5 flex items-center justify-center gap-4">
                 <Button type="submit">Simpan</Button>
-                <Button variant="danger" onClick={handleBack}>Batal</Button>
+                <Button variant="danger" onClick={handleBack}>
+                  Batal
+                </Button>
               </div>
             </form>
           </FormProvider>

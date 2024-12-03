@@ -10,6 +10,13 @@ export type KunjunganForm = {
   keluhan: string;
 };
 
+export type UpdateKunjunganForm = {
+  sesi: string;
+  tanggalKunjungan: string;
+  jamMasuk: Dayjs;
+  keluhan: string;
+}
+
 export type CancelKunjunganForm = {
   status: number;
 };

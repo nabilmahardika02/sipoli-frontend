@@ -8,7 +8,7 @@ import sendRequest from "@/lib/getApi";
 import useAuthStore from "@/store/useAuthStore"; // supaya pasien & admin gak bisa edit
 import { DiagnosaAkhir } from "@/types/entities/kunjungan";
 import { UpdateDiagnosaAkhirForm } from "@/types/forms/hasilPemeriksaanForm";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { LuPencil } from "react-icons/lu";
 
@@ -29,20 +29,19 @@ const DataDiagnosaAkhir = ({
   const methods = useForm<UpdateDiagnosaAkhirForm>({
     mode: "onTouched",
   });
-  const { handleSubmit } = methods;
+  const { handleSubmit, reset } = methods;
 
-  const onSubmit: SubmitHandler<UpdateDiagnosaAkhirForm> = (data) => {
+  const onSubmit: SubmitHandler<UpdateDiagnosaAkhirForm> = (formData) => {
     const postData = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "put",
         `hasil-pemeriksaan/${idPemeriksaan}/diagnosa-akhir`,
-        data,
+        formData,
         true
       );
 
       if (isSuccess) {
         setShowModal(false);
-        methods.reset();
         setTrigger(!trigger);
       }
     };
@@ -50,18 +49,19 @@ const DataDiagnosaAkhir = ({
     postData();
   };
 
-  useEffect(() => {
-    if (data) {
-      methods.setValue("icd10", data.icd10);
-      methods.setValue("diagnosaKerja", data.diagnosaKerja);
-      methods.setValue("rencana", data.rencana);
-      methods.setValue("tindakan", data.tindakan);
-    }
-  }, [data, methods]);
+  const handleOpenModal = () => {
+    reset({
+      icd10: data.icd10 || "",
+      diagnosaKerja: data.diagnosaKerja || "",
+      rencana: data.rencana || "",
+      tindakan: data.tindakan || "",
+    });
+    setShowModal(true);
+  };
 
   return (
     <div>
-    <Divider weight="thin" className="my-5" />
+      <Divider weight="thin" className="my-5" />
       <div className="mt-5 flex items-center gap-2">
         <div className="w-1 h-5 bg-primary-1"></div>
         <Typography className="text-primary-1 font-semibold">
@@ -71,13 +71,13 @@ const DataDiagnosaAkhir = ({
           <IconButton
             icon={LuPencil}
             variant="primary"
-            onClick={() => setShowModal(true)}
+            onClick={handleOpenModal} // Gunakan fungsi untuk membuka modal
           />
         )}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
         <div>
-          <Typography variant="p2" weight="semibold" className="text-gray-400">
+          <Typography variant="p2" weight="semibold" className="text-gray-700">
             ICD10
           </Typography>
           <Typography className="text-primary-1">
@@ -85,7 +85,7 @@ const DataDiagnosaAkhir = ({
           </Typography>
         </div>
         <div>
-          <Typography variant="p2" weight="semibold" className="text-gray-400">
+          <Typography variant="p2" weight="semibold" className="text-gray-700">
             Diagnosa Kerja
           </Typography>
           <Typography className="text-primary-1">
@@ -93,7 +93,7 @@ const DataDiagnosaAkhir = ({
           </Typography>
         </div>
         <div>
-          <Typography variant="p2" weight="semibold" className="text-gray-400">
+          <Typography variant="p2" weight="semibold" className="text-gray-700">
             Rencana
           </Typography>
           <Typography className="text-primary-1">
@@ -101,7 +101,7 @@ const DataDiagnosaAkhir = ({
           </Typography>
         </div>
         <div>
-          <Typography variant="p2" weight="semibold" className="text-gray-400">
+          <Typography variant="p2" weight="semibold" className="text-gray-700">
             Tindakan
           </Typography>
           <Typography className="text-primary-1">
@@ -134,9 +134,15 @@ const DataDiagnosaAkhir = ({
                     label="Tindakan"
                   />
                 </div>
-                <Button type="submit" className="max-md:w-full">
-                  Simpan
-                </Button>
+                <div className="flex justify-center gap-2">
+                  <Button
+                    variant="danger"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Batal
+                  </Button>
+                  <Button type="submit">Simpan</Button>
+                </div>
               </form>
             </FormProvider>
           </div>

@@ -1,8 +1,8 @@
+import Breadcrumb from "@/components/elements/Breadcrumb";
 import Button from "@/components/elements/Button";
 import Divider from "@/components/elements/Divider";
 import Input from "@/components/elements/forms/Input";
 import SelectInput from "@/components/elements/forms/SelectInput";
-import TextArea from "@/components/elements/forms/TextArea";
 import { LoadingDiv } from "@/components/elements/Loading";
 import Typography from "@/components/elements/Typography";
 import { checkRole } from "@/lib/checkRole";
@@ -42,20 +42,36 @@ const HasilPemeriksaan1Form = ({
 
   const { handleSubmit } = methods;
 
+  const getDefaultTanggalPeriksa = () => {
+    const currentDate = new Date();
+    const kunjunganDate = new Date(kunjungan.tanggal);
+
+    kunjunganDate.setHours(currentDate.getHours());
+    kunjunganDate.setMinutes(currentDate.getMinutes());
+
+    const year = kunjunganDate.getFullYear();
+    const month = String(kunjunganDate.getMonth() + 1).padStart(2, "0"); 
+    const day = String(kunjunganDate.getDate()).padStart(2, "0");
+    const hours = String(kunjunganDate.getHours()).padStart(2, "0");
+    const minutes = String(kunjunganDate.getMinutes()).padStart(2, "0");
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+
   useEffect(() => {
     if (hasilPemeriksaan) {
-      methods.setValue("dokterPengirim", hasilPemeriksaan.dokterPengirim);
       methods.setValue("dokter", hasilPemeriksaan.dokter);
       methods.setValue("keluhanUtama", hasilPemeriksaan.keluhanUtama);
       methods.setValue(
         "riwayatPenyakitSekarang",
         hasilPemeriksaan.riwayatPenyakitSekarang
       );
-      methods.setValue("kie", hasilPemeriksaan.kie);
-      methods.setValue("tanggalMasuk", hasilPemeriksaan.tanggalMasuk);
-      methods.setValue("tanggalKeluar", hasilPemeriksaan.tanggalKeluar);
+      methods.setValue(
+        "tanggalPeriksa",
+        hasilPemeriksaan.tanggalPeriksa || getDefaultTanggalPeriksa()
+      );
     }
-  }, [hasilPemeriksaan, methods]);
+  }, [hasilPemeriksaan, methods, kunjungan.tanggal]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,13 +91,10 @@ const HasilPemeriksaan1Form = ({
   const onSubmit: SubmitHandler<HasilKunjunganForm> = (data) => {
     setHasilPemeriksaan((prevState) => ({
       ...prevState,
-      dokterPengirim: data.dokterPengirim,
       dokter: data.dokter,
       keluhanUtama: data.keluhanUtama,
       riwayatPenyakitSekarang: data.riwayatPenyakitSekarang,
-      kie: data.kie,
-      tanggalMasuk: data.tanggalMasuk,
-      tanggalKeluar: data.tanggalKeluar,
+      tanggalPeriksa: data.tanggalPeriksa,
     }));
 
     setSection(2);
@@ -89,10 +102,8 @@ const HasilPemeriksaan1Form = ({
 
   return (
     <section>
-      <Typography variant="h7" className="text-primary-1">
-        Formulir 1
-      </Typography>
-      <Divider></Divider>
+      <Breadcrumb currentStep={1} totalSteps={6} />
+      <Divider weight="thin" className="my-5" />
       <Typography variant="h7" className="mt-5 text-primary-1">
         Data Kunjungan - {kunjungan.profile.name}
       </Typography>
@@ -100,12 +111,6 @@ const HasilPemeriksaan1Form = ({
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className="mt-5 items-end">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
-              <Input
-                id="dokterPengirim"
-                placeholder="Dokter Pengirim"
-                label="Dokter Pengirim"
-                {...methods.register("dokterPengirim")}
-              />
               <SelectInput
                 id="dokter"
                 placeholder="Pilih Dokter"
@@ -123,21 +128,12 @@ const HasilPemeriksaan1Form = ({
                 ))}
               </SelectInput>
               <Input
-                id="tanggalMasuk"
+                id="tanggalPeriksa"
                 type="datetime-local"
-                placeholder="Tanggal Masuk"
-                label="Tanggal Masuk"
-                defaultValue={new Date(kunjungan.tanggalMasuk)
-                  .toISOString()
-                  .slice(0, 16)}
-                {...methods.register("tanggalMasuk")}
-              />
-              <Input
-                id="tanggalKeluar"
-                type="datetime-local"
-                placeholder="Tanggal Keluar"
-                label="Tanggal Keluar"
-                {...methods.register("tanggalKeluar")}
+                placeholder="Tanggal Periksa"
+                label="Tanggal Periksa"
+                defaultValue={getDefaultTanggalPeriksa()} 
+                {...methods.register("tanggalPeriksa")}
               />
               <Input
                 id="keluhanUtama"
@@ -150,12 +146,6 @@ const HasilPemeriksaan1Form = ({
                 placeholder="Riwayat Penyakit dari Keluhan Utama"
                 label="Riwayat Penyakit dari Keluhan Utama"
                 {...methods.register("riwayatPenyakitSekarang")}
-              />
-              <TextArea
-                id="kie"
-                placeholder="Komunikasi Informasi dan Edukasi"
-                label="Komunikasi Informasi dan Edukasi"
-                {...methods.register("kie")}
               />
             </div>
             <div className="flex items-center gap-3">

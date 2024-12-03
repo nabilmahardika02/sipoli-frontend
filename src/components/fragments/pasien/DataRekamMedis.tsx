@@ -1,12 +1,11 @@
 import Button from "@/components/elements/Button";
 import Divider from "@/components/elements/Divider";
 import Input from "@/components/elements/forms/Input";
-import IconButton from "@/components/elements/IconButton";
 import Typography from "@/components/elements/Typography";
 import ModalLayout from "@/components/layouts/ModalLayout";
 import { calculateAge, formatDate, getJenisKelamin } from "@/lib/formater";
 import sendRequest from "@/lib/getApi";
-import useAuthStore from "@/store/useAuthStore"; // Supaya pasien gabisa edit
+import useAuthStore from "@/store/useAuthStore";
 import { Pasien } from "@/types/entities/profile";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
@@ -24,13 +23,24 @@ const DataRekamMedis = ({
 }) => {
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
-  const user = useAuthStore.useUser(); // ambil data user dari auth store, Supaya pasien gabisa edit
+  const user = useAuthStore.useUser();
 
   const methods = useForm<{ noRekamMedis: string }>({
     mode: "onTouched",
   });
 
-  const { handleSubmit } = methods;
+  const { handleSubmit, reset } = methods;
+
+  // Menyiapkan nilai default
+  const prepareDefaultValues = () => ({
+    noRekamMedis: pasien.noRekamMedis || "",
+  });
+
+  // Buka modal dan reset form ke nilai default
+  const handleOpenModal = () => {
+    reset(prepareDefaultValues());
+    setShowModal(true);
+  };
 
   const onSubmit: SubmitHandler<{ noRekamMedis: string }> = (data) => {
     const postData = async () => {
@@ -46,19 +56,12 @@ const DataRekamMedis = ({
 
       if (isSuccess) {
         setShowModal(false);
-        methods.reset();
         setTrigger(!trigger);
       }
     };
 
     postData();
   };
-
-  useEffect(() => {
-    if (pasien) {
-      methods.setValue("noRekamMedis", pasien.noRekamMedis);
-    }
-  }, [pasien, methods]);
 
   return (
     <section className="data-section">
@@ -68,15 +71,15 @@ const DataRekamMedis = ({
             {pasien.noRekamMedis || "No Rekam Medis: -"}
           </Typography>
           {["DOKTER", "PERAWAT"].includes(user?.role ?? "") && (
-    <Button
-    className="max-md:aspect-square"
-    leftIcon={LuPencil}
-    onClick={() => setShowModal(true)}
-    variant="primary"
-  >
-    Ubah
-  </Button>
-)}
+            <Button
+              className="max-md:aspect-square"
+              leftIcon={LuPencil}
+              onClick={handleOpenModal}
+              variant="primary"
+            >
+              Ubah Nomor Rekam Medis
+            </Button>
+          )}
         </div>
         <Divider />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
@@ -84,9 +87,9 @@ const DataRekamMedis = ({
             <Typography
               variant="p2"
               weight="semibold"
-              className="text-gray-400"
+              className="text-gray-700"
             >
-              Name
+              Nama
             </Typography>
             <Typography className="text-primary-1">{pasien.name}</Typography>
           </div>
@@ -94,7 +97,7 @@ const DataRekamMedis = ({
             <Typography
               variant="p2"
               weight="semibold"
-              className="text-gray-400"
+              className="text-gray-700"
             >
               NIK
             </Typography>
@@ -104,7 +107,7 @@ const DataRekamMedis = ({
             <Typography
               variant="p2"
               weight="semibold"
-              className="text-gray-400"
+              className="text-gray-700"
             >
               Usia
             </Typography>
@@ -116,7 +119,7 @@ const DataRekamMedis = ({
             <Typography
               variant="p2"
               weight="semibold"
-              className="text-gray-400"
+              className="text-gray-700"
             >
               Jenis Kelamin
             </Typography>
@@ -128,7 +131,7 @@ const DataRekamMedis = ({
             <Typography
               variant="p2"
               weight="semibold"
-              className="text-gray-400"
+              className="text-gray-700"
             >
               Terakhir Diubah
             </Typography>
@@ -147,17 +150,24 @@ const DataRekamMedis = ({
             <FormProvider {...methods}>
               <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="mt-5 flex flex-col gap-2 items-end"
+                className="mt-5 items-end"
               >
-                <Input
-                  id="noRekamMedis"
-                  placeholder="Nomor Rekam Medis"
-                  validation={{ required: "Wajib diisi" }}
-                  label="Nomor Rekam Medis"
-                />
-                <Button type="submit" className="max-md:w-full">
-                  Save
-                </Button>
+                <div className="grid grid-cols-1 gap-5 mb-4">
+                  <Input
+                    id="noRekamMedis"
+                    placeholder="Nomor Rekam Medis"
+                    label="Nomor Rekam Medis"
+                  />
+                </div>
+                <div className="flex justify-center gap-2">
+                  <Button
+                    variant="danger"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Batal
+                  </Button>
+                  <Button type="submit">Simpan</Button>
+                </div>
               </form>
             </FormProvider>
           </div>

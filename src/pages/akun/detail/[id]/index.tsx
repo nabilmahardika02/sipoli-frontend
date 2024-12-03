@@ -188,7 +188,7 @@ const DetailPage = () => {
                 <Typography
                   variant="p2"
                   weight="semibold"
-                  className="text-gray-400"
+                  className="text-gray-700"
                 >
                   Username
                 </Typography>
@@ -200,7 +200,7 @@ const DetailPage = () => {
                 <Typography
                   variant="p2"
                   weight="semibold"
-                  className="text-gray-400"
+                  className="text-gray-700"
                 >
                   Role
                 </Typography>
@@ -214,7 +214,7 @@ const DetailPage = () => {
                     <Typography
                       variant="p2"
                       weight="semibold"
-                      className="text-gray-400"
+                      className="text-gray-700"
                     >
                       Jabatan
                     </Typography>
@@ -226,7 +226,7 @@ const DetailPage = () => {
                     <Typography
                       variant="p2"
                       weight="semibold"
-                      className="text-gray-400"
+                      className="text-gray-700"
                     >
                       Unit Kerja
                     </Typography>
@@ -238,7 +238,7 @@ const DetailPage = () => {
                     <Typography
                       variant="p2"
                       weight="semibold"
-                      className="text-gray-400"
+                      className="text-gray-700"
                     >
                       Eselon
                     </Typography>
@@ -250,7 +250,7 @@ const DetailPage = () => {
                     <Typography
                       variant="p2"
                       weight="semibold"
-                      className="text-gray-400"
+                      className="text-gray-700"
                     >
                       Alamat
                     </Typography>
@@ -265,7 +265,7 @@ const DetailPage = () => {
                     <Typography
                       variant="p2"
                       weight="semibold"
-                      className="text-gray-400"
+                      className="text-gray-700"
                     >
                       Nama
                     </Typography>
@@ -277,7 +277,7 @@ const DetailPage = () => {
                     <Typography
                       variant="p2"
                       weight="semibold"
-                      className="text-gray-400"
+                      className="text-gray-700"
                     >
                       Jenis Kelamin
                     </Typography>
@@ -291,7 +291,7 @@ const DetailPage = () => {
                     <Typography
                       variant="p2"
                       weight="semibold"
-                      className="text-gray-400"
+                      className="text-gray-700"
                     >
                       Nomor HP
                     </Typography>
@@ -303,7 +303,7 @@ const DetailPage = () => {
                     <Typography
                       variant="p2"
                       weight="semibold"
-                      className="text-gray-400"
+                      className="text-gray-700"
                     >
                       Tanggal Lahir
                     </Typography>
@@ -319,7 +319,7 @@ const DetailPage = () => {
                 <Typography
                   variant="p2"
                   weight="semibold"
-                  className="text-gray-400"
+                  className="text-gray-700"
                 >
                   Tanggal Registrasi
                 </Typography>
@@ -331,7 +331,7 @@ const DetailPage = () => {
                 <Typography
                   variant="p2"
                   weight="semibold"
-                  className="text-gray-400"
+                  className="text-gray-700"
                 >
                   Terakhir Diubah
                 </Typography>

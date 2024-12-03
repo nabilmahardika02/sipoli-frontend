@@ -60,7 +60,11 @@ export const createCustomToast = (options: ToastOptions) => {
   return { ...DEFAULT_TOAST, ...options };
 };
 
-export const showToast = (message: string, options?: ToastOptions, title?: string) => {
+export const showToast = (
+  message: string,
+  options?: ToastOptions,
+  title?: string
+) => {
   return toast(message, options || DEFAULT_TOAST);
 };
 

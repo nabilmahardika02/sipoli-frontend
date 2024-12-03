@@ -1,7 +1,6 @@
 import Button from "@/components/elements/Button";
 import Divider from "@/components/elements/Divider";
 import Input from "@/components/elements/forms/Input";
-import IconButton from "@/components/elements/IconButton";
 import Typography from "@/components/elements/Typography";
 import ModalLayout from "@/components/layouts/ModalLayout";
 import sendRequest from "@/lib/getApi";
@@ -9,7 +8,7 @@ import useAuthStore from "@/store/useAuthStore"; // Supaya pasien gabisa edit
 import { Pasien } from "@/types/entities/profile";
 import { UpdateRekamMedisForm } from "@/types/forms/rekamMedisForm";
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { LuPencil } from "react-icons/lu";
 
@@ -30,7 +29,25 @@ const DataRiwayatPenyakit = ({
     mode: "onTouched",
   });
 
-  const { handleSubmit } = methods;
+  const { handleSubmit, reset } = methods;
+
+  // Fungsi untuk menyiapkan nilai default
+  const prepareDefaultValues = () => ({
+    tindakanBedah: pasien.riwayatPenyakitDahulu.tindakanBedah || "",
+    kelainanJantung: pasien.riwayatPenyakitDahulu.kelainanJantung || "",
+    kencingManisPribadi: pasien.riwayatPenyakitDahulu.kencingManis || "",
+    kelainanSaluranCerna: pasien.riwayatPenyakitDahulu.kelainanSaluranCerna || "",
+    rawatInap: pasien.riwayatPenyakitDahulu.rawatInap || "",
+    penyakitHati: pasien.riwayatPenyakitDahulu.penyakitHati || "",
+    kecelakaan: pasien.riwayatPenyakitDahulu.kecelakaan || "",
+    riwayatSakitLainnya: pasien.riwayatPenyakitDahulu.lainnya || "",
+  });
+
+  // Reset nilai form saat membuka modal
+  const handleOpenModal = () => {
+    reset(prepareDefaultValues());
+    setShowModal(true);
+  };
 
   const onSubmit: SubmitHandler<UpdateRekamMedisForm> = (data) => {
     const postData = async () => {
@@ -46,44 +63,12 @@ const DataRiwayatPenyakit = ({
 
       if (isSuccess) {
         setShowModal(false);
-        methods.reset();
         setTrigger(!trigger);
       }
     };
 
     postData();
   };
-
-  useEffect(() => {
-    if (pasien) {
-      methods.setValue(
-        "tindakanBedah",
-        pasien.riwayatPenyakitDahulu.tindakanBedah
-      );
-      methods.setValue(
-        "kelainanJantung",
-        pasien.riwayatPenyakitDahulu.kelainanJantung
-      );
-      methods.setValue(
-        "kencingManisPribadi",
-        pasien.riwayatPenyakitDahulu.kencingManis
-      );
-      methods.setValue(
-        "kelainanSaluranCerna",
-        pasien.riwayatPenyakitDahulu.kelainanSaluranCerna
-      );
-      methods.setValue("rawatInap", pasien.riwayatPenyakitDahulu.rawatInap);
-      methods.setValue(
-        "penyakitHati",
-        pasien.riwayatPenyakitDahulu.penyakitHati
-      );
-      methods.setValue("kecelakaan", pasien.riwayatPenyakitDahulu.kecelakaan);
-      methods.setValue(
-        "riwayatSakitLainnya",
-        pasien.riwayatPenyakitDahulu.lainnya
-      );
-    }
-  }, [pasien, methods]);
 
   return (
     <section className="data-section">
@@ -93,24 +78,20 @@ const DataRiwayatPenyakit = ({
             Data Riwayat Penyakit
           </Typography>
           {["DOKTER", "PERAWAT"].includes(user?.role ?? "") && (
-    <Button
-    className="max-md:aspect-square"
-    leftIcon={LuPencil}
-    onClick={() => setShowModal(true)}
-    variant="primary"
-  >
-    Ubah
-  </Button>
-)}
+            <Button
+              className="max-md:aspect-square"
+              leftIcon={LuPencil}
+              onClick={handleOpenModal}
+              variant="primary"
+            >
+              Ubah
+            </Button>
+          )}
         </div>
         <Divider />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
           <div>
-            <Typography
-              variant="p2"
-              weight="semibold"
-              className="text-gray-400"
-            >
+            <Typography variant="p2" weight="semibold" className="text-gray-700">
               Tindakan Bedah
             </Typography>
             <Typography className="text-primary-1">
@@ -118,11 +99,7 @@ const DataRiwayatPenyakit = ({
             </Typography>
           </div>
           <div>
-            <Typography
-              variant="p2"
-              weight="semibold"
-              className="text-gray-400"
-            >
+            <Typography variant="p2" weight="semibold" className="text-gray-700">
               Kelainan Jantung
             </Typography>
             <Typography className="text-primary-1">
@@ -130,11 +107,7 @@ const DataRiwayatPenyakit = ({
             </Typography>
           </div>
           <div>
-            <Typography
-              variant="p2"
-              weight="semibold"
-              className="text-gray-400"
-            >
+            <Typography variant="p2" weight="semibold" className="text-gray-700">
               Kencing Manis
             </Typography>
             <Typography className="text-primary-1">
@@ -142,11 +115,7 @@ const DataRiwayatPenyakit = ({
             </Typography>
           </div>
           <div>
-            <Typography
-              variant="p2"
-              weight="semibold"
-              className="text-gray-400"
-            >
+            <Typography variant="p2" weight="semibold" className="text-gray-700">
               Kelainan Saluran Pencernaan
             </Typography>
             <Typography className="text-primary-1">
@@ -154,11 +123,7 @@ const DataRiwayatPenyakit = ({
             </Typography>
           </div>
           <div>
-            <Typography
-              variant="p2"
-              weight="semibold"
-              className="text-gray-400"
-            >
+            <Typography variant="p2" weight="semibold" className="text-gray-700">
               Rawat Inap
             </Typography>
             <Typography className="text-primary-1">
@@ -166,11 +131,7 @@ const DataRiwayatPenyakit = ({
             </Typography>
           </div>
           <div>
-            <Typography
-              variant="p2"
-              weight="semibold"
-              className="text-gray-400"
-            >
+            <Typography variant="p2" weight="semibold" className="text-gray-700">
               Hati
             </Typography>
             <Typography className="text-primary-1">
@@ -178,11 +139,7 @@ const DataRiwayatPenyakit = ({
             </Typography>
           </div>
           <div>
-            <Typography
-              variant="p2"
-              weight="semibold"
-              className="text-gray-400"
-            >
+            <Typography variant="p2" weight="semibold" className="text-gray-700">
               Kecelakaan
             </Typography>
             <Typography className="text-primary-1">
@@ -190,11 +147,7 @@ const DataRiwayatPenyakit = ({
             </Typography>
           </div>
           <div>
-            <Typography
-              variant="p2"
-              weight="semibold"
-              className="text-gray-400"
-            >
+            <Typography variant="p2" weight="semibold" className="text-gray-700">
               Lainnya
             </Typography>
             <Typography className="text-primary-1">
@@ -210,55 +163,27 @@ const DataRiwayatPenyakit = ({
               Ubah Data Riwayat Sakit
             </Typography>
             <FormProvider {...methods}>
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="mt-5 items-end"
-              >
+              <form onSubmit={handleSubmit(onSubmit)} className="mt-5 items-end">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
-                  <Input
-                    id="tindakanBedah"
-                    placeholder="Tindakan Bedah"
-                    label="Tindakan Bedah"
-                  />
-                  <Input
-                    id="kelainanJantung"
-                    placeholder="Kelainan Jantung"
-                    label="Kelainan Jantung"
-                  />
-                  <Input
-                    id="kencingManisPribadi"
-                    placeholder="Kencing Manis"
-                    label="Kencing Manis"
-                  />
+                  <Input id="tindakanBedah" placeholder="Tindakan Bedah" label="Tindakan Bedah" />
+                  <Input id="kelainanJantung" placeholder="Kelainan Jantung" label="Kelainan Jantung" />
+                  <Input id="kencingManisPribadi" placeholder="Kencing Manis" label="Kencing Manis" />
                   <Input
                     id="kelainanSaluranCerna"
                     placeholder="Kelainan Saluran Pencernaan"
                     label="Kelainan Saluran Pencernaan"
                   />
-                  <Input
-                    id="rawatInap"
-                    placeholder="Riwayat Rawat Inap"
-                    label="Riwayat Rawat Inap"
-                  />
-                  <Input
-                    id="penyakitHati"
-                    placeholder="Penyakit Hati"
-                    label="Penyakit Hati"
-                  />
-                  <Input
-                    id="kecelakaan"
-                    placeholder="Kecelakaan"
-                    label="Kecelakaan"
-                  />
-                  <Input
-                    id="riwayatSakitLainnya"
-                    placeholder="Lainnya"
-                    label="Lainnya"
-                  />
+                  <Input id="rawatInap" placeholder="Riwayat Rawat Inap" label="Riwayat Rawat Inap" />
+                  <Input id="penyakitHati" placeholder="Penyakit Hati" label="Penyakit Hati" />
+                  <Input id="kecelakaan" placeholder="Kecelakaan" label="Kecelakaan" />
+                  <Input id="riwayatSakitLainnya" placeholder="Lainnya" label="Lainnya" />
                 </div>
-                <Button type="submit" className="max-md:w-full">
-                  Save
-                </Button>
+                <div className="flex justify-center gap-2">
+                  <Button variant="danger" onClick={() => setShowModal(false)}>
+                    Batal
+                  </Button>
+                  <Button type="submit">Simpan</Button>
+                </div>
               </form>
             </FormProvider>
           </div>

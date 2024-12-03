@@ -5,7 +5,6 @@ import Button from "@/components/elements/Button";
 import { FaArrowLeft } from "react-icons/fa";
 import router from "next/router";
 import { checkRole } from "@/lib/checkRole";
-import { IoTrashBin } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import sendRequest from "@/lib/getApi";
 
@@ -45,12 +44,11 @@ const NotifikasiPage = () => {
     const [responseData, message, isSuccess] = await sendRequest(
       "put",
       "notifikasi/mark-read",
-      notificationIds, // Payload ke API
+      notificationIds, 
       true
     );
 
     if (isSuccess) {
-      console.log("mark sukses");
       const fetchData = async () => {
         const [responseData, message, isSuccess] = await sendRequest(
           "get",
@@ -123,7 +121,7 @@ const NotifikasiPage = () => {
   }, [selectedNotifications, notifications]);
 
   return (
-    <main className="w-full p-8 bg-gray-100 h-screen flex flex-col items-center gap-2">
+    <main className="w-full p-8 bg-gray-100 min-h-screen flex flex-col items-center gap-2">
       <div className="w-[90%] lg:w-[70%]">
         <Button variant="secondary" onClick={handleBack} leftIcon={FaArrowLeft}>
           Kembali
@@ -148,7 +146,7 @@ const NotifikasiPage = () => {
               className="p-2 rounded-full"
               onClick={handleDeleteSelected}
             >
-              <IoTrashBin size={24} />
+              Hapus
             </Button>
           </div>
         </div>
