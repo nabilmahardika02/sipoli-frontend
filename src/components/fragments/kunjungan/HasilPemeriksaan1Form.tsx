@@ -17,6 +17,14 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import { FiChevronRight } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const HasilPemeriksaan1Form = ({
   hasilPemeriksaan,
@@ -43,19 +51,17 @@ const HasilPemeriksaan1Form = ({
   const { handleSubmit } = methods;
 
   const getDefaultTanggalPeriksa = () => {
-    const currentDate = new Date();
     const kunjunganDate = new Date(kunjungan.tanggal);
+    const currentDate = new Date();
 
     kunjunganDate.setHours(currentDate.getHours());
     kunjunganDate.setMinutes(currentDate.getMinutes());
 
-    const year = kunjunganDate.getFullYear();
-    const month = String(kunjunganDate.getMonth() + 1).padStart(2, "0"); 
-    const day = String(kunjunganDate.getDate()).padStart(2, "0");
-    const hours = String(kunjunganDate.getHours()).padStart(2, "0");
-    const minutes = String(kunjunganDate.getMinutes()).padStart(2, "0");
+    const formattedDate = dayjs(kunjunganDate)
+      .tz("Asia/Makassar")
+      .format("YYYY-MM-DDTHH:mm");
 
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
+    return formattedDate;
   };
 
   useEffect(() => {
@@ -89,20 +95,43 @@ const HasilPemeriksaan1Form = ({
   }, []);
 
   const onSubmit: SubmitHandler<HasilKunjunganForm> = (data) => {
+    const currentValues = methods.getValues();
+    const formattedTanggalPeriksa = dayjs(currentValues.tanggalPeriksa)
+      .tz("Asia/Makassar")
+      .format();
+
+    console.log("Tanggal Periksa (formatted):", formattedTanggalPeriksa);
+
     setHasilPemeriksaan((prevState) => ({
       ...prevState,
       dokter: data.dokter,
       keluhanUtama: data.keluhanUtama,
       riwayatPenyakitSekarang: data.riwayatPenyakitSekarang,
-      tanggalPeriksa: data.tanggalPeriksa,
+      tanggalPeriksa: formattedTanggalPeriksa,
     }));
 
     setSection(2);
   };
 
+  const handleNavigate = (step: number) => {
+    const currentValues = methods.getValues();
+    const formattedTanggalPeriksa = dayjs(currentValues.tanggalPeriksa)
+      .tz("Asia/Makassar")
+      .format();
+
+    setHasilPemeriksaan((prevState) => ({
+      ...prevState,
+      dokter: currentValues.dokter,
+      keluhanUtama: currentValues.keluhanUtama,
+      riwayatPenyakitSekarang: currentValues.riwayatPenyakitSekarang,
+      tanggalPeriksa: formattedTanggalPeriksa,
+    }));
+    setSection(step);
+  };
+
   return (
     <section>
-      <Breadcrumb currentStep={1} totalSteps={6} />
+      <Breadcrumb currentStep={1} totalSteps={6} onNavigate={handleNavigate} />
       <Divider weight="thin" className="my-5" />
       <Typography variant="h7" className="mt-5 text-primary-1">
         Data Kunjungan - {kunjungan.profile.name}
@@ -132,7 +161,7 @@ const HasilPemeriksaan1Form = ({
                 type="datetime-local"
                 placeholder="Tanggal Periksa"
                 label="Tanggal Periksa"
-                defaultValue={getDefaultTanggalPeriksa()} 
+                defaultValue={getDefaultTanggalPeriksa()}
                 {...methods.register("tanggalPeriksa")}
               />
               <Input
@@ -150,11 +179,13 @@ const HasilPemeriksaan1Form = ({
             </div>
             <div className="flex items-center gap-3">
               <Link href={"/kunjungan/" + router.query.id}>
-                <Button className="max-md:w-full" variant="danger">
+                <Button className="max-md:w-full" variant="danger"
+                  leftIcon={FiX}>
                   Batal
                 </Button>
               </Link>
-              <Button type="submit" className="max-md:w-full">
+              <Button type="submit" className="max-md:w-full"
+              rightIcon={FiChevronRight}>
                 Berikutnya
               </Button>
             </div>

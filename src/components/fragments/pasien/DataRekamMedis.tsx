@@ -11,6 +11,8 @@ import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { LuPencil } from "react-icons/lu";
+import { FiCheckSquare } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
 
 const DataRekamMedis = ({
   pasien,
@@ -161,12 +163,17 @@ const DataRekamMedis = ({
                 </div>
                 <div className="flex justify-center gap-2">
                   <Button
+                    className="max-md:aspect-square"
+                    leftIcon={FiX}
                     variant="danger"
                     onClick={() => setShowModal(false)}
                   >
                     Batal
                   </Button>
-                  <Button type="submit">Simpan</Button>
+                  <Button type="submit"
+                            className="max-md:aspect-square"
+                            leftIcon={FiCheckSquare}
+                  >Simpan</Button>
                 </div>
               </form>
             </FormProvider>

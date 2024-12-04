@@ -14,6 +14,8 @@ import Link from "next/link";
 import router from "next/router";
 import { useEffect, useState } from "react";
 import { FaCirclePlus } from "react-icons/fa6";
+import { BiSolidUserDetail } from "react-icons/bi";
+
 
 const KunjunganPage = () => {
   const { setTitle } = useDocumentTitle();
@@ -56,7 +58,7 @@ const KunjunganPage = () => {
               </Typography>
               {user?.role === "PASIEN" && (
                 <Link href={`/pasien/detail/${kunjungan.profile.id}`}>
-                  <Button variant="primary">Detail Pasien</Button>
+                      <Button variant="primary" className="rounded-lg" size="lg" leftIcon={BiSolidUserDetail}>Detail Pasien</Button>
                 </Link>
               )}
             </div>
@@ -70,24 +72,39 @@ const KunjunganPage = () => {
                 Hasil Pemeriksaan
               </Typography>
               <Divider />
-              {(user?.role === "DOKTER" || user?.role === "PERAWAT") &&
-              !kunjungan.hasilPemeriksaan &&
-              kunjungan.status < 3 ? (
-                <div className="w-full flex justify-center rounded-lg border border-gray-300 py-8 mt-3">
-                <Typography
-                  variant="h7"
-                  className="text-gray-400 mt-2 mb-2 group-hover:text-gray-500"
-                >
-                  Belum Ada Hasil Pemeriksaan
-                </Typography>
-              </div>
-              ) : (
-                <DataHasilPemeriksaan
-                  data={kunjungan.hasilPemeriksaan}
-                  trigger={trigger}
-                  setTrigger={setTrigger}
-                />
-              )}
+              {!kunjungan.hasilPemeriksaan && kunjungan.status < 3 ? (
+  <div className="w-full flex flex-col justify-center items-center rounded-lg border border-gray-300 py-8 mt-3">
+    <Typography
+      variant="h7"
+      className="text-gray-400 mt-3 mb-3 group-hover:text-gray-500"
+    >
+      Hasil Pemeriksaan Telah Dihapus Oleh Klinik
+    </Typography>
+    {/* {["PERAWAT", "DOKTER"].includes(user?.role ?? "") && (
+                    <Link
+                    href={
+                      "/kunjungan/hasil-pemeriksaan/tambah/" + kunjungan.id
+                    }
+                    className="flex flex-col items-center group"
+                  >
+                    <FaCirclePlus className="text-gray-400 text-3xl group-hover:text-gray-500" />
+                    <Typography
+                      variant="h7"
+                      className="text-gray-400 mt-4 group-hover:text-gray-500"
+                    >
+                      Tambah Hasil Pemeriksaan
+                    </Typography>
+                  </Link>
+    )} */}
+  </div>
+) : (
+  <DataHasilPemeriksaan
+    data={kunjungan.hasilPemeriksaan}
+    trigger={trigger}
+    setTrigger={setTrigger}
+  />
+)}
+
             </section>
           )}
         </>

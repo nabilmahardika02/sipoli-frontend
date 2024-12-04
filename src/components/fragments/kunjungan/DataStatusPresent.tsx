@@ -11,6 +11,8 @@ import { UpdateStatusPresentForm } from "@/types/forms/hasilPemeriksaanForm";
 import { Dispatch, SetStateAction, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { LuPencil } from "react-icons/lu";
+import { FiCheckSquare } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
 
 const DataStatusPresent = ({
   data,
@@ -68,19 +70,23 @@ const DataStatusPresent = ({
   return (
     <div>
       <Divider weight="thin" className="my-5" />
-      <div className="mt-5 flex items-center gap-2">
-        <div className="w-1 h-5 bg-primary-1"></div>
-        <Typography className="text-primary-1 font-semibold">
-          Status Present
-        </Typography>
-        {["DOKTER", "PERAWAT"].includes(user?.role ?? "") && (
-          <IconButton
-            icon={LuPencil}
-            variant="primary"
-            onClick={handleOpenModal} // Use the handleOpenModal function
-          />
-        )}
-      </div>
+      <div className="mt-5 flex items-center justify-between">
+  <div className="flex items-center gap-2">
+    <div className="w-1 h-5 bg-primary-1"></div>
+    <Typography className="text-primary-1 font-semibold">Status Present</Typography>
+  </div>
+  {["DOKTER", "PERAWAT"].includes(user?.role ?? "") && (
+    <Button
+      className="text-xs h-8 w-auto"
+      leftIcon={LuPencil}
+      onClick={handleOpenModal}
+      variant="primary"
+    >
+      Ubah
+    </Button>
+  )}
+</div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
         <div>
           <Typography variant="p2" weight="semibold" className="text-gray-700">
@@ -166,21 +172,26 @@ const DataStatusPresent = ({
                   <Input id="faring" placeholder="Faring" label="Faring" />
                   <Input id="cor" placeholder="Cor" label="Cor" />
                   <Input id="pulmo" placeholder="Pulmo" label="Pulmo" />
-                  <Input id="abd" placeholder="Abdomen" label="Abdomen" />
+                  <Input id="abd" placeholder="Abd" label="Abd" />
                   <Input
                     id="ext"
-                    placeholder="Ekstremitas"
-                    label="Ekstremitas"
+                    placeholder="Ext"
+                    label="Ext"
                   />
                 </div>
                 <div className="flex justify-center gap-2">
                   <Button
+                    className="max-md:aspect-square"
+                    leftIcon={FiX}
                     variant="danger"
                     onClick={() => setShowModal(false)}
                   >
                     Batal
                   </Button>
-                  <Button type="submit">Simpan</Button>
+                  <Button type="submit"
+                      className="max-md:aspect-square"
+                      leftIcon={FiCheckSquare}
+                  >Simpan</Button>
                 </div>
               </form>
             </FormProvider>

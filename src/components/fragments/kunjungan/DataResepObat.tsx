@@ -14,6 +14,8 @@ import { ResepObatRujukanForm, KuantitasObatRequest } from "@/types/forms/hasilP
 import { Dispatch, SetStateAction, useState } from "react";
 import { FormProvider, SubmitHandler, useForm, useFieldArray } from "react-hook-form";
 import { LuPencil } from "react-icons/lu";
+import { FiCheckSquare } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
 
 const DataResepObat = ({
   listKuantitasObat,
@@ -95,13 +97,23 @@ const DataResepObat = ({
   return (
     <div>
       <Divider weight="thin" className="my-5" />
-      <div className="mt-5 flex items-center gap-2">
-        <div className="w-1 h-5 bg-primary-1"></div>
-        <Typography className="text-primary-1 font-semibold">Resep Obat</Typography>
-        {["DOKTER", "PERAWAT"].includes(user?.role ?? "") && (
-          <IconButton icon={LuPencil} variant="primary" onClick={handleOpenModal} />
-        )}
-      </div>
+      <div className="mt-5 flex items-center justify-between">
+  <div className="flex items-center gap-2">
+    <div className="w-1 h-5 bg-primary-1"></div>
+    <Typography className="text-primary-1 font-semibold">Resep Obat</Typography>
+  </div>
+  {["DOKTER", "PERAWAT"].includes(user?.role ?? "") && (
+    <Button
+      className="text-xs h-8 w-auto"
+      leftIcon={LuPencil}
+      onClick={handleOpenModal}
+      variant="primary"
+    >
+      Ubah
+    </Button>
+  )}
+</div>
+
 
       {/* Display Data */}
       {listKuantitasObat.length > 0 ? (
@@ -234,11 +246,19 @@ const DataResepObat = ({
                   placeholder="Komunikasi Informasi dan Edukasi"
                   label="Komunikasi Informasi dan Edukasi"
                 />
-                <div className="flex justify-center gap-2 mt-4">
-                  <Button variant="danger" onClick={() => setShowModal(false)}>
+                <div className="flex justify-center gap-2">
+                  <Button
+                    className="max-md:aspect-square"
+                    leftIcon={FiX}
+                    variant="danger"
+                    onClick={() => setShowModal(false)}
+                  >
                     Batal
                   </Button>
-                  <Button type="submit">Simpan</Button>
+                  <Button type="submit"
+                      className="max-md:aspect-square"
+                      leftIcon={FiCheckSquare}
+                  >Simpan</Button>
                 </div>
               </form>
             </FormProvider>

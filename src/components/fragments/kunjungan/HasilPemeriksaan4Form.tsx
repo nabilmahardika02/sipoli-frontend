@@ -7,6 +7,8 @@ import { Kunjungan } from "@/types/entities/kunjungan";
 import { HasilPemeriksaanForm } from "@/types/forms/hasilPemeriksaanForm";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { FiChevronRight } from "react-icons/fi";
+import { FiChevronLeft } from "react-icons/fi";
 
 const HasilPemeriksaan4Form = ({
   hasilPemeriksaan,
@@ -59,9 +61,21 @@ const HasilPemeriksaan4Form = ({
     setSection(3);
   };
 
+  const handleNavigate = (step: number) => {
+    const currentValues = methods.getValues(); // Ambil nilai form saat ini
+    setHasilPemeriksaan((prevState) => ({
+      ...prevState,
+      icd10: currentValues.icd10,
+      diagnosaKerja: currentValues.diagnosaKerja,
+      rencana: currentValues.rencana,
+      tindakan: currentValues.tindakan,
+    }));
+    setSection(step); // Pindah ke langkah yang dipilih
+  };
+
   return (
     <section>
-      <Breadcrumb currentStep={4} totalSteps={6} />
+      <Breadcrumb currentStep={4} totalSteps={6} onNavigate={handleNavigate} />
       <Divider weight="thin" className="my-5" />
       <Typography variant="h7" className="mt-5 text-primary-1">
         Diagnosa Akhir - {kunjungan.profile.name}
@@ -81,12 +95,13 @@ const HasilPemeriksaan4Form = ({
           <div className="flex items-center gap-3">
             <Button
               className="max-md:w-full"
+              leftIcon={FiChevronLeft}
               variant="danger"
               onClick={handlePrev}
             >
               Kembali
             </Button>
-            <Button type="submit" className="max-md:w-full">
+            <Button type="submit" className="max-md:w-full" rightIcon={FiChevronRight}>
               Berikutnya
             </Button>
           </div>
