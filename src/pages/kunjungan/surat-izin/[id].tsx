@@ -73,7 +73,7 @@ const SuratIzinPage = () => {
 
   useEffect(() => {
     const fetchAccount = async () => {
-      if (!suratIzin?.kunjungan?.profile?.id) return
+      if (!suratIzin?.kunjungan?.profile?.id) return;
       const [responseData, message, isSuccess] = await sendRequest(
         "get",
         "auth/profile/" + suratIzin?.kunjungan.profile.id
@@ -101,13 +101,13 @@ const SuratIzinPage = () => {
               <span className="text-primary-1 font-bold">
                 {jumlahHari} hari
               </span>{" "}
-              terhitung mulai tanggal {" "}
+              terhitung mulai tanggal{" "}
               <span className="text-primary-1 font-bold">
                 {suratIzin?.tanggalAwal
                   ? formatDateWithoutDays(suratIzin.tanggalAwal)
                   : "-"}
               </span>{" "}
-              s.d tanggal {" "}
+              s.d tanggal{" "}
               <span className="text-primary-1 font-bold">
                 {suratIzin?.tanggalAkhir
                   ? formatDateWithoutDays(suratIzin.tanggalAkhir)
@@ -175,7 +175,9 @@ const SuratIzinPage = () => {
             </Typography>
             <Typography weight="bold" className="text-primary-1">
               {suratIzin?.kunjungan.profile.name} (
-              {suratIzin ? getJenisKelamin(suratIzin?.kunjungan.profile.jenisKelamin) : "-"}
+              {suratIzin
+                ? getJenisKelamin(suratIzin?.kunjungan.profile.jenisKelamin)
+                : "-"}
               )
             </Typography>
           </div>
@@ -240,7 +242,7 @@ const SuratIzinPage = () => {
       </section>
       <div className="my-2 flex items-center gap-2">
         <Typography className="text-primary-1">Powered by SIPOLI</Typography>
-        <Logo/>
+        <Logo />
       </div>
     </main>
   );

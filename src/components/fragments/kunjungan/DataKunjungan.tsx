@@ -1,8 +1,9 @@
 import Typography from "@/components/elements/Typography";
 import { sesi, status } from "@/content/kunjungan";
-import { formatDateOnly } from "@/lib/formater";
-import { formatDate } from "@/lib/formater";
+import { formatDate, formatDateOnly } from "@/lib/formater";
 import { Kunjungan } from "@/types/entities/kunjungan";
+import { DateTime } from "luxon";
+import { useEffect, useState } from "react";
 
 const getSesiText = (sesiValue: number | undefined) => {
   const sesiItem = sesi.find((item) => Number(item.value) === sesiValue);
@@ -30,6 +31,15 @@ const getStatusColor = (statusValue: number | undefined) => {
 };
 
 const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
+  const [dt, setDt] = useState<DateTime>();
+
+  useEffect(() => {
+    const timeZone = "Asia/Makassar";
+    setDt(
+      DateTime.fromISO(kunjungan.tanggal, { zone: "utc" }).setZone(timeZone)
+    );
+  }, [kunjungan]);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
       <div>
@@ -50,10 +60,14 @@ const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
           {getStatusText(kunjungan?.status)}
         </Typography>
       </div>
-      {(new Date(kunjungan.tanggal).getDay() === 0 || kunjungan.hasilPemeriksaan)&& (
+      {(dt?.weekday === 7 || kunjungan.hasilPemeriksaan) && (
         <>
           <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-700">
+            <Typography
+              variant="p2"
+              weight="semibold"
+              className="text-gray-700"
+            >
               Tanggal Periksa
             </Typography>
             <Typography className="text-primary-1">
@@ -67,7 +81,11 @@ const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
       {kunjungan.hasilPemeriksaan && (
         <>
           <div>
-            <Typography variant="p2" weight="semibold" className="text-gray-700">
+            <Typography
+              variant="p2"
+              weight="semibold"
+              className="text-gray-700"
+            >
               Dokter
             </Typography>
             <Typography className="text-primary-1">
@@ -76,29 +94,25 @@ const DataKunjungan = ({ kunjungan }: { kunjungan: Kunjungan }) => {
           </div>
         </>
       )}
-      {new Date(kunjungan.tanggal).getDay() !== 0 && !kunjungan.hasilPemeriksaan && (<div>
-        <Typography variant="p2" weight="semibold" className="text-gray-700">
-          Tanggal
-        </Typography>
-        <Typography className="text-primary-1">
-          {formatDateOnly(kunjungan.tanggal)}
-        </Typography>
-      </div>)}
+      {dt?.weekday !== 7 && !kunjungan.hasilPemeriksaan && (
+        <div>
+          <Typography variant="p2" weight="semibold" className="text-gray-700">
+            Tanggal
+          </Typography>
+          <Typography className="text-primary-1">
+            {formatDateOnly(kunjungan.tanggal)}
+          </Typography>
+        </div>
+      )}
       <div>
         <Typography variant="p2" weight="semibold" className="text-gray-700">
           Keluhan
         </Typography>
-        <Typography className="text-primary-1">
-          {kunjungan.keluhan}
-        </Typography>
+        <Typography className="text-primary-1">{kunjungan.keluhan}</Typography>
       </div>
-      {kunjungan.antrian && kunjungan.status < 2 && new Date(kunjungan.tanggal).getDay() !== 0 && (
+      {kunjungan.antrian && kunjungan.status < 2 && dt?.weekday !== 7 && (
         <div>
-          <Typography
-            variant="p2"
-            weight="semibold"
-            className="text-gray-700"
-          >
+          <Typography variant="p2" weight="semibold" className="text-gray-700">
             Sesi
           </Typography>
           <Typography className="text-primary-1">

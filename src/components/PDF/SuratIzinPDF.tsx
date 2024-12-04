@@ -1,16 +1,20 @@
-import React, { useEffect, useRef, useState } from "react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
-import Typography from "../elements/Typography";
-import Logo from "../elements/Logo";
-import Divider from "../elements/Divider";
-import Button from "../elements/Button";
-import { formatDate, formatDateWithoutDays } from "@/lib/formater";
+import {
+  formatDate,
+  formatDateWithoutDays,
+  getCurrentDateTime,
+} from "@/lib/formater";
 import sendRequest from "@/lib/getApi";
 import { Account } from "@/types/entities/account";
 import { Kunjungan } from "@/types/entities/kunjungan";
-import QRCodeGenerator from "./QRCodeGenerator";
 import { SuratIzin } from "@/types/entities/suratIzin";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import React, { useEffect, useRef, useState } from "react";
+import Button from "../elements/Button";
+import Divider from "../elements/Divider";
+import Logo from "../elements/Logo";
+import Typography from "../elements/Typography";
+import QRCodeGenerator from "./QRCodeGenerator";
 
 interface SuratIzinPDFProps {
   tanggalAwal: string | Date | undefined; // Sesuaikan jika tanggal dalam format string atau Date
@@ -27,7 +31,7 @@ const SuratIzinPDF: React.FC<SuratIzinPDFProps> = ({
   const [jumlahHari, setJumlahHari] = useState<number>();
   const [account, setAccount] = useState<Account>();
   const [nomorSurat, setNomorSurat] = useState<string>();
-  const [createdAt, setCreatedAt] = useState<string | Date>();
+  const [createdAt, setCreatedAt] = useState<string>();
   const [suratIzin, setSuratIzin] = useState<SuratIzin | null>(null);
 
   useEffect(() => {
@@ -63,9 +67,7 @@ const SuratIzinPDF: React.FC<SuratIzinPDFProps> = ({
   }, [kunjungan]);
 
   useEffect(() => {
-    const now = new Date();
-    const isoString = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Makassar' })).toISOString();
-    setCreatedAt(isoString);
+    setCreatedAt(getCurrentDateTime());
 
     const fetchData = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
@@ -251,7 +253,7 @@ const SuratIzinPDF: React.FC<SuratIzinPDFProps> = ({
             <div className="flex flex-col items-center">
               {suratIzin === null && (
                 <Typography variant="p4" className="text-center">
-                  KAB. GIANYAR, {formatDateWithoutDays(new Date())}
+                  KAB. GIANYAR, {formatDateWithoutDays(getCurrentDateTime())}
                 </Typography>
               )}
               {suratIzin !== null && (
