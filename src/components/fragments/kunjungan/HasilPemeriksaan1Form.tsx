@@ -51,16 +51,12 @@ const HasilPemeriksaan1Form = ({
   const { handleSubmit } = methods;
 
   const getDefaultTanggalPeriksa = () => {
-    const kunjunganDate = new Date(kunjungan.tanggal);
-    const currentDate = new Date();
-
-    kunjunganDate.setHours(currentDate.getHours());
-    kunjunganDate.setMinutes(currentDate.getMinutes());
-
-    const formattedDate = dayjs(kunjunganDate)
-      .tz("Asia/Makassar")
+    const today = new Date();
+  
+    const formattedDate = dayjs(today)
+      // .tz("Asia/Makassar")
       .format("YYYY-MM-DDTHH:mm");
-
+  
     return formattedDate;
   };
 
