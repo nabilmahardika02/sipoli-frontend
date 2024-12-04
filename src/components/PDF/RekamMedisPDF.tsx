@@ -237,7 +237,7 @@ const RekamMedisPDF: React.FC<RekamMedisPDFProps> = ({ kunjungan }) => {
               Informasi Pemeriksaan
             </Typography>
 
-            <div className="grid grid-cols-[150px_150px1fr] gap-y-1">
+            <div className="grid grid-cols-[160px_1fr] gap-y-1">
               <div className="flex flex-col items-start">
                 <Typography variant="p4" className="font-light">
                   Dokter

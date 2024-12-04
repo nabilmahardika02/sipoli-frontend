@@ -24,11 +24,7 @@ const usernameValidation: RegisterOptions = {
       if (!value) return true;
       const firstChar = value.charAt(0);
       return /[A-Za-z]/.test(firstChar) || "Username harus dimulai dengan huruf";
-    },
-
-    // Validasi tanpa spasi
-    noSpaces: (value) => 
-      !/\s/.test(value) || "Tidak boleh mengandung spasi"
+    }
   }
 }
 
