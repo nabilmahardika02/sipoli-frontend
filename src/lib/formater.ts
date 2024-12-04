@@ -114,6 +114,27 @@ export function calculateAge(dateOfBirth: string): string {
   return `${years} tahun, ${months} bulan, ${days} hari`;
 }
 
+export function calculateOnlyYearAge(dateOfBirth: string): string {
+  const today = new Date();
+  const birthDate = new Date(dateOfBirth);
+
+  let years = today.getFullYear() - birthDate.getFullYear();
+  let months = today.getMonth() - birthDate.getMonth();
+  let days = today.getDate() - birthDate.getDate();
+
+  if (days < 0) {
+    months--;
+  }
+
+  if (months < 0) {
+    years--;
+  }
+
+  return `${years} tahun`;
+}
+
+
+
 export function getCurrency(value: number): string {
   if (isNaN(value)) {
     throw new Error("Input harus berupa angka.");
