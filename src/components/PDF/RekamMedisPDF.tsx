@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import {
   calculateOnlyYearAge,
   formatDate,
+  getCurrentDateTime,
   getJenisKelamin,
   getKewarganegaraan,
   getSatuanObat,
@@ -25,7 +26,7 @@ const RekamMedisPDF: React.FC<RekamMedisPDFProps> = ({ kunjungan }) => {
   const pdfRef = useRef<HTMLDivElement>(null);
   const [account, setAccount] = useState<Account>();
   const [pasien, setPasien] = useState<Pasien>();
-  const [createdAt, setCreatedAt] = useState<string | Date>();
+  const [createdAt, setCreatedAt] = useState<string>();
 
   useEffect(() => {
     const fetchAccount = async () => {
@@ -60,7 +61,7 @@ const RekamMedisPDF: React.FC<RekamMedisPDFProps> = ({ kunjungan }) => {
   }, [fetchProfile, kunjungan]);
 
   useEffect(() => {
-    setCreatedAt(new Date());
+    setCreatedAt(getCurrentDateTime());
   }, []);
 
   const handleGeneratePDF = async () => {
