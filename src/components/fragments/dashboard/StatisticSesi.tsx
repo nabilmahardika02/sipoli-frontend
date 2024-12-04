@@ -94,6 +94,7 @@ const StatisticSesi = ({ className = "" }: { className?: string }) => {
               ]}
               xAxis={[
                 {
+                  label: "Tipe Sesi",
                   scaleType: "band",
                   data: labels,
                 },

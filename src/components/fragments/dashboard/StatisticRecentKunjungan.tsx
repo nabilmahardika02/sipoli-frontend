@@ -32,7 +32,7 @@ const StatisticRecentKunjungan = ({ className }: { className?: string }) => {
         <div className="mt-4 flex flex-col gap-2">
           <div className="flex justify-between items-center">
             <Typography variant="p2" className="font-medium text-gray-500">
-              Jumlah kunjungan hari ini
+              Jumlah kunjungan pasien hari ini
             </Typography>
             <Typography variant="p1" className="font-bold text-primary-1">
               {data?.jumlahToday || 0}
