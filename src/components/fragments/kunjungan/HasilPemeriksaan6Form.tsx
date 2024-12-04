@@ -13,6 +13,8 @@ import {
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { FiChevronLeft } from "react-icons/fi";
+import { FiCheckSquare } from "react-icons/fi";
 
 const HasilPemeriksaan5Form = ({
   hasilPemeriksaan,
@@ -87,9 +89,23 @@ const HasilPemeriksaan5Form = ({
     setSection(5);
   };
 
+  const handleNavigate = (step: number) => {
+    const currentValues = methods.getValues(); // Ambil nilai form saat ini
+    setHasilPemeriksaan((prevState) => ({
+      ...prevState,
+      rujukanRequestDTO: {
+        tujuanRujukan: currentValues.tujuanRujukan,
+        dokterRujukan: currentValues.dokterRujukan,
+        catatanRujukan: currentValues.catatanRujukan,
+      },
+    }));
+    setSection(step); // Pindah ke langkah yang dipilih
+  };
+  
+
   return (
     <section>
-      <Breadcrumb currentStep={6} totalSteps={6} />
+      <Breadcrumb currentStep={6} totalSteps={6} onNavigate={handleNavigate} />
       <Divider weight="thin" className="my-5" />
       <Typography variant="h7" className="mt-5 text-primary-1">
         Rujukan - {kunjungan.profile.name}
@@ -116,12 +132,14 @@ const HasilPemeriksaan5Form = ({
           <div className="flex items-center gap-3">
             <Button
               className="max-md:w-full"
+              leftIcon={FiChevronLeft}
               variant="danger"
               onClick={handlePrev}
             >
               Kembali
             </Button>
-            <Button type="submit" className="max-md:w-full">
+            <Button type="submit" className="max-md:w-full"
+                    rightIcon={FiCheckSquare}>
               Simpan
             </Button>
           </div>

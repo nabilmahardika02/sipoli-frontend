@@ -120,10 +120,7 @@ const SuratIzinPage = () => {
               Diagnosis Akhir:
             </Typography>
             <Typography weight="bold" className="text-primary-1">
-              {
-                suratIzin?.kunjungan.hasilPemeriksaan.diagnosaAkhir
-                  .diagnosaKerja
-              }
+                {suratIzin?.kunjungan.hasilPemeriksaan ? suratIzin.kunjungan.hasilPemeriksaan.diagnosaAkhir.diagnosaKerja : "-"}
             </Typography>
           </div>
 
@@ -132,7 +129,7 @@ const SuratIzinPage = () => {
               Diagnosa ICD10:
             </Typography>
             <Typography weight="bold" className="text-primary-1">
-              {suratIzin?.kunjungan.hasilPemeriksaan.diagnosaAkhir.icd10}
+              {suratIzin?.kunjungan.hasilPemeriksaan ? suratIzin.kunjungan.hasilPemeriksaan.diagnosaAkhir.icd10 : "-"}
             </Typography>
           </div>
 

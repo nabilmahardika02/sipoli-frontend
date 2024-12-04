@@ -19,6 +19,10 @@ import {
   useFieldArray,
   useForm,
 } from "react-hook-form";
+import { FiChevronRight } from "react-icons/fi";
+import { FiChevronLeft } from "react-icons/fi";
+import { FiPlus } from "react-icons/fi";
+import { IoTrashBin } from "react-icons/io5";
 
 const HasilPemeriksaan5Form = ({
   hasilPemeriksaan,
@@ -47,7 +51,7 @@ const HasilPemeriksaan5Form = ({
       resepObatRujukan: hasilPemeriksaan.resepObatRujukan || { deskripsi: "" },
       kie: hasilPemeriksaan.kie || "",
     },
-  });
+  });  
 
   const { handleSubmit, getValues, control, setValue } = methods;
   const { fields, append, remove } = useFieldArray({
@@ -72,7 +76,7 @@ const HasilPemeriksaan5Form = ({
     if (hasilPemeriksaan) {
       methods.setValue(
         "listKuantitasObatDTO",
-        hasilPemeriksaan.listKuantitasObatDTO || []
+        hasilPemeriksaan.listKuantitasObatDTO || [] // Mengisi kembali namaObat dan lainnya
       );
       methods.setValue(
         "resepObatRujukan",
@@ -80,18 +84,19 @@ const HasilPemeriksaan5Form = ({
       );
       methods.setValue("kie", hasilPemeriksaan.kie || "");
     }
-  }, [hasilPemeriksaan, methods]);
+  }, [hasilPemeriksaan, methods]);  
 
   const onSubmit: SubmitHandler<HasilPemeriksaanForm> = (data) => {
     setHasilPemeriksaan((prev) => ({
       ...prev,
-      listKuantitasObatDTO: data.listKuantitasObatDTO,
+      listKuantitasObatDTO: data.listKuantitasObatDTO, // Termasuk namaObat yang sudah dipilih
       resepObatRujukan: data.resepObatRujukan,
       kie: data.kie,
     }));
-
+  
     setSection(6); 
   };
+  
 
   const handlePrev = () => {
     const currentValues = getValues();
@@ -101,9 +106,10 @@ const HasilPemeriksaan5Form = ({
       resepObatRujukan: currentValues.resepObatRujukan,
       kie: currentValues.kie,
     }));
-
+  
     setSection(4); 
   };
+  
 
   const handleObatChange = (index: number, obatId: string) => {
     const selectedObat = obatList.find((obat) => obat.id === obatId);
@@ -114,10 +120,10 @@ const HasilPemeriksaan5Form = ({
               .map((restock) => restock.tanggalKadaluarsa)
               .sort((a, b) => new Date(a).getTime() - new Date(b).getTime())[0]
           : "Tidak tersedia";
-
+  
       const jenisSatuan = getSatuanObat(selectedObat.jenisSatuan);
-
-      setValue(`listKuantitasObatDTO.${index}.namaObat`, selectedObat.namaObat);
+  
+      setValue(`listKuantitasObatDTO.${index}.namaObat`, selectedObat.namaObat); // Simpan namaObat
       setValue(
         `listKuantitasObatDTO.${index}.tanggalKadaluarsa`,
         formatDateOnly(closestExpiryDate)
@@ -125,11 +131,24 @@ const HasilPemeriksaan5Form = ({
       setValue(`listKuantitasObatDTO.${index}.jenisSatuan`, jenisSatuan);
     }
   };
+  
+
+  const handleNavigate = (step: number) => {
+    const currentValues = methods.getValues(); // Ambil nilai form saat ini
+    setHasilPemeriksaan((prevState) => ({
+      ...prevState,
+      listKuantitasObatDTO: currentValues.listKuantitasObatDTO,
+      resepObatRujukan: currentValues.resepObatRujukan,
+      kie: currentValues.kie,
+    }));
+    setSection(step); // Pindah ke langkah yang dipilih
+  };
+  
 
   return (
     <section className="space-y-8">
       <div>
-        <Breadcrumb currentStep={5} totalSteps={6} />
+        <Breadcrumb currentStep={5} totalSteps={6} onNavigate={handleNavigate} />
         <Divider weight="thin" className="my-5" />
         <Typography variant="h7" className="mt-5 text-primary-1">
           Resep Obat - {kunjungan?.profile?.name || "Tidak Ada Nama"}
@@ -142,24 +161,27 @@ const HasilPemeriksaan5Form = ({
                   key={item.id}
                   className="border p-4 grid grid-cols-1 md:grid-cols-1 gap-5 mb-2 rounded-md"
                 >
-                  <SelectInput
-                    id={`listKuantitasObatDTO.${index}.obatId`}
-                    placeholder="Pilih Obat"
-                    label={`Obat ${index + 1}`}
-                    {...methods.register(
-                      `listKuantitasObatDTO.${index}.obatId` as const,
-                      {
-                        onChange: (e) =>
-                          handleObatChange(index, e.target.value),
-                      }
-                    )}
-                  >
-                    {obatList.map((obat) => (
-                      <option key={obat.id} value={obat.id}>
-                        {obat.namaObat}
-                      </option>
-                    ))}
-                  </SelectInput>
+<SelectInput
+  id={`listKuantitasObatDTO.${index}.obatId`}
+  placeholder="Pilih Obat"
+  label={`Obat ${index + 1}`}
+  {...methods.register(
+    `listKuantitasObatDTO.${index}.obatId` as const,
+    {
+      onChange: (e) => handleObatChange(index, e.target.value),
+    }
+  )}
+  value={methods.watch(`listKuantitasObatDTO.${index}.obatId`)} // Ambil nilai dari watch
+>
+  {obatList.map((obat) => (
+    <option key={obat.id} value={obat.id}>
+      {obat.namaObat}
+    </option>
+  ))}
+</SelectInput>
+
+
+
 
                   {/* Tanggal Kadaluarsa dan Jenis Satuan sejajar */}
                   <div className="grid grid-cols-2 gap-5">
@@ -200,14 +222,16 @@ const HasilPemeriksaan5Form = ({
                       `listKuantitasObatDTO.${index}.petunjukPemakaian` as const
                     )}
                   />
-                  <Button variant="danger" onClick={() => remove(index)}>
+                  <Button variant="danger"
+                  leftIcon={IoTrashBin}
+                   onClick={() => remove(index)}>
                     Hapus Obat
                   </Button>
                 </div>
               ))}
             </div>
             <Button
-              variant="primary"
+              variant="primary" leftIcon={FiPlus}
               onClick={() =>
                 append({
                   obatId: "",
@@ -238,12 +262,13 @@ const HasilPemeriksaan5Form = ({
             <div className="flex items-center gap-3 mt-4">
               <Button
                 className="max-md:w-full"
+                leftIcon={FiChevronLeft}
                 variant="danger"
                 onClick={handlePrev}
               >
                 Kembali
               </Button>
-              <Button type="submit" className="max-md:w-full">
+              <Button type="submit" className="max-md:w-full" rightIcon={FiChevronRight}>
                 Berikutnya
               </Button>
             </div>
