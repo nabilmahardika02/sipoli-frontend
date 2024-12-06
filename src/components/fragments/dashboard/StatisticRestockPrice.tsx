@@ -82,7 +82,7 @@ const StatisticRestockPrice = ({
               <div className="flex flex-col justify-center overflow-x-auto">
                 <LineChart
                   margin={{ left: 80 }}
-                  width={550}
+                  width={1250}
                   height={400}
                   series={[
                     {

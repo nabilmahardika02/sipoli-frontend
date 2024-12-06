@@ -30,7 +30,7 @@ const KunjunganPage = () => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    setTitle("Detail Rekam Medis");
+    setTitle("Detail Hasil Pemeriksaan");
   }, [setTitle]);
 
   useEffect(() => {
@@ -65,7 +65,7 @@ const KunjunganPage = () => {
             <div className="flex justify-center md:justify-between gap-2 my-2">
               <div className="flex justify-start">
                 <Typography variant="h6" className="text-primary-1">
-                  Detail Kunjungan
+                  Kunjungan
                 </Typography>
               </div>
               <div className="flex justify-end gap-2">
@@ -92,7 +92,7 @@ const KunjunganPage = () => {
               <Typography variant="h6" className="text-primary-1">
                 Hasil Pemeriksaan
               </Typography>
-              <Divider />
+              <Divider weight="kurus" />
               {!kunjungan.hasilPemeriksaan && kunjungan.status < 3 ? (
   <div className="w-full flex flex-col justify-center items-center rounded-lg border border-gray-300 py-8 mt-3">
     <Typography

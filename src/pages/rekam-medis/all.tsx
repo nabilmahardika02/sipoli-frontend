@@ -28,7 +28,7 @@ const RekamMedisPage = () => {
   });
 
   useEffect(() => {
-    setTitle("Daftar Rekam Medis");
+    setTitle("Daftar Hasil Pemeriksaan");
 
     const fetchProfiles = async () => {
       const endpoint =
@@ -74,9 +74,6 @@ const RekamMedisPage = () => {
     <main>
       <section className="w-full">
       <div className="flex items-center justify-between mb-4">
-        <Typography variant="h6" className=" text-primary-1">
-          Daftar Rekam Medis Pasien 
-        </Typography>
         </div>
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className="my-5">
@@ -114,7 +111,7 @@ const RekamMedisPage = () => {
                 weight="semibold"
                 className="text-gray-400"
               >
-                Mohon pilih profil pasien untuk melihat rekam medis
+                Mohon pilih profil pasien untuk melihat hasil pemeriksaan
               </Typography>
             </div>
           ) : kunjungans && kunjungans.length > 0 ? (
@@ -133,7 +130,7 @@ const RekamMedisPage = () => {
                 weight="semibold"
                 className="text-gray-400"
               >
-                Tidak ada data rekam medis
+                Pasien tidak memiliki hasil pemeriksaan
               </Typography>
             </div>
           )}

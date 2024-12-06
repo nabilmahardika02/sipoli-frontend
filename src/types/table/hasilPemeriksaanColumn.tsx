@@ -14,7 +14,7 @@ type CustomGridValueGetterParams = {
 export const kunjunganTables: GridColDef[] = [
   {
     field: "tanggal",
-    headerName: "Tanggal Kunjungan",
+    headerName: "Tanggal Periksa",
     headerAlign: "center", // Menengahkan teks header
     align: "center",
     width: 200,
@@ -95,6 +95,5 @@ export const kunjunganTables: GridColDef[] = [
   },
 ];
 
-// Fungsi untuk mendapatkan Row ID
 export const getRowIdKunjungan: GridRowIdGetter<GridValidRowModel> = (row) =>
   row.id;

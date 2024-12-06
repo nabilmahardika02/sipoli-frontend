@@ -73,7 +73,7 @@ export const pasienMenu: NavbarMenu[] = [
     children: [],
   },
   {
-    name: "Rekam Medis",
+    name: "Hasil Pemeriksaan",
     icon: FaBook,
     href: "/rekam-medis/all",
     children: [],
