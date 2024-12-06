@@ -22,12 +22,12 @@ const DesktopTopNav = ({ title = "Beranda" }: { title?: string }) => {
       const data = responseData as NewNotifikasiResponse;
       setIsNotif(data.isExists);
 
-      data.newNotifications.forEach((notifikasi, i) => {
+      if (data.newNotifications.length > 0) {
         showToast(
-          notifikasi.title + "\n" + notifikasi.message,
+          "Terdapat " + data.newNotifications.length + " kunjungan baru",
           KUNJUNGAN_TOAST
-        );
-      });
+        ); 
+      }
     }
   }, []);
 

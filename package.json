@@ -42,6 +42,7 @@
     "react-select": "^5.8.0",
     "react-tabs": "^6.0.2",
     "react-virtuoso": "^4.7.2",
+    "sipoli-frontend": "file:",
     "styled-components": "^6.1.8",
     "tailwind-datepicker-react": "^1.4.2",
     "tailwind-merge": "^1.8.1",

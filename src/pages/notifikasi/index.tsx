@@ -49,17 +49,6 @@ const NotifikasiPage = () => {
     );
 
     if (isSuccess) {
-      const fetchData = async () => {
-        const [responseData, message, isSuccess] = await sendRequest(
-          "get",
-          "notifikasi/my-notif"
-        );
-
-        if (isSuccess) {
-          setNotifications(responseData as Notifikasi[]);
-        }
-      };
-
       fetchData();
     }
   };
@@ -176,7 +165,7 @@ const NotifikasiPage = () => {
                   onClick={() => handleNotificationClick(notification)} // Panggil handleNotificationClick ketika card diklik
                   className={`cursor-pointer shadow-md rounded-lg p-4 border flex-1 ${
                     notification.readStatus < 2
-                      ? "bg-blue-100 border-blue-300"
+                      ? "bg-blue-200 border-blue-400"
                       : "bg-white border-gray-200"
                   }`}
                 >
