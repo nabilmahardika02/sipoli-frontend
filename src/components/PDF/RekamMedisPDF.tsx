@@ -770,7 +770,7 @@ const RekamMedisPDF: React.FC<RekamMedisPDFProps> = ({ kunjungan }) => {
                 <br></br>
               </Typography>
               <Typography variant="p4" className="text-center">
-                dr. {kunjungan?.dokter.name}
+                {kunjungan?.dokter.name}
               </Typography>
             </div>
             <div className="flex flex-col items-center">
