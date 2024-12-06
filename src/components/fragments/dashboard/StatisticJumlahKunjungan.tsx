@@ -147,8 +147,8 @@ const StatisticJumlahKunjugan = ({
                   data: labels,
                   label:
                     periode === "bulanan"
-                      ? "Rentang tanggal pada bulan terpilih"
-                      : "",
+                      ? "Tanggal Kunjungan"
+                      : "Bulan Kunjungan",
                 },
               ]}
               sx={{
