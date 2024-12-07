@@ -132,6 +132,6 @@ export const KUNJUNGAN_TOAST = createCustomToast({
   },
   icon: <FaInfoCircle size={20} />,
   className: "w-[375px] [&>div]:justify-start",
-  position: "top-center",
+  position: "bottom-right",
   duration: 10000,
 });
