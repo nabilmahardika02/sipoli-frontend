@@ -1,4 +1,5 @@
 import Button from "@/components/elements/Button";
+import { formatDateOnly } from "@/lib/formater";
 import { Kunjungan } from "@/types/entities/kunjungan";
 import {
   GridColDef,
@@ -18,21 +19,8 @@ export const kunjunganTables: GridColDef[] = [
     headerAlign: "center", // Menengahkan teks header
     align: "center",
     width: 200,
-    valueGetter: (value, row, column, apiRef) => {
-      const tanggal = row.tanggal;
-      if (tanggal) {
-        const date = new Date(tanggal);
-        const options: Intl.DateTimeFormatOptions = {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        };
-        return date.toLocaleDateString("id-ID", options); // Menggunakan locale Indonesia
-      }
-      return "-";
-    },
-  },
+    valueGetter: (value, row, column, apiRef) =>
+    formatDateOnly(row.tanggal) || "-",},
   {
     field: "name",
     headerName: "Nama Pasien",

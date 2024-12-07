@@ -28,7 +28,7 @@ const RekamMedisPage = () => {
   });
 
   useEffect(() => {
-    setTitle("Daftar Hasil Pemeriksaan");
+    setTitle("Daftar Riwayat Hasil Pemeriksaan");
 
     const fetchProfiles = async () => {
       const endpoint =
