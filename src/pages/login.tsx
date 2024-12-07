@@ -11,6 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { CiLogin } from "react-icons/ci";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -110,7 +111,11 @@ const LoginPage = () => {
               label="Password"
               type="password"
             />
-            <Button type="submit" className="mt-3 mx-auto md:mx-0">
+            <Button
+              type="submit"
+              className="mt-3 mx-auto md:mx-0"
+              rightIcon={CiLogin}
+            >
               Login
             </Button>
           </form>

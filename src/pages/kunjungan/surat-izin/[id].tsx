@@ -35,6 +35,18 @@ const SuratIzinPage = () => {
     }
   };
 
+  const fetchAccount = async () => {
+    if (!suratIzin?.kunjungan?.profile?.id) return;
+    const [responseData, message, isSuccess] = await sendRequest(
+      "get",
+      "auth/profile/" + suratIzin?.kunjungan.profile.id
+    );
+
+    if (isSuccess && responseData) {
+      setAccount(responseData as Account);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       if (!router.isReady) return;
@@ -45,6 +57,8 @@ const SuratIzinPage = () => {
 
       if (isSuccess && responseData) {
         setSuratIzin(responseData as SuratIzin);
+        fetchAccount();
+        console.log("masuk kesini gasih kocak");
       }
     };
 
@@ -56,35 +70,8 @@ const SuratIzinPage = () => {
   useEffect(() => {
     if (suratIzin) {
       fetchJumlahHari();
+      fetchAccount();
     }
-  }, [suratIzin]);
-
-  const isExpired = () => {
-    const today = new Date();
-    const endDate = new Date(
-      suratIzin?.tanggalAkhir ? formatDateOnly(suratIzin.tanggalAkhir) : "-"
-    );
-
-    today.setHours(0, 0, 0, 0);
-    endDate.setHours(0, 0, 0, 0);
-
-    return endDate < today;
-  };
-
-  useEffect(() => {
-    const fetchAccount = async () => {
-      if (!suratIzin?.kunjungan?.profile?.id) return;
-      const [responseData, message, isSuccess] = await sendRequest(
-        "get",
-        "auth/profile/" + suratIzin?.kunjungan.profile.id
-      );
-
-      if (isSuccess && responseData) {
-        setAccount(responseData as Account);
-      }
-    };
-
-    fetchAccount();
   }, [suratIzin]);
 
   return (
@@ -139,19 +126,21 @@ const SuratIzinPage = () => {
             </Typography>
             <div className="flex items-center gap-2">
               <Typography weight="bold">
-                {isExpired() ? (
-                  <span className="text-red-500">Kadaluarsa</span>
-                ) : (
+                {suratIzin?.isActive === true ? (
                   <span className="text-green-500">Aktif</span>
+                ) : (
+                  <span className="text-red-500">Kadaluarsa</span>
                 )}
               </Typography>
-              {isExpired() ? (
+              
+              {suratIzin?.isActive === true ? (
+                
+                <span className="text-green-500 text-2xl font-bold">
+                <FaCheck />
+              </span>
+              ) : (
                 <span className="text-red-500 text-2xl font-bold">
                   <RxCross2 />
-                </span>
-              ) : (
-                <span className="text-green-500 text-2xl font-bold">
-                  <FaCheck />
                 </span>
               )}
             </div>

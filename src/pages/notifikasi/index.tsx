@@ -7,6 +7,8 @@ import router from "next/router";
 import { checkRole } from "@/lib/checkRole";
 import { useEffect, useState } from "react";
 import sendRequest from "@/lib/getApi";
+import { IoTrashBin } from "react-icons/io5";
+import { CiRead } from "react-icons/ci";
 
 const NotifikasiPage = () => {
   const [notifications, setNotifications] = useState<Notifikasi[]>();
@@ -44,22 +46,11 @@ const NotifikasiPage = () => {
     const [responseData, message, isSuccess] = await sendRequest(
       "put",
       "notifikasi/mark-read",
-      notificationIds, 
+      notificationIds,
       true
     );
 
     if (isSuccess) {
-      const fetchData = async () => {
-        const [responseData, message, isSuccess] = await sendRequest(
-          "get",
-          "notifikasi/my-notif"
-        );
-
-        if (isSuccess) {
-          setNotifications(responseData as Notifikasi[]);
-        }
-      };
-
       fetchData();
     }
   };
@@ -137,6 +128,7 @@ const NotifikasiPage = () => {
               variant="outline"
               className="p-2 rounded-full"
               onClick={handleMarkRead}
+              leftIcon={CiRead}
             >
               Tandai Semua Dibaca
             </Button>
@@ -145,6 +137,7 @@ const NotifikasiPage = () => {
               size="lg"
               className="p-2 rounded-full"
               onClick={handleDeleteSelected}
+              leftIcon={IoTrashBin}
             >
               Hapus
             </Button>
@@ -176,7 +169,7 @@ const NotifikasiPage = () => {
                   onClick={() => handleNotificationClick(notification)} // Panggil handleNotificationClick ketika card diklik
                   className={`cursor-pointer shadow-md rounded-lg p-4 border flex-1 ${
                     notification.readStatus < 2
-                      ? "bg-blue-100 border-blue-300"
+                      ? "bg-blue-200 border-blue-400"
                       : "bg-white border-gray-200"
                   }`}
                 >
