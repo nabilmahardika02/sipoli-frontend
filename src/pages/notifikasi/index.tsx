@@ -7,6 +7,8 @@ import router from "next/router";
 import { checkRole } from "@/lib/checkRole";
 import { useEffect, useState } from "react";
 import sendRequest from "@/lib/getApi";
+import { IoTrashBin } from "react-icons/io5";
+import { CiRead } from "react-icons/ci";
 
 const NotifikasiPage = () => {
   const [notifications, setNotifications] = useState<Notifikasi[]>();
@@ -44,7 +46,7 @@ const NotifikasiPage = () => {
     const [responseData, message, isSuccess] = await sendRequest(
       "put",
       "notifikasi/mark-read",
-      notificationIds, 
+      notificationIds,
       true
     );
 
@@ -126,6 +128,7 @@ const NotifikasiPage = () => {
               variant="outline"
               className="p-2 rounded-full"
               onClick={handleMarkRead}
+              leftIcon={CiRead}
             >
               Tandai Semua Dibaca
             </Button>
@@ -134,6 +137,7 @@ const NotifikasiPage = () => {
               size="lg"
               className="p-2 rounded-full"
               onClick={handleDeleteSelected}
+              leftIcon={IoTrashBin}
             >
               Hapus
             </Button>

@@ -21,6 +21,7 @@ import router from "next/router";
 import React, { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { FaInfoCircle } from "react-icons/fa";
+import { FiCheckSquare, FiChevronLeft } from "react-icons/fi";
 
 const KunjunganAddPage = () => {
   const user = useAuthStore.useUser();
@@ -446,8 +447,14 @@ const KunjunganAddPage = () => {
                 />
               </div>
               <div className="mt-5 flex items-center justify-center gap-4">
-                <Button type="submit">Simpan</Button>
-                <Button variant="danger" onClick={handleBack}>
+                <Button type="submit" rightIcon={FiCheckSquare}>
+                  Simpan
+                </Button>
+                <Button
+                  variant="danger"
+                  leftIcon={FiChevronLeft}
+                  onClick={handleBack}
+                >
                   Batal
                 </Button>
               </div>
