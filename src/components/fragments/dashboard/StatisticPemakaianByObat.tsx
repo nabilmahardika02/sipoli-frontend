@@ -130,15 +130,15 @@ const StatisticPemakaianByObat = ({
                   margin={{ left: 60 }}
                   width={1050}
                   height={400}
-                  // series={[
-                  //   {
-                  //     curve: "linear",
-                  //     data: values,
-                  //     label: "Jumlah Obat Dipakai",
-                  //     showMark: false,
-                  //     color: "#296a91",
-                  //   },
-                  // ]}
+                  series={[
+                    {
+                      curve: "linear",
+                      data: values,
+                      label: "Jumlah Obat Dipakai",
+                      showMark: false,
+                      color: "#296a91",
+                    },
+                  ]}
                   yAxis={[
                     {
                       label: "Jumlah Obat Dipakai",

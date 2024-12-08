@@ -117,6 +117,7 @@ const HasilPemeriksaan2Form = ({
               type="number"
               placeholder="Temperature"
               label="Temperature (°C)"
+              step="0.1" // supaya bisa decimal
             />
             <Input
               id="tensi"
@@ -128,24 +129,28 @@ const HasilPemeriksaan2Form = ({
               type="number"
               placeholder="Mean Arterial Pressure"
               label="Mean Arterial Pressure (mmHg)"
+              step="0.1"
             />
             <Input
               id="respiratoryRate"
               type="number"
               placeholder="Respiratory Rate"
               label="Respiratory Rate (per minute)"
+              step="0.1"
             />
             <Input
               id="heartRate"
               type="number"
               placeholder="Heart Rate"
               label="Heart Rate (bpm)"
+              step="0.1"
             />
             <Input
               id="oxygenSaturation"
               type="number"
               placeholder="Oxygen Saturation"
               label="Oxygen Saturation (%)"
+              step="0.1"
             />
             <Input id="kesadaran" placeholder="Kesadaran" label="Kesadaran" />
             <Input id="eye" type="number" placeholder="Eye" label="Eye" />

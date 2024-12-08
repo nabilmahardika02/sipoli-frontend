@@ -91,19 +91,19 @@ const HasilPemeriksaan1Form = ({
   }, []);
 
   const onSubmit: SubmitHandler<HasilKunjunganForm> = (data) => {
-    const currentValues = methods.getValues();
-    const formattedTanggalPeriksa = dayjs(currentValues.tanggalPeriksa)
-      .tz("Asia/Makassar")
-      .format();
+    // const currentValues = methods.getValues();
+    // const formattedTanggalPeriksa = dayjs(currentValues.tanggalPeriksa)
+    //   .tz("Asia/Makassar")
+    //   .format();
 
-    console.log("Tanggal Periksa (formatted):", formattedTanggalPeriksa);
+    // console.log("Tanggal Periksa (formatted):", formattedTanggalPeriksa);
 
     setHasilPemeriksaan((prevState) => ({
       ...prevState,
       dokter: data.dokter,
       keluhanUtama: data.keluhanUtama,
       riwayatPenyakitSekarang: data.riwayatPenyakitSekarang,
-      tanggalPeriksa: formattedTanggalPeriksa,
+      tanggalPeriksa: data.tanggalPeriksa,
     }));
 
     setSection(2);
@@ -120,7 +120,7 @@ const HasilPemeriksaan1Form = ({
       dokter: currentValues.dokter,
       keluhanUtama: currentValues.keluhanUtama,
       riwayatPenyakitSekarang: currentValues.riwayatPenyakitSekarang,
-      tanggalPeriksa: formattedTanggalPeriksa,
+      tanggalPeriksa: currentValues.tanggalPeriksa,
     }));
     setSection(step);
   };
