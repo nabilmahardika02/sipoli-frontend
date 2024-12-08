@@ -128,7 +128,7 @@ const StatisticPemakaianObatByMonth = ({
                 },
               ]}
               series={[{ data: values }]}
-              width={1050}
+              width={1250}
               height={350}
               colors={["#475FB8"]}
               grid={{ vertical: true, horizontal: true }}

@@ -39,7 +39,7 @@ const DataDaftarRekamMedis = ({
   return (
     <section className="p-5 md:p-8 rounded-xl bg-white border border-gray-200 shadow-md">
       <Typography variant="h6" className="text-primary-1">
-        Daftar Rekam Medis
+        Daftar Riwayat Hasil Pemeriksaan
       </Typography>
       <Divider />
       {kunjungans.length > 0 ? (
