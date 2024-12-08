@@ -73,7 +73,7 @@ const StatisticTopRestock = ({ className = "" }: { className?: string }) => {
             id="year"
             label="Tahun"
             className="md:rounded-full"
-            parentClassName="md:w-[50%]"
+            parentClassName="md:w-[25%]"
             //@ts-ignore
             onChange={setSelectedYear}
           >
@@ -91,7 +91,7 @@ const StatisticTopRestock = ({ className = "" }: { className?: string }) => {
             id="bulan"
             label="Bulan"
             className="md:rounded-full"
-            parentClassName="md:w-[50%]"
+            parentClassName="md:w-[25%]"
             //@ts-ignore
             onChange={setSelectedMonth}
             defaultValue={12}
@@ -114,7 +114,7 @@ const StatisticTopRestock = ({ className = "" }: { className?: string }) => {
             <BarChart
               yAxis={[
                 {
-                  label: "Total Obat Dipakai",
+                  label: "Jumlah Stok Obat yang Pernah Ditambahkan",
                 },
               ]}
               xAxis={[
@@ -128,7 +128,7 @@ const StatisticTopRestock = ({ className = "" }: { className?: string }) => {
                 },
               ]}
               series={[{ data: values }]}
-              width={480}
+              width={1250}
               height={350}
               colors={["#913275"]}
               grid={{ vertical: true, horizontal: true }}

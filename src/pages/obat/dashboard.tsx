@@ -46,8 +46,8 @@ const DashboardObatPage = () => {
       </Head>
       <StatisticPemakaianObatByMonth className="md:col-span-2" />
       <StatisticPemakaianByObat className="md:col-span-2" obatList={obatList} />
-      <StatisticTopRestock />
-      <StatisticRestockPrice obatList={obatList}/>
+      <StatisticTopRestock className="md:col-span-2" />
+      <StatisticRestockPrice className="md:col-span-2" obatList={obatList}/>
     </main>
   );
 };
