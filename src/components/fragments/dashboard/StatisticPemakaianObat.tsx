@@ -65,7 +65,7 @@ const StatisticPemakaianObatByMonth = ({
   return (
     <section className={clsxm("data-section", className)}>
       <Typography variant="h6" className="text-primary-1">
-        Jumlah Pemakaian Obat per Bulan
+        Jumlah Pemakaian Obat Terbanyak
       </Typography>
       <FormProvider {...methods}>
         <form className="w-full flex flex-col md:flex-row items-center justify-start gap-5 my-4">

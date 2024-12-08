@@ -114,7 +114,7 @@ const StatisticTopRestock = ({ className = "" }: { className?: string }) => {
             <BarChart
               yAxis={[
                 {
-                  label: "Total Obat Direstock",
+                  label: "Total Kuantitas Restock",
                 },
               ]}
               xAxis={[

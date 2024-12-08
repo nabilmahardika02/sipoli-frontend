@@ -148,7 +148,7 @@ const StatisticPemakaianByObat = ({
                     {
                       scaleType: "point",
                       data: labels,
-                      label: "Rentang tanggal pada bulan terpilih",
+                      label: "Tanggal Pemakaian Obat",
                       valueFormatter: (v) => {
                         const tempLabel = v.split(" ");
                         return `${tempLabel[1]}` || v;
