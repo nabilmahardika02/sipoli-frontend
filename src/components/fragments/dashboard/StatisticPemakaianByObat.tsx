@@ -130,15 +130,15 @@ const StatisticPemakaianByObat = ({
                   margin={{ left: 60 }}
                   width={1050}
                   height={400}
-                  series={[
-                    {
-                      curve: "linear",
-                      data: values,
-                      label: "Jumlah Obat Dipakai",
-                      showMark: false,
-                      color: "#296a91",
-                    },
-                  ]}
+                  // series={[
+                  //   {
+                  //     curve: "linear",
+                  //     data: values,
+                  //     label: "Jumlah Obat Dipakai",
+                  //     showMark: false,
+                  //     color: "#296a91",
+                  //   },
+                  // ]}
                   yAxis={[
                     {
                       label: "Jumlah Obat Dipakai",
@@ -148,7 +148,7 @@ const StatisticPemakaianByObat = ({
                     {
                       scaleType: "point",
                       data: labels,
-                      label: "Rentang tanggal pada bulan terpilih",
+                      label: "Tanggal Pemakaian Obat",
                       valueFormatter: (v) => {
                         const tempLabel = v.split(" ");
                         return `${tempLabel[1]}` || v;
