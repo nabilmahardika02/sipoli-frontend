@@ -134,8 +134,12 @@ const KunjunganPage = () => {
                 {kunjungan.status === 0 && (
                   <div className="flex justify-end">
                     <Link href={`/kunjungan/update/${kunjungan.id}`}>
-                      <Button variant="secondary" size="lg" leftIcon={LuPencil}>
-                        Ubah Data Kunjungan
+                      <Button
+                        variant="primary"
+                        leftIcon={LuPencil}
+                        leftIconClassName="max-md:mr-0"
+                      >
+                        <span className="max-md:hidden">Perbarui Kunjungan</span>
                       </Button>
                     </Link>
                   </div>
