@@ -7,7 +7,37 @@ import { PasswordByAdminForm } from "@/types/forms/authForm";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { FormProvider, SubmitHandler, useForm, RegisterOptions } from "react-hook-form";
+
+const passwordValidation: RegisterOptions = {
+  required: "Password wajib diisi",
+  minLength: { value: 8, message: "Minimal 8 karakter" },
+  maxLength: { value: 30, message: "Minimal 30 karakter" },
+  validate: {
+    // Validasi setidaknya 1 huruf kecil
+    hasLowercase: (value) => 
+      /(?=.*[a-z])/.test(value) || "Harus mengandung minimal 1 huruf kecil",
+    
+    // Validasi setidaknya 1 huruf besar
+    hasUppercase: (value) => 
+      /(?=.*[A-Z])/.test(value) || "Harus mengandung minimal 1 huruf besar",
+    
+    // Validasi setidaknya 1 angka
+    hasNumber: (value) => 
+      /(?=.*\d)/.test(value) || "Harus mengandung minimal 1 angka",
+    
+    // Validasi setidaknya 1 simbol
+    hasSymbol: (value) => 
+      /(?=.*[!@#$%^&*])/.test(value) || "Harus mengandung minimal 1 simbol (!@#$%^&*)",
+    
+    // Validasi tanpa spasi
+    noSpaces: (value) => 
+      !/\s/.test(value) || "Tidak boleh mengandung spasi",
+
+    noCertainSymbol: (value) => 
+      !/<>/.test(value) || "Gunakan simbol (!@#$%^&*) saja"
+  }
+}
 
 const ChangePasswordByAdminPage = () => {
   const { setTitle } = useDocumentTitle();
@@ -47,10 +77,7 @@ const ChangePasswordByAdminPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <Input
                 id="newPassword"
-                validation={{
-                  required: "Password wajib diisi",
-                  minLength: { value: 8, message: "Minimal 8 karakter" },
-                }}
+                validation={passwordValidation}
                 placeholder="*******"
                 label="Password Baru"
                 type="password"

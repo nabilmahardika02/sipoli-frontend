@@ -12,7 +12,7 @@ export const profileTableColumns: GridColDef[] = [
     field: "name",
     headerName: "Nama",
     headerAlign: "center",
-    width: 200,
+    width: 300,
     align: "center",
     valueGetter: (value, row, column, apiRef) => {
       return row.name || "-";
@@ -32,7 +32,7 @@ export const profileTableColumns: GridColDef[] = [
     field: "tanggalLahir",
     headerName: "Tanggal Lahir",
     headerAlign: "center",
-    width: 150,
+    width: 250,
     align: "center",
     valueGetter: (value, row, column, apiRef) => {
       return row.tanggalLahir ? formatDateOnly(row.tanggalLahir) : "-";
@@ -42,7 +42,7 @@ export const profileTableColumns: GridColDef[] = [
     field: "noHp",
     headerName: "Nomor Telepon",
     headerAlign: "center",
-    width: 150,
+    width: 195,
     align: "center",
     valueGetter: (value, row, column, apiRef) => {
       return row.noHp || "-";
