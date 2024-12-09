@@ -14,6 +14,7 @@ type AuthStoreType = {
   logout: () => void;
   stopLoading: () => void;
   setIsNotif: (status: boolean) => void;
+  setChangedUser: (user: User) => void;
 };
 
 const useAuthStoreBase = create<AuthStoreType>((set) => ({
@@ -53,6 +54,13 @@ const useAuthStoreBase = create<AuthStoreType>((set) => ({
       })
     );
   },
+  setChangedUser: (user: User) => {
+    set(
+      produce<AuthStoreType>((state) => {
+        state.user = user;
+      })
+    )
+  }
 }));
 
 const useAuthStore = createSelectorHooks(useAuthStoreBase);

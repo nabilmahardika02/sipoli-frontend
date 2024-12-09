@@ -9,7 +9,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import { RegisterOptions } from 'react-hook-form';
+import { RegisterOptions } from "react-hook-form";
+import { User } from "@/types/entities/user";
 
 const usernameValidation: RegisterOptions = {
   required: "Username wajib diisi",
@@ -17,16 +18,18 @@ const usernameValidation: RegisterOptions = {
   maxLength: { value: 30, message: "Minimal 30 karakter" },
   pattern: {
     value: /^[A-Za-z0-9_]*$/,
-    message: "Username hanya dapat berisi huruf, angka, dan underscore"
+    message: "Username hanya dapat berisi huruf, angka, dan underscore",
   },
   validate: {
     startsWithLetter: (value) => {
       if (!value) return true;
       const firstChar = value.charAt(0);
-      return /[A-Za-z]/.test(firstChar) || "Username harus dimulai dengan huruf";
-    }
-  }
-}
+      return (
+        /[A-Za-z]/.test(firstChar) || "Username harus dimulai dengan huruf"
+      );
+    },
+  },
+};
 
 const ChangeUsernamePage = () => {
   const { setTitle } = useDocumentTitle();
@@ -36,33 +39,33 @@ const ChangeUsernamePage = () => {
   }, [setTitle]);
 
   const user = useAuthStore.useUser();
-
-  const userId = user?.accountId;
+  const setChangedUser = useAuthStore.useSetChangedUser();
 
   const router = useRouter();
   const methods = useForm<UsernameForm>({
     mode: "onTouched",
   });
 
-  const { handleSubmit} = methods;
+  const { handleSubmit } = methods;
 
   const onSubmit: SubmitHandler<UsernameForm> = (data) => {
-    const requestData = {
-      ...data,
-      accountId: user?.accountId
-    };
-
-    console.log('Request Data:', requestData); // Cek payload yang akan dikirim
-
     const postData = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "put",
         "auth/change-username",
-        { ...data, accountId: user?.accountId },
+        data,
         true
       );
 
       if (isSuccess) {
+        const [responseDataProfile, messageProfile, isSuccessProfile] =
+          await sendRequest("get", "/profile/me", null);
+
+        const user = responseDataProfile as User;
+
+        setChangedUser(user);
+        console.log(user);
+
         router.push(`/akun/me`);
       }
     };
