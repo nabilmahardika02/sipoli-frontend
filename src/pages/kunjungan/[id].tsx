@@ -135,7 +135,7 @@ const KunjunganPage = () => {
                   <div className="flex justify-end">
                     <Link href={`/kunjungan/update/${kunjungan.id}`}>
                       <Button
-                        variant="primary"
+                        variant="secondary"
                         leftIcon={LuPencil}
                         leftIconClassName="max-md:mr-0"
                       >
