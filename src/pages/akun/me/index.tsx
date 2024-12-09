@@ -38,7 +38,7 @@ const DetailPage = () => {
     const fetchAccount = async () => {
       const [responseData, message, isSuccess] = await sendRequest(
         "get",
-        `auth/detail/${user?.accountId}`
+        `auth/my-account`
       );
 
       if (isSuccess) {
