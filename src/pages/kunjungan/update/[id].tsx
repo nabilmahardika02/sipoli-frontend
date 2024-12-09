@@ -24,6 +24,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { FaInfoCircle } from "react-icons/fa";
+import { FiCheckSquare, FiChevronLeft } from "react-icons/fi";
+
 
 var utc = require("dayjs/plugin/utc");
 var timezone = require("dayjs/plugin/timezone");
@@ -180,6 +182,9 @@ const KunjunganUpdatePage = () => {
     setSelectedSesi(event.target.value);
     setShowAntrianInfo(true);
   };
+    const handleBack = () => {
+      router.back();
+    };
 
   return (
     <main>
@@ -266,10 +271,19 @@ const KunjunganUpdatePage = () => {
                 )}
               </div>
               <div className="mt-5 flex items-center gap-4">
-                <Button type="submit">Perbarui</Button>
+                <Button type="submit" rightIcon={FiCheckSquare}>
+                  Perbarui
+                </Button>
                 <Link href={"/kunjungan/" + router.query.id}>
-                  <Button variant="danger">Batal</Button>
+                  <Button
+                    variant="danger"
+                    leftIcon={FiChevronLeft}
+                    onClick={handleBack}
+                  >
+                    Batal
+                  </Button>
                 </Link>
+
               </div>
             </form>
           </FormProvider>
